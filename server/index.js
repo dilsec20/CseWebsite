@@ -42,8 +42,8 @@ app.get('/api/health', (req, res) => {
 // Initialize database on startup
 async function initializeDatabase() {
   try {
-    // Check if tables exist by trying to query problems table
-    const result = await pool.query("SELECT COUNT(*) FROM problems LIMIT 1");
+    // Check if tables exist by trying to query dsa_modules table
+    const result = await pool.query("SELECT COUNT(*) FROM dsa_modules LIMIT 1");
     console.log('✅ Database tables already exist');
   } catch (error) {
     // Tables don't exist, create them

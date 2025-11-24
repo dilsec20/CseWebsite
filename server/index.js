@@ -95,7 +95,32 @@ async function initializeDatabase() {
         );
       }
 
-      console.log(`✅ Mock data initialized: ${mockData.problems.length} problems, ${mockData.quiz_questions.length} quiz questions`);
+      // Insert DSA Modules
+      console.log('📚 Inserting DSA modules...');
+      for (const module of mockData.dsa_modules) {
+        await pool.query(
+          'INSERT INTO dsa_modules (module_id, title, description, order_index) VALUES ($1, $2, $3, $4)',
+          [module.module_id, module.title, module.description, module.order_index]
+        );
+      }
+
+      // Insert DSA Topics
+      console.log('📖 Inserting DSA topics...');
+      for (const topic of mockData.dsa_topics) {
+        // Try to find linked problem ID if needed
+        let problemId = topic.problem_id;
+        if (topic.title.includes("Kadane")) {
+          const probRes = await pool.query("SELECT problem_id FROM problems WHERE title ILIKE '%Maximum Subarray%' LIMIT 1");
+          if (probRes.rows.length > 0) problemId = probRes.rows[0].problem_id;
+        }
+
+        await pool.query(
+          'INSERT INTO dsa_topics (topic_id, module_id, title, content, problem_id, order_index) VALUES ($1, $2, $3, $4, $5, $6)',
+          [topic.topic_id, topic.module_id, topic.title, topic.content, problemId, topic.order_index]
+        );
+      }
+
+      console.log(`✅ Mock data initialized: ${mockData.problems.length} problems, ${mockData.quiz_questions.length} quiz questions, ${mockData.dsa_modules.length} DSA modules`);
     } catch (initError) {
       console.error('❌ Error initializing database:', initError.message);
     }

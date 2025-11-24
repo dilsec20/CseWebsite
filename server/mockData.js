@@ -130,7 +130,40 @@ const mockData = {
     quiz_questions: [],
     quiz_options: [],
     contest_sessions: [],
-    contest_problems: []
+    contest_problems: [],
+    dsa_modules: [
+        { module_id: 1, title: 'Logic Building', description: 'Start your journey here. Learn how to think like a programmer.', order_index: 1 },
+        { module_id: 2, title: 'Time & Space Complexity', description: 'Understand the efficiency of your code. Big O notation explained.', order_index: 2 },
+        { module_id: 3, title: 'Arrays', description: 'Master the most fundamental data structure.', order_index: 3 },
+        { module_id: 4, title: 'Strings', description: 'Text processing and manipulation techniques.', order_index: 4 },
+        { module_id: 5, title: 'Linked Lists', description: 'Dynamic data structures and pointer manipulation.', order_index: 5 }
+    ],
+    dsa_topics: [
+        {
+            topic_id: 1,
+            module_id: 1,
+            title: 'Introduction to Programming',
+            content: '# Introduction to Programming\n\nProgramming is the art of telling a computer what to do.\n\n## What is Logic?\nLogic is the sequence of steps required to solve a problem. Before writing code, you must design the logic.\n\n### Steps to Solve a Problem:\n1. **Understand the Problem**: Read the description carefully.\n2. **Identify Inputs & Outputs**: What do you have? What do you need?\n3. **Design the Algorithm**: Step-by-step plan.\n4. **Dry Run**: Test manually with examples.\n5. **Code**: Translate logic to syntax.',
+            problem_id: null,
+            order_index: 1
+        },
+        {
+            topic_id: 2,
+            module_id: 2,
+            title: 'Big O Notation',
+            content: '# Big O Notation\n\nBig O notation describes the **worst-case scenario** of an algorithm\'s performance.\n\n## Common Complexities:\n- **O(1)**: Constant time (Direct access)\n- **O(log n)**: Logarithmic time (Binary Search)\n- **O(n)**: Linear time (Simple loop)\n- **O(n^2)**: Quadratic time (Nested loops)\n\n## Why it Matters?\nIn competitive programming, constraints tell you the required complexity:\n- n <= 10^6 -> O(n) or O(n log n)\n- n <= 10^3 -> O(n^2) allowed',
+            problem_id: null,
+            order_index: 1
+        },
+        {
+            topic_id: 3,
+            module_id: 3,
+            title: 'Kadane\'s Algorithm',
+            content: '# Maximum Subarray Sum (Kadane\'s Algorithm)\n\n## Problem Statement\nGiven an array, find the contiguous subarray with the largest sum.\n\n## Intuition\nIf we have a negative sum, carrying it forward will only decrease our future sum. So, if the current sum becomes negative, we reset it to 0.\n\n## Algorithm\n1. Initialize `current_sum = 0` and `max_sum = INT_MIN`.\n2. Iterate through the array:\n   - Add `arr[i]` to `current_sum`.\n   - Update `max_sum = max(max_sum, current_sum)`.\n   - If `current_sum < 0`, reset `current_sum = 0`.\n\n## Time Complexity\n- **O(n)**: We pass through the array once.\n- **Space**: O(1).\n\n## Code Snippet\n```cpp\nint maxSubArray(vector<int>& nums) {\n    int maxSum = INT_MIN, curr = 0;\n    for(int x : nums) {\n        curr += x;\n        maxSum = max(maxSum, curr);\n        if(curr < 0) curr = 0;\n    }\n    return maxSum;\n}\n```',
+            problem_id: null, // Will need to link dynamically if possible, or leave null for now
+            order_index: 1
+        }
+    ]
 };
 
 // Generate 500+ DSA problems using the same templates as generateProblems.js

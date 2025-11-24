@@ -99,3 +99,20 @@ CREATE INDEX idx_problems_topic ON problems(topic);
 CREATE INDEX idx_submissions_user_id ON submissions(user_id);
 CREATE INDEX idx_submissions_problem_id ON submissions(problem_id);
 CREATE INDEX idx_quiz_results_user_id ON quiz_results(user_id);
+
+-- DSA Learning Path Tables
+CREATE TABLE IF NOT EXISTS dsa_modules (
+    module_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    order_index INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS dsa_topics (
+    topic_id SERIAL PRIMARY KEY,
+    module_id INTEGER REFERENCES dsa_modules(module_id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    problem_id INTEGER REFERENCES problems(problem_id) ON DELETE SET NULL,
+    order_index INTEGER NOT NULL
+);

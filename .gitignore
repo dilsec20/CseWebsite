@@ -1,1 +1,40 @@
-node_modules
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables (but keep .env.example, .env.development, .env.production)
+.env
+.env.local
+server/.env
+client/.env
+client/.env.local
+
+# Build outputs
+dist/
+build/
+client/dist/
+client/build/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.bak
+*.tmp

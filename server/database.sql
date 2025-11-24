@@ -12,9 +12,10 @@ DROP TABLE IF EXISTS users CASCADE;
 -- Users table for authentication
 CREATE TABLE users (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-   user_name VARCHAR(100) NOT NULL,
+    user_name VARCHAR(100) NOT NULL,
     user_email VARCHAR(255) UNIQUE NOT NULL,
     user_password VARCHAR(255) NOT NULL,
+    username VARCHAR(100) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

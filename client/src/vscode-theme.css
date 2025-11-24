@@ -1,0 +1,125 @@
+/* VS Code Dark+ Theme for Prism */
+pre[class*="language-"],
+code[class*="language-"] {
+    color: #d4d4d4;
+    background: #1e1e1e;
+    font-family: "Fira Code", "Cascadia Code", Consolas, Monaco, 'Courier New', monospace;
+    font-size: 14px;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.6;
+    tab-size: 4;
+    hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre)>code[class*="language-"],
+pre[class*="language-"] {
+    background: #1e1e1e;
+}
+
+/* Inline code */
+:not(pre)>code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+/* Syntax highlighting colors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6a9955;
+    /* Green comments */
+}
+
+.token.punctuation {
+    color: #d4d4d4;
+}
+
+.token.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #b5cea8;
+    /* Light green for numbers */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #ce9178;
+    /* Orange for strings */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #d4d4d4;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #c586c0;
+    /* Purple for keywords */
+}
+
+.token.function,
+.token.class-name {
+    color: #dcdcaa;
+    /* Yellow for functions */
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #9cdcfe;
+    /* Blue for variables */
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+/* Types */
+.token.type {
+    color: #4ec9b0;
+}
+
+/* Macros and preprocessor */
+.token.macro,
+.token.preprocessor {
+    color: #c586c0;
+}

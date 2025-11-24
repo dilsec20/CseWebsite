@@ -1,0 +1,452 @@
+[
+  {
+    "problem_id": 1250,
+    "title": "Merge Intervals",
+    "difficulty": "Medium",
+    "current_description": "Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+    "sample_input": "4\n1 3\n2 6\n8 10\n15 18",
+    "sample_output": "1 6\n8 10\n15 18",
+    "proposed_addition": "**Input Format:**\n- 5 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1250,
+    "title": "Merge Intervals",
+    "difficulty": "Medium",
+    "current_description": "Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+    "sample_input": "4\n1 3\n2 6\n8 10\n15 18",
+    "sample_output": "1 6\n8 10\n15 18",
+    "proposed_addition": "**Input Format:**\n- 5 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1256,
+    "title": "Group Anagrams",
+    "difficulty": "Medium",
+    "current_description": "Given an array of strings strs, group the anagrams together. You can return the answer in any order.\n\nAn Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+    "sample_input": "6\neat tea tan ate nat bat",
+    "sample_output": "ate eat tea\nbat\nnat tan",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1277,
+    "title": "Course Schedule",
+    "difficulty": "Medium",
+    "current_description": "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.\n\nReturn true if you can finish all courses. Otherwise, return false.",
+    "sample_input": "2\n1\n1 0",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1281,
+    "title": "Jump Game",
+    "difficulty": "Medium",
+    "current_description": "You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.\n\nReturn true if you can reach the last index, or false otherwise.",
+    "sample_input": "5\n2 3 1 1 4",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1284,
+    "title": "Top K Frequent Elements",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.",
+    "sample_input": "6\n1 1 1 2 2 3\n2",
+    "sample_output": "1 2",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1285,
+    "title": "Kth Largest Element in an Array",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums and an integer k, return the kth largest element in the array.\n\nNote that it is the kth largest element in the sorted order, not the kth distinct element.\n\nCan you solve it without sorting?",
+    "sample_input": "6\n3 2 1 5 6 4\n2",
+    "sample_output": "5",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1288,
+    "title": "Merge k Sorted Lists",
+    "difficulty": "Hard",
+    "current_description": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.\n\nMerge all the linked-lists into one sorted linked-list and return it.",
+    "sample_input": "3\n3 1 4 5\n3 1 3 4\n2 2 6",
+    "sample_output": "1 1 2 3 4 4 5 6",
+    "proposed_addition": "**Input Format:**\n- 4 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1306,
+    "title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "current_description": "Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.\n\nYou must write an algorithm that runs in O(n) time.",
+    "sample_input": "6\n100 4 200 1 3 2",
+    "sample_output": "4",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1307,
+    "title": "Subarray Sum Equals K",
+    "difficulty": "Medium",
+    "current_description": "Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.\n\nA subarray is a contiguous non-empty sequence of elements within an array.",
+    "sample_input": "3\n1 1 1\n2",
+    "sample_output": "2",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1308,
+    "title": "Rotate Array",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums, rotate the array to the right by k steps, where k is non-negative.\n\nExample 1:\nInput: nums = [1,2,3,4,5,6,7], k = 3\nOutput: [5,6,7,1,2,3,4]\nExplanation:\nrotate 1 steps to the right: [7,1,2,3,4,5,6]\nrotate 2 steps to the right: [6,7,1,2,3,4,5]\nrotate 3 steps to the right: [5,6,7,1,2,3,4]",
+    "sample_input": "7\n1 2 3 4 5 6 7\n3",
+    "sample_output": "5 6 7 1 2 3 4",
+    "proposed_addition": "**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1309,
+    "title": "Find All Duplicates in an Array",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums of length n where all the integers of nums are in the range [1, n] and each integer appears once or twice, return an array of all the integers that appears twice.\n\nYou must write an algorithm that runs in O(n) time and uses only constant extra space.",
+    "sample_input": "8\n4 3 2 7 8 2 3 1",
+    "sample_output": "2 3",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1310,
+    "title": "Next Permutation",
+    "difficulty": "Medium",
+    "current_description": "A permutation of an array of integers is an arrangement of its members into a sequence or linear order.\n\nThe next permutation of an array of integers is the next lexicographically greater permutation of its integer. More formally, if all the permutations of the array are sorted in one container according to their lexicographical order, then the next permutation of that array is the permutation that follows it in the sorted container. If such arrangement is not possible, the array must be rearranged as the lowest possible order (i.e., sorted in ascending order).\n\nFor example, the next permutation of arr = [1,2,3] is [1,3,2].\nSimilarly, the next permutation of arr = [2,3,1] is [3,1,2].\nWhile the next permutation of arr = [3,2,1] is [1,2,3] because [3,2,1] does not have a lexicographical larger rearrangement.",
+    "sample_input": "3\n1 2 3",
+    "sample_output": "1 3 2",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1311,
+    "title": "Sort Colors (Dutch National Flag)",
+    "difficulty": "Medium",
+    "current_description": "Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.\n\nWe will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.\n\nYou must solve this problem without using the library's sort function.",
+    "sample_input": "6\n2 0 2 1 1 0",
+    "sample_output": "0 0 1 1 2 2",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1312,
+    "title": "Majority Element",
+    "difficulty": "Easy",
+    "current_description": "Given an array nums of size n, return the majority element.\n\nThe majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.",
+    "sample_input": "7\n2 2 1 1 1 2 2",
+    "sample_output": "2",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1313,
+    "title": "Reverse Words in a String",
+    "difficulty": "Medium",
+    "current_description": "Given an input string s, reverse the order of the words.\n\nA word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.\n\nReturn a string of the words in reverse order concatenated by a single space.\n\nNote that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra spaces.",
+    "sample_input": "the sky is blue",
+    "sample_output": "blue is sky the",
+    "proposed_addition": "**Input Format:**\n- Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1314,
+    "title": "Implement strStr()",
+    "difficulty": "Easy",
+    "current_description": "Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.\n\nClarification:\nWhat should we return when needle is an empty string? This is a great question to ask during an interview.\nFor the purpose of this problem, we will return 0 when needle is an empty string.",
+    "sample_input": "sadbutsad\nsad",
+    "sample_output": "0",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1315,
+    "title": "String to Integer (atoi)",
+    "difficulty": "Medium",
+    "current_description": "Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).\n\nThe algorithm for myAtoi(string s) is as follows:\n1. Read in and ignore any leading whitespace.\n2. Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.\n3. Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.\n4. Convert these digits into an integer (i.e. \"123\" -> 123, \"0032\" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).\n5. If the integer is out of the 32-bit signed integer range [-2^31, 2^31 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -2^31 should be clamped to -2^31, and integers greater than 2^31 - 1 should be clamped to 2^31 - 1.\n6. Return the integer as the final result.",
+    "sample_input": "42",
+    "sample_output": "42",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1316,
+    "title": "Minimum Window Substring",
+    "difficulty": "Hard",
+    "current_description": "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string \"\".\n\nThe testcases will be generated such that the answer is unique.",
+    "sample_input": "ADOBECODEBANC\nABC",
+    "sample_output": "BANC",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1317,
+    "title": "Longest Common Prefix",
+    "difficulty": "Easy",
+    "current_description": "Write a function to find the longest common prefix string amongst an array of strings.\n\nIf there is no common prefix, return an empty string \"\".",
+    "sample_input": "3\nflower flow flight",
+    "sample_output": "fl",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1319,
+    "title": "Reorder List",
+    "difficulty": "Medium",
+    "current_description": "You are given the head of a singly linked-list. The list can be represented as:\nL0 → L1 → … → Ln - 1 → Ln\n\nReorder the list to be on the following form:\nL0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …\n\nYou may not modify the values in the list's nodes. Only nodes themselves may be changed.",
+    "sample_input": "5\n1 2 3 4 5",
+    "sample_output": "1 5 2 4 3",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1321,
+    "title": "Partition Equal Subset Sum",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.",
+    "sample_input": "4\n1 5 11 5",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1322,
+    "title": "Edit Distance",
+    "difficulty": "Medium",
+    "current_description": "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.\n\nYou have the following three operations permitted on a word:\n- Insert a character\n- Delete a character\n- Replace a character",
+    "sample_input": "horse\nros",
+    "sample_output": "3",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1323,
+    "title": "Decode Ways",
+    "difficulty": "Medium",
+    "current_description": "A message containing letters from A-Z can be encoded into numbers using the following mapping:\n'A' -> \"1\"\n'B' -> \"2\"\n...\n'Z' -> \"26\"\n\nTo decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, \"11106\" can be mapped into:\n- \"AAJF\" with the grouping (1 1 10 6)\n- \"KJF\" with the grouping (11 10 6)\n\nNote that the grouping (1 11 06) is invalid because \"06\" cannot be mapped into 'F' since \"6\" is different from \"06\".\n\nGiven a string s containing only digits, return the number of ways to decode it.",
+    "sample_input": "12",
+    "sample_output": "2",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1324,
+    "title": "Maximum Product Subarray",
+    "difficulty": "Medium",
+    "current_description": "Given an integer array nums, find a subarray that has the largest product, and return the product.\n\nThe test cases are generated so that the answer will fit in a 32-bit integer.",
+    "sample_input": "4\n2 3 -2 4",
+    "sample_output": "6",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1325,
+    "title": "Clone Graph",
+    "difficulty": "Medium",
+    "current_description": "Given a reference of a node in a connected undirected graph.\n\nReturn a deep copy (clone) of the graph.\n\nEach node in the graph contains a value (int) and a list (List[Node]) of its neighbors.",
+    "sample_input": "4\n1 2 4\n2 1 3\n3 2 4\n4 1 3",
+    "sample_output": "4\n1 2 4\n2 1 3\n3 2 4\n4 1 3",
+    "proposed_addition": "**Input Format:**\n- 5 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1326,
+    "title": "Pacific Atlantic Water Flow",
+    "difficulty": "Medium",
+    "current_description": "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.\n\nThe island is partitioned into a grid of square cells. You are given an m x n integer matrix heights where heights[r][c] represents the height above sea level of the cell at coordinate (r, c).\n\nThe island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is less than or equal to the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean.\n\nReturn a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.",
+    "sample_input": "5 5\n1 2 2 3 5\n3 2 3 4 4\n2 4 5 3 1\n6 7 1 4 5\n5 1 1 2 4",
+    "sample_output": "0 4\n1 3\n1 4\n2 2\n3 0\n3 1\n4 0",
+    "proposed_addition": "**Input Format:**\n- 6 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1331,
+    "title": "Search a 2D Matrix II",
+    "difficulty": "Medium",
+    "current_description": "Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties:\n\n- Integers in each row are sorted in ascending from left to right.\n- Integers in each column are sorted in ascending from top to bottom.",
+    "sample_input": "5 5\n1 4 7 11 15\n2 5 8 12 19\n3 6 9 16 22\n10 13 14 17 24\n18 21 23 26 30\n5",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- 7 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1334,
+    "title": "Letter Combinations of a Phone Number",
+    "difficulty": "Medium",
+    "current_description": "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.\n\nA mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.",
+    "sample_input": "23",
+    "sample_output": "ad ae af bd be bf cd ce cf",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1338,
+    "title": "Lowest Common Ancestor of a Binary Tree",
+    "difficulty": "Medium",
+    "current_description": "Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.\n\nAccording to the definition of LCA on Wikipedia: \"The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).\"",
+    "sample_input": "3 5 1 6 2 0 8 null null 7 4\n5\n1",
+    "sample_output": "3",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1339,
+    "title": "Binary Tree Right Side View",
+    "difficulty": "Medium",
+    "current_description": "Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.",
+    "sample_input": "1 2 3 null 5 null 4",
+    "sample_output": "1 3 4",
+    "proposed_addition": "**Input Format:**\n- Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1340,
+    "title": "Serialize and Deserialize Binary Tree",
+    "difficulty": "Hard",
+    "current_description": "Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.\n\nDesign an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.",
+    "sample_input": null,
+    "sample_output": null,
+    "proposed_addition": "**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1341,
+    "title": "Kth Smallest Element in a BST",
+    "difficulty": "Medium",
+    "current_description": "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.",
+    "sample_input": "5 3 6 2 4 null null 1\n3",
+    "sample_output": "3",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1342,
+    "title": "Word Break",
+    "difficulty": "Medium",
+    "current_description": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nNote that the same word in the dictionary may be reused multiple times in the segmentation.",
+    "sample_input": "leetcode\n2\nleet code",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- 3 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1343,
+    "title": "Generate Parentheses",
+    "difficulty": "Medium",
+    "current_description": "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
+    "sample_input": "3",
+    "sample_output": "((())) (()()) (())() ()(()) ()()()",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1344,
+    "title": "Implement Stack using Queues",
+    "difficulty": "Easy",
+    "current_description": "Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (push, top, pop, and empty).\n\nImplement the MyStack class:\n- void push(int x) Pushes element x to the top of the stack.\n- int pop() Removes the element on the top of the stack and returns it.\n- int top() Returns the element on the top of the stack.\n- boolean empty() Returns true if the stack is empty, false otherwise.\n\nNotes:\n- You must use only standard operations of a queue, which means only push to back, peek/pop from front, size and is empty operations are valid.\n- Depending on your language, the queue may not be supported natively. You may simulate a queue using a list or deque (double-ended queue) as long as you use only a queue's standard operations.",
+    "sample_input": "MyStack\npush 1\npush 2\ntop\npop\nempty",
+    "sample_output": "2\n2\nfalse",
+    "proposed_addition": "**Input Format:**\n- 6 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1345,
+    "title": "Find Missing Number",
+    "difficulty": "Easy",
+    "current_description": "Given an array containing n distinct numbers from 0 to n, find the one number that is missing from the array.",
+    "sample_input": "3\n3 0 1",
+    "sample_output": "2",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1346,
+    "title": "Remove Duplicates from Sorted Array",
+    "difficulty": "Easy",
+    "current_description": "Remove duplicates from a sorted array in-place and return the count of unique elements.",
+    "sample_input": "5\n1 1 2 2 3",
+    "sample_output": "3\n1 2 3",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1350,
+    "title": "First Unique Character",
+    "difficulty": "Easy",
+    "current_description": "Find the index of the first non-repeating character.",
+    "sample_input": "leetcode",
+    "sample_output": "0",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1356,
+    "title": "Kth Largest in Stream",
+    "difficulty": "Medium",
+    "current_description": "Design a class to find kth largest element in a stream.",
+    "sample_input": "3\n4 5 8 2\n3\n3\n5\n10",
+    "sample_output": "4\n5\n5",
+    "proposed_addition": "**Input Format:**\n- 6 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1357,
+    "title": "Reorganize String",
+    "difficulty": "Medium",
+    "current_description": "Reorganize string so no two adjacent characters are same.",
+    "sample_input": "aab",
+    "sample_output": "aba",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^5\n- -10^4 <= values <= 10^4"
+  },
+  {
+    "problem_id": 1360,
+    "title": "Happy Number",
+    "difficulty": "Easy",
+    "current_description": "Determine if a number is happy (eventually reaches 1).",
+    "sample_input": "19",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1364,
+    "title": "Contains Duplicate III",
+    "difficulty": "Hard",
+    "current_description": "Check if there are two indices with abs(nums[i]-nums[j]) ≤ t and abs(i-j) ≤ k.",
+    "sample_input": "4 3 0\n1 2 3 1",
+    "sample_output": "true",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1365,
+    "title": "Substring with Concatenation",
+    "difficulty": "Hard",
+    "current_description": "Find all starting indices where concatenation of all words exists.",
+    "sample_input": "barfoothefoobarman\n2\nfoo\nbar",
+    "sample_output": "0 9",
+    "proposed_addition": "**Input Format:**\n- 4 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1368,
+    "title": "Palindrome Pairs",
+    "difficulty": "Hard",
+    "current_description": "Find all pairs of distinct indices forming palindromes.",
+    "sample_input": "4\nabcd\ndcba\nlls\ns",
+    "sample_output": "0 1\n1 0\n2 3\n3 2",
+    "proposed_addition": "**Input Format:**\n- 5 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1377,
+    "title": "Remove Outer Parentheses",
+    "difficulty": "Easy",
+    "current_description": "Remove outermost parentheses from primitive decompositions.",
+    "sample_input": "(()())(())",
+    "sample_output": "()()()",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1384,
+    "title": "First Unique Character in Stream",
+    "difficulty": "Easy",
+    "current_description": "Find first non-repeating character after each insertion.",
+    "sample_input": "aabcc",
+    "sample_output": "a\n-1\nb\nb\n-1",
+    "proposed_addition": "**Input Format:**\n- A single value\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1385,
+    "title": "Time Needed to Buy Tickets",
+    "difficulty": "Easy",
+    "current_description": "Calculate time for person at position k to buy tickets.",
+    "sample_input": "2 3 2\n2",
+    "sample_output": "6",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^3\n- Values fit in standard integer range"
+  },
+  {
+    "problem_id": 1390,
+    "title": "Constrained Subsequence Sum",
+    "difficulty": "Hard",
+    "current_description": "Max sum of subsequence with adjacent elements ≤ k apart.",
+    "sample_input": "5 2\n10 2 -10 5 20",
+    "sample_output": "37",
+    "proposed_addition": "**Input Format:**\n- First line: Size or parameter\n- Second line: Space-separated values\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  },
+  {
+    "problem_id": 1477,
+    "title": "Reconstruct Itinerary",
+    "difficulty": "Hard",
+    "current_description": "Reconstruct travel itinerary (lexicographically smallest).",
+    "sample_input": "MUC LHR\nJFK MUC\nSFO SJC\nLHR SFO",
+    "sample_output": "JFK MUC LHR SFO SJC",
+    "proposed_addition": "**Input Format:**\n- 4 lines of input\n\n**Output Format:**\n- Print the result as specified in the problem statement\n\n**Constraints:**\n- 1 <= n <= 10^6\n- Values fit in 64-bit integer range"
+  }
+]

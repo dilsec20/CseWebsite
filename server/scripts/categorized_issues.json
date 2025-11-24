@@ -1,0 +1,5674 @@
+{
+  "inputFormatMismatch": [
+    {
+      "id": 1272,
+      "title": "Coin Change",
+      "issue": "Description mentions 3 lines but sample has 2 lines"
+    }
+  ],
+  "missingInputFormat": [
+    {
+      "id": 1347,
+      "title": "3Sum Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1349,
+      "title": "Reverse String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1351,
+      "title": "Kth Largest Element in Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1352,
+      "title": "Last Stone Weight",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1353,
+      "title": "K Closest Points to Origin",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1354,
+      "title": "Find Kth Smallest Element",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1355,
+      "title": "Merge K Sorted Lists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1358,
+      "title": "IPO Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (48 chars)"
+      ]
+    },
+    {
+      "id": 1359,
+      "title": "Isomorphic Strings",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1361,
+      "title": "Word Pattern",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (44 chars)"
+      ]
+    },
+    {
+      "id": 1362,
+      "title": "Find All Anagrams",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (45 chars)"
+      ]
+    },
+    {
+      "id": 1366,
+      "title": "Longest Duplicate Substring",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1367,
+      "title": "Count Unique Characters",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1370,
+      "title": "Remove Nth Node From End",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1371,
+      "title": "Swap Nodes in Pairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1372,
+      "title": "Rotate List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1373,
+      "title": "Reverse Nodes in k-Group",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1374,
+      "title": "Copy List with Random Pointer",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1375,
+      "title": "Baseball Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1376,
+      "title": "Next Greater Element I",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1378,
+      "title": "Asteroid Collision",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1379,
+      "title": "Remove K Digits",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1380,
+      "title": "Maximal Rectangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1381,
+      "title": "Implement Queue using Stacks",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1382,
+      "title": "Design Circular Queue",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1383,
+      "title": "Number of Recent Calls",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1386,
+      "title": "Jump Game VI",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1387,
+      "title": "Shortest Subarray with Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1388,
+      "title": "Reveal Cards Increasing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1389,
+      "title": "Dota2 Senate",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1391,
+      "title": "Maximum of Absolute Value Expression",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1392,
+      "title": "First Bad Version",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (46 chars)"
+      ]
+    },
+    {
+      "id": 1393,
+      "title": "Perfect Square",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1395,
+      "title": "Find Minimum in Rotated Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1396,
+      "title": "Koko Eating Bananas",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1397,
+      "title": "Capacity To Ship Packages",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1398,
+      "title": "Count of Range Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1399,
+      "title": "Max Depth Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (15 chars)"
+      ]
+    },
+    {
+      "id": 1400,
+      "title": "Symmetric Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1401,
+      "title": "Diameter of Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1402,
+      "title": "Balanced Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1403,
+      "title": "Validate BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1404,
+      "title": "Lowest Common Ancestor",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1405,
+      "title": "Binary Tree Level Order",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1406,
+      "title": "Path Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1407,
+      "title": "Construct from Preorder Inorder",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1408,
+      "title": "Serialize Deserialize Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1409,
+      "title": "Binary Tree Max Path Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (13 chars)"
+      ]
+    },
+    {
+      "id": 1410,
+      "title": "Find Center of Star",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1411,
+      "title": "Find Town Judge",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1412,
+      "title": "All Paths Source to Target",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1413,
+      "title": "Find if Path Exists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1414,
+      "title": "Number of Provinces",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1415,
+      "title": "Pacific Atlantic Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1416,
+      "title": "Network Delay Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1417,
+      "title": "Minimum Height Trees",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1418,
+      "title": "Min Cost Climbing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1419,
+      "title": "Maximum Subarray",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1420,
+      "title": "Divisor Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1421,
+      "title": "Partition Equal Subset",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1422,
+      "title": "Regular Expression Match",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1423,
+      "title": "Assign Cookies",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1424,
+      "title": "Lemonade Change",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1425,
+      "title": "Best Time Buy Sell II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1426,
+      "title": "Minimum Moves Equal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1427,
+      "title": "Queue Reconstruction",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1428,
+      "title": "Non-overlapping Intervals",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1429,
+      "title": "Jump Game II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1430,
+      "title": "Letter Case Permutation",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1431,
+      "title": "Combinations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1432,
+      "title": "Phone Letter Combos",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1433,
+      "title": "Word Search II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1434,
+      "title": "Min K Pairs Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1435,
+      "title": "Contiguous Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1436,
+      "title": "4Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1437,
+      "title": "Same Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1438,
+      "title": "Minimum Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1439,
+      "title": "Kth Smallest in BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1440,
+      "title": "Flatten Tree to Linked List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1441,
+      "title": "Populating Next Right Pointers",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1442,
+      "title": "Binary Tree Cameras",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1443,
+      "title": "Vertical Order Traversal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1444,
+      "title": "N-ary Tree Max Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1445,
+      "title": "Minimum Depth Leaves",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1446,
+      "title": "Surrounded Regions",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1447,
+      "title": "Shortest Path Binary Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1448,
+      "title": "Minimum Cost Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1449,
+      "title": "Alien Dictionary",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1450,
+      "title": "Word Ladder II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1451,
+      "title": "Shortest Path Visiting All Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1452,
+      "title": "Fibonacci Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1453,
+      "title": "Pascal Triangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1454,
+      "title": "Triangle Minimum Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1455,
+      "title": "Longest Valid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1456,
+      "title": "Min Cost Climbing Stairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1457,
+      "title": "Minimum Arrows Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1458,
+      "title": "Combination Sum III",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1459,
+      "title": "Binary Watch",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1460,
+      "title": "Palindrome Partitioning",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1461,
+      "title": "Sudoku Solver",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1462,
+      "title": "N-Queens II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1463,
+      "title": "Sudoku Permutations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1464,
+      "title": "IPO",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1465,
+      "title": "Employee Free Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1466,
+      "title": "Letter Combinations Length",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1467,
+      "title": "Kth Smallest Pair Distance",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1468,
+      "title": "Find K-th Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1469,
+      "title": "Maximum Average Subarray II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1470,
+      "title": "Trapping Rain Water II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1471,
+      "title": "Basic Calculator",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1472,
+      "title": "Remove Invalid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1473,
+      "title": "Distinct Subsequences",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1474,
+      "title": "Interleaving String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1475,
+      "title": "Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1476,
+      "title": "Critical Connections",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1478,
+      "title": "Swim in Rising Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1479,
+      "title": "Reverse Nodes Between",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1480,
+      "title": "Max Points on Line",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1481,
+      "title": "Sliding Puzzle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1482,
+      "title": "Count Unique BSTs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1483,
+      "title": "First Missing Positive",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1484,
+      "title": "Minimum Window Contains All",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1485,
+      "title": "Backspace String Compare",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1486,
+      "title": "Shortest Subarray Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1487,
+      "title": "Create Maximum Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1489,
+      "title": "Count Complete Tree Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1490,
+      "title": "Cheapest Flights Within K Stops",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1491,
+      "title": "Best Time Stock Cooldown",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1492,
+      "title": "Restore IP Addresses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1493,
+      "title": "Search 2D Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1494,
+      "title": "Count of Atoms",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1495,
+      "title": "Word Break II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1496,
+      "title": "Text Justification",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1497,
+      "title": "Partition List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1498,
+      "title": "Design Snake Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1499,
+      "title": "Wiggle Subsequence",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1500,
+      "title": "Sort List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1501,
+      "title": "Convert Sorted List to BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1502,
+      "title": "Scramble String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1503,
+      "title": "Candy Distribution",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1504,
+      "title": "Merge k Sorted Arrays",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    }
+  ],
+  "missingOutputFormat": [
+    {
+      "id": 1347,
+      "title": "3Sum Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1349,
+      "title": "Reverse String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1351,
+      "title": "Kth Largest Element in Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1352,
+      "title": "Last Stone Weight",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1353,
+      "title": "K Closest Points to Origin",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1354,
+      "title": "Find Kth Smallest Element",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1355,
+      "title": "Merge K Sorted Lists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1358,
+      "title": "IPO Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (48 chars)"
+      ]
+    },
+    {
+      "id": 1359,
+      "title": "Isomorphic Strings",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1361,
+      "title": "Word Pattern",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (44 chars)"
+      ]
+    },
+    {
+      "id": 1362,
+      "title": "Find All Anagrams",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (45 chars)"
+      ]
+    },
+    {
+      "id": 1366,
+      "title": "Longest Duplicate Substring",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1367,
+      "title": "Count Unique Characters",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1370,
+      "title": "Remove Nth Node From End",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1371,
+      "title": "Swap Nodes in Pairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1372,
+      "title": "Rotate List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1373,
+      "title": "Reverse Nodes in k-Group",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1374,
+      "title": "Copy List with Random Pointer",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1375,
+      "title": "Baseball Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1376,
+      "title": "Next Greater Element I",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1378,
+      "title": "Asteroid Collision",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1379,
+      "title": "Remove K Digits",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1380,
+      "title": "Maximal Rectangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1381,
+      "title": "Implement Queue using Stacks",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1382,
+      "title": "Design Circular Queue",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1383,
+      "title": "Number of Recent Calls",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1386,
+      "title": "Jump Game VI",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1387,
+      "title": "Shortest Subarray with Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1388,
+      "title": "Reveal Cards Increasing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1389,
+      "title": "Dota2 Senate",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1391,
+      "title": "Maximum of Absolute Value Expression",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1392,
+      "title": "First Bad Version",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (46 chars)"
+      ]
+    },
+    {
+      "id": 1393,
+      "title": "Perfect Square",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1395,
+      "title": "Find Minimum in Rotated Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1396,
+      "title": "Koko Eating Bananas",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1397,
+      "title": "Capacity To Ship Packages",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1398,
+      "title": "Count of Range Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1399,
+      "title": "Max Depth Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (15 chars)"
+      ]
+    },
+    {
+      "id": 1400,
+      "title": "Symmetric Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1401,
+      "title": "Diameter of Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1402,
+      "title": "Balanced Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1403,
+      "title": "Validate BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1404,
+      "title": "Lowest Common Ancestor",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1405,
+      "title": "Binary Tree Level Order",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1406,
+      "title": "Path Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1407,
+      "title": "Construct from Preorder Inorder",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1408,
+      "title": "Serialize Deserialize Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1409,
+      "title": "Binary Tree Max Path Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (13 chars)"
+      ]
+    },
+    {
+      "id": 1410,
+      "title": "Find Center of Star",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1411,
+      "title": "Find Town Judge",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1412,
+      "title": "All Paths Source to Target",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1413,
+      "title": "Find if Path Exists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1414,
+      "title": "Number of Provinces",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1415,
+      "title": "Pacific Atlantic Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1416,
+      "title": "Network Delay Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1417,
+      "title": "Minimum Height Trees",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1418,
+      "title": "Min Cost Climbing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1419,
+      "title": "Maximum Subarray",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1420,
+      "title": "Divisor Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1421,
+      "title": "Partition Equal Subset",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1422,
+      "title": "Regular Expression Match",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1423,
+      "title": "Assign Cookies",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1424,
+      "title": "Lemonade Change",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1425,
+      "title": "Best Time Buy Sell II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1426,
+      "title": "Minimum Moves Equal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1427,
+      "title": "Queue Reconstruction",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1428,
+      "title": "Non-overlapping Intervals",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1429,
+      "title": "Jump Game II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1430,
+      "title": "Letter Case Permutation",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1431,
+      "title": "Combinations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1432,
+      "title": "Phone Letter Combos",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1433,
+      "title": "Word Search II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1434,
+      "title": "Min K Pairs Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1435,
+      "title": "Contiguous Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1436,
+      "title": "4Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1437,
+      "title": "Same Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1438,
+      "title": "Minimum Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1439,
+      "title": "Kth Smallest in BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1440,
+      "title": "Flatten Tree to Linked List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1441,
+      "title": "Populating Next Right Pointers",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1442,
+      "title": "Binary Tree Cameras",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1443,
+      "title": "Vertical Order Traversal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1444,
+      "title": "N-ary Tree Max Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1445,
+      "title": "Minimum Depth Leaves",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1446,
+      "title": "Surrounded Regions",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1447,
+      "title": "Shortest Path Binary Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1448,
+      "title": "Minimum Cost Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1449,
+      "title": "Alien Dictionary",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1450,
+      "title": "Word Ladder II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1451,
+      "title": "Shortest Path Visiting All Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1452,
+      "title": "Fibonacci Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1453,
+      "title": "Pascal Triangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1454,
+      "title": "Triangle Minimum Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1455,
+      "title": "Longest Valid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1456,
+      "title": "Min Cost Climbing Stairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1457,
+      "title": "Minimum Arrows Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1458,
+      "title": "Combination Sum III",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1459,
+      "title": "Binary Watch",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1460,
+      "title": "Palindrome Partitioning",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1461,
+      "title": "Sudoku Solver",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1462,
+      "title": "N-Queens II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1463,
+      "title": "Sudoku Permutations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1464,
+      "title": "IPO",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1465,
+      "title": "Employee Free Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1466,
+      "title": "Letter Combinations Length",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1467,
+      "title": "Kth Smallest Pair Distance",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1468,
+      "title": "Find K-th Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1469,
+      "title": "Maximum Average Subarray II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1470,
+      "title": "Trapping Rain Water II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1471,
+      "title": "Basic Calculator",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1472,
+      "title": "Remove Invalid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1473,
+      "title": "Distinct Subsequences",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1474,
+      "title": "Interleaving String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1475,
+      "title": "Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1476,
+      "title": "Critical Connections",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1478,
+      "title": "Swim in Rising Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1479,
+      "title": "Reverse Nodes Between",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1480,
+      "title": "Max Points on Line",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1481,
+      "title": "Sliding Puzzle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1482,
+      "title": "Count Unique BSTs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1483,
+      "title": "First Missing Positive",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1484,
+      "title": "Minimum Window Contains All",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1485,
+      "title": "Backspace String Compare",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1486,
+      "title": "Shortest Subarray Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1487,
+      "title": "Create Maximum Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1489,
+      "title": "Count Complete Tree Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1490,
+      "title": "Cheapest Flights Within K Stops",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1491,
+      "title": "Best Time Stock Cooldown",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1492,
+      "title": "Restore IP Addresses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1493,
+      "title": "Search 2D Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1494,
+      "title": "Count of Atoms",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1495,
+      "title": "Word Break II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1496,
+      "title": "Text Justification",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1497,
+      "title": "Partition List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1498,
+      "title": "Design Snake Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1499,
+      "title": "Wiggle Subsequence",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1500,
+      "title": "Sort List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1501,
+      "title": "Convert Sorted List to BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1502,
+      "title": "Scramble String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1503,
+      "title": "Candy Distribution",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1504,
+      "title": "Merge k Sorted Arrays",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    }
+  ],
+  "missingConstraints": [
+    {
+      "id": 1347,
+      "title": "3Sum Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1349,
+      "title": "Reverse String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1351,
+      "title": "Kth Largest Element in Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1352,
+      "title": "Last Stone Weight",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1353,
+      "title": "K Closest Points to Origin",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1354,
+      "title": "Find Kth Smallest Element",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1355,
+      "title": "Merge K Sorted Lists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1358,
+      "title": "IPO Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (48 chars)"
+      ]
+    },
+    {
+      "id": 1359,
+      "title": "Isomorphic Strings",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1361,
+      "title": "Word Pattern",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (44 chars)"
+      ]
+    },
+    {
+      "id": 1362,
+      "title": "Find All Anagrams",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (45 chars)"
+      ]
+    },
+    {
+      "id": 1366,
+      "title": "Longest Duplicate Substring",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1367,
+      "title": "Count Unique Characters",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1370,
+      "title": "Remove Nth Node From End",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1371,
+      "title": "Swap Nodes in Pairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1372,
+      "title": "Rotate List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1373,
+      "title": "Reverse Nodes in k-Group",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1374,
+      "title": "Copy List with Random Pointer",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1375,
+      "title": "Baseball Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1376,
+      "title": "Next Greater Element I",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1378,
+      "title": "Asteroid Collision",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1379,
+      "title": "Remove K Digits",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1380,
+      "title": "Maximal Rectangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1381,
+      "title": "Implement Queue using Stacks",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1382,
+      "title": "Design Circular Queue",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1383,
+      "title": "Number of Recent Calls",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1386,
+      "title": "Jump Game VI",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1387,
+      "title": "Shortest Subarray with Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1388,
+      "title": "Reveal Cards Increasing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1389,
+      "title": "Dota2 Senate",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1391,
+      "title": "Maximum of Absolute Value Expression",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1392,
+      "title": "First Bad Version",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (46 chars)"
+      ]
+    },
+    {
+      "id": 1393,
+      "title": "Perfect Square",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1395,
+      "title": "Find Minimum in Rotated Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1396,
+      "title": "Koko Eating Bananas",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1397,
+      "title": "Capacity To Ship Packages",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1398,
+      "title": "Count of Range Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1399,
+      "title": "Max Depth Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (15 chars)"
+      ]
+    },
+    {
+      "id": 1400,
+      "title": "Symmetric Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1401,
+      "title": "Diameter of Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1402,
+      "title": "Balanced Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1403,
+      "title": "Validate BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1404,
+      "title": "Lowest Common Ancestor",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1405,
+      "title": "Binary Tree Level Order",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1406,
+      "title": "Path Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1407,
+      "title": "Construct from Preorder Inorder",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1408,
+      "title": "Serialize Deserialize Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1409,
+      "title": "Binary Tree Max Path Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (13 chars)"
+      ]
+    },
+    {
+      "id": 1410,
+      "title": "Find Center of Star",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1411,
+      "title": "Find Town Judge",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1412,
+      "title": "All Paths Source to Target",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1413,
+      "title": "Find if Path Exists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1414,
+      "title": "Number of Provinces",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1415,
+      "title": "Pacific Atlantic Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1416,
+      "title": "Network Delay Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1417,
+      "title": "Minimum Height Trees",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1418,
+      "title": "Min Cost Climbing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1419,
+      "title": "Maximum Subarray",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1420,
+      "title": "Divisor Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1421,
+      "title": "Partition Equal Subset",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1422,
+      "title": "Regular Expression Match",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1423,
+      "title": "Assign Cookies",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1424,
+      "title": "Lemonade Change",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1425,
+      "title": "Best Time Buy Sell II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1426,
+      "title": "Minimum Moves Equal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1427,
+      "title": "Queue Reconstruction",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1428,
+      "title": "Non-overlapping Intervals",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1429,
+      "title": "Jump Game II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1430,
+      "title": "Letter Case Permutation",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1431,
+      "title": "Combinations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1432,
+      "title": "Phone Letter Combos",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1433,
+      "title": "Word Search II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1434,
+      "title": "Min K Pairs Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1435,
+      "title": "Contiguous Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1436,
+      "title": "4Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1437,
+      "title": "Same Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1438,
+      "title": "Minimum Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1439,
+      "title": "Kth Smallest in BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1440,
+      "title": "Flatten Tree to Linked List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1441,
+      "title": "Populating Next Right Pointers",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1442,
+      "title": "Binary Tree Cameras",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1443,
+      "title": "Vertical Order Traversal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1444,
+      "title": "N-ary Tree Max Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1445,
+      "title": "Minimum Depth Leaves",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1446,
+      "title": "Surrounded Regions",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1447,
+      "title": "Shortest Path Binary Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1448,
+      "title": "Minimum Cost Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1449,
+      "title": "Alien Dictionary",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1450,
+      "title": "Word Ladder II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1451,
+      "title": "Shortest Path Visiting All Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1452,
+      "title": "Fibonacci Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1453,
+      "title": "Pascal Triangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1454,
+      "title": "Triangle Minimum Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1455,
+      "title": "Longest Valid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1456,
+      "title": "Min Cost Climbing Stairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1457,
+      "title": "Minimum Arrows Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1458,
+      "title": "Combination Sum III",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1459,
+      "title": "Binary Watch",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1460,
+      "title": "Palindrome Partitioning",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1461,
+      "title": "Sudoku Solver",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1462,
+      "title": "N-Queens II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1463,
+      "title": "Sudoku Permutations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1464,
+      "title": "IPO",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1465,
+      "title": "Employee Free Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1466,
+      "title": "Letter Combinations Length",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1467,
+      "title": "Kth Smallest Pair Distance",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1468,
+      "title": "Find K-th Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1469,
+      "title": "Maximum Average Subarray II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1470,
+      "title": "Trapping Rain Water II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1471,
+      "title": "Basic Calculator",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1472,
+      "title": "Remove Invalid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1473,
+      "title": "Distinct Subsequences",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1474,
+      "title": "Interleaving String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1475,
+      "title": "Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1476,
+      "title": "Critical Connections",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1478,
+      "title": "Swim in Rising Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1479,
+      "title": "Reverse Nodes Between",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1480,
+      "title": "Max Points on Line",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1481,
+      "title": "Sliding Puzzle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1482,
+      "title": "Count Unique BSTs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1483,
+      "title": "First Missing Positive",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1484,
+      "title": "Minimum Window Contains All",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1485,
+      "title": "Backspace String Compare",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1486,
+      "title": "Shortest Subarray Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1487,
+      "title": "Create Maximum Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1489,
+      "title": "Count Complete Tree Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1490,
+      "title": "Cheapest Flights Within K Stops",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1491,
+      "title": "Best Time Stock Cooldown",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1492,
+      "title": "Restore IP Addresses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1493,
+      "title": "Search 2D Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1494,
+      "title": "Count of Atoms",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1495,
+      "title": "Word Break II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1496,
+      "title": "Text Justification",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1497,
+      "title": "Partition List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1498,
+      "title": "Design Snake Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1499,
+      "title": "Wiggle Subsequence",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1500,
+      "title": "Sort List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1501,
+      "title": "Convert Sorted List to BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1502,
+      "title": "Scramble String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1503,
+      "title": "Candy Distribution",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1504,
+      "title": "Merge k Sorted Arrays",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    }
+  ],
+  "shortDescription": [
+    {
+      "id": 1347,
+      "title": "3Sum Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1349,
+      "title": "Reverse String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1351,
+      "title": "Kth Largest Element in Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1352,
+      "title": "Last Stone Weight",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (50 chars)"
+      ]
+    },
+    {
+      "id": 1353,
+      "title": "K Closest Points to Origin",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1354,
+      "title": "Find Kth Smallest Element",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1355,
+      "title": "Merge K Sorted Lists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1358,
+      "title": "IPO Problem",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (48 chars)"
+      ]
+    },
+    {
+      "id": 1359,
+      "title": "Isomorphic Strings",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1361,
+      "title": "Word Pattern",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (44 chars)"
+      ]
+    },
+    {
+      "id": 1362,
+      "title": "Find All Anagrams",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (45 chars)"
+      ]
+    },
+    {
+      "id": 1366,
+      "title": "Longest Duplicate Substring",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1367,
+      "title": "Count Unique Characters",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1370,
+      "title": "Remove Nth Node From End",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1371,
+      "title": "Swap Nodes in Pairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1372,
+      "title": "Rotate List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1373,
+      "title": "Reverse Nodes in k-Group",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1374,
+      "title": "Copy List with Random Pointer",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1375,
+      "title": "Baseball Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1376,
+      "title": "Next Greater Element I",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1378,
+      "title": "Asteroid Collision",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1379,
+      "title": "Remove K Digits",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1380,
+      "title": "Maximal Rectangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1381,
+      "title": "Implement Queue using Stacks",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1382,
+      "title": "Design Circular Queue",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1383,
+      "title": "Number of Recent Calls",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1386,
+      "title": "Jump Game VI",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1387,
+      "title": "Shortest Subarray with Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1388,
+      "title": "Reveal Cards Increasing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1389,
+      "title": "Dota2 Senate",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1391,
+      "title": "Maximum of Absolute Value Expression",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (49 chars)"
+      ]
+    },
+    {
+      "id": 1392,
+      "title": "First Bad Version",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (46 chars)"
+      ]
+    },
+    {
+      "id": 1393,
+      "title": "Perfect Square",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1395,
+      "title": "Find Minimum in Rotated Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1396,
+      "title": "Koko Eating Bananas",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1397,
+      "title": "Capacity To Ship Packages",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1398,
+      "title": "Count of Range Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1399,
+      "title": "Max Depth Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (15 chars)"
+      ]
+    },
+    {
+      "id": 1400,
+      "title": "Symmetric Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1401,
+      "title": "Diameter of Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1402,
+      "title": "Balanced Binary Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1403,
+      "title": "Validate BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (16 chars)"
+      ]
+    },
+    {
+      "id": 1404,
+      "title": "Lowest Common Ancestor",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1405,
+      "title": "Binary Tree Level Order",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1406,
+      "title": "Path Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1407,
+      "title": "Construct from Preorder Inorder",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1408,
+      "title": "Serialize Deserialize Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1409,
+      "title": "Binary Tree Max Path Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (13 chars)"
+      ]
+    },
+    {
+      "id": 1410,
+      "title": "Find Center of Star",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1411,
+      "title": "Find Town Judge",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1412,
+      "title": "All Paths Source to Target",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1413,
+      "title": "Find if Path Exists",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (21 chars)"
+      ]
+    },
+    {
+      "id": 1414,
+      "title": "Number of Provinces",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1415,
+      "title": "Pacific Atlantic Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1416,
+      "title": "Network Delay Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1417,
+      "title": "Minimum Height Trees",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1418,
+      "title": "Min Cost Climbing",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1419,
+      "title": "Maximum Subarray",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1420,
+      "title": "Divisor Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1421,
+      "title": "Partition Equal Subset",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1422,
+      "title": "Regular Expression Match",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1423,
+      "title": "Assign Cookies",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1424,
+      "title": "Lemonade Change",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1425,
+      "title": "Best Time Buy Sell II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1426,
+      "title": "Minimum Moves Equal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (19 chars)"
+      ]
+    },
+    {
+      "id": 1427,
+      "title": "Queue Reconstruction",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1428,
+      "title": "Non-overlapping Intervals",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1429,
+      "title": "Jump Game II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1430,
+      "title": "Letter Case Permutation",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1431,
+      "title": "Combinations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1432,
+      "title": "Phone Letter Combos",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1433,
+      "title": "Word Search II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1434,
+      "title": "Min K Pairs Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1435,
+      "title": "Contiguous Array",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1436,
+      "title": "4Sum II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1437,
+      "title": "Same Tree",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1438,
+      "title": "Minimum Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1439,
+      "title": "Kth Smallest in BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1440,
+      "title": "Flatten Tree to Linked List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1441,
+      "title": "Populating Next Right Pointers",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (29 chars)"
+      ]
+    },
+    {
+      "id": 1442,
+      "title": "Binary Tree Cameras",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1443,
+      "title": "Vertical Order Traversal",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1444,
+      "title": "N-ary Tree Max Depth",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1445,
+      "title": "Minimum Depth Leaves",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (18 chars)"
+      ]
+    },
+    {
+      "id": 1446,
+      "title": "Surrounded Regions",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1447,
+      "title": "Shortest Path Binary Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1448,
+      "title": "Minimum Cost Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1449,
+      "title": "Alien Dictionary",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1450,
+      "title": "Word Ladder II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1451,
+      "title": "Shortest Path Visiting All Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1452,
+      "title": "Fibonacci Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1453,
+      "title": "Pascal Triangle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (23 chars)"
+      ]
+    },
+    {
+      "id": 1454,
+      "title": "Triangle Minimum Path",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1455,
+      "title": "Longest Valid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1456,
+      "title": "Min Cost Climbing Stairs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    },
+    {
+      "id": 1457,
+      "title": "Minimum Arrows Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1458,
+      "title": "Combination Sum III",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1459,
+      "title": "Binary Watch",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1460,
+      "title": "Palindrome Partitioning",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1461,
+      "title": "Sudoku Solver",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (17 chars)"
+      ]
+    },
+    {
+      "id": 1462,
+      "title": "N-Queens II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1463,
+      "title": "Sudoku Permutations",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1464,
+      "title": "IPO",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (28 chars)"
+      ]
+    },
+    {
+      "id": 1465,
+      "title": "Employee Free Time",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1466,
+      "title": "Letter Combinations Length",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1467,
+      "title": "Kth Smallest Pair Distance",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1468,
+      "title": "Find K-th Smallest Sum",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1469,
+      "title": "Maximum Average Subarray II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1470,
+      "title": "Trapping Rain Water II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (34 chars)"
+      ]
+    },
+    {
+      "id": 1471,
+      "title": "Basic Calculator",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1472,
+      "title": "Remove Invalid Parentheses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1473,
+      "title": "Distinct Subsequences",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1474,
+      "title": "Interleaving String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (41 chars)"
+      ]
+    },
+    {
+      "id": 1475,
+      "title": "Burst Balloons",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (33 chars)"
+      ]
+    },
+    {
+      "id": 1476,
+      "title": "Critical Connections",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1478,
+      "title": "Swim in Rising Water",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (47 chars)"
+      ]
+    },
+    {
+      "id": 1479,
+      "title": "Reverse Nodes Between",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (42 chars)"
+      ]
+    },
+    {
+      "id": 1480,
+      "title": "Max Points on Line",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (24 chars)"
+      ]
+    },
+    {
+      "id": 1481,
+      "title": "Sliding Puzzle",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1482,
+      "title": "Count Unique BSTs",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1483,
+      "title": "First Missing Positive",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1484,
+      "title": "Minimum Window Contains All",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (40 chars)"
+      ]
+    },
+    {
+      "id": 1485,
+      "title": "Backspace String Compare",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (35 chars)"
+      ]
+    },
+    {
+      "id": 1486,
+      "title": "Shortest Subarray Sum K",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1487,
+      "title": "Create Maximum Number",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (27 chars)"
+      ]
+    },
+    {
+      "id": 1489,
+      "title": "Count Complete Tree Nodes",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (36 chars)"
+      ]
+    },
+    {
+      "id": 1490,
+      "title": "Cheapest Flights Within K Stops",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1491,
+      "title": "Best Time Stock Cooldown",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1492,
+      "title": "Restore IP Addresses",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (32 chars)"
+      ]
+    },
+    {
+      "id": 1493,
+      "title": "Search 2D Matrix",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (37 chars)"
+      ]
+    },
+    {
+      "id": 1494,
+      "title": "Count of Atoms",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1495,
+      "title": "Word Break II",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (25 chars)"
+      ]
+    },
+    {
+      "id": 1496,
+      "title": "Text Justification",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (26 chars)"
+      ]
+    },
+    {
+      "id": 1497,
+      "title": "Partition List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1498,
+      "title": "Design Snake Game",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (20 chars)"
+      ]
+    },
+    {
+      "id": 1499,
+      "title": "Wiggle Subsequence",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (30 chars)"
+      ]
+    },
+    {
+      "id": 1500,
+      "title": "Sort List",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (31 chars)"
+      ]
+    },
+    {
+      "id": 1501,
+      "title": "Convert Sorted List to BST",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Missing sample test case",
+        "Description too short (43 chars)"
+      ]
+    },
+    {
+      "id": 1502,
+      "title": "Scramble String",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (39 chars)"
+      ]
+    },
+    {
+      "id": 1503,
+      "title": "Candy Distribution",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (38 chars)"
+      ]
+    },
+    {
+      "id": 1504,
+      "title": "Merge k Sorted Arrays",
+      "issues": [
+        "Missing Input Format section",
+        "Missing Output Format section",
+        "Missing Constraints section",
+        "Description too short (22 chars)"
+      ]
+    }
+  ],
+  "nullOutput": []
+}

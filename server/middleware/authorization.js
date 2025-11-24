@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
         }
 
         // 2. Verify token
-        const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        const payload = jwt.verify(jwtToken, "supersecretkey123");
 
         // Extract user ID from payload (payload.user.id)
         req.user = payload.user.id;

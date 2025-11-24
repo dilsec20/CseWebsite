@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { API_URL } from '../config';
 
 const ProfileMenu = ({ setAuth }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,7 @@ const ProfileMenu = ({ setAuth }) => {
     useEffect(() => {
         const getUserData = async () => {
             try {
-                const response = await fetch("http://localhost:5000/dashboard/", {
+                const response = await fetch(`${API_URL}/dashboard/`, {
                     headers: { token: localStorage.getItem("token") }
                 });
                 const data = await response.json();

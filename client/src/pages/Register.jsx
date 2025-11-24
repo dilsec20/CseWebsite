@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Mail, Lock, User, ArrowRight, Code } from 'lucide-react';
+import { API_URL } from '../config';
 
 const Register = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
@@ -20,7 +21,7 @@ const Register = ({ setAuth }) => {
     try {
       const body = { email, password, name };
       const response = await fetch(
-        "http://localhost:5000/auth/register",
+        `${API_URL}/auth/register`,
         {
           method: "POST",
           headers: {

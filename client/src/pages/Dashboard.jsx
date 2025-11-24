@@ -13,6 +13,7 @@ import {
     TrendingUp
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
+import { API_URL } from '../config';
 
 const Dashboard = ({ setAuth }) => {
     const [name, setName] = useState("");
@@ -29,7 +30,7 @@ const Dashboard = ({ setAuth }) => {
 
     const getDashboardData = async () => {
         try {
-            const response = await fetch("http://localhost:5000/dashboard/", {
+            const response = await fetch(`${API_URL}/dashboard/`, {
                 headers: { token: localStorage.getItem("token") }
             });
             const parseRes = await response.json();

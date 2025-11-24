@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, ArrowLeft, Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { API_URL } from '../config';
 
 const Quiz = () => {
     const { id } = useParams();
@@ -14,7 +15,7 @@ const Quiz = () => {
     useEffect(() => {
         const getQuiz = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/quizzes/${id}`);
+                const response = await fetch(`${API_URL}/api/quizzes/${id}`);
                 if (!response.ok) throw new Error("Failed to fetch quiz");
                 const jsonData = await response.json();
                 setQuizData(jsonData);
@@ -43,7 +44,7 @@ const Quiz = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/api/quizzes/${id}/submit`, {
+            const response = await fetch(`${API_URL}/api/quizzes/${id}/submit`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

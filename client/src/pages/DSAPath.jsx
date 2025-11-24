@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Code, ChevronRight, Layers, Cpu, Hash, AlignLeft, GitMerge } from 'lucide-react';
+import { API_URL } from '../config';
 
 const DSAPath = () => {
     const [modules, setModules] = useState([]);
@@ -12,7 +13,7 @@ const DSAPath = () => {
 
     const fetchModules = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/dsa/modules');
+            const response = await fetch(`${API_URL}/api/dsa/modules`);
             const data = await response.json();
             setModules(data);
             setLoading(false);

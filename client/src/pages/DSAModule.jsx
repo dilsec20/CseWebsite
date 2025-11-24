@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
+import { API_URL } from '../config';
 
 const DSAModule = () => {
     const { id } = useParams();
@@ -15,7 +16,7 @@ const DSAModule = () => {
 
     const fetchModuleData = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/dsa/modules/${id}`);
+            const response = await fetch(`${API_URL}/api/dsa/modules/${id}`);
             const data = await response.json();
             setModule(data);
             if (data.topics.length > 0) {
@@ -30,7 +31,7 @@ const DSAModule = () => {
 
     const fetchTopicContent = async (topicId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/dsa/topics/${topicId}`);
+            const response = await fetch(`${API_URL}/api/dsa/topics/${topicId}`);
             const data = await response.json();
             setSelectedTopic(data);
         } catch (err) {

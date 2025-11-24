@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, Clock, Zap, Play } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { API_URL } from '../config';
 
 const ContestDashboard = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const ContestDashboard = () => {
                 return;
             }
 
-            const response = await fetch("http://localhost:5000/api/contests/start", {
+            const response = await fetch(`${API_URL}/api/contests/start`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

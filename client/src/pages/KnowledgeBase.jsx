@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Brain, Code, ArrowRight } from 'lucide-react';
+import { API_URL } from '../config';
 
 const KnowledgeBase = () => {
     const [quizzes, setQuizzes] = useState([]);
@@ -8,7 +9,7 @@ const KnowledgeBase = () => {
     useEffect(() => {
         const getQuizzes = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/quizzes");
+                const response = await fetch(`${API_URL}/api/quizzes`);
                 const jsonData = await response.json();
                 setQuizzes(jsonData);
             } catch (err) {

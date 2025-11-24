@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Code, CheckCircle, Clock, TrendingUp } from 'lucide-react';
+import { API_URL } from '../config';
 
 const ProblemList = ({ setAuth }) => {
     const [problems, setProblems] = useState([]);
@@ -20,7 +21,7 @@ const ProblemList = ({ setAuth }) => {
 
     const fetchProblems = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/problems');
+            const response = await fetch(`${API_URL}/api/problems`);
             const data = await response.json();
             setProblems(data);
             // Fetch solved problems
@@ -34,7 +35,7 @@ const ProblemList = ({ setAuth }) => {
 
     const fetchSolvedProblems = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/problems/solved', {
+            const response = await fetch(`${API_URL}/api/problems/solved`, {
                 headers: { token: localStorage.getItem('token') }
             });
             const data = await response.json();

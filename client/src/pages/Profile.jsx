@@ -6,6 +6,7 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
+import { API_URL } from '../config';
 
 const Profile = () => {
     const { username } = useParams();
@@ -33,7 +34,7 @@ const Profile = () => {
 
             // Check if viewing own profile
             if (token) {
-                const response = await fetch("http://localhost:5000/dashboard/", {
+                const response = await fetch(`${API_URL}/dashboard/`, {
                     headers: { token: token }
                 });
                 const myData = await response.json();
@@ -45,7 +46,7 @@ const Profile = () => {
                 } else {
                     setIsOwnProfile(false);
                     // Fetch public profile
-                    const publicResponse = await fetch(`http://localhost:5000/api/public/profile/${username}`);
+                    const publicResponse = await fetch(`${API_URL}/api/public/profile/${username}`);
                     if (publicResponse.status === 404) {
                         toast.error("User not found");
                         navigate("/dashboard");
@@ -56,7 +57,7 @@ const Profile = () => {
             } else {
                 // Not logged in, fetch public profile
                 setIsOwnProfile(false);
-                const publicResponse = await fetch(`http://localhost:5000/api/public/profile/${username}`);
+                const publicResponse = await fetch(`${API_URL}/api/public/profile/${username}`);
                 if (publicResponse.status === 404) {
                     toast.error("User not found");
                     navigate("/login");
@@ -115,7 +116,7 @@ const Profile = () => {
                 github_url: formData.githubUrl
             };
 
-            const response = await fetch("http://localhost:5000/dashboard/profile", {
+            const response = await fetch(`${API_URL}/dashboard/profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

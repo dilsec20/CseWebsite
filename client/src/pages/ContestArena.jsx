@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, Circle, ArrowRight } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { API_URL } from '../config';
 
 const ContestArena = () => {
     const { id } = useParams();
@@ -14,7 +15,7 @@ const ContestArena = () => {
         const getContest = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await fetch(`http://localhost:5000/api/contests/${id}`, {
+                const response = await fetch(`${API_URL}/api/contests/${id}`, {
                     headers: { "token": token }
                 });
                 const data = await response.json();
@@ -52,7 +53,7 @@ const ContestArena = () => {
     const finishContest = async () => {
         try {
             const token = localStorage.getItem("token");
-            await fetch(`http://localhost:5000/api/contests/${id}/finish`, {
+            await fetch(`${API_URL}/api/contests/${id}/finish`, {
                 method: "POST",
                 headers: { "token": token }
             });
@@ -80,7 +81,7 @@ const ContestArena = () => {
                 const token = localStorage.getItem("token");
                 if (!token) return;
 
-                const response = await fetch("http://localhost:5000/api/problems/solved", {
+                const response = await fetch(`${API_URL}/api/problems/solved`, {
                     headers: { "token": token }
                 });
                 const data = await response.json();
@@ -136,8 +137,8 @@ const ContestArena = () => {
                 <div className="lg:col-span-2 space-y-4">
                     {problems.map((problem, index) => (
                         <div key={problem.problem_id} className={`p-6 rounded-lg shadow-sm border transition ${solvedProblems.has(problem.problem_id)
-                                ? 'bg-green-50 border-green-200'
-                                : 'bg-white border-gray-200 hover:border-blue-300'
+                            ? 'bg-green-50 border-green-200'
+                            : 'bg-white border-gray-200 hover:border-blue-300'
                             }`}>
                             <div className="flex justify-between items-start">
                                 <div>
@@ -162,8 +163,8 @@ const ContestArena = () => {
                                 <Link
                                     to={`/problems/${problem.problem_id}?contest=${id}`}
                                     className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center ${solvedProblems.has(problem.problem_id)
-                                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                                            : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                        : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
                                         }`}
                                 >
                                     {solvedProblems.has(problem.problem_id) ? 'Solved' : 'Solve'}

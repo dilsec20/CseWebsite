@@ -24,6 +24,8 @@ import ProfileMenu from './components/ProfileMenu';
 import DSAPath from './pages/DSAPath';
 import DSAModule from './pages/DSAModule';
 
+import { API_URL } from './config';
+
 // Global Navbar Component
 const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
   const location = useLocation();
@@ -119,7 +121,7 @@ function App() {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/auth/is-verify", {
+      const response = await fetch(`${API_URL}/auth/is-verify`, {
         method: "GET",
         headers: { token: token }
       });

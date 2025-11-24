@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import SimpleCodeEditor from '../components/SimpleCodeEditor';
 import { Play, Send, ArrowLeft, CheckCircle, XCircle, Loader, ChevronRight } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { API_URL } from '../config';
 
 const SolveProblem = ({ setAuth }) => {
     const { id } = useParams();
@@ -64,7 +65,7 @@ int main() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const response = await fetch(`http://localhost:5000/api/problems/${id}/submissions`, {
+            const response = await fetch(`${API_URL}/api/problems/${id}/submissions`, {
                 headers: { "token": token }
             });
             const data = await response.json();
@@ -79,7 +80,7 @@ int main() {
     const fetchContestProblems = async (contestId) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`http://localhost:5000/api/contests/${contestId}`, {
+            const response = await fetch(`${API_URL}/api/contests/${contestId}`, {
                 headers: { "token": token }
             });
             const data = await response.json();
@@ -91,7 +92,7 @@ int main() {
 
     const getProblem = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/problems/${id}`);
+            const response = await fetch(`${API_URL}/api/problems/${id}`);
             const jsonData = await response.json();
             console.log('Problem data received:', jsonData);
             console.log('Description length:', jsonData.description?.length);
@@ -108,7 +109,7 @@ int main() {
         setVerdict(null);
         try {
             const body = { code, language: "cpp", problem_id: id };
-            const response = await fetch("http://localhost:5000/api/execute/run", {
+            const response = await fetch(`${API_URL}/api/execute/run`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
@@ -160,7 +161,7 @@ int main() {
             }
 
             const body = { problem_id: id, code, language: "cpp" };
-            const response = await fetch("http://localhost:5000/api/execute/submit", {
+            const response = await fetch(`${API_URL}/api/execute/submit`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

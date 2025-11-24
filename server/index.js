@@ -51,8 +51,72 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-app.listen(PORT, () => {
+// Initialize database on startup
+async function initializeDatabase() {
+  try {
+    // Check if tables exist by trying to query problems table
+    const result = await pool.query("SELECT COUNT(*) FROM problems LIMIT 1");
+    console.log('✅ Database tables already exist');
+  } catch (error) {
+    // Tables don't exist, create them
+    console.log('📝 Tables not found, initializing database...');
+    const fs = require('fs');
+    const path = require('path');
+
+    try {
+      // Read and execute schema
+      const schemaPath = path.join(__dirname, 'database.sql');
+      const schema = fs.readFileSync(schemaPath, 'utf8');
+      await pool.query(schema);
+      console.log('✅ Database tables created!');
+
+      // Initialize mock data
+      const mockData = require('./mockData.js');
+
+      // Insert problems
+      console.log('📊 Inserting mock problems...');
+      for (const problem of mockData.problems) {
+        await pool.query(
+          'INSERT INTO problems (title, description, difficulty, topic, test_case_input, test_case_output) VALUES ($1, $2, $3, $4, $5, $6)',
+          [problem.title, problem.description, problem.difficulty, problem.topic, problem.test_case_input, problem.test_case_output]
+        );
+      }
+      console.log(`✅ Inserted ${mockData.problems.length} problems`);
+
+      // Insert quizzes
+      for (const quiz of mockData.quizzes) {
+        await pool.query(
+          'INSERT INTO quizzes (quiz_id, title, category, description) VALUES ($1, $2, $3, $4)',
+          [quiz.quiz_id, quiz.title, quiz.category, quiz.description]
+        );
+      }
+
+      // Insert quiz questions
+      for (const question of mockData.quiz_questions) {
+        await pool.query(
+          'INSERT INTO quiz_questions (question_id, quiz_id, question_text) VALUES ($1, $2, $3)',
+          [question.question_id, question.quiz_id, question.question_text]
+        );
+      }
+
+      // Insert quiz options
+      for (const option of mockData.quiz_options) {
+        await pool.query(
+          'INSERT INTO quiz_options (option_id, question_id, option_text, is_correct) VALUES ($1, $2, $3, $4)',
+          [option.option_id, option.question_id, option.option_text, option.is_correct]
+        );
+      }
+
+      console.log(`✅ Mock data initialized: ${mockData.problems.length} problems, ${mockData.quiz_questions.length} quiz questions`);
+    } catch (initError) {
+      console.error('❌ Error initializing database:', initError.message);
+    }
+  }
+}
+
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
   console.log(`FRONTEND_URL: ${process.env.FRONTEND_URL}`);
+  await initializeDatabase();
 });

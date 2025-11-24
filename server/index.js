@@ -10,30 +10,18 @@ const PORT = process.env.PORT || 5000;
 
 // CORS Configuration with debugging
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://placement-prep-frontend.onrender.com',
-  process.env.FRONTEND_URL
-].filter(Boolean);
-
-console.log('🔐 CORS Allowed Origins:', allowedOrigins);
+  "https://placement-prep-frontend.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      console.log(`✅ Allowing origin: ${origin}`);
-      callback(null, true);
-    } else {
-      console.warn(`❌ Blocking origin: ${origin}`);
-      callback(null, true); // Temporarily allow all for debugging
-    }
-  },
+  origin: allowedOrigins,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'token']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"]
 }));
+
 
 app.use(express.json({ limit: '10mb' }));
 

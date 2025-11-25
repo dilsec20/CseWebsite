@@ -65,7 +65,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
 
   // Handle SPA routing - return index.html for any unknown routes
-  app.get('*', (req, res) => {
+  // Using regex /.*/ to match all routes avoids "Missing parameter name" error in Express 5
+  app.get(/.*/, (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
   });
 }

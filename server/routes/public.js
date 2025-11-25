@@ -8,7 +8,7 @@ router.get("/profile/:username", async (req, res) => {
 
         // Get user info
         const userInfo = await pool.query(
-            "SELECT user_id, user_name, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_name = $1",
+            "SELECT user_id, user_name, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_name ILIKE $1",
             [username]
         );
 

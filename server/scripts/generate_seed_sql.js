@@ -32,7 +32,7 @@ async function generateSeed() {
         console.log('   - Exporting Users...');
         const users = await pool.query('SELECT * FROM users');
         for (const row of users.rows) {
-            stream.write(`INSERT INTO users (user_id, username, email, password, full_name, role, created_at) VALUES (${escapeSql(row.user_id)}, ${escapeSql(row.username)}, ${escapeSql(row.email)}, ${escapeSql(row.password)}, ${escapeSql(row.full_name)}, ${escapeSql(row.role)}, ${escapeSql(row.created_at)}) ON CONFLICT (user_id) DO NOTHING;\n`);
+            stream.write(`INSERT INTO users (user_id, username, email, password, full_name, role, created_at, bio, profile_picture, linkedin_url, github_url, website_url, twitter_url) VALUES (${escapeSql(row.user_id)}, ${escapeSql(row.username)}, ${escapeSql(row.email)}, ${escapeSql(row.password)}, ${escapeSql(row.full_name)}, ${escapeSql(row.role)}, ${escapeSql(row.created_at)}, ${escapeSql(row.bio)}, ${escapeSql(row.profile_picture)}, ${escapeSql(row.linkedin_url)}, ${escapeSql(row.github_url)}, ${escapeSql(row.website_url)}, ${escapeSql(row.twitter_url)}) ON CONFLICT (user_id) DO UPDATE SET bio = EXCLUDED.bio, profile_picture = EXCLUDED.profile_picture, linkedin_url = EXCLUDED.linkedin_url, github_url = EXCLUDED.github_url;\n`);
         }
 
         // 2. DSA Modules

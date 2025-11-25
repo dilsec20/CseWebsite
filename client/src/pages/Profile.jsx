@@ -190,7 +190,7 @@ const Profile = () => {
         return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
 
-    const avatarColor = getAvatarColor(profileData.username);
+    const avatarColor = getAvatarColor(profileData.user_name);
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -292,7 +292,7 @@ const Profile = () => {
                                     </span>
                                 )}
                             </div>
-                            <p className="text-gray-500 text-lg mb-1">@{profileData.username}</p>
+                            <p className="text-gray-500 text-lg mb-1">@{profileData.user_name}</p>
                             <div className="flex items-center gap-4 text-sm text-gray-600 mt-3">
                                 <div className="flex items-center gap-1">
                                     <Mail className="h-4 w-4" />

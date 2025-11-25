@@ -8,18 +8,34 @@ const Register = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
-    name: ""
+    name: "",
+    username: ""
   });
 
-  const { email, password, name } = inputs;
+  const { email, password, name, username } = inputs;
 
-  const onChange = e =>
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  const onChange = e => {
+    // For username, only allow alphanumeric and underscores
+    if (e.target.name === "username") {
+      const val = e.target.value;
+      if (/^[a-zA-Z0-9_]*$/.test(val)) {
+        setInputs({ ...inputs, [e.target.name]: val });
+      }
+    } else {
+      setInputs({ ...inputs, [e.target.name]: e.target.value });
+    }
+  };
 
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const body = { email, password, name };
+      // Final validation before submit
+      if (username.length < 3) {
+        toast.error("Username must be at least 3 characters long");
+        return;
+      }
+
+      const body = { email, password, name, username };
       const response = await fetch(
         `${API_URL}/auth/register`,
         {
@@ -74,6 +90,25 @@ const Register = ({ setAuth }) => {
                 required
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-gray-400 font-bold text-lg">@</span>
+              </div>
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={onChange}
+                className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="username_123"
+                required
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Only letters, numbers, and underscores.</p>
           </div>
 
           <div>

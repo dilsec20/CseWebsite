@@ -18,7 +18,13 @@ function generateUsername(name) {
 // Register
 router.post("/register", async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, username } = req.body;
+
+        // Validate username format (backend side)
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        if (!username || !usernameRegex.test(username)) {
+            return res.status(400).json("Invalid username format. Only letters, numbers, and underscores allowed.");
+        }
 
         // Check if email exists
         const userCheck = await pool.query(
@@ -30,24 +36,14 @@ router.post("/register", async (req, res) => {
             return res.status(401).json("User already exists");
         }
 
-        // Generate unique username
-        let baseUsername = generateUsername(name);
-        let username = baseUsername;
-        let counter = 1;
+        // Check if username exists
+        const usernameCheck = await pool.query(
+            "SELECT * FROM users WHERE username = $1",
+            [username]
+        );
 
-        // Check for username duplicates and append number if needed
-        while (true) {
-            const usernameCheck = await pool.query(
-                "SELECT * FROM users WHERE username = $1",
-                [username]
-            );
-
-            if (usernameCheck.rows.length === 0) {
-                break; // Username is unique
-            }
-
-            username = `${baseUsername}${counter}`;
-            counter++;
+        if (usernameCheck.rows.length > 0) {
+            return res.status(401).json("Username is already taken");
         }
 
         // Hash password

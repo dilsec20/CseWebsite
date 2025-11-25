@@ -28,6 +28,18 @@ async function generateSeed() {
         stream.write('-- Production Seed File\n');
         stream.write('BEGIN;\n\n');
 
+        // 0. Initialize Schema (Create Tables)
+        console.log('   - Including Schema...');
+        const schemaPath = path.join(__dirname, '../database.sql');
+        if (fs.existsSync(schemaPath)) {
+            const schema = fs.readFileSync(schemaPath, 'utf8');
+            stream.write('-- Schema Initialization\n');
+            stream.write(schema);
+            stream.write('\n\n-- Data Insertion\n');
+        } else {
+            console.warn('⚠️ database.sql not found, skipping schema initialization');
+        }
+
         // 1. Users
         console.log('   - Exporting Users...');
         const users = await pool.query('SELECT * FROM users');

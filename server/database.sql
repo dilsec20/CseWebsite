@@ -31,6 +31,17 @@ CREATE TABLE problems (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Test Cases table
+CREATE TABLE test_cases (
+    test_case_id SERIAL PRIMARY KEY,
+    problem_id INTEGER REFERENCES problems(problem_id) ON DELETE CASCADE,
+    input TEXT NOT NULL,
+    expected_output TEXT NOT NULL,
+    is_hidden BOOLEAN DEFAULT FALSE,
+    is_sample BOOLEAN DEFAULT FALSE,
+    test_case_order INTEGER
+);
+
 -- Submissions table to track user progress
 CREATE TABLE submissions (
     submission_id SERIAL PRIMARY KEY,

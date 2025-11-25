@@ -58,6 +58,18 @@ app.use("/api/contests", require("./routes/contests"));
 app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
 
+// Serve static assets in production
+const path = require('path');
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+
+  // Handle SPA routing - return index.html for any unknown routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });

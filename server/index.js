@@ -39,6 +39,43 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Temporary route to seed production database from SQL file
+app.get('/api/admin/seed-prod', async (req, res) => {
+  const secret = req.query.secret;
+  if (secret !== 'dilip_admin') {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const seedPath = path.join(__dirname, 'seed_prod.sql');
+
+    if (!fs.existsSync(seedPath)) {
+      return res.status(404).json({ error: 'Seed file not found' });
+    }
+
+    console.log('🌱 Starting production seed...');
+    const sql = fs.readFileSync(seedPath, 'utf8');
+
+    // Execute the SQL script
+    await pool.query(sql);
+
+    console.log('✅ Production seed completed successfully!');
+    res.json({
+      status: 'success',
+      message: 'Database seeded successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('❌ Seed error:', err);
+    res.status(500).json({
+      error: 'Seeding failed',
+      details: err.message
+    });
+  }
+});
+
 // Initialize database on startup
 async function initializeDatabase() {
   try {

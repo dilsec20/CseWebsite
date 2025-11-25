@@ -166,7 +166,13 @@ async function initializeDatabase() {
 
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`FRONTEND_URL: ${process.env.FRONTEND_URL}`);
-  await initializeDatabase();
+
+  // Only auto-initialize in development
+  if (process.env.NODE_ENV !== 'production') {
+    await initializeDatabase();
+  } else {
+    console.log('⚠️  Production mode: Skipping auto-initialization. Use /api/admin/seed-prod to initialize database.');
+  }
 });

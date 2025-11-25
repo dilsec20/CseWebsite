@@ -21,7 +21,16 @@ CREATE TABLE users (
     user_email VARCHAR(255) UNIQUE NOT NULL,
     user_password VARCHAR(255) NOT NULL,
     username VARCHAR(100) UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    bio TEXT,
+    profile_picture TEXT,
+    linkedin_url VARCHAR(255),
+    github_url VARCHAR(255),
+    website_url VARCHAR(255),
+    twitter_url VARCHAR(255),
+    about TEXT,
+    full_name VARCHAR(255),
+    role VARCHAR(50) DEFAULT 'user'
 );
 
 -- Problems table  

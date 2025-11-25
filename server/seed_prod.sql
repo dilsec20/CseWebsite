@@ -131,7 +131,8 @@ CREATE TABLE IF NOT EXISTS dsa_modules (
     module_id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    order_index INTEGER NOT NULL
+    order_index INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS dsa_topics (
@@ -140,7 +141,8 @@ CREATE TABLE IF NOT EXISTS dsa_topics (
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     problem_id INTEGER REFERENCES problems(problem_id) ON DELETE SET NULL,
-    order_index INTEGER NOT NULL
+    order_index INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 

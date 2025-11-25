@@ -74,7 +74,7 @@ const ProfileMenu = ({ setAuth }) => {
 
     if (!userData) return null;
 
-    const avatarColor = getAvatarColor(userData.username);
+    const avatarColor = getAvatarColor(userData.user_name);
 
     return (
         <div className="relative" ref={menuRef}>
@@ -104,7 +104,7 @@ const ProfileMenu = ({ setAuth }) => {
                     {/* User Info */}
                     <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-bold text-gray-900">{userData.user_name}</p>
-                        <p className="text-xs text-gray-500">@{userData.username}</p>
+                        <p className="text-xs text-gray-500">@{userData.user_name}</p>
                     </div>
 
                     {/* Menu Items */}

@@ -55,42 +55,8 @@ This project is built using the **PERN Stack** for high performance and scalabil
 
 ---
 
-## 🚀 Getting Started (Local Setup)
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd CseWebsite
-    ```
 
-2.  **Install Dependencies:**
-    ```bash
-    # Backend
-    cd server
-    npm install
-
-    # Frontend
-    cd ../client
-    npm install
-    ```
-
-3.  **Setup Database:**
-    *   Create a PostgreSQL database named `placement_prep`.
-    *   Import the schema from `server/database.sql`.
-
-4.  **Run the Application:**
-    ```bash
-    # Backend (Port 5000)
-    cd server
-    npm start
-
-    # Frontend (Port 5173)
-    cd client
-    npm run dev
-    ```
-
----
-
-## 👨‍💻 Author
+## 👨‍💻 Author - Dilip Kumar
 
 Developed with ❤️ for helping students ace their placements.

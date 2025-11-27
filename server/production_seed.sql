@@ -1,10 +1,7 @@
 -- Production Seed File
 BEGIN;
 
--- Schema Initialization
--- Drop existing tables if they exist (in reverse order of dependencies)
-DROP TABLE IF EXISTS dsa_topics CASCADE;
-DROP TABLE IF EXISTS dsa_modules CASCADE;
+-- Force update 2025-11-27
 DROP TABLE IF EXISTS contest_problems CASCADE;
 DROP TABLE IF EXISTS contest_sessions CASCADE;  
 DROP TABLE IF EXISTS quiz_results CASCADE;

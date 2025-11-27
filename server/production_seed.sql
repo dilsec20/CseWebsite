@@ -11493,7 +11493,7 @@ INSERT INTO test_cases (test_case_id, problem_id, input, expected_output, is_hid
 INSERT INTO test_cases (test_case_id, problem_id, input, expected_output, is_hidden, is_sample) VALUES (1052, 1245, '5
 4 1 2 1 2', '4', NULL, false) ON CONFLICT (test_case_id) DO NOTHING;
 INSERT INTO test_cases (test_case_id, problem_id, input, expected_output, is_hidden, is_sample) VALUES (1053, 1245, '7
-1 2 3 4 5 1 2', '3', NULL, false) ON CONFLICT (test_case_id) DO NOTHING;
+1 2 1 2 4 4 3', '3', NULL, false) ON CONFLICT (test_case_id) DO NOTHING;
 INSERT INTO test_cases (test_case_id, problem_id, input, expected_output, is_hidden, is_sample) VALUES (1054, 1245, '3
 7 7 8', '8', NULL, false) ON CONFLICT (test_case_id) DO NOTHING;
 INSERT INTO test_cases (test_case_id, problem_id, input, expected_output, is_hidden, is_sample) VALUES (1055, 1245, '9

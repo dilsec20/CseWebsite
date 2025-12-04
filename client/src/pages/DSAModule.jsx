@@ -154,6 +154,18 @@ const DSAModule = () => {
                 {selectedTopic ? (
                     <div className="max-w-4xl mx-auto px-8 py-12">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
+                            {selectedTopic.video_url && (
+                                <div className="mb-8 aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                                    <iframe
+                                        src={selectedTopic.video_url.replace('watch?v=', 'embed/')}
+                                        title={selectedTopic.title}
+                                        className="w-full h-full"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            )}
+
                             <div className="prose prose-blue max-w-none">
                                 {renderContent(selectedTopic.content)}
                             </div>

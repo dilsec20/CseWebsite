@@ -138,7 +138,10 @@ router.post("/forgot-password", async (req, res) => {
         const emailResult = await sendOTPEmail(email, otp, user.rows[0].user_name);
 
         if (!emailResult.success) {
-            return res.status(500).json({ error: "Failed to send email. Please try again." });
+            return res.status(500).json({
+                error: "Failed to send email",
+                details: emailResult.error
+            });
         }
 
         res.json({

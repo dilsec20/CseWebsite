@@ -68,27 +68,20 @@ app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
 
 // Serve static assets in production
+// Serve static assets if in production or if dist folder exists
 const path = require('path');
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  const distPath = path.join(__dirname, '../client/dist');
+const distPath = path.join(__dirname, '../client/dist');
+const fs = require('fs');
+
+if (process.env.NODE_ENV === 'production' || fs.existsSync(distPath)) {
   console.log(`📂 Serving static files from: ${distPath}`);
-  try {
-    const fs = require('fs');
-    if (fs.existsSync(distPath)) {
-      console.log('📄 Files in dist:', fs.readdirSync(distPath));
-    } else {
-      console.error('❌ dist folder NOT FOUND!');
-    }
-  } catch (e) {
-    console.error('❌ Error checking dist folder:', e);
-  }
+
   app.use(express.static(distPath));
 
   // Handle SPA routing - return index.html for any unknown routes
   // Using regex /.*/ to match all routes avoids "Missing parameter name" error in Express 5
   app.get(/.*/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+    res.sendFile(path.resolve(distPath, 'index.html'));
   });
 }
 

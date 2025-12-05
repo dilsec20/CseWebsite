@@ -15,6 +15,10 @@ CREATE DATABASE placement_prep;
 
 ### 2. Configure Environment Variables
 
+For Supabase, use the connection string provided in your dashboard.
+You can use the Transaction Pooler (port 6543) or Direct Connection (port 5432).
+Direct Connection is recommended for migrations and schema changes.
+
 Copy the example file and fill in your details:
 ```bash
 cd server

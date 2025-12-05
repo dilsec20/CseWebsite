@@ -38,6 +38,10 @@ CREATE TABLE problems (
     topic VARCHAR(100) NOT NULL,
     test_case_input TEXT,
     test_case_output TEXT,
+    constraints TEXT,
+    input_format TEXT,
+    output_format TEXT,
+    source VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -49,7 +53,8 @@ CREATE TABLE test_cases (
     expected_output TEXT NOT NULL,
     is_hidden BOOLEAN DEFAULT FALSE,
     is_sample BOOLEAN DEFAULT FALSE,
-    test_case_order INTEGER
+    test_case_order INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Submissions table to track user progress
@@ -138,5 +143,24 @@ CREATE TABLE IF NOT EXISTS dsa_topics (
     content TEXT NOT NULL,
     problem_id INTEGER REFERENCES problems(problem_id) ON DELETE SET NULL,
     order_index INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Progress Table
+CREATE TABLE IF NOT EXISTS user_progress (
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    problem_id INTEGER REFERENCES problems(problem_id) ON DELETE CASCADE,
+    solved BOOLEAN DEFAULT FALSE,
+    last_attempted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, problem_id)
+);
+
+-- Password Reset Tokens Table
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    token_id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

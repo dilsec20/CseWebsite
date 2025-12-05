@@ -106,12 +106,13 @@ router.get("/profile/:username", async (req, res) => {
 
         // Calculate Contest Rating (Relative Performance Logic)
         // 1. Fetch all contest sessions for user ordered by time
-        let contestRating = 0;
+        let currentRating = 0;
         let totalContestSolutions = 0;
+        const ratingHistory = [];
 
         try {
             const allContests = await pool.query(
-                `SELECT cs.session_id, cs.start_time,
+                `SELECT cs.session_id, cs.start_time, cs.end_time,
                         COUNT(CASE WHEN p.difficulty = 'Easy' AND cp.solved = true THEN 1 END) as easy_solved,
                         COUNT(CASE WHEN p.difficulty = 'Medium' AND cp.solved = true THEN 1 END) as medium_solved,
                         COUNT(CASE WHEN p.difficulty = 'Hard' AND cp.solved = true THEN 1 END) as hard_solved,
@@ -120,7 +121,7 @@ router.get("/profile/:username", async (req, res) => {
                  JOIN contest_problems cp ON cs.session_id = cp.session_id
                  JOIN problems p ON cp.problem_id = p.problem_id
                  WHERE cs.user_id = $1
-                 GROUP BY cs.session_id, cs.start_time
+                 GROUP BY cs.session_id, cs.start_time, cs.end_time
                  ORDER BY cs.start_time ASC`,
                 [userId]
             );
@@ -132,12 +133,12 @@ router.get("/profile/:username", async (req, res) => {
                 const hard = parseInt(contest.hard_solved);
                 totalContestSolutions += parseInt(contest.total_solved);
 
-                // Base score for this contest
-                const score = (easy * 20) + (medium * 30) + (hard * 60);
+                // Base score for this contest (Matched with Dashboard: 20/40/80)
+                const score = (easy * 20) + (medium * 40) + (hard * 80);
 
                 if (i === 0) {
                     // First contest: No penalty, just add score
-                    contestRating += score;
+                    currentRating += score;
                 } else {
                     // Subsequent contests: Compare with previous
                     const prev = allContests.rows[i - 1];
@@ -148,15 +149,23 @@ router.get("/profile/:username", async (req, res) => {
                     let penalty = 0;
                     // Penalty only if solved count DROPS compared to previous contest
                     if (easy < prevEasy) penalty += (prevEasy - easy) * 10;
-                    if (medium < prevMedium) penalty += (prevMedium - medium) * 15;
-                    if (hard < prevHard) penalty += (prevHard - hard) * 30;
+                    if (medium < prevMedium) penalty += (prevMedium - medium) * 20;
+                    if (hard < prevHard) penalty += (prevHard - hard) * 40;
 
-                    contestRating += (score - penalty);
+                    currentRating += (score - penalty);
                 }
-            }
 
-            // Ensure rating doesn't go below 0
-            contestRating = Math.max(0, contestRating);
+                // Ensure rating doesn't go below 0
+                if (currentRating < 0) currentRating = 0;
+
+                // Add to history with unique date (append contest number if multiple contests on same day)
+                const dateStr = new Date(contest.end_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                const uniqueDate = allContests.rows.length > 1 ? `${dateStr} #${i + 1}` : dateStr;
+                ratingHistory.push({
+                    date: uniqueDate,
+                    rating: currentRating
+                });
+            }
         } catch (err) {
             console.log('Contest rating calculation failed:', err.message);
         }
@@ -198,8 +207,9 @@ router.get("/profile/:username", async (req, res) => {
                 hours_spent: hoursSpent,
                 contests_attended: contestsAttended,
                 contest_solutions: totalContestSolutions,
-                contest_rating: contestRating
+                contest_rating: currentRating
             },
+            rating_history: ratingHistory,
             submission_calendar: calendarData
         });
 

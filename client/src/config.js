@@ -1,5 +1,5 @@
 // API Configuration
-// In production, VITE_API_URL will be set in environment variables
-// In development, it falls back to localhost:5000
-
-export const API_URL = "https://csewebsiteplacement-prep-backend.onrender.com";
+// Dynamically determine API URL based on environment
+export const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? "http://localhost:5000"
+    : window.location.origin;

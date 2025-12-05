@@ -6,9 +6,9 @@ router.get("/profile/:username", async (req, res) => {
     try {
         const { username } = req.params;
 
-        // Get user info
+        // Get user info - Query by USERNAME not user_name
         const userInfo = await pool.query(
-            "SELECT user_id, user_name, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_name ILIKE $1",
+            "SELECT user_id, user_name, username, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE username = $1",
             [username]
         );
 
@@ -181,7 +181,7 @@ router.get("/profile/:username", async (req, res) => {
 
         res.json({
             user_name: user.user_name,
-            username: user.user_name,
+            username: user.username,
             user_email: user.user_email, // Consider hiding this for public profiles if privacy is a concern
             member_since: user.created_at,
             bio: user.bio,
@@ -215,8 +215,9 @@ router.get("/search", async (req, res) => {
         const { q } = req.query;
         if (!q) return res.json([]);
 
+        // Search by username OR user_name
         const users = await pool.query(
-            "SELECT user_name, profile_picture FROM users WHERE user_name ILIKE $1 LIMIT 5",
+            "SELECT user_name, username, profile_picture FROM users WHERE username ILIKE $1 OR user_name ILIKE $1 LIMIT 5",
             [`%${q}%`]
         );
 

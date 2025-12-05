@@ -104,12 +104,12 @@ const ProfileMenu = ({ setAuth }) => {
                     {/* User Info */}
                     <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-bold text-gray-900">{userData.user_name}</p>
-                        <p className="text-xs text-gray-500">@{userData.user_name}</p>
+                        <p className="text-xs text-gray-500">@{userData.username}</p>
                     </div>
 
                     {/* Menu Items */}
                     <Link
-                        to={`/profile/${userData.user_name}`}
+                        to={`/profile/${userData.username}`}
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                         onClick={() => setIsOpen(false)}
                     >

@@ -9,7 +9,7 @@ router.get("/", authorization, async (req, res) => {
 
         // Get user info including profile fields
         const userInfo = await pool.query(
-            "SELECT user_name, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_id = $1",
+            "SELECT user_name, username, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_id = $1",
             [userId]
         );
 
@@ -188,8 +188,6 @@ router.get("/", authorization, async (req, res) => {
             // Ensure rating doesn't go below 0
             if (currentRating < 0) currentRating = 0;
 
-            console.log(`[DEBUG] Contest ${i}: Score=${score}, Rating=${currentRating}`);
-
             // Add to history with unique date (append contest number if multiple contests on same day)
             const dateStr = new Date(contest.end_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
             const uniqueDate = allContests.rows.length > 1 ? `${dateStr} #${i + 1}` : dateStr;
@@ -198,8 +196,6 @@ router.get("/", authorization, async (req, res) => {
                 rating: currentRating
             });
         }
-
-        console.log('[DEBUG] Final History:', ratingHistory);
 
         // Final rating is the last one
         const finalRating = currentRating;
@@ -224,7 +220,7 @@ router.get("/", authorization, async (req, res) => {
 
         res.json({
             user_name: user.user_name,
-            username: user.user_name,
+            username: user.username,
             user_email: user.user_email,
             member_since: user.created_at,
             bio: user.bio,
@@ -259,19 +255,19 @@ router.get("/", authorization, async (req, res) => {
 router.put("/profile", authorization, async (req, res) => {
     try {
         const userId = req.user;
-        const { user_name, bio, profile_picture, linkedin_url, github_url } = req.body;
+        const { user_name, username, bio, profile_picture, linkedin_url, github_url } = req.body;
 
         // Validate username format if provided
-        if (user_name) {
+        if (username) {
             const usernameRegex = /^[a-zA-Z0-9_]+$/;
-            if (!usernameRegex.test(user_name)) {
+            if (!usernameRegex.test(username)) {
                 return res.status(400).json({ error: "Username can only contain letters, numbers, and underscores" });
             }
 
             // Check for uniqueness
             const userExist = await pool.query(
-                "SELECT user_id FROM users WHERE user_name = $1 AND user_id != $2",
-                [user_name, userId]
+                "SELECT user_id FROM users WHERE username = $1 AND user_id != $2",
+                [username, userId]
             );
 
             if (userExist.rows.length > 0) {
@@ -279,17 +275,18 @@ router.put("/profile", authorization, async (req, res) => {
             }
         }
 
-        // Update profile fields including user_name
+        // Update profile fields including user_name and username
         const result = await pool.query(
             `UPDATE users 
              SET user_name = COALESCE($1, user_name),
-                    bio = $2,
-                    profile_picture = $3,
-                    linkedin_url = $4,
-                    github_url = $5
-             WHERE user_id = $6
-             RETURNING user_name, bio, profile_picture, linkedin_url, github_url`,
-            [user_name, bio, profile_picture, linkedin_url, github_url, userId]
+                 username = COALESCE($2, username),
+                 bio = $3,
+                 profile_picture = $4,
+                 linkedin_url = $5,
+                 github_url = $6
+             WHERE user_id = $7
+             RETURNING user_name, username, bio, profile_picture, linkedin_url, github_url`,
+            [user_name, username, bio, profile_picture, linkedin_url, github_url, userId]
         );
 
         if (result.rows.length === 0) {

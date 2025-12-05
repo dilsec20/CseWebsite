@@ -57,6 +57,38 @@ app.get('/api/admin/seed-prod', async (req, res) => {
   }
 });
 
+// Fix RLS Access
+app.get('/api/admin/fix-rls', async (req, res) => {
+  if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const sqlPath = path.join(__dirname, 'fix_rls.sql');
+    if (!fs.existsSync(sqlPath)) return res.status(404).json({ error: 'fix_rls.sql not found' });
+
+    await pool.query(fs.readFileSync(sqlPath, 'utf8'));
+    res.json({ status: 'success', message: 'RLS Backend Access Fixed' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Disable RLS (Emergency)
+app.get('/api/admin/disable-rls', async (req, res) => {
+  if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const sqlPath = path.join(__dirname, 'disable_rls.sql');
+    if (!fs.existsSync(sqlPath)) return res.status(404).json({ error: 'disable_rls.sql not found' });
+
+    await pool.query(fs.readFileSync(sqlPath, 'utf8'));
+    res.json({ status: 'success', message: 'RLS Disabled on all tables' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Routes
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/api/dashboard", require("./routes/dashboard"));

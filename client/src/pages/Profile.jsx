@@ -34,7 +34,7 @@ const Profile = () => {
 
             // Check if viewing own profile
             if (token) {
-                const response = await fetch(`${API_URL}/dashboard/`, {
+                const response = await fetch(`${API_URL}/api/dashboard/`, {
                     headers: { token: token }
                 });
                 const myData = await response.json();
@@ -116,7 +116,7 @@ const Profile = () => {
                 github_url: formData.githubUrl
             };
 
-            const response = await fetch(`${API_URL}/dashboard/profile`, {
+            const response = await fetch(`${API_URL}/api/dashboard/profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

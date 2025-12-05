@@ -13,7 +13,7 @@ const ProfileMenu = ({ setAuth }) => {
     useEffect(() => {
         const getUserData = async () => {
             try {
-                const response = await fetch(`${API_URL}/dashboard/`, {
+                const response = await fetch(`${API_URL}/api/dashboard/`, {
                     headers: { token: localStorage.getItem("token") }
                 });
                 const data = await response.json();

@@ -59,7 +59,7 @@ app.get('/api/admin/seed-prod', async (req, res) => {
 
 // Routes
 app.use("/auth", require("./routes/jwtAuth"));
-app.use("/dashboard", require("./routes/dashboard"));
+app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/problems", require("./routes/problems"));
 app.use("/api/execute", require("./routes/execute"));
 app.use("/api/quizzes", require("./routes/quizzes"));

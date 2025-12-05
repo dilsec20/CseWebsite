@@ -30,7 +30,7 @@ const Dashboard = ({ setAuth }) => {
 
     const getDashboardData = async () => {
         try {
-            const response = await fetch(`${API_URL}/dashboard/`, {
+            const response = await fetch(`${API_URL}/api/dashboard/`, {
                 headers: { token: localStorage.getItem("token") }
             });
             const parseRes = await response.json();

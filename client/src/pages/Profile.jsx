@@ -19,7 +19,9 @@ const Profile = () => {
         username: '',
         bio: '',
         linkedinUrl: '',
-        githubUrl: ''
+        githubUrl: '',
+        oldPassword: '',
+        newPassword: ''
     });
     const [previewImage, setPreviewImage] = useState(null);
     const fileInputRef = useRef(null);
@@ -73,7 +75,9 @@ const Profile = () => {
                 username: data.username || '',
                 bio: data.bio || '',
                 linkedinUrl: data.linkedin_url || '',
-                githubUrl: data.github_url || ''
+                githubUrl: data.github_url || '',
+                oldPassword: '',
+                newPassword: ''
             });
             setPreviewImage(data.profile_picture);
         } catch (err) {
@@ -116,7 +120,9 @@ const Profile = () => {
                 bio: formData.bio,
                 profile_picture: previewImage,
                 linkedin_url: formData.linkedinUrl,
-                github_url: formData.githubUrl
+                github_url: formData.githubUrl,
+                oldPassword: formData.oldPassword,
+                newPassword: formData.newPassword
             };
 
             const response = await fetch(`${API_URL}/api/dashboard/profile`, {
@@ -221,7 +227,9 @@ const Profile = () => {
                                         username: profileData.username || '',
                                         bio: profileData.bio || '',
                                         linkedinUrl: profileData.linkedin_url || '',
-                                        githubUrl: profileData.github_url || ''
+                                        githubUrl: profileData.github_url || '',
+                                        oldPassword: '',
+                                        newPassword: ''
                                     });
                                     setPreviewImage(profileData.profile_picture);
                                 }}
@@ -345,6 +353,34 @@ const Profile = () => {
                                     />
                                 </div>
                                 <p className="text-xs text-gray-500 mt-1">Only letters, numbers, and underscores allowed.</p>
+                            </div>
+
+                            <div className="pt-2 pb-2 border-t border-b border-gray-100 my-4">
+                                <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1">
+                                    Change Password (Optional)
+                                </h3>
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Old Password</label>
+                                        <input
+                                            type="password"
+                                            value={formData.oldPassword}
+                                            onChange={(e) => setFormData({ ...formData, oldPassword: e.target.value })}
+                                            placeholder="Enter current password"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                        <input
+                                            type="password"
+                                            value={formData.newPassword}
+                                            onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                                            placeholder="Enter new password"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div>

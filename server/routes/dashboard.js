@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const pool = require("../db");
+const bcrypt = require("bcryptjs");
 const authorization = require("../middleware/authorization");
 
 // GET /dashboard/ - Get user dashboard stats
@@ -256,7 +257,28 @@ router.get("/", authorization, async (req, res) => {
 router.put("/profile", authorization, async (req, res) => {
     try {
         const userId = req.user;
-        const { user_name, username, bio, profile_picture, linkedin_url, github_url } = req.body;
+        const { user_name, username, bio, profile_picture, linkedin_url, github_url, oldPassword, newPassword } = req.body;
+
+        let passwordHash = null;
+
+        // Handle password change if requested
+        if (newPassword) {
+            if (!oldPassword) {
+                return res.status(400).json({ error: "Old password is required to set a new password" });
+            }
+
+            // Get current password hash
+            const userPass = await pool.query("SELECT user_password FROM users WHERE user_id = $1", [userId]);
+            if (userPass.rows.length === 0) return res.status(404).json({ error: "User not found" });
+
+            const validPassword = await bcrypt.compare(oldPassword, userPass.rows[0].user_password);
+            if (!validPassword) {
+                return res.status(400).json({ error: "Incorrect old password" });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            passwordHash = await bcrypt.hash(newPassword, salt);
+        }
 
         // Validate username format if provided
         if (username) {
@@ -284,10 +306,11 @@ router.put("/profile", authorization, async (req, res) => {
                  bio = $3,
                  profile_picture = $4,
                  linkedin_url = $5,
-                 github_url = $6
-             WHERE user_id = $7
+                 github_url = $6,
+                 user_password = COALESCE($7, user_password)
+             WHERE user_id = $8
              RETURNING user_name, username, bio, profile_picture, linkedin_url, github_url`,
-            [user_name, username, bio, profile_picture, linkedin_url, github_url, userId]
+            [user_name, username, bio, profile_picture, linkedin_url, github_url, passwordHash, userId]
         );
 
         if (result.rows.length === 0) {

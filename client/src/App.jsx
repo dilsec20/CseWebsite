@@ -163,7 +163,7 @@ function App() {
         <Route path="/theory/aptitude" element={<AptitudeTheory />} />
         <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
         <Route path="/theory/reasoning" element={<ReasoningTheory />} />
-        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

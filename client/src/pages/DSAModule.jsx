@@ -155,14 +155,18 @@ const DSAModule = () => {
                     <div className="max-w-4xl mx-auto px-8 py-12">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
                             {selectedTopic.video_url && (
-                                <div className="mb-8 aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                                    <iframe
-                                        src={selectedTopic.video_url.replace('watch?v=', 'embed/')}
-                                        title={selectedTopic.title}
-                                        className="w-full h-full"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    ></iframe>
+                                <div className={`mb-8 ${selectedTopic.video_url.includes(',') ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200'}`}>
+                                    {selectedTopic.video_url.split(',').map((url, idx) => (
+                                        <div key={idx} className={`${selectedTopic.video_url.includes(',') ? 'aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200' : 'w-full h-full'}`}>
+                                            <iframe
+                                                src={url.trim().replace('watch?v=', 'embed/')}
+                                                title={`${selectedTopic.title} ${idx + 1}`}
+                                                className="w-full h-full"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
 

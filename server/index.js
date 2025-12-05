@@ -94,6 +94,7 @@ app.use("/auth", require("./routes/jwtAuth"));
 app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/problems", require("./routes/problems"));
 app.use("/api/execute", require("./routes/execute"));
+app.use("/api/admin", require("./routes/admin")); // Admin Routes
 app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/contests", require("./routes/contests"));
 app.use("/api/public", require("./routes/public"));

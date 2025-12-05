@@ -20,6 +20,7 @@ import AptitudeTheory from './pages/AptitudeTheory';
 import CSFundamentalsTheory from './pages/CSFundamentalsTheory';
 import ReasoningTheory from './pages/ReasoningTheory';
 import ProfileMenu from './components/ProfileMenu';
+import AdminDashboard from './pages/AdminDashboard';
 
 import DSAPath from './pages/DSAPath';
 import DSAModule from './pages/DSAModule';
@@ -162,6 +163,7 @@ function App() {
         <Route path="/theory/aptitude" element={<AptitudeTheory />} />
         <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
         <Route path="/theory/reasoning" element={<ReasoningTheory />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

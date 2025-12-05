@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, LogOut, Settings, LayoutDashboard } from 'lucide-react';
+import { User, LogOut, Settings, LayoutDashboard, Shield } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
@@ -125,6 +125,17 @@ const ProfileMenu = ({ setAuth }) => {
                         <LayoutDashboard className="h-4 w-4 mr-3" />
                         Dashboard
                     </Link>
+
+                    {userData.role === 'admin' && (
+                        <Link
+                            to="/admin"
+                            className="flex items-center px-4 py-2 text-sm text-purple-700 hover:bg-purple-50 transition"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <Shield className="h-4 w-4 mr-3" />
+                            Admin View
+                        </Link>
+                    )}
 
                     <div className="border-t border-gray-100 my-1"></div>
 

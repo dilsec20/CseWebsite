@@ -9,7 +9,7 @@ router.get("/", authorization, async (req, res) => {
 
         // Get user info including profile fields
         const userInfo = await pool.query(
-            "SELECT user_name, username, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_id = $1",
+            "SELECT user_name, username, user_email, role, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE user_id = $1",
             [userId]
         );
 
@@ -222,6 +222,7 @@ router.get("/", authorization, async (req, res) => {
             user_name: user.user_name,
             username: user.username,
             user_email: user.user_email,
+            role: user.role,
             member_since: user.created_at,
             bio: user.bio,
             profile_picture: user.profile_picture,

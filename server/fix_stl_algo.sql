@@ -1,0 +1,1 @@
+UPDATE dsa_topics SET video_url = 'https://www.youtube.com/watch?v=cWvruDR-hJA,https://www.youtube.com/watch?v=zI9wlhwMZpk,https://www.youtube.com/watch?v=3pvZhwp0U9w,https://www.youtube.com/watch?v=Cg7SI0WtmXY,https://www.youtube.com/watch?v=sYs0L1vxRjo,https://www.youtube.com/watch?v=o-WpVoRgSj4' WHERE title ILIKE '%STL Algorithms%';

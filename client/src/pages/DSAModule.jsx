@@ -121,6 +121,34 @@ const DSAModule = () => {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     if (!module) return <div className="min-h-screen flex items-center justify-center">Module not found</div>;
 
+    const handleNext = () => {
+        if (!module || !selectedTopic) return;
+        const currentIndex = module.topics.findIndex(t => t.topic_id === selectedTopic.topic_id);
+        if (currentIndex < module.topics.length - 1) {
+            fetchTopicContent(module.topics[currentIndex + 1].topic_id);
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (!module || !selectedTopic) return;
+        const currentIndex = module.topics.findIndex(t => t.topic_id === selectedTopic.topic_id);
+        if (currentIndex > 0) {
+            fetchTopicContent(module.topics[currentIndex - 1].topic_id);
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    };
+
+    const getCurrentIndex = () => {
+        if (!module || !selectedTopic) return -1;
+        return module.topics.findIndex(t => t.topic_id === selectedTopic.topic_id);
+    };
+
+    const isFirstTopic = getCurrentIndex() === 0;
+    const isLastTopic = module && getCurrentIndex() === module.topics.length - 1;
+
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
@@ -193,10 +221,22 @@ const DSAModule = () => {
 
                         {/* Navigation Footer */}
                         <div className="mt-8 flex justify-between items-center">
-                            <button className="px-4 py-2 text-gray-500 hover:text-gray-900 font-medium flex items-center gap-2 disabled:opacity-50">
+                            <button
+                                onClick={handlePrevious}
+                                disabled={isFirstTopic}
+                                className={`px-4 py-2 font-medium flex items-center gap-2 transition ${isFirstTopic
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-gray-500 hover:text-gray-900'}`}
+                            >
                                 <ChevronLeft className="h-4 w-4" /> Previous
                             </button>
-                            <button className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2">
+                            <button
+                                onClick={handleNext}
+                                disabled={isLastTopic}
+                                className={`px-4 py-2 font-medium flex items-center gap-2 transition ${isLastTopic
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-blue-600 hover:text-blue-700'}`}
+                            >
                                 Next Topic <ChevronRight className="h-4 w-4" />
                             </button>
                         </div>

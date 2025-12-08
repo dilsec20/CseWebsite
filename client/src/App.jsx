@@ -27,6 +27,7 @@ import DSAModule from './pages/DSAModule';
 
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
+import { CodeProvider } from './contexts/CodeContext';
 
 // Global Navbar Component
 const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
@@ -139,42 +140,42 @@ function App() {
 
 
 
+
+
   useEffect(() => {
     isAuth();
   }, []);
 
   return (
-    <Router>
-      <ToastContainer />
-      <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
-      <AIChatbot />
-      <Routes>
-        <Route path="/" element={<Landing setAuth={setAuth} />} />
-        <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
-        <Route path="/login" element={!isAuthenticated ? <Login setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/dashboard" element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to="/login" />} />
-        <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
-        <Route path="/dsa-path" element={<DSAPath />} />
-        <Route path="/dsa/module/:id" element={<DSAModule />} />
-        <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
-        <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
-        <Route path="/knowledge-base" element={<KnowledgeBase />} />
-        <Route path="/quiz/:id" element={<Quiz />} />
-        <Route path="/contests" element={<ContestDashboard />} />
-        <Route path="/contests/:id" element={<ContestArena />} />
-        <Route path="/theory/aptitude" element={<AptitudeTheory />} />
-        <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
-        <Route path="/theory/reasoning" element={<ReasoningTheory />} />
-        <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
-      </Routes>
-    </Router>
+    <CodeProvider>
+      <Router>
+        <ToastContainer />
+        <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
+        <AIChatbot />
+        <Routes>
+          <Route path="/" element={<Landing setAuth={setAuth} />} />
+          <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
+          <Route path="/login" element={!isAuthenticated ? <Login setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/dashboard" element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to="/login" />} />
+          <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
+          <Route path="/dsa-path" element={<DSAPath />} />
+          <Route path="/dsa/module/:id" element={<DSAModule />} />
+          <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
+          <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
+          <Route path="/knowledge-base" element={<KnowledgeBase />} />
+          <Route path="/quiz/:id" element={<Quiz />} />
+          <Route path="/contests" element={<ContestDashboard />} />
+          <Route path="/contests/:id" element={<ContestArena />} />
+          <Route path="/theory/aptitude" element={<AptitudeTheory />} />
+          <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
+          <Route path="/theory/reasoning" element={<ReasoningTheory />} />
+          <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    </CodeProvider>
   );
 }
-
-export default App;
-
-
 
 

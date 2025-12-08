@@ -17,7 +17,7 @@ router.post('/chat', async (req, res) => {
             });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
       You are a helpful AI assistant for a Computer Science Education website.

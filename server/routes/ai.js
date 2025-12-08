@@ -30,9 +30,14 @@ router.post('/chat', async (req, res) => {
       
       User's Question: ${message}
       
-      Please answer the user's question. If the question is about the current page, use the provided context to explain it. 
-      If the question is general programming help, you can answer that too.
-      Keep your answers concise, helpful, and friendly. Use formatting (markdown) if necessary for code details.
+      INSTRUCTIONS:
+      1. If the context contains "USER CODE EDITOR CONTENT", the user is likely solving a coding problem. 
+         - If they ask for help, explain the logic or syntax.
+         - If they ask for "optimal code" or "suggestions", analyze their code for complexity and suggest improvements.
+         - Do NOT solve the problem for them unless they explicitly ask for the solution (try to guide them first).
+      2. If the user asks about the page content, use the provided context.
+      3. Use markdown for code blocks.
+      4. Keep answers concise and encouraging.
     `;
 
         const result = await model.generateContent(prompt);

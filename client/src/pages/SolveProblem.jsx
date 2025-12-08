@@ -5,10 +5,13 @@ import { Play, Send, ArrowLeft, CheckCircle, XCircle, Loader, ChevronRight } fro
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
+import { useCodeContext } from '../contexts/CodeContext';
+
 const SolveProblem = ({ setAuth }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const { setCode: setGlobalCode, setProblemContext } = useCodeContext(); // Use Context
     const [problem, setProblem] = useState(null);
     const [code, setCode] = useState(`#include <bits/stdc++.h>
 using namespace std;
@@ -18,6 +21,13 @@ int main() {
     
     return 0;
 }`);
+    // ... (other state)
+
+    // Sync code to global context whenever it changes
+    useEffect(() => {
+        setGlobalCode(code);
+    }, [code, setGlobalCode]);
+
     const [output, setOutput] = useState('');
     const [runLoading, setRunLoading] = useState(false);
     const [submitLoading, setSubmitLoading] = useState(false);
@@ -35,15 +45,16 @@ int main() {
     const [showSidebar, setShowSidebar] = useState(true);
 
     useEffect(() => {
-        // Reset code to default template when problem changes
-        setCode(`#include <bits/stdc++.h>
+        // Reset code explicitly (local state)
+        const defaultCode = `#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     // Write your code here
     
     return 0;
-}`);
+}`;
+        setCode(defaultCode);
         setVerdict(null);
         setOutput('');
 
@@ -59,6 +70,7 @@ int main() {
             fetchSubmissions();
         }
     }, [id, location.search]);
+
 
     const fetchSubmissions = async () => {
         try {

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { useCodeContext } from '../contexts/CodeContext';
 
 const AIChatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { getCode } = useCodeContext();
     const [messages, setMessages] = useState([
         { role: 'ai', content: 'Hi! I can help you understand this page or answer any coding questions. What do you need help with?' }
     ]);
@@ -20,14 +22,17 @@ const AIChatbot = () => {
         scrollToBottom();
     }, [messages]);
 
-    // Reset or update context when location changes? 
-    // For now, we'll keep the chat running but the "context" sent will always be the current page.
-
     const getPageContext = () => {
-        // Simple way to get visible text content
-        // Limiting to a reasonable amount of characters to avoid token limits
-        const bodyText = document.body.innerText;
-        return bodyText.substring(0, 10000); // Send first 10k chars
+        // Get visible text content
+        let context = document.body.innerText.substring(0, 10000);
+
+        // Check if there is code in the editor context
+        const editorCode = getCode();
+        if (editorCode && editorCode.trim().length > 0 && editorCode.trim() !== 'undefined') {
+            context += `\n\n--- USER CODE EDITOR CONTENT ---\n${editorCode}\n--------------------------------`;
+        }
+
+        return context;
     };
 
     const handleSend = async (e) => {
@@ -108,8 +113,8 @@ const AIChatbot = () => {
                             >
                                 <div
                                     className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.role === 'user'
-                                            ? 'bg-indigo-600 text-white rounded-br-none'
-                                            : 'bg-white dark:bg-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none shadow-sm'
+                                        ? 'bg-indigo-600 text-white rounded-br-none'
+                                        : 'bg-white dark:bg-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none shadow-sm'
                                         }`}
                                 >
                                     {

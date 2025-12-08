@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const pool = require('./db');
+const path = require('path');
+const fs = require('fs');
 
 dotenv.config();
 
@@ -29,8 +31,6 @@ app.get('/api/admin/seed-prod', async (req, res) => {
   }
 
   try {
-    const fs = require('fs');
-    const path = require('path');
     const seedPath = path.join(__dirname, 'production_seed.sql');
 
     if (!fs.existsSync(seedPath)) {
@@ -61,8 +61,6 @@ app.get('/api/admin/seed-prod', async (req, res) => {
 app.get('/api/admin/fix-rls', async (req, res) => {
   if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
   try {
-    const fs = require('fs');
-    const path = require('path');
     const sqlPath = path.join(__dirname, 'fix_rls.sql');
     if (!fs.existsSync(sqlPath)) return res.status(404).json({ error: 'fix_rls.sql not found' });
 
@@ -77,8 +75,6 @@ app.get('/api/admin/fix-rls', async (req, res) => {
 app.get('/api/admin/disable-rls', async (req, res) => {
   if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
   try {
-    const fs = require('fs');
-    const path = require('path');
     const sqlPath = path.join(__dirname, 'disable_rls.sql');
     if (!fs.existsSync(sqlPath)) return res.status(404).json({ error: 'disable_rls.sql not found' });
 
@@ -99,12 +95,10 @@ app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/contests", require("./routes/contests"));
 app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
+app.use("/api/ai", require("./routes/ai")); // NEW: AI Chatbot Route
 
 // Serve static assets in production
-// Serve static assets if in production or if dist folder exists
-const path = require('path');
 const distPath = path.join(__dirname, '../client/dist');
-const fs = require('fs');
 
 if (process.env.NODE_ENV === 'production' || fs.existsSync(distPath)) {
   console.log(`📂 Serving static files from: ${distPath}`);
@@ -112,7 +106,6 @@ if (process.env.NODE_ENV === 'production' || fs.existsSync(distPath)) {
   app.use(express.static(distPath));
 
   // Handle SPA routing - return index.html for any unknown routes
-  // Using regex /.*/ to match all routes avoids "Missing parameter name" error in Express 5
   app.get(/.*/, (req, res) => {
     res.sendFile(path.resolve(distPath, 'index.html'));
   });

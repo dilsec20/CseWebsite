@@ -26,6 +26,7 @@ import DSAPath from './pages/DSAPath';
 import DSAModule from './pages/DSAModule';
 
 import { API_URL } from './config';
+import AIChatbot from './components/AIChatbot';
 
 // Global Navbar Component
 const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
@@ -136,6 +137,8 @@ function App() {
     }
   }
 
+
+
   useEffect(() => {
     isAuth();
   }, []);
@@ -144,6 +147,7 @@ function App() {
     <Router>
       <ToastContainer />
       <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
+      <AIChatbot />
       <Routes>
         <Route path="/" element={<Landing setAuth={setAuth} />} />
         <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />

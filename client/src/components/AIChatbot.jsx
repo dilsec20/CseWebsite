@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User, Maximize2, Trash2, Copy, Check } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Maximize2, Trash2, Copy, Check, Minimize2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { useCodeContext } from '../contexts/CodeContext';
 import ReactMarkdown from 'react-markdown';
@@ -181,6 +181,11 @@ const AIChatbot = () => {
         setInput('');
     };
 
+    const handleMinimize = () => {
+        setIsOpen(false);
+        // Do NOT reset messages, just close the window
+    };
+
     return (
         <div className="fixed bottom-6 left-6 z-50 font-sans">
             {/* Toggle Button */}
@@ -217,15 +222,22 @@ const AIChatbot = () => {
                         </div>
                         <div className="flex items-center gap-1 mr-4">
                             <button
-                                onClick={() => setMessages([{ role: 'ai', content: 'Hi! I can help you understand this page or answer any coding questions. What do you need help with?' }])}
+                                onClick={() => setMessages([{ role: 'ai', content: 'Hello Coder! How can i help you?' }])}
                                 className="hover:bg-gray-700 p-1.5 rounded transition text-gray-400 hover:text-white"
                                 title="Clear Chat"
                             >
                                 <Trash2 size={16} />
                             </button>
                             <button
-                                onClick={handleClose}
+                                onClick={handleMinimize}
                                 className="hover:bg-gray-700 p-1.5 rounded transition text-gray-400 hover:text-white"
+                                title="Minimize (Keep Chat)"
+                            >
+                                <Minimize2 size={18} />
+                            </button>
+                            <button
+                                onClick={handleClose}
+                                className="hover:bg-red-500/20 hover:text-red-400 p-1.5 rounded transition text-gray-400"
                                 title="Close & Reset"
                             >
                                 <X size={18} />

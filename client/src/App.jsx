@@ -138,10 +138,6 @@ function App() {
     }
   }
 
-
-
-
-
   useEffect(() => {
     isAuth();
   }, []);
@@ -178,4 +174,4 @@ function App() {
   );
 }
 
-
+export default App;

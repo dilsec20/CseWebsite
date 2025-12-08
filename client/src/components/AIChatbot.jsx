@@ -1,10 +1,54 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User, Maximize2, Trash2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Maximize2, Trash2, Copy, Check } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { useCodeContext } from '../contexts/CodeContext';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const CodeBlock = ({ language, value, ...props }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(value);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="rounded-md overflow-hidden my-3 bg-black border border-gray-800">
+            <div className="bg-[#202123] px-4 py-1.5 text-xs text-gray-400 border-b border-gray-700 flex justify-between items-center font-mono select-none">
+                <span>{language || 'code'}</span>
+                <button
+                    onClick={handleCopy}
+                    className="hover:text-white transition-colors flex items-center gap-1.5 focus:outline-none"
+                    title="Copy code"
+                >
+                    {copied ? (
+                        <>
+                            <Check size={14} className="text-green-500" />
+                            <span className="text-green-500">Copied!</span>
+                        </>
+                    ) : (
+                        <>
+                            <Copy size={14} />
+                            <span>Copy</span>
+                        </>
+                    )}
+                </button>
+            </div>
+            <SyntaxHighlighter
+                {...props}
+                style={vscDarkPlus}
+                language={language}
+                PreTag="div"
+                customStyle={{ margin: 0, padding: '1rem', background: '#000', fontSize: '0.9em' }}
+            >
+                {value}
+            </SyntaxHighlighter>
+        </div>
+    );
+};
 
 const AIChatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -211,21 +255,7 @@ const AIChatbot = () => {
                                                         code({ node, inline, className, children, ...props }) {
                                                             const match = /language-(\w+)/.exec(className || '')
                                                             return !inline && match ? (
-                                                                <div className="rounded-md overflow-hidden my-3 bg-black">
-                                                                    <div className="bg-[#202123] px-4 py-1.5 text-xs text-gray-400 border-b border-gray-700 flex justify-between font-mono">
-                                                                        <span>{match[1]}</span>
-                                                                        <span>Copy</span>
-                                                                    </div>
-                                                                    <SyntaxHighlighter
-                                                                        {...props}
-                                                                        style={vscDarkPlus}
-                                                                        language={match[1]}
-                                                                        PreTag="div"
-                                                                        customStyle={{ margin: 0, padding: '1rem', background: '#000', fontSize: '0.9em' }}
-                                                                    >
-                                                                        {String(children).replace(/\n$/, '')}
-                                                                    </SyntaxHighlighter>
-                                                                </div>
+                                                                <CodeBlock language={match[1]} value={String(children).replace(/\n$/, '')} {...props} />
                                                             ) : (
                                                                 <code {...props} className={`bg-black/30 px-1.5 py-0.5 rounded font-mono text-sm text-[#E9E9E9] ${className}`}>
                                                                     {children}

@@ -48,7 +48,7 @@ router.post('/chat', async (req, res) => {
 
     } catch (error) {
         console.error('Error calling Gemini API:', error);
-        res.status(500).json({ error: 'Failed to generate response. Please try again.' });
+        res.status(500).json({ error: error.message || 'Failed to generate response. Please try again.' });
     }
 });
 

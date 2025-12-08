@@ -132,7 +132,7 @@ const AIChatbot = () => {
         setIsOpen(false);
         // Reset chat history when closed
         setMessages([
-            { role: 'ai', content: 'Hi! I can help you understand this page or answer any coding questions. What do you need help with?' }
+            { role: 'ai', content: 'Hello Coder! How can i help you?' }
         ]);
         setInput('');
     };

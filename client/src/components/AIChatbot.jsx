@@ -10,7 +10,7 @@ const AIChatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { getCode } = useCodeContext();
     const [messages, setMessages] = useState([
-        { role: 'ai', content: 'Hi! I can help you understand this page or answer any coding questions. What do you need help with?' }
+        { role: 'ai', content: 'Hello Coder! How can i help you?' }
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);

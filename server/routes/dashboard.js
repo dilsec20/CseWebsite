@@ -34,27 +34,8 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        // Calculate current streak
-        const streakQuery = await pool.query(
-            `WITH submission_dates AS (
-                SELECT DISTINCT DATE(submitted_at) as submit_date
-                FROM submissions
-                WHERE user_id = $1
-                ORDER BY submit_date DESC
-            ),
-            date_diffs AS (
-                SELECT 
-                    submit_date,
-                    submit_date - LAG(submit_date, 1) OVER (ORDER BY submit_date DESC) as diff
-                FROM submission_dates
-            )
-            SELECT COUNT(*) as streak
-            FROM date_diffs
-            WHERE diff IS NULL OR diff = -1`,
-            [userId]
-        );
-
-        const currentStreak = streakQuery.rows[0]?.streak || 0;
+        // Calculate current streak (Now fetched from users table)
+        const currentStreak = user.current_streak || 0;
 
         // Get problems solved by difficulty
         const easyProblems = await pool.query(

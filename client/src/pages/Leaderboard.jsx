@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import { Trophy, Flame, Target, Medal, Crown } from 'lucide-react';
+
+const Leaderboard = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchLeaderboard();
+    }, []);
+
+    const fetchLeaderboard = async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/gamification/leaderboard`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setUsers(data);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getRankIcon = (rank) => {
+        if (rank === 0) return <Crown className="text-yellow-400 fill-yellow-400" size={24} />;
+        if (rank === 1) return <Medal className="text-gray-300 fill-gray-300" size={24} />;
+        if (rank === 2) return <Medal className="text-amber-600 fill-amber-600" size={24} />;
+        return <span className="font-bold text-gray-500 w-6 text-center">{rank + 1}</span>;
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans p-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex items-center gap-3 mb-8">
+                    <Trophy className="text-yellow-500" size={40} />
+                    <h1 className="text-3xl font-bold text-gray-800">Global Leaderboard</h1>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+                                    <th className="px-6 py-4 text-left font-semibold">Rank</th>
+                                    <th className="px-6 py-4 text-left font-semibold">Coder</th>
+                                    <th className="px-6 py-4 text-center font-semibold flex items-center justify-center gap-2">
+                                        <Target size={18} /> Solved
+                                    </th>
+                                    <th className="px-6 py-4 text-center font-semibold">
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Flame size={18} /> Streak
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="4" className="text-center py-8 text-gray-500">Loading rankings...</td>
+                                    </tr>
+                                ) : users.map((user, idx) => (
+                                    <tr key={idx} className="hover:bg-blue-50/50 transition-colors group">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-2">
+                                                {getRankIcon(idx)}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-sm">
+                                                    {user.profile_picture ? (
+                                                        <img src={user.profile_picture} alt="profile" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-indigo-100 text-indigo-600 font-bold">
+                                                            {user.username?.charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                                        @{user.username}
+                                                    </p>
+                                                    {idx === 0 && <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Champion</span>}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <span className="font-mono font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-lg">
+                                                {user.total_solved}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex items-center justify-center gap-1.5 text-orange-500 font-bold">
+                                                <Flame size={18} className={user.current_streak > 0 ? "fill-orange-500 animate-pulse" : "text-gray-300"} />
+                                                <span className={user.current_streak > 0 ? "text-orange-600" : "text-gray-400"}>
+                                                    {user.current_streak}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Leaderboard;

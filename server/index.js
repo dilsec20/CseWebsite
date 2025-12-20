@@ -57,6 +57,40 @@ app.get('/api/admin/seed-prod', async (req, res) => {
   }
 });
 
+// Gamification Migration Endpoint (Production)
+app.get('/api/admin/migrate-gamification', async (req, res) => {
+  if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    console.log('🎮 Starting Gamification Migration...');
+    // 1. Add columns
+    await pool.query(`
+          ALTER TABLE users 
+          ADD COLUMN IF NOT EXISTS current_streak INT DEFAULT 0,
+          ADD COLUMN IF NOT EXISTS last_solved_at TIMESTAMP,
+          ADD COLUMN IF NOT EXISTS total_solved INT DEFAULT 0;
+      `);
+
+    // 2. Backfill total_solved
+    await pool.query(`
+          WITH user_counts AS (
+              SELECT user_id, COUNT(DISTINCT problem_id) as solved_count
+              FROM submissions
+              WHERE status = 'Accepted' OR status = 'Success'
+              GROUP BY user_id
+          )
+          UPDATE users
+          SET total_solved = user_counts.solved_count
+          FROM user_counts
+          WHERE users.user_id = user_counts.user_id;
+      `);
+
+    res.json({ status: 'success', message: 'Gamification Schema Applied & Backfilled' });
+  } catch (err) {
+    console.error('Migration failed:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Fix RLS Access
 app.get('/api/admin/fix-rls', async (req, res) => {
   if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
@@ -95,7 +129,9 @@ app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/contests", require("./routes/contests"));
 app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
-app.use("/api/ai", require("./routes/ai")); // NEW: AI Chatbot Route
+app.use("/api/ai", require("./routes/ai"));
+app.use("/api/gamification", require("./routes/gamification"));
+app.use("/api/study-plans", require("./routes/studyPlans"));
 
 // Serve static assets in production
 const distPath = path.join(__dirname, '../client/dist');

@@ -368,6 +368,45 @@ router.post("/submit", authorization, async (req, res) => {
                 );
                 console.log(`Contest problem marked as solved for session ${sessionId}`);
             }
+
+            // GAMIFICATION: Update Streak & Total Solved
+            try {
+                // Get current stats
+                const userStats = await pool.query('SELECT current_streak, last_solved_at FROM users WHERE user_id = $1', [userId]);
+                if (userStats.rows.length > 0) {
+                    const user = userStats.rows[0];
+                    const now = new Date();
+                    const lastSolved = user.last_solved_at ? new Date(user.last_solved_at) : null;
+                    let newStreak = user.current_streak || 0;
+
+                    if (lastSolved) {
+                        const isSameDay = now.toDateString() === lastSolved.toDateString();
+                        const yesterday = new Date(now);
+                        yesterday.setDate(now.getDate() - 1);
+                        const isYesterday = yesterday.toDateString() === lastSolved.toDateString();
+
+                        if (!isSameDay) {
+                            if (isYesterday) newStreak++;
+                            else newStreak = 1;
+                        }
+                    } else {
+                        newStreak = 1;
+                    }
+
+                    // Recalculate total solved
+                    const totalRes = await pool.query('SELECT COUNT(*) as count FROM user_progress WHERE user_id = $1 AND solved = true', [userId]);
+                    const totalSolved = totalRes.rows[0].count;
+
+                    await pool.query(
+                        'UPDATE users SET current_streak = $1, last_solved_at = NOW(), total_solved = $2 WHERE user_id = $3',
+                        [newStreak, totalSolved, userId]
+                    );
+                    console.log(`Gamification updated: Streak ${newStreak}, Total ${totalSolved}`);
+                }
+            } catch (gamiErr) {
+                console.error("Gamification update failed:", gamiErr.message);
+                // Don't fail the submission response
+            }
         }
 
         res.json({

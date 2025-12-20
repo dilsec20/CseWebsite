@@ -21,13 +21,45 @@ import CSFundamentalsTheory from './pages/CSFundamentalsTheory';
 import ReasoningTheory from './pages/ReasoningTheory';
 import ProfileMenu from './components/ProfileMenu';
 import AdminDashboard from './pages/AdminDashboard';
-
+import Leaderboard from './pages/Leaderboard';
+import StudyPlan from './pages/StudyPlan'; // NEW
 import DSAPath from './pages/DSAPath';
 import DSAModule from './pages/DSAModule';
 
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
 import { CodeProvider } from './contexts/CodeContext';
+
+// Streak Counter Component
+const StreakCounter = () => {
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    const fetchStreak = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await fetch(`${API_URL}/gamification/my-streak`, {
+          headers: { token: token }
+        });
+        const data = await res.json();
+        if (res.ok) setStreak(data.streak);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchStreak();
+  }, []);
+
+  if (streak === 0) return null;
+
+  return (
+    <div className="flex items-center gap-1 bg-orange-50 px-3 py-1 rounded-full border border-orange-100" title="Daily Streak">
+      <span className="text-lg animate-pulse">🔥</span>
+      <span className="font-bold text-orange-600">{streak}</span>
+    </div>
+  );
+};
 
 // Global Navbar Component
 const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
@@ -54,19 +86,24 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
             </Link>
+            <Link to="/study-plan" className="text-gray-700 hover:text-blue-600 font-medium transition flex items-center gap-1">
+              <span className="hidden xl:inline">Blind 75</span>
+              <span className="xl:hidden">Plan</span>
+            </Link>
             <Link to="/problems" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Problems
             </Link>
             <Link to="/contests" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Contests
             </Link>
-            <Link to="/knowledge-base" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              Knowledge Base
+            <Link to="/leaderboard" className="text-gray-700 hover:text-blue-600 font-medium transition flex items-center gap-1">
+              <span className="hidden lg:inline">Leaderboard</span>
+              <span className="lg:hidden">Ranks</span>
             </Link>
           </div>
 
           {/* Search Bar */}
-          <div className="hidden md:block flex-1 max-w-md mx-6">
+          <div className="hidden md:block flex-1 max-w-sm mx-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,6 +125,7 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
 
           {/* Profile Menu (Right Side) */}
           <div className="flex items-center gap-3">
+            {isAuthenticated && <StreakCounter />}
             {isAuthenticated ? (
               <ProfileMenu setAuth={setAuth} />
             ) : (
@@ -155,6 +193,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/dashboard" element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to="/login" />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/study-plan" element={<StudyPlan />} />
           <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
           <Route path="/dsa-path" element={<DSAPath />} />
           <Route path="/dsa/module/:id" element={<DSAModule />} />

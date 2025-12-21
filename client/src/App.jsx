@@ -92,10 +92,7 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
             </Link>
-            <Link to="/study-plan" className="text-gray-700 hover:text-blue-600 font-medium transition flex items-center gap-1">
-              <span className="hidden xl:inline">Blind 75</span>
-              <span className="xl:hidden">Plan</span>
-            </Link>
+
             <Link to="/problems" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Problems
             </Link>

@@ -187,6 +187,8 @@ int main() {
             if (parseRes.verdict === "Accepted") {
                 setVerdict("Accepted");
                 toast.success(`Perfect! Passed all ${parseRes.total_count} test cases!`);
+                // Trigger global streak update
+                window.dispatchEvent(new Event('streakUpdated'));
             } else if (parseRes.verdict === "Compilation Error") {
                 setVerdict("Compilation Error");
                 toast.error("Compilation Error");

@@ -49,6 +49,12 @@ const StreakCounter = () => {
       }
     };
     fetchStreak();
+
+    // Listen for custom event to update streak immediately after solving
+    const handleStreakUpdate = () => fetchStreak();
+    window.addEventListener('streakUpdated', handleStreakUpdate);
+
+    return () => window.removeEventListener('streakUpdated', handleStreakUpdate);
   }, []);
 
   if (streak === 0) return null;

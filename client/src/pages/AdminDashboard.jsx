@@ -82,12 +82,21 @@ const AdminDashboard = () => {
                         </h1>
                         <p className="text-gray-500 mt-1">Platform overview and user management</p>
                     </div>
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
-                    >
-                        Exit Admin View
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => navigate('/admin/contests')}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                        >
+                            <Trophy className="h-4 w-4" />
+                            Manage Contests
+                        </button>
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                        >
+                            Exit Admin View
+                        </button>
+                    </div>
                 </div>
 
                 {/* Stats Grid */}

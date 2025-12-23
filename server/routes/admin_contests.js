@@ -130,14 +130,15 @@ router.post("/:id/finalize", authorization, async (req, res) => {
 
             // Cap rating change? No, let it fly for MVP.
 
-            const newRating = (user.current_rating || 1200) + ratingChange;
+            const effectiveRating = user.current_rating === 0 ? 1200 : (user.current_rating || 1200);
+            const newRating = effectiveRating + ratingChange;
 
             // Update Participation Record
             await pool.query(
                 `UPDATE contest_participations 
                  SET rank = $1, pre_rating = $2, post_rating = $3 
                  WHERE participation_id = $4`,
-                [rank, user.current_rating || 1200, newRating, user.participation_id]
+                [rank, user.current_rating, newRating, user.participation_id]
             );
 
             // Update User Profile

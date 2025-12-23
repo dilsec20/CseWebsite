@@ -101,9 +101,17 @@ const AdminContestManager = () => {
 
     return (
         <div className="p-8 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8 text-gray-800 flex items-center gap-3">
-                <FileText className="w-8 h-8 text-blue-600" /> Contest Manager
-            </h1>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                    <FileText className="w-8 h-8 text-blue-600" /> Contest Manager
+                </h1>
+                <button
+                    onClick={() => navigate('/admin')}
+                    className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                >
+                    Back to Dashboard
+                </button>
+            </div>
 
             {/* LIST VIEW */}
             {view === 'list' && (

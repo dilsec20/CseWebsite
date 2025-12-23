@@ -114,7 +114,7 @@ router.get("/profile/:username", async (req, res) => {
 
         // If no history, maybe add initial point?
         if (ratingHistory.length === 0) {
-            ratingHistory.push({ date: 'Start', rating: 1200 });
+            ratingHistory.push({ date: 'Start', rating: 0 });
         }
 
         const totalContestSolutions = 0; // Placeholder
@@ -156,7 +156,7 @@ router.get("/profile/:username", async (req, res) => {
                 hours_spent: hoursSpent,
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,
-                contest_rating: user.rating || 1200
+                contest_rating: user.rating || 0
             },
             rating_history: ratingHistory,
             submission_calendar: calendarData

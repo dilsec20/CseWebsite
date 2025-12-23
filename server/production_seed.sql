@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS contest_participations (
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='rating') THEN
-        ALTER TABLE users ADD COLUMN rating INT DEFAULT 1200;
+        ALTER TABLE users ADD COLUMN rating INT DEFAULT 0;
     END IF;
     
     -- Add columns to contest_participations if they don't exist (in case table already created without them)

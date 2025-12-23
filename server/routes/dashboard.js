@@ -137,7 +137,7 @@ router.get("/", authorization, async (req, res) => {
 
         // If no history, maybe add initial point?
         if (ratingHistory.length === 0) {
-            ratingHistory.push({ date: 'Start', rating: 1200 });
+            ratingHistory.push({ date: 'Start', rating: 0 });
         }
 
 
@@ -185,7 +185,7 @@ router.get("/", authorization, async (req, res) => {
                 hours_spent: hoursSpent,
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,
-                contest_rating: user.rating || 1200, // Use stored rating
+                contest_rating: user.rating || 0, // Show 0 if unrated
                 easy_solved: parseInt(easyProblems.rows[0].count),
                 medium_solved: parseInt(mediumProblems.rows[0].count),
                 hard_solved: parseInt(hardProblems.rows[0].count)

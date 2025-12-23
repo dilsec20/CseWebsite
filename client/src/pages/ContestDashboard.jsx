@@ -15,13 +15,21 @@ const ContestDashboard = () => {
         const fetchGlobal = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`${API_URL}/api/contests/global/all`, {
-                    headers: { token }
-                });
-                const data = await res.json();
-                setGlobalContests(data);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        setGlobalContests(data);
+                    } else {
+                        console.error("Expected array but got:", data);
+                        setGlobalContests([]);
+                    }
+                } else {
+                    console.error("Failed to fetch contests");
+                    setGlobalContests([]);
+                }
             } catch (err) {
                 console.error(err);
+                setGlobalContests([]);
             }
         };
         fetchGlobal();
@@ -107,7 +115,7 @@ const ContestDashboard = () => {
                 {/* LIVE EVENTS TAB */}
                 {activeTab === 'events' && (
                     <div className="space-y-4">
-                        {globalContests.filter(c => new Date(c.end_time) > new Date()).length === 0 ? (
+                        {!Array.isArray(globalContests) || globalContests.filter(c => new Date(c.end_time) > new Date()).length === 0 ? (
                             <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
                                 <Trophy className="mx-auto h-12 w-12 text-gray-300 mb-3" />
                                 <h3 className="text-lg font-medium text-gray-900">No scheduled contests</h3>
@@ -164,7 +172,7 @@ const ContestDashboard = () => {
                 {/* PAST EVENTS TAB */}
                 {activeTab === 'past' && (
                     <div className="space-y-4">
-                        {globalContests.filter(c => new Date(c.end_time) <= new Date()).length === 0 ? (
+                        {!Array.isArray(globalContests) || globalContests.filter(c => new Date(c.end_time) <= new Date()).length === 0 ? (
                             <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
                                 <Clock className="mx-auto h-12 w-12 text-gray-300 mb-3" />
                                 <h3 className="text-lg font-medium text-gray-900">No past contests</h3>

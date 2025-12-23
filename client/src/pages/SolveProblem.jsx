@@ -7,20 +7,44 @@ import { API_URL } from '../config';
 
 import { useCodeContext } from '../contexts/CodeContext';
 
-const SolveProblem = ({ setAuth }) => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { setCode: setGlobalCode, setProblemContext } = useCodeContext(); // Use Context
-    const [problem, setProblem] = useState(null);
-    const [code, setCode] = useState(`#include <bits/stdc++.h>
+// Define boilerplates outside component to avoid recreation
+const BOILERPLATES = {
+    cpp: `#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     // Write your code here
     
     return 0;
-}`);
+}`,
+    python: `import sys
+
+# Write your code here
+def solve():
+    pass
+
+if __name__ == "__main__":
+    solve()`,
+    java: `import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // Write your code here
+        
+    }
+}`
+};
+
+const SolveProblem = ({ setAuth }) => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { setCode: setGlobalCode, setProblemContext } = useCodeContext(); // Use Context
+    const [problem, setProblem] = useState(null);
+    const [language, setLanguage] = useState('cpp'); // Default language
+    const [code, setCode] = useState(BOILERPLATES.cpp);
+
     // ... (other state)
 
     // Sync code to global context whenever it changes
@@ -46,15 +70,7 @@ int main() {
 
     useEffect(() => {
         // Reset code explicitly (local state)
-        const defaultCode = `#include <bits/stdc++.h>
-using namespace std;
-
-int main() {
-    // Write your code here
-    
-    return 0;
-}`;
-        setCode(defaultCode);
+        setCode(BOILERPLATES[language]);
         setVerdict(null);
         setOutput('');
 
@@ -69,7 +85,25 @@ int main() {
         if (localStorage.getItem("token")) {
             fetchSubmissions();
         }
-    }, [id, location.search]);
+    }, [id, location.search]); // Removed language dependency to prevent auto-reset on refresh if we persisted it, but here it resets on ID change
+
+
+    const handleLanguageChange = (e) => {
+        const newLang = e.target.value;
+        const currentBoilerplate = BOILERPLATES[language];
+
+        // If code is modified from boilerplate, ask confirmation (Simplified for now: Just switch if it matches boilerplate or empty)
+        // Ideally: if (code !== currentBoilerplate && !window.confirm("Switching language will reset your code. Continue?")) return;
+
+        if (code !== currentBoilerplate && code.trim() !== '') {
+            if (!window.confirm("Switching language will reset your current code. Are you sure?")) {
+                return;
+            }
+        }
+
+        setLanguage(newLang);
+        setCode(BOILERPLATES[newLang]);
+    };
 
 
     const fetchSubmissions = async () => {
@@ -120,7 +154,7 @@ int main() {
         setOutput('');
         setVerdict(null);
         try {
-            const body = { code, language: "cpp", problem_id: id };
+            const body = { code, language, problem_id: id }; // Use updated language variable
             const response = await fetch(`${API_URL}/api/execute/run`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -172,7 +206,7 @@ int main() {
                 return;
             }
 
-            const body = { problem_id: id, code, language: "cpp" };
+            const body = { problem_id: id, code, language }; // Use updated language variable
             const response = await fetch(`${API_URL}/api/execute/submit`, {
                 method: "POST",
                 headers: {
@@ -269,6 +303,19 @@ int main() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                    {/* Language Selector */}
+                    <div className="relative">
+                        <select
+                            value={language}
+                            onChange={handleLanguageChange}
+                            className="bg-slate-800 text-slate-300 text-sm font-medium px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="cpp">C++ (g++ 17)</option>
+                            <option value="python">Python 3</option>
+                            <option value="java">Java 17</option>
+                        </select>
+                    </div>
+
                     <button
                         onClick={handleRun}
                         disabled={runLoading}
@@ -424,7 +471,11 @@ int main() {
                                                     <button
                                                         onClick={() => {
                                                             setCode(sub.code);
-                                                            toast.info("Code loaded into editor");
+                                                            // Also try to detect language if possible, otherwise default to cpp or keep current
+                                                            // Ideally store language in DB and retrieve it.
+                                                            // For now assuming existing submissions might have a language field we aren't using yet or it's default.
+                                                            if (sub.language) setLanguage(sub.language);
+                                                            toast.info(`Code loaded (${sub.language || 'cpp'})`);
                                                         }}
                                                         className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded transition-colors"
                                                     >
@@ -446,7 +497,7 @@ int main() {
                         <SimpleCodeEditor
                             value={code}
                             onChange={setCode}
-                            language="cpp"
+                            language={language === 'python' ? 'python' : language === 'java' ? 'java' : 'cpp'} // Ensure editor highlighting matches
                         />
                     </div>
 

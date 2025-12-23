@@ -150,6 +150,15 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
   );
 };
 
+const ChatbotWrapper = () => {
+  const location = useLocation();
+  // Hide chatbot on all contest related pages
+  if (location.pathname.startsWith('/contests')) {
+    return null;
+  }
+  return <AIChatbot />;
+};
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -190,7 +199,7 @@ function App() {
       <Router>
         <ToastContainer />
         <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
-        <AIChatbot />
+        <ChatbotWrapper />
         <Routes>
           <Route path="/" element={<Landing setAuth={setAuth} />} />
           <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />

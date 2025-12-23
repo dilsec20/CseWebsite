@@ -57,7 +57,7 @@ const ContestArena = () => {
                 method: "POST",
                 headers: { "token": token }
             });
-            toast.success("Contest finished!");
+            toast.success("Practice session ended!");
             navigate('/contests');
         } catch (err) {
             console.error(err.message);
@@ -127,7 +127,7 @@ const ContestArena = () => {
                         onClick={finishContest}
                         className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-sm font-bold"
                     >
-                        Finish Contest
+                        End Practice
                     </button>
                 </div>
             </header>

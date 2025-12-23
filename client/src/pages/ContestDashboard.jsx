@@ -90,6 +90,12 @@ const ContestDashboard = () => {
                             Live Events
                         </button>
                         <button
+                            onClick={() => setActiveTab('past')}
+                            className={`px-6 py-2 rounded-lg font-medium transition ${activeTab === 'past' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
+                        >
+                            Past Events
+                        </button>
+                        <button
                             onClick={() => setActiveTab('practice')}
                             className={`px-6 py-2 rounded-lg font-medium transition ${activeTab === 'practice' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
                         >
@@ -101,20 +107,19 @@ const ContestDashboard = () => {
                 {/* LIVE EVENTS TAB */}
                 {activeTab === 'events' && (
                     <div className="space-y-4">
-                        {globalContests.length === 0 ? (
+                        {globalContests.filter(c => new Date(c.end_time) > new Date()).length === 0 ? (
                             <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
                                 <Trophy className="mx-auto h-12 w-12 text-gray-300 mb-3" />
                                 <h3 className="text-lg font-medium text-gray-900">No scheduled contests</h3>
                                 <p className="text-gray-500">Check back later for upcoming global events.</p>
                             </div>
                         ) : (
-                            globalContests.map(contest => {
+                            globalContests.filter(c => new Date(c.end_time) > new Date()).map(contest => {
                                 const now = new Date();
                                 const start = new Date(contest.start_time);
                                 const end = new Date(contest.end_time);
                                 let status = 'upcoming';
                                 if (now >= start && now < end) status = 'live';
-                                if (now >= end) status = 'ended';
 
                                 return (
                                     <div key={contest.contest_id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 transition hover:shadow-md">
@@ -123,7 +128,6 @@ const ContestDashboard = () => {
                                                 <h3 className="text-xl font-bold text-gray-900">{contest.title}</h3>
                                                 {status === 'live' && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-bold rounded animate-pulse">LIVE</span>}
                                                 {status === 'upcoming' && <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs font-bold rounded">UPCOMING</span>}
-                                                {status === 'ended' && <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-bold rounded">ENDED</span>}
                                             </div>
                                             <p className="text-gray-500 text-sm mb-2">{contest.description}</p>
                                             <div className="flex items-center gap-4 text-sm text-gray-500">
@@ -149,18 +153,53 @@ const ContestDashboard = () => {
                                                     Register
                                                 </button>
                                             )}
-                                            {status === 'ended' && (
-                                                <button
-                                                    onClick={() => navigate(`/contests/global/${contest.contest_id}`)} // View leaderboards/problems
-                                                    className="px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200"
-                                                >
-                                                    View Results
-                                                </button>
-                                            )}
                                         </div>
                                     </div>
                                 );
                             })
+                        )}
+                    </div>
+                )}
+
+                {/* PAST EVENTS TAB */}
+                {activeTab === 'past' && (
+                    <div className="space-y-4">
+                        {globalContests.filter(c => new Date(c.end_time) <= new Date()).length === 0 ? (
+                            <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
+                                <Clock className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+                                <h3 className="text-lg font-medium text-gray-900">No past contests</h3>
+                                <p className="text-gray-500">Completed contests will appear here.</p>
+                            </div>
+                        ) : (
+                            globalContests
+                                .filter(c => new Date(c.end_time) <= new Date())
+                                .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
+                                .map(contest => {
+                                    const start = new Date(contest.start_time);
+
+                                    return (
+                                        <div key={contest.contest_id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 transition hover:shadow-md opacity-75 hover:opacity-100">
+                                            <div>
+                                                <div className="flex items-center gap-3 mb-1">
+                                                    <h3 className="text-xl font-bold text-gray-800">{contest.title}</h3>
+                                                    <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-bold rounded">ENDED</span>
+                                                </div>
+                                                <div className="flex items-center gap-4 text-sm text-gray-500">
+                                                    <span className="flex items-center gap-1"><Calendar size={14} /> Ended on {new Date(contest.end_time).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <button
+                                                    onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
+                                                    className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50"
+                                                >
+                                                    View Results & Practice
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
                         )}
                     </div>
                 )}

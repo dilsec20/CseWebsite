@@ -111,14 +111,14 @@ const GlobalContestArena = () => {
             </div>
 
             <div className="flex-1 max-w-7xl mx-auto w-full p-6">
-                {!isRegistered ? (
+                {!isRegistered && timeLeft > 0 ? (
                     <div className="text-center py-20">
                         <AlertTriangle className="mx-auto h-16 w-16 text-yellow-500 mb-4" />
                         <h2 className="text-2xl font-bold text-gray-900 mb-2">You are not registered</h2>
                         <p className="text-gray-600 mb-6">You must register for this contest to participate.</p>
                         <button className="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700">Register Now</button>
                     </div>
-                ) : !hasStarted ? (
+                ) : !hasStarted && timeLeft > 0 ? (
                     <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-200">
                         <Clock className="mx-auto h-16 w-16 text-blue-500 mb-4 animate-pulse" />
                         <h2 className="text-2xl font-bold text-gray-900 mb-2">Contest Has Not Started</h2>

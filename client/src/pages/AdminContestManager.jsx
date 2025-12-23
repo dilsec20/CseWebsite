@@ -209,8 +209,15 @@ const AdminContestManager = () => {
 
                         <div className="space-y-4">
                             <h3 className="font-semibold text-lg border-b pb-2">Test Cases (JSON)</h3>
+                            <div className="text-sm text-gray-600 mb-2 bg-blue-50 p-2 rounded border border-blue-100">
+                                <p><strong>Single List for All Cases:</strong> Combine both sample (visible) and hidden (submit) test cases into one JSON array below.</p>
+                                <ul className="list-disc pl-4 mt-1 text-xs">
+                                    <li><code>"is_sample": true</code> → Visible when user clicks 'Run'</li>
+                                    <li><code>"is_sample": false</code> → Hidden, used only for 'Submit' grading</li>
+                                </ul>
+                            </div>
                             <p className="text-xs text-gray-400">
-                                Format: <br />
+                                Example Format: <br />
                                 <code className="bg-gray-100 p-1 rounded block mt-1">
                                     [<br />
                                     &#123; "input": "2\n1 2", "expected_output": "3", "is_sample": true &#125;,<br />

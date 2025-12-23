@@ -53,18 +53,72 @@ CREATE TABLE IF NOT EXISTS user_progress (
 );
 
 -- 3. GAMIFICATION UPDATES (For existing tables)
+
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='current_streak') THEN
-        ALTER TABLE users ADD COLUMN current_streak INT DEFAULT 0;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='last_solved_at') THEN
-        ALTER TABLE users ADD COLUMN last_solved_at TIMESTAMP;
-    END IF;
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='total_solved') THEN
         ALTER TABLE users ADD COLUMN total_solved INT DEFAULT 0;
     END IF;
 END $$;
+
+-- 3.1 NEW CONTEST SYSTEM TABLES
+CREATE TABLE IF NOT EXISTS global_contests (
+    contest_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    created_by UUID REFERENCES users(user_id),
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS contest_participations (
+    participation_id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(user_id),
+    contest_id INT REFERENCES global_contests(contest_id),
+    score INT DEFAULT 0,
+    finish_time TIMESTAMP, -- Time of last successful submission
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Rating System Columns
+    pre_rating INT,
+    post_rating INT,
+    rank INT,
+    UNIQUE(user_id, contest_id)
+);
+
+-- 3.2 RATING SYSTEM UPDATES
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='rating') THEN
+        ALTER TABLE users ADD COLUMN rating INT DEFAULT 1200;
+    END IF;
+    
+    -- Add columns to contest_participations if they don't exist (in case table already created without them)
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='contest_participations' AND column_name='rank') THEN
+        ALTER TABLE contest_participations ADD COLUMN pre_rating INT;
+        ALTER TABLE contest_participations ADD COLUMN post_rating INT;
+        ALTER TABLE contest_participations ADD COLUMN rank INT;
+    END IF;
+END $$;
+
+-- Ensure problems can belong to a contest (nullable for practice problems)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='problems' AND column_name='contest_id') THEN
+        ALTER TABLE problems ADD COLUMN contest_id INT REFERENCES global_contests(contest_id);
+    END IF;
+END $$;
+
+-- Ensure test_cases table exists (It was referenced in execute.js but missing in seed)
+CREATE TABLE IF NOT EXISTS test_cases (
+    test_case_id SERIAL PRIMARY KEY,
+    problem_id INT REFERENCES problems(problem_id),
+    input TEXT NOT NULL,
+    expected_output TEXT NOT NULL,
+    is_sample BOOLEAN DEFAULT FALSE,
+    test_case_order INT DEFAULT 0
+);
+
 
 -- 4. SEED CONTENT (Blind 75)
 -- We insert problems if they don't exist.

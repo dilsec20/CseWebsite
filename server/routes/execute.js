@@ -349,7 +349,8 @@ router.post("/submit", authorization, async (req, res) => {
             );
             console.log('User progress updated');
 
-            // Check if this is part of an active contest
+
+            // Check if this is part of an active contest (session based)
             const activeSession = await pool.query(
                 `SELECT session_id FROM contest_sessions 
                  WHERE user_id = $1 AND status = 'active' 
@@ -368,6 +369,47 @@ router.post("/submit", authorization, async (req, res) => {
                 );
                 console.log(`Contest problem marked as solved for session ${sessionId}`);
             }
+
+            // ===================================
+            // GLOBAL CONTEST SCORING (New)
+            // ===================================
+            const globalContestCheck = await pool.query(
+                `SELECT gc.contest_id, gc.start_time 
+                 FROM global_contests gc
+                 JOIN problems p ON p.contest_id = gc.contest_id
+                 WHERE p.problem_id = $1 
+                 AND NOW() BETWEEN gc.start_time AND gc.end_time`,
+                [problem_id]
+            );
+
+            if (globalContestCheck.rows.length > 0) {
+                const contestId = globalContestCheck.rows[0].contest_id;
+                console.log(`Problem ${problem_id} belongs to active Global Contest ${contestId}`);
+
+                // Check if user has ALREADY solved this problem in this contest (to prevent double points)
+                // We check if there is any PRIORITY accepted submission for this user/problem
+                const existingSolves = await pool.query(
+                    `SELECT submission_id FROM submissions 
+                     WHERE user_id = $1 AND problem_id = $2 AND status = 'Accepted' AND submission_id < $3`,
+                    [userId, problem_id, submissionResult.rows[0].submission_id]
+                );
+
+                if (existingSolves.rows.length === 0) {
+                    console.log(`First time solving problem ${problem_id} for user ${userId}. Awarding points.`);
+
+                    await pool.query(
+                        `UPDATE contest_participations 
+                         SET score = score + 100, finish_time = NOW()
+                         WHERE user_id = $1 AND contest_id = $2`,
+                        [userId, contestId]
+                    );
+                } else {
+                    console.log(`User ${userId} already solved problem ${problem_id}. No points awarded.`);
+                }
+            }
+            // ===================================
+
+            // GAMIFICATION: Update Streak & Total Solved
 
             // GAMIFICATION: Update Streak & Total Solved
             try {

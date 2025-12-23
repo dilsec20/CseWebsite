@@ -16,11 +16,13 @@ import KnowledgeBase from './pages/KnowledgeBase';
 import Quiz from './pages/Quiz';
 import ContestDashboard from './pages/ContestDashboard';
 import ContestArena from './pages/ContestArena';
+import GlobalContestArena from './pages/GlobalContestArena';
 import AptitudeTheory from './pages/AptitudeTheory';
 import CSFundamentalsTheory from './pages/CSFundamentalsTheory';
 import ReasoningTheory from './pages/ReasoningTheory';
 import ProfileMenu from './components/ProfileMenu';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminContestManager from './pages/AdminContestManager';
 import Leaderboard from './pages/Leaderboard';
 import StudyPlan from './pages/StudyPlan'; // NEW
 import DSAPath from './pages/DSAPath';
@@ -207,10 +209,12 @@ function App() {
           <Route path="/quiz/:id" element={<Quiz />} />
           <Route path="/contests" element={<ContestDashboard />} />
           <Route path="/contests/:id" element={<ContestArena />} />
+          <Route path="/contests/global/:id" element={isAuthenticated ? <GlobalContestArena /> : <Navigate to="/login" />} />
           <Route path="/theory/aptitude" element={<AptitudeTheory />} />
           <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
           <Route path="/theory/reasoning" element={<ReasoningTheory />} />
           <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
+          <Route path="/admin/contests" element={isAuthenticated ? <AdminContestManager /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
     </CodeProvider>

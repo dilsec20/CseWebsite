@@ -8,7 +8,7 @@ router.get("/profile/:username", async (req, res) => {
 
         // Get user info - Query by USERNAME not user_name
         const userInfo = await pool.query(
-            "SELECT user_id, user_name, username, user_email, created_at, bio, profile_picture, linkedin_url, github_url FROM users WHERE username = $1",
+            "SELECT user_id, user_name, username, user_email, created_at, bio, profile_picture, linkedin_url, github_url, rating FROM users WHERE username = $1",
             [username]
         );
 
@@ -18,6 +18,8 @@ router.get("/profile/:username", async (req, res) => {
 
         const user = userInfo.rows[0];
         const userId = user.user_id;
+
+        // ... (Keep existing problem queries) ...
 
         // Get problems solved count
         const problemsSolved = await pool.query(
@@ -89,86 +91,33 @@ router.get("/profile/:username", async (req, res) => {
         // Calculate hours spent (approximate)
         const hoursSpent = Math.round(parseInt(totalSubmissions.rows[0].count) * 0.5); // Assuming 30 mins per submission
 
-        // Get contests attended (handle missing table gracefully)
-        let contestsAttended = 0;
-        try {
-            const contestsResult = await pool.query(
-                `SELECT COUNT(DISTINCT session_id) as count
-                 FROM contest_sessions
-                 WHERE user_id = $1`,
-                [userId]
-            );
-            contestsAttended = parseInt(contestsResult.rows[0].count);
-        } catch (err) {
-            // Table doesn't exist yet, use default value
-            console.log('Contest table not found, using default value');
+        // Get contests attended
+        const contestsAttended = await pool.query(
+            "SELECT COUNT(*) as count FROM contest_participations WHERE user_id = $1",
+            [userId]
+        );
+
+        // Fetch Rating History from contest_participations
+        const ratingHistoryQuery = await pool.query(
+            `SELECT gc.end_time as date, cp.post_rating as rating
+              FROM contest_participations cp
+              JOIN global_contests gc ON cp.contest_id = gc.contest_id
+              WHERE cp.user_id = $1 AND cp.post_rating IS NOT NULL
+              ORDER BY gc.end_time ASC`,
+            [userId]
+        );
+
+        const ratingHistory = ratingHistoryQuery.rows.map(row => ({
+            date: new Date(row.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+            rating: row.rating
+        }));
+
+        // If no history, maybe add initial point?
+        if (ratingHistory.length === 0) {
+            ratingHistory.push({ date: 'Start', rating: 1200 });
         }
 
-        // Calculate Contest Rating (Relative Performance Logic)
-        // 1. Fetch all contest sessions for user ordered by time
-        let currentRating = 0;
-        let totalContestSolutions = 0;
-        const ratingHistory = [];
-
-        try {
-            const allContests = await pool.query(
-                `SELECT cs.session_id, cs.start_time, cs.end_time,
-                        COUNT(CASE WHEN p.difficulty = 'Easy' AND cp.solved = true THEN 1 END) as easy_solved,
-                        COUNT(CASE WHEN p.difficulty = 'Medium' AND cp.solved = true THEN 1 END) as medium_solved,
-                        COUNT(CASE WHEN p.difficulty = 'Hard' AND cp.solved = true THEN 1 END) as hard_solved,
-                        COUNT(CASE WHEN cp.solved = true THEN 1 END) as total_solved
-                 FROM contest_sessions cs
-                 JOIN contest_problems cp ON cs.session_id = cp.session_id
-                 JOIN problems p ON cp.problem_id = p.problem_id
-                 WHERE cs.user_id = $1
-                 GROUP BY cs.session_id, cs.start_time, cs.end_time
-                 ORDER BY cs.start_time ASC`,
-                [userId]
-            );
-
-            for (let i = 0; i < allContests.rows.length; i++) {
-                const contest = allContests.rows[i];
-                const easy = parseInt(contest.easy_solved);
-                const medium = parseInt(contest.medium_solved);
-                const hard = parseInt(contest.hard_solved);
-                totalContestSolutions += parseInt(contest.total_solved);
-
-                // Base score for this contest (Matched with Dashboard: 20/40/80)
-                const score = (easy * 20) + (medium * 40) + (hard * 80);
-
-                if (i === 0) {
-                    // First contest: No penalty, just add score
-                    currentRating += score;
-                } else {
-                    // Subsequent contests: Compare with previous
-                    const prev = allContests.rows[i - 1];
-                    const prevEasy = parseInt(prev.easy_solved);
-                    const prevMedium = parseInt(prev.medium_solved);
-                    const prevHard = parseInt(prev.hard_solved);
-
-                    let penalty = 0;
-                    // Penalty only if solved count DROPS compared to previous contest
-                    if (easy < prevEasy) penalty += (prevEasy - easy) * 10;
-                    if (medium < prevMedium) penalty += (prevMedium - medium) * 20;
-                    if (hard < prevHard) penalty += (prevHard - hard) * 40;
-
-                    currentRating += (score - penalty);
-                }
-
-                // Ensure rating doesn't go below 0
-                if (currentRating < 0) currentRating = 0;
-
-                // Add to history with unique date (append contest number if multiple contests on same day)
-                const dateStr = new Date(contest.end_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                const uniqueDate = allContests.rows.length > 1 ? `${dateStr} #${i + 1}` : dateStr;
-                ratingHistory.push({
-                    date: uniqueDate,
-                    rating: currentRating
-                });
-            }
-        } catch (err) {
-            console.log('Contest rating calculation failed:', err.message);
-        }
+        const totalContestSolutions = 0; // Placeholder
 
         // Get submission calendar
         const submissionCalendar = await pool.query(
@@ -205,9 +154,9 @@ router.get("/profile/:username", async (req, res) => {
                 total_submissions: parseInt(totalSubmissions.rows[0].count),
                 current_streak: currentStreak,
                 hours_spent: hoursSpent,
-                contests_attended: contestsAttended,
+                contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,
-                contest_rating: currentRating
+                contest_rating: user.rating || 1200
             },
             rating_history: ratingHistory,
             submission_calendar: calendarData

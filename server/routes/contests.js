@@ -127,4 +127,126 @@ router.post("/:id/finish", authorization, async (req, res) => {
     }
 });
 
+
+// ==========================================
+// GLOBAL CONTESTS (Codeforces Style)
+// ==========================================
+
+// Get All Global Contests
+router.get("/global/all", authorization, async (req, res) => {
+    try {
+        const contests = await pool.query(
+            "SELECT * FROM global_contests ORDER BY start_time DESC"
+        );
+        res.json(contests.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Get Specific Global Contest (with problems if active)
+router.get("/global/:id", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user_id = req.user;
+
+        const contestRes = await pool.query("SELECT * FROM global_contests WHERE contest_id = $1", [id]);
+        if (contestRes.rows.length === 0) return res.status(404).json("Contest not found");
+
+        const contest = contestRes.rows[0];
+        const now = new Date();
+        const startTime = new Date(contest.start_time);
+
+        let problems = [];
+
+        // Show problems only if contest has started
+        if (now >= startTime) {
+            const problemsRes = await pool.query(
+                "SELECT problem_id, title, difficulty, topic FROM problems WHERE contest_id = $1 ORDER BY problem_id",
+                [id]
+            );
+            problems = problemsRes.rows;
+        }
+
+        // Check if user registered
+        const participation = await pool.query(
+            "SELECT * FROM contest_participations WHERE contest_id = $1 AND user_id = $2",
+            [id, user_id]
+        );
+
+        res.json({
+            contest,
+            problems,
+            is_registered: participation.rows.length > 0,
+            has_started: now >= startTime
+        });
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Register for Contest
+router.post("/global/:id/register", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user_id = req.user;
+
+        await pool.query(
+            "INSERT INTO contest_participations (user_id, contest_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+            [user_id, id]
+        );
+
+        res.json({ message: "Registered successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+// Get My Participation Details (Score)
+router.get("/global/:id/participation", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user_id = req.user;
+
+        const participation = await pool.query(
+            "SELECT * FROM contest_participations WHERE contest_id = $1 AND user_id = $2",
+            [id, user_id]
+        );
+
+        if (participation.rows.length === 0) return res.json({ score: 0 });
+        res.json(participation.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+// Get Contest Leaderboard
+router.get("/global/:id/leaderboard", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const leaderboard = await pool.query(
+            `SELECT p.rank, u.username, p.score, p.finish_time, p.post_rating, 
+                    (p.post_rating - p.pre_rating) as rating_change
+             FROM contest_participations p
+             JOIN users u ON p.user_id = u.user_id
+             WHERE p.contest_id = $1 AND p.score > 0
+             ORDER BY p.score DESC, p.finish_time ASC`,
+            [id]
+        );
+
+        res.json(leaderboard.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;

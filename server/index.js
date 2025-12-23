@@ -127,6 +127,7 @@ app.use("/api/execute", require("./routes/execute"));
 app.use("/api/admin", require("./routes/admin")); // Admin Routes
 app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/contests", require("./routes/contests"));
+app.use("/api/admin/contests", require("./routes/admin_contests")); // New Admin Contest Routes
 app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
 app.use("/api/ai", require("./routes/ai"));

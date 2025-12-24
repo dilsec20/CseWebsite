@@ -27,6 +27,8 @@ import Leaderboard from './pages/Leaderboard';
 import StudyPlan from './pages/StudyPlan'; // NEW
 import DSAPath from './pages/DSAPath';
 import DSAModule from './pages/DSAModule';
+import CPPath from './pages/CPPath';
+import CPModule from './pages/CPModule';
 
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
@@ -93,6 +95,9 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
           <div className="hidden md:flex items-center gap-6">
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
+            </Link>
+            <Link to="/cp-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              CP Path
             </Link>
 
             <Link to="/problems" className="text-gray-700 hover:text-blue-600 font-medium transition">
@@ -212,6 +217,8 @@ function App() {
           <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
           <Route path="/dsa-path" element={<DSAPath />} />
           <Route path="/dsa/module/:id" element={<DSAModule />} />
+          <Route path="/cp-path" element={<CPPath />} />
+          <Route path="/cp/module/:id" element={<CPModule />} />
           <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
           <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
           <Route path="/knowledge-base" element={<KnowledgeBase />} />

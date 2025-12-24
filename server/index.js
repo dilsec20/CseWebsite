@@ -130,6 +130,7 @@ app.use("/api/contests", require("./routes/contests"));
 app.use("/api/admin/contests", require("./routes/admin_contests")); // New Admin Contest Routes
 app.use("/api/public", require("./routes/public"));
 app.use("/api/dsa", require("./routes/dsa"));
+app.use("/api/cp", require("./routes/cp"));
 app.use("/api/ai", require("./routes/ai"));
 app.use("/api/gamification", require("./routes/gamification"));
 app.use("/api/study-plans", require("./routes/studyPlans"));

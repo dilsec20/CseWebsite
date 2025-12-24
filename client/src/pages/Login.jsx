@@ -51,7 +51,7 @@ const Login = ({ setAuth }) => {
             <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-12 lg:px-24 py-12">
                 <div className="mb-8">
                     <Link to="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl mb-12">
-                        <Code className="h-6 w-6" /> PrepPortal
+                        <Code className="h-6 w-6" /> Home
                     </Link>
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Welcome back</h1>
                     <p className="text-gray-500">Please enter your details to sign in.</p>

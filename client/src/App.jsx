@@ -83,12 +83,12 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
           <Link to="/dashboard" className="flex items-center gap-2 text-blue-600 font-bold text-xl hover:text-blue-700 transition">
             <Code className="h-6 w-6" />
-            <span>PrepPortal</span>
+            <span>Home</span>
           </Link>
 
           {/* Navigation Links */}

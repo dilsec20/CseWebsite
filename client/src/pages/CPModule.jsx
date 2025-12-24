@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
+import { BookOpen, ChevronRight, ChevronLeft } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { API_URL } from '../config';
 
 const CPModule = () => {
@@ -37,86 +40,6 @@ const CPModule = () => {
         } catch (err) {
             console.error(err);
         }
-    };
-
-    // Improved Markdown Parser
-    const renderContent = (content) => {
-        if (!content) return null;
-
-        const lines = content.split('\n');
-        const elements = [];
-        let inCodeBlock = false;
-        let codeBuffer = [];
-
-        lines.forEach((line, idx) => {
-            if (line.startsWith('```')) {
-                if (inCodeBlock) {
-                    // End of code block
-                    elements.push(
-                        <div key={`code-${idx}`} className="bg-gray-900 text-gray-100 font-mono p-4 rounded-lg text-sm my-4 overflow-x-auto shadow-inner">
-                            <pre>{codeBuffer.join('\n')}</pre>
-                        </div>
-                    );
-                    codeBuffer = [];
-                }
-                inCodeBlock = !inCodeBlock;
-                return;
-            }
-
-            if (inCodeBlock) {
-                codeBuffer.push(line);
-                return;
-            }
-
-            // Regular Markdown
-            if (line.startsWith('# ')) elements.push(<h1 key={idx} className="text-3xl font-bold text-gray-900 mt-8 mb-4 border-b pb-2">{line.replace('# ', '')}</h1>);
-            else if (line.startsWith('## ')) elements.push(<h2 key={idx} className="text-2xl font-bold text-gray-800 mt-6 mb-3">{line.replace('## ', '')}</h2>);
-            else if (line.startsWith('### ')) elements.push(<h3 key={idx} className="text-xl font-bold text-gray-800 mt-4 mb-2">{line.replace('### ', '')}</h3>);
-            else if (line.startsWith('* ')) elements.push(<li key={idx} className="ml-4 text-gray-700 mb-1 list-disc list-inside bg-yellow-50 p-2 rounded">{line.replace('* ', '')}</li>);
-            else if (line.startsWith('- ')) {
-                // Handle links in list items
-                const content = line.replace('- ', '');
-                const linkMatch = content.match(/\[(.*?)\]\((.*?)\)/);
-                if (linkMatch) {
-                    const [, text, url] = linkMatch;
-                    const isExternal = url.startsWith('http://') || url.startsWith('https://');
-
-                    // Extract platform and difficulty info after the link
-                    const afterLink = content.substring(content.indexOf(')') + 1).trim();
-
-                    if (isExternal) {
-                        elements.push(
-                            <li key={idx} className="ml-4 text-gray-700 mb-2 list-disc list-inside flex items-center justify-between">
-                                <a
-                                    href={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline font-medium"
-                                >
-                                    {text}
-                                </a>
-                                {afterLink && <span className="text-sm text-gray-500 ml-2">{afterLink}</span>}
-                            </li>
-                        );
-                    } else {
-                        elements.push(
-                            <li key={idx} className="ml-4 text-gray-700 mb-2 list-disc list-inside">
-                                <Link to={url} className="text-blue-600 hover:underline font-medium">
-                                    {text}
-                                </Link>
-                                {afterLink && <span className="text-sm text-gray-500 ml-2">{afterLink}</span>}
-                            </li>
-                        );
-                    }
-                } else {
-                    elements.push(<li key={idx} className="ml-4 text-gray-700 mb-1 list-disc list-inside">{content}</li>);
-                }
-            }
-            else if (line.trim() === '') elements.push(<br key={idx} />);
-            else elements.push(<p key={idx} className="text-gray-700 mb-2 leading-relaxed">{line}</p>);
-        });
-
-        return elements;
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -198,7 +121,29 @@ const CPModule = () => {
                             )}
 
                             <div className="prose prose-blue max-w-none">
-                                {renderContent(selectedTopic.content)}
+                                <ReactMarkdown
+                                    components={{
+                                        code({ node, inline, className, children, ...props }) {
+                                            const match = /language-(\w+)/.exec(className || '');
+                                            return !inline && match ? (
+                                                <SyntaxHighlighter
+                                                    style={vscDarkPlus}
+                                                    language={match[1]}
+                                                    PreTag="div"
+                                                    {...props}
+                                                >
+                                                    {String(children).replace(/\n$/, '')}
+                                                </SyntaxHighlighter>
+                                            ) : (
+                                                <code className={className} {...props}>
+                                                    {children}
+                                                </code>
+                                            );
+                                        }
+                                    }}
+                                >
+                                    {selectedTopic.content}
+                                </ReactMarkdown>
                             </div>
                         </div>
 

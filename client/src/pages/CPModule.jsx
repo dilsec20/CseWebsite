@@ -166,7 +166,7 @@ const CPModule = () => {
                                         a: ({ node, href, children, ...props }) => (
                                             <a
                                                 href={href}
-                                                className="text-blue-600 font-semibold hover:text-blue-800 hover:underline transition-colors duration-200 inline-flex items-center gap-1"
+                                                className="!text-blue-600 font-bold hover:!text-blue-800 hover:!underline transition-colors duration-200 inline-flex items-center gap-1"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 {...props}

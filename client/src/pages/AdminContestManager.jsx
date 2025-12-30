@@ -230,6 +230,31 @@ const AdminContestManager = () => {
                                 </div>
                                 <div className="flex gap-3">
                                     <button
+                                        onClick={() => {
+                                            setEditingContestId(c.contest_id);
+                                            // Pre-fill form
+                                            const start = new Date(c.start_time);
+                                            const end = new Date(c.end_time);
+                                            const duration = Math.round((end - start) / 60000);
+
+                                            // Format start_time for datetime-local input (YYYY-MM-DDTHH:mm)
+                                            // Note: This needs local time adjustment
+                                            const offset = start.getTimezoneOffset() * 60000;
+                                            const localISOTime = new Date(start.getTime() - offset).toISOString().slice(0, 16);
+
+                                            setContestForm({
+                                                title: c.title,
+                                                description: c.description,
+                                                start_time: localISOTime,
+                                                duration_minutes: duration
+                                            });
+                                            setView('create');
+                                        }}
+                                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-200"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
                                         onClick={async () => {
                                             if (!window.confirm("Are you sure you want to delete this contest?")) return;
                                             try {
@@ -251,26 +276,28 @@ const AdminContestManager = () => {
                                     >
                                         Delete
                                     </button>
-                                    <button
-                                        onClick={async () => {
-                                            if (!window.confirm("End contest and update ratings? Only do this AFTER the contest is over.")) return;
-                                            try {
-                                                const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}/finalize`, {
-                                                    method: 'POST',
-                                                    headers: { token: localStorage.getItem('token') }
-                                                });
-                                                const data = await res.json();
-                                                if (res.ok) toast.success(data.message || "Ratings updated!");
-                                                else toast.error(data.error || "Failed to finalize");
-                                            } catch (e) {
-                                                console.error(e);
-                                                toast.error("Error finalizing contest");
-                                            }
-                                        }}
-                                        className="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-purple-200"
-                                    >
-                                        End Contest
-                                    </button>
+                                    {new Date() > new Date(c.end_time) && (
+                                        <button
+                                            onClick={async () => {
+                                                if (!window.confirm("Calculate rankings and update user ratings?")) return;
+                                                try {
+                                                    const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}/finalize`, {
+                                                        method: 'POST',
+                                                        headers: { token: localStorage.getItem('token') }
+                                                    });
+                                                    const data = await res.json();
+                                                    if (res.ok) toast.success(data.message || "Ratings updated!");
+                                                    else toast.error(data.error || "Failed to finalize");
+                                                } catch (e) {
+                                                    console.error(e);
+                                                    toast.error("Error finalizing contest");
+                                                }
+                                            }}
+                                            className="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-purple-200"
+                                        >
+                                            Calculate Ratings
+                                        </button>
+                                    )}
                                     <button
                                         onClick={() => {
                                             setSelectedContest(c);
@@ -291,10 +318,10 @@ const AdminContestManager = () => {
                 </div>
             )}
 
-            {/* CREATE CONTEST VIEW */}
+            {/* CREATE/EDIT CONTEST VIEW */}
             {view === 'create' && (
                 <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-2xl">
-                    <h2 className="text-2xl font-bold mb-6">Create New Contest</h2>
+                    <h2 className="text-2xl font-bold mb-6">{editingContestId ? "Edit Contest" : "Create New Contest"}</h2>
                     <form onSubmit={handleCreateContest} className="space-y-4">
                         <input className="w-full p-3 border rounded-lg" placeholder="Contest Title" value={contestForm.title} onChange={e => setContestForm({ ...contestForm, title: e.target.value })} required />
                         <textarea className="w-full p-3 border rounded-lg" placeholder="Description" rows={3} value={contestForm.description} onChange={e => setContestForm({ ...contestForm, description: e.target.value })} />

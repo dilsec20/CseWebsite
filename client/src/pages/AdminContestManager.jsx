@@ -231,24 +231,38 @@ const AdminContestManager = () => {
                                 <div className="flex gap-3">
                                     <button
                                         onClick={() => {
-                                            setEditingContestId(c.contest_id);
-                                            // Pre-fill form
-                                            const start = new Date(c.start_time);
-                                            const end = new Date(c.end_time);
-                                            const duration = Math.round((end - start) / 60000);
+                                            console.log("[DEBUG] Edit clicked for:", c);
+                                            try {
+                                                setEditingContestId(c.contest_id);
+                                                // Pre-fill form
+                                                const start = new Date(c.start_time);
+                                                const end = new Date(c.end_time);
 
-                                            // Format start_time for datetime-local input (YYYY-MM-DDTHH:mm)
-                                            // Note: This needs local time adjustment
-                                            const offset = start.getTimezoneOffset() * 60000;
-                                            const localISOTime = new Date(start.getTime() - offset).toISOString().slice(0, 16);
+                                                if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                                                    console.error("Invalid date for contest:", c);
+                                                    toast.error("Error: Invalid contest dates");
+                                                    return;
+                                                }
 
-                                            setContestForm({
-                                                title: c.title,
-                                                description: c.description,
-                                                start_time: localISOTime,
-                                                duration_minutes: duration
-                                            });
-                                            setView('create');
+                                                const duration = Math.round((end - start) / 60000);
+
+                                                // Format start_time for datetime-local input (YYYY-MM-DDTHH:mm)
+                                                // Note: This needs local time adjustment
+                                                const offset = start.getTimezoneOffset() * 60000;
+                                                const localISOTime = new Date(start.getTime() - offset).toISOString().slice(0, 16);
+
+                                                setContestForm({
+                                                    title: c.title,
+                                                    description: c.description || '',
+                                                    start_time: localISOTime,
+                                                    duration_minutes: duration
+                                                });
+                                                console.log("[DEBUG] Setting view to create/edit");
+                                                setView('create');
+                                            } catch (err) {
+                                                console.error("Edit handler error:", err);
+                                                toast.error("Error opening edit form: " + err.message);
+                                            }
                                         }}
                                         className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-200"
                                     >
@@ -256,19 +270,24 @@ const AdminContestManager = () => {
                                     </button>
                                     <button
                                         onClick={async () => {
+                                            console.log("[DEBUG] Delete clicked for:", c.contest_id);
                                             if (!window.confirm("Are you sure you want to delete this contest?")) return;
                                             try {
                                                 const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}`, {
                                                     method: 'DELETE',
                                                     headers: { token: localStorage.getItem('token') }
                                                 });
+                                                console.log("[DEBUG] Delete response:", res.status);
                                                 if (res.ok) {
                                                     toast.success("Contest deleted");
                                                     fetchContests();
                                                 } else {
-                                                    toast.error("Failed to delete contest");
+                                                    const err = await res.json();
+                                                    console.error("Delete failed:", err);
+                                                    toast.error("Failed to delete contest: " + (err.error || "Unknown error"));
                                                 }
                                             } catch (e) {
+                                                console.error("Delete exception:", e);
                                                 toast.error("Error deleting contest");
                                             }
                                         }}

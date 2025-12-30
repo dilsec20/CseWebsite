@@ -15,6 +15,9 @@ const ContestDashboard = () => {
         const fetchGlobal = async () => {
             try {
                 const token = localStorage.getItem("token");
+                const res = await fetch(`${API_URL}/api/contests/global/all`, {
+                    headers: { token }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     if (Array.isArray(data)) {

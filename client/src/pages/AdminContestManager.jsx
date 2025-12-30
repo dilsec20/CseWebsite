@@ -50,9 +50,13 @@ const AdminContestManager = () => {
             const res = await fetch(`${API_URL}/api/admin/contests/${contestId}/problems`, {
                 headers: { token: localStorage.getItem('token') }
             });
+            console.log(`[DEBUG] Fetching problems for contest ${contestId}: Status ${res.status}`);
             if (res.ok) {
                 const data = await res.json();
+                console.log("[DEBUG] Problems fetched:", data);
                 setContestProblems(data);
+            } else {
+                console.error("Failed to fetch problems, status:", res.status);
             }
         } catch (err) {
             console.error("Failed to fetch problems", err);
@@ -270,8 +274,10 @@ const AdminContestManager = () => {
                                     <button
                                         onClick={() => {
                                             setSelectedContest(c);
+                                            fetchContestProblems(c.contest_id);
                                             // Reset form when opening
                                             setProblemForm({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
+                                            setEditingProblemId(null);
                                             setView('add_problem');
                                         }}
                                         className="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-green-200"
@@ -331,6 +337,8 @@ const AdminContestManager = () => {
 
                     {/* Problem List */}
                     <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {console.log("[DEBUG] Rendering problems:", contestProblems)}
+                        {contestProblems.length === 0 && <p className="text-gray-500 col-span-full">No problems added yet.</p>}
                         {contestProblems.map(p => (
                             <div
                                 key={p.problem_id}

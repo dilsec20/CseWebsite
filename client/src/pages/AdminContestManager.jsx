@@ -25,7 +25,7 @@ const AdminContestManager = () => {
 
     const fetchContests = async () => {
         try {
-            const res = await fetch(`${API_URL}/contests/global/all`, {
+            const res = await fetch(`${API_URL}/api/contests/global/all`, {
                 headers: { token: localStorage.getItem('token') }
             });
             const data = await res.json();
@@ -39,7 +39,7 @@ const AdminContestManager = () => {
         e.preventDefault();
         try {
             console.log("Submitting contest:", contestForm);
-            const res = await fetch(`${API_URL}/admin/contests/create`, {
+            const res = await fetch(`${API_URL}/api/admin/contests/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
                 body: JSON.stringify(contestForm)
@@ -64,7 +64,7 @@ const AdminContestManager = () => {
         e.preventDefault();
         try {
             // 1. Create Problem
-            const problemRes = await fetch(`${API_URL}/admin/contests/problems/add`, {
+            const problemRes = await fetch(`${API_URL}/api/admin/contests/problems/add`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') }, // Fixed endpoint path
                 body: JSON.stringify({ ...problemForm, contest_id: selectedContest.contest_id })
@@ -91,7 +91,7 @@ const AdminContestManager = () => {
                 return;
             }
 
-            const tcRes = await fetch(`${API_URL}/admin/contests/test-cases/add`, {
+            const tcRes = await fetch(`${API_URL}/api/admin/contests/test-cases/add`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
                 body: JSON.stringify({ problem_id: problemId, test_cases: testCases })
@@ -144,7 +144,7 @@ const AdminContestManager = () => {
                                         onClick={async () => {
                                             if (!window.confirm("Finalize contest and update ratings? Cannot be undone.")) return;
                                             try {
-                                                const res = await fetch(`${API_URL}/admin/contests/${c.contest_id}/finalize`, {
+                                                const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}/finalize`, {
                                                     method: 'POST',
                                                     headers: { token: localStorage.getItem('token') }
                                                 });

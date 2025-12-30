@@ -172,16 +172,25 @@ const AdminContestManager = () => {
                                                     method: 'POST',
                                                     headers: { token: localStorage.getItem('token') }
                                                 });
-                                                if (res.ok) toast.success("Ratings updated!");
-                                                else toast.error("Failed to finalize");
-                                            } catch (e) { toast.error("Error finalizing"); }
+                                                const data = await res.json();
+                                                if (res.ok) toast.success(data.message || "Ratings updated!");
+                                                else toast.error(data.error || "Failed to finalize");
+                                            } catch (e) {
+                                                console.error(e);
+                                                toast.error("Error finalizing contest");
+                                            }
                                         }}
                                         className="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-purple-200"
                                     >
                                         Finalize
                                     </button>
                                     <button
-                                        onClick={() => { setSelectedContest(c); setView('add_problem'); }}
+                                        onClick={() => {
+                                            setSelectedContest(c);
+                                            // Reset form when opening
+                                            setProblemForm({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
+                                            setView('add_problem');
+                                        }}
                                         className="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-green-200"
                                     >
                                         + Add Problem

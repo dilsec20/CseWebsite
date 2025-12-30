@@ -109,7 +109,9 @@ router.post("/:id/finalize", authorization, async (req, res) => {
         );
 
         if (participants.rows.length === 0) {
-            return res.status(400).json({ error: "No participants to rate" });
+            // No participants, just close the contest
+            await pool.query("UPDATE global_contests SET is_active = false WHERE contest_id = $1", [id]);
+            return res.json({ message: "Contest finalized (No participants to rate)", participants: 0 });
         }
 
         const rankedUsers = participants.rows;

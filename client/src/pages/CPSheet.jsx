@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Calculator, Cpu, Hash, FunctionSquare, Target, Search, Layers, Zap,
     Share2, TreeDeciduous, GitMerge, ScanLine, AlignLeft, Award, Sparkles,
-    ChevronDown, ChevronUp, CheckCircle, ExternalLink, Filter
+    ChevronDown, CheckCircle, ExternalLink
 } from 'lucide-react';
 import problemData from '../data/little_sheep_yawn_problems.json';
 
@@ -10,11 +10,31 @@ const CPSheet = () => {
     // State for expanded sections (by default expand the first one)
     const [expandedModules, setExpandedModules] = useState({ "Number Theory": true });
 
+    // State for solved problems (persisted in local storage)
+    const [solvedProblems, setSolvedProblems] = useState(() => {
+        const saved = localStorage.getItem('cp_sheet_solved');
+        return saved ? JSON.parse(saved) : {};
+    });
+
+    // Persist solved state whenever it changes
+    useEffect(() => {
+        localStorage.setItem('cp_sheet_solved', JSON.stringify(solvedProblems));
+    }, [solvedProblems]);
+
     // Toggle module expansion
     const toggleModule = (moduleName) => {
         setExpandedModules(prev => ({
             ...prev,
             [moduleName]: !prev[moduleName]
+        }));
+    };
+
+    // Toggle problem solved status
+    const toggleProblem = (problemId, e) => {
+        e.stopPropagation(); // Prevent row click from triggering something else if we add it later
+        setSolvedProblems(prev => ({
+            ...prev,
+            [problemId]: !prev[problemId]
         }));
     };
 
@@ -67,6 +87,13 @@ const CPSheet = () => {
 
     const totalProblems = Object.values(problemData).flat().length;
 
+    // Calculate overall progress just for fun, or per module
+    const calculateProgress = (problems) => {
+        if (!problems || problems.length === 0) return 0;
+        const solvedCount = problems.filter(p => solvedProblems[p.id]).length;
+        return Math.round((solvedCount / problems.length) * 100);
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
@@ -84,85 +111,111 @@ const CPSheet = () => {
 
                 {/* Modules List */}
                 <div className="space-y-6">
-                    {displayData.map((module, index) => (
-                        <div key={module.title} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-                            {/* Module Header */}
-                            <button
-                                onClick={() => toggleModule(module.title)}
-                                className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors"
-                            >
-                                <div className="flex items-center gap-5">
-                                    <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
-                                        {getIcon(module.title)}
-                                    </div>
-                                    <div className="text-left">
-                                        <h3 className="text-xl font-bold text-gray-900">
-                                            {index + 1}. {module.title}
-                                        </h3>
-                                        <span className="text-sm text-gray-500 font-medium">
-                                            {module.problems.length} Problems
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className={`transform transition-transform duration-300 ${expandedModules[module.title] ? 'rotate-180' : ''}`}>
-                                    <ChevronDown className="h-6 w-6 text-gray-400" />
-                                </div>
-                            </button>
+                    {displayData.map((module, index) => {
+                        const progress = calculateProgress(module.problems);
+                        const solvedCount = module.problems.filter(p => solvedProblems[p.id]).length;
 
-                            {/* Problems List */}
-                            {expandedModules[module.title] && (
-                                <div className="border-t border-gray-100 bg-gray-50/30">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="bg-gray-50 border-b border-gray-200">
-                                                    <th className="py-4 px-6 font-semibold text-gray-600 w-16 text-center">Status</th>
-                                                    <th className="py-4 px-6 font-semibold text-gray-600">Problem Name</th>
-                                                    <th className="py-4 px-6 font-semibold text-gray-600 w-32 text-center">Rating</th>
-                                                    <th className="py-4 px-6 font-semibold text-gray-600 w-32 text-center">Contest</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {module.problems.map((problem) => (
-                                                    <tr key={problem.id} className="border-b border-gray-100 hover:bg-blue-50/30 transition-colors group">
-                                                        <td className="py-3 px-6 text-center">
-                                                            <div className="flex justify-center">
-                                                                <CheckCircle className="h-6 w-6 text-green-500 fill-green-50" />
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-3 px-6">
-                                                            <a
-                                                                href={problem.link}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-gray-900 font-medium hover:text-blue-600 flex items-center gap-2 group-hover:underline decoration-blue-400 underline-offset-2"
-                                                            >
-                                                                {problem.name}
-                                                                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
-                                                            </a>
-                                                        </td>
-                                                        <td className="py-3 px-6 text-center">
-                                                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${getRatingColor(problem.rating)}`}>
-                                                                {problem.rating || "Unrated"}
-                                                            </span>
-                                                        </td>
-                                                        <td className="py-3 px-6 text-center text-gray-500 font-mono text-sm">
-                                                            {problem.contestId}{problem.index}
-                                                        </td>
+                        return (
+                            <div key={module.title} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+                                {/* Module Header */}
+                                <button
+                                    onClick={() => toggleModule(module.title)}
+                                    className="w-full flex flex-col p-0 bg-white hover:bg-gray-50 transition-colors"
+                                >
+                                    <div className="flex items-center justify-between p-6 w-full">
+                                        <div className="flex items-center gap-5">
+                                            <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
+                                                {getIcon(module.title)}
+                                                {/* Circular progress overlay could go here, but bar is safer */}
+                                            </div>
+                                            <div className="text-left">
+                                                <h3 className="text-xl font-bold text-gray-900">
+                                                    {index + 1}. {module.title}
+                                                </h3>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-sm text-gray-500 font-medium">
+                                                        {solvedCount} / {module.problems.length} Solved
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={`transform transition-transform duration-300 ${expandedModules[module.title] ? 'rotate-180' : ''}`}>
+                                            <ChevronDown className="h-6 w-6 text-gray-400" />
+                                        </div>
+                                    </div>
+                                    {/* Progress Bar */}
+                                    <div className="w-full h-1.5 bg-gray-100 mt-0">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                </button>
+
+                                {/* Problems List */}
+                                {expandedModules[module.title] && (
+                                    <div className="border-t border-gray-100 bg-gray-50/30">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-left border-collapse">
+                                                <thead>
+                                                    <tr className="bg-gray-50 border-b border-gray-200">
+                                                        <th className="py-4 px-6 font-semibold text-gray-600 w-16 text-center">Done?</th>
+                                                        <th className="py-4 px-6 font-semibold text-gray-600">Problem Name</th>
+                                                        <th className="py-4 px-6 font-semibold text-gray-600 w-32 text-center">Rating</th>
+                                                        <th className="py-4 px-6 font-semibold text-gray-600 w-32 text-center">Contest</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                </thead>
+                                                <tbody>
+                                                    {module.problems.map((problem) => (
+                                                        <tr key={problem.id} className={`border-b border-gray-100 transition-colors group ${solvedProblems[problem.id] ? 'bg-blue-50/50' : 'hover:bg-gray-50'}`}>
+                                                            <td className="py-3 px-6 text-center">
+                                                                <div className="flex justify-center">
+                                                                    <button
+                                                                        onClick={(e) => toggleProblem(problem.id, e)}
+                                                                        className={`p-1 rounded-full transition-all duration-200 ${solvedProblems[problem.id]
+                                                                                ? 'text-green-500 bg-green-50 hover:bg-green-100'
+                                                                                : 'text-gray-300 hover:text-gray-400'
+                                                                            }`}
+                                                                    >
+                                                                        <CheckCircle className={`h-6 w-6 ${solvedProblems[problem.id] ? 'fill-green-100' : ''}`} />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                            <td className="py-3 px-6">
+                                                                <a
+                                                                    href={problem.link}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={`font-medium flex items-center gap-2 group-hover:underline decoration-blue-400 underline-offset-2 ${solvedProblems[problem.id] ? 'text-gray-500 line-through decoration-gray-400' : 'text-gray-900 hover:text-blue-600'
+                                                                        }`}
+                                                                >
+                                                                    {problem.name}
+                                                                    <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
+                                                                </a>
+                                                            </td>
+                                                            <td className="py-3 px-6 text-center">
+                                                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${getRatingColor(problem.rating)} opacity-${solvedProblems[problem.id] ? '75' : '100'}`}>
+                                                                    {problem.rating || "Unrated"}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-3 px-6 text-center text-gray-500 font-mono text-sm">
+                                                                {problem.contestId}{problem.index}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-                                    {/* Footer for Module */}
-                                    <div className="p-4 text-center border-t border-gray-200 bg-gray-50 text-sm text-gray-500">
-                                        Showing {module.problems.length} accepted solutions sorted by difficulty (Rating)
+                                        {/* Footer for Module */}
+                                        <div className="p-4 text-center border-t border-gray-200 bg-gray-50 text-sm text-gray-500">
+                                            Showing {module.problems.length} accepted solutions sorted by difficulty (Rating)
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

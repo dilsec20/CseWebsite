@@ -17,6 +17,10 @@ const AdminContestManager = () => {
     const [contestForm, setContestForm] = useState({ title: '', description: '', start_time: '', duration_minutes: 120 });
     const [problemForm, setProblemForm] = useState({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
 
+    // New State for Management
+    const [contestProblems, setContestProblems] = useState([]);
+    const [editingProblemId, setEditingProblemId] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,6 +42,20 @@ const AdminContestManager = () => {
             setContests(data);
         } catch (err) {
             console.error("Error fetching contests:", err);
+        }
+    };
+
+    const fetchContestProblems = async (contestId) => {
+        try {
+            const res = await fetch(`${API_URL}/api/admin/contests/${contestId}/problems`, {
+                headers: { token: localStorage.getItem('token') }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setContestProblems(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch problems", err);
         }
     };
 
@@ -87,44 +105,64 @@ const AdminContestManager = () => {
     const handleAddProblem = async (e) => {
         e.preventDefault();
         try {
-            // 1. Create Problem
-            const problemRes = await fetch(`${API_URL}/api/admin/contests/problems/add`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') }, // Fixed endpoint path
-                body: JSON.stringify({ ...problemForm, contest_id: selectedContest.contest_id })
-            });
+            let problemId;
 
-            if (!problemRes.ok) throw new Error("Problem creation failed");
-            const problemData = await problemRes.json();
-            const problemId = problemData.problem_id;
+            if (editingProblemId) {
+                // UPDATE Existing Problem
+                const res = await fetch(`${API_URL}/api/admin/contests/problems/${editingProblemId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
+                    body: JSON.stringify(problemForm)
+                });
+
+                if (!res.ok) throw new Error("Problem update failed");
+                const data = await res.json();
+                problemId = data.problem_id;
+                toast.success("Problem updated!");
+            } else {
+                // CREATE New Problem
+                const problemRes = await fetch(`${API_URL}/api/admin/contests/problems/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') }, // Fixed endpoint path
+                    body: JSON.stringify({ ...problemForm, contest_id: selectedContest.contest_id })
+                });
+
+                if (!problemRes.ok) throw new Error("Problem creation failed");
+                const problemData = await problemRes.json();
+                problemId = problemData.problem_id;
+            }
 
             // 2. Parse and Add Test Cases
-            // Expected format: Input:::Output|||Input:::Output
-            // A simple parser for manual entry
-            // Or better: JSON array text
+            // Only add test cases logic here (simplified)
+            // If editing, we skip updating test cases for now as requested/planned, unless it's a new problem logic or separate tool.
+            // But let's keep the original logic for NEW problems, and maybe skip for edit unless we want to support it (plan said "Optional").
 
-            let testCases = [];
-            try {
-                // Try JSON parsing first
-                testCases = JSON.parse(problemForm.test_cases_text);
-            } catch {
-                // Fallback to simple parser: Case 1 Input --- Case 1 Output === Case 2 Input ---...
-                // Only if JSON fails. For now, let's enforce JSON array for simplicity in MVP
-                // [{ "input": "...", "expected_output": "...", "is_sample": true }]
-                toast.error("Test cases must be valid JSON array");
-                return;
+            if (!editingProblemId && problemForm.test_cases_text) {
+                let testCases = [];
+                try {
+                    testCases = JSON.parse(problemForm.test_cases_text);
+                } catch {
+                    // Fallback/Ignore if empty
+                }
+
+                if (testCases.length > 0) {
+                    const tcRes = await fetch(`${API_URL}/api/admin/contests/test-cases/add`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
+                        body: JSON.stringify({ problem_id: problemId, test_cases: testCases })
+                    });
+                    if (tcRes.ok) toast.success("Test Cases added!");
+                }
+            } else if (!editingProblemId) {
+                toast.success("Problem added (No test cases)");
             }
 
-            const tcRes = await fetch(`${API_URL}/api/admin/contests/test-cases/add`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
-                body: JSON.stringify({ problem_id: problemId, test_cases: testCases })
-            });
+            // Refresh list and clear form
+            fetchContestProblems(selectedContest.contest_id);
+            setEditingProblemId(null);
+            setProblemForm({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
+            // Stay in add_problem view to see the list update
 
-            if (tcRes.ok) {
-                toast.success("Problem & Test Cases added!");
-                setView('list');
-            }
         } catch (err) {
             toast.error(err.message);
         }
@@ -227,11 +265,47 @@ const AdminContestManager = () => {
                 </div>
             )}
 
-            {/* ADD PROBLEM VIEW */}
+            {/* ADD PROBLEM VIEW (Now Manage/Edit View) */}
             {view === 'add_problem' && (
                 <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-                    <h2 className="text-2xl font-bold mb-2">Add Problem</h2>
-                    <p className="text-gray-500 mb-6">To: {selectedContest?.title}</p>
+                    <div className="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 className="text-2xl font-bold">Manage Contest</h2>
+                            <p className="text-gray-500">{selectedContest?.title}</p>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setEditingProblemId(null);
+                                setProblemForm({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
+                            }}
+                            className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-100"
+                        >
+                            + New Problem
+                        </button>
+                    </div>
+
+                    {/* Problem List */}
+                    <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {contestProblems.map(p => (
+                            <div
+                                key={p.problem_id}
+                                onClick={() => {
+                                    setEditingProblemId(p.problem_id);
+                                    setProblemForm({ ...p, test_cases_text: '' }); // Load problem data, reset test cases (we don't fetch them yet)
+                                }}
+                                className={`p-4 rounded-lg border cursor-pointer transition ${editingProblemId === p.problem_id ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
+                            >
+                                <h4 className="font-bold text-gray-800">{p.title}</h4>
+                                <span className={`text-xs px-2 py-1 rounded-full ${p.difficulty === 'Easy' ? 'bg-green-100 text-green-700' : p.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                                    {p.difficulty}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-4 border-b pb-2">
+                        {editingProblemId ? `Edit Problem: ${problemForm.title}` : "Add New Problem"}
+                    </h3>
 
                     <form onSubmit={handleAddProblem} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div className="space-y-4">
@@ -245,6 +319,7 @@ const AdminContestManager = () => {
                             <input className="w-full p-3 border rounded-lg" placeholder="Topic (e.g. Arrays)" value={problemForm.topic} onChange={e => setProblemForm({ ...problemForm, topic: e.target.value })} />
                             <textarea className="w-full p-3 border rounded-lg" placeholder="Description (Markdown supported)" rows={6} value={problemForm.description} onChange={e => setProblemForm({ ...problemForm, description: e.target.value })} required />
                             <textarea className="w-full p-3 border rounded-lg" placeholder="Constraints (e.g. 1 <= N <= 10^5)" rows={2} value={problemForm.constraints} onChange={e => setProblemForm({ ...problemForm, constraints: e.target.value })} />
+                            <input className="w-full p-3 border rounded-lg" placeholder="Source (Optional)" value={problemForm.source || ''} onChange={e => setProblemForm({ ...problemForm, source: e.target.value })} />
                         </div>
 
                         <div className="space-y-4">
@@ -267,17 +342,16 @@ const AdminContestManager = () => {
                             </p>
                             <textarea
                                 className="w-full p-3 border rounded-lg font-mono text-sm bg-gray-50"
-                                placeholder="Paste JSON test cases here..."
+                                placeholder={editingProblemId ? "Leave empty to keep existing test cases (Updating test cases not supported in edit mode yet)" : "Paste JSON test cases here..."}
                                 rows={15}
                                 value={problemForm.test_cases_text}
                                 onChange={e => setProblemForm({ ...problemForm, test_cases_text: e.target.value })}
-                                required
                             />
 
                             <div className="flex justify-end gap-3 mt-6">
                                 <button type="button" onClick={() => setView('list')} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
                                 <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium flex items-center gap-2">
-                                    <Save size={18} /> Save Problem
+                                    <Save size={18} /> {editingProblemId ? "Update Problem" : "Save Problem"}
                                 </button>
                             </div>
                         </div>

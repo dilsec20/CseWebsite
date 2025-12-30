@@ -172,4 +172,41 @@ router.post("/:id/finalize", authorization, async (req, res) => {
     }
 });
 
+// Get all problems for a contest (Admin View)
+router.get("/:id/problems", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const problems = await pool.query(
+            "SELECT * FROM problems WHERE contest_id = $1 ORDER BY problem_id ASC",
+            [id]
+        );
+        res.json(problems.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Update a Problem
+router.put("/problems/:problem_id", authorization, async (req, res) => {
+    try {
+        const { problem_id } = req.params;
+        const { title, description, difficulty, topic, constraints, source } = req.body;
+
+        const updatedProblem = await pool.query(
+            "UPDATE problems SET title = $1, description = $2, difficulty = $3, topic = $4, constraints = $5, source = $6 WHERE problem_id = $7 RETURNING *",
+            [title, description, difficulty, topic, constraints, source, problem_id]
+        );
+
+        if (updatedProblem.rows.length === 0) {
+            return res.status(404).json({ error: "Problem not found" });
+        }
+
+        res.json(updatedProblem.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;

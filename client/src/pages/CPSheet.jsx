@@ -15,6 +15,10 @@ const CPSheet = ({ isAuthenticated }) => {
     // Format: { "Module Name": { "SubTopic Name": boolean } }
     const [expandedSubTopics, setExpandedSubTopics] = useState({});
 
+    // State for rating filters
+    // Format: { "Module Name": { "SubTopic Name": "rating_string" } }
+    const [ratingFilters, setRatingFilters] = useState({});
+
     // State for solved problems (persisted in local storage)
     const [solvedProblems, setSolvedProblems] = useState(() => {
         const saved = localStorage.getItem('cp_sheet_solved');
@@ -36,12 +40,26 @@ const CPSheet = ({ isAuthenticated }) => {
 
     // Toggle sub-topic expansion
     const toggleSubTopic = (moduleName, subTopicName, e) => {
+        // Don't toggle if clicking on input
+        if (e.target.tagName === 'INPUT') return;
+
         e.stopPropagation();
         setExpandedSubTopics(prev => ({
             ...prev,
             [moduleName]: {
                 ...(prev[moduleName] || {}),
                 [subTopicName]: !prev[moduleName]?.[subTopicName]
+            }
+        }));
+    };
+
+    // Handle rating filter change
+    const handleFilterChange = (moduleName, subTopicName, value) => {
+        setRatingFilters(prev => ({
+            ...prev,
+            [moduleName]: {
+                ...(prev[moduleName] || {}),
+                [subTopicName]: value
             }
         }));
     };
@@ -199,68 +217,91 @@ const CPSheet = ({ isAuthenticated }) => {
                                             const isExpanded = expandedSubTopics[moduleName]?.[subTopicName];
                                             const subSolved = problems.filter(p => solvedProblems[p.id]).length;
 
+                                            // Filtering Logic
+                                            const filterRating = ratingFilters[moduleName]?.[subTopicName] || '';
+                                            const displayProblems = filterRating
+                                                ? problems.filter(p => p.rating === parseInt(filterRating))
+                                                : problems;
+
                                             return (
                                                 <div key={subTopicName} className="border-t border-gray-100">
                                                     {/* Sub-topic Header */}
-                                                    <button
+                                                    <div
                                                         onClick={(e) => toggleSubTopic(moduleName, subTopicName, e)}
-                                                        className="w-full flex items-center justify-between py-3 px-8 bg-white hover:bg-gray-50 transition-colors border-b border-gray-50"
+                                                        className="w-full flex items-center justify-between py-3 px-8 bg-white hover:bg-gray-50 transition-colors border-b border-gray-50 cursor-pointer"
                                                     >
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-3 flex-1">
                                                             {isExpanded ? <FolderOpen className="h-4 w-4 text-blue-400" /> : <Folder className="h-4 w-4 text-gray-400" />}
-                                                            <span className="font-semibold text-gray-700 text-sm">{subTopicName}</span>
+                                                            <span className="font-semibold text-gray-700 text-sm whitespace-nowrap">{subTopicName}</span>
                                                             <span className="text-xs text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-full font-medium shadow-sm">
                                                                 {subSolved}/{problems.length}
                                                             </span>
+
+                                                            {/* Rating Filter Input */}
+                                                            <div className="ml-4" onClick={(e) => e.stopPropagation()}>
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder="Rating..."
+                                                                    className="w-24 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 transition-colors bg-gray-50 focus:bg-white"
+                                                                    value={filterRating}
+                                                                    onChange={(e) => handleFilterChange(moduleName, subTopicName, e.target.value)}
+                                                                />
+                                                            </div>
                                                         </div>
                                                         <ChevronDown className={`h-4 w-4 text-gray-300 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                                                    </button>
+                                                    </div>
 
                                                     {/* Problems Table */}
                                                     {isExpanded && (
                                                         <div className="overflow-x-auto bg-white pl-4">
-                                                            <table className="w-full text-left border-collapse">
-                                                                <tbody>
-                                                                    {problems.map((problem) => (
-                                                                        <tr key={problem.id} className={`border-b border-gray-50 transition-colors group ${solvedProblems[problem.id] ? 'bg-blue-50/30' : 'hover:bg-gray-50'}`}>
-                                                                            <td className="py-2 px-4 w-12 text-center pointer-events-auto">
-                                                                                <button
-                                                                                    onClick={(e) => toggleProblem(problem.id, e)}
-                                                                                    className={`p-1 rounded-full transition-transform active:scale-95 ${solvedProblems[problem.id]
-                                                                                            ? 'text-green-500'
-                                                                                            : 'text-gray-200 hover:text-gray-400'
-                                                                                        }`}
-                                                                                    title={isAuthenticated ? (solvedProblems[problem.id] ? "Mark as unsolved" : "Mark as solved") : "Login to track"}
-                                                                                >
-                                                                                    {isAuthenticated || solvedProblems[problem.id] ? (
-                                                                                        <CheckCircle className="h-6 w-6" />
-                                                                                    ) : (
-                                                                                        <Lock className="h-4 w-4 text-gray-300" />
-                                                                                    )}
-                                                                                </button>
-                                                                            </td>
-                                                                            <td className="py-2 px-4">
-                                                                                <a
-                                                                                    href={problem.link}
-                                                                                    target="_blank"
-                                                                                    rel="noopener noreferrer"
-                                                                                    className={`text-sm font-medium flex items-center gap-2 ${solvedProblems[problem.id] ? 'text-gray-400 line-through' : 'text-gray-700 hover:text-blue-600'}`}
-                                                                                >
-                                                                                    {problem.name}
-                                                                                </a>
-                                                                            </td>
-                                                                            <td className="py-2 px-4 text-right">
-                                                                                <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${getRatingColor(problem.rating)}`}>
-                                                                                    {problem.rating}
-                                                                                </span>
-                                                                            </td>
-                                                                            <td className="py-2 px-4 text-right text-xs text-gray-400 font-mono w-20">
-                                                                                {problem.contestId}{problem.index}
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))}
-                                                                </tbody>
-                                                            </table>
+                                                            {displayProblems.length > 0 ? (
+                                                                <table className="w-full text-left border-collapse">
+                                                                    <tbody>
+                                                                        {displayProblems.map((problem) => (
+                                                                            <tr key={problem.id} className={`border-b border-gray-50 transition-colors group ${solvedProblems[problem.id] ? 'bg-blue-50/30' : 'hover:bg-gray-50'}`}>
+                                                                                <td className="py-2 px-4 w-12 text-center pointer-events-auto">
+                                                                                    <button
+                                                                                        onClick={(e) => toggleProblem(problem.id, e)}
+                                                                                        className={`p-1 rounded-full transition-transform active:scale-95 ${solvedProblems[problem.id]
+                                                                                                ? 'text-green-500'
+                                                                                                : 'text-gray-200 hover:text-gray-400'
+                                                                                            }`}
+                                                                                        title={isAuthenticated ? (solvedProblems[problem.id] ? "Mark as unsolved" : "Mark as solved") : "Login to track"}
+                                                                                    >
+                                                                                        {isAuthenticated || solvedProblems[problem.id] ? (
+                                                                                            <CheckCircle className="h-6 w-6" />
+                                                                                        ) : (
+                                                                                            <Lock className="h-4 w-4 text-gray-300" />
+                                                                                        )}
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td className="py-2 px-4">
+                                                                                    <a
+                                                                                        href={problem.link}
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        className={`text-sm font-medium flex items-center gap-2 ${solvedProblems[problem.id] ? 'text-gray-400 line-through' : 'text-gray-700 hover:text-blue-600'}`}
+                                                                                    >
+                                                                                        {problem.name}
+                                                                                    </a>
+                                                                                </td>
+                                                                                <td className="py-2 px-4 text-right">
+                                                                                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${getRatingColor(problem.rating)}`}>
+                                                                                        {problem.rating}
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td className="py-2 px-4 text-right text-xs text-gray-400 font-mono w-20">
+                                                                                    {problem.contestId}{problem.index}
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            ) : (
+                                                                <div className="p-4 text-center text-sm text-gray-400 italic">
+                                                                    No problems found with rating {filterRating}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>

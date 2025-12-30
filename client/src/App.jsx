@@ -223,7 +223,7 @@ function App() {
           <Route path="/dsa/module/:id" element={<DSAModule />} />
           <Route path="/cp-path" element={<CPPath />} />
           <Route path="/cp/module/:id" element={<CPModule />} />
-          <Route path="/cp-sheet" element={<CPSheet />} />
+          <Route path="/cp-sheet" element={<CPSheet isAuthenticated={isAuthenticated} />} />
           <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
           <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
           <Route path="/knowledge-base" element={<KnowledgeBase />} />

@@ -29,6 +29,7 @@ const Landing = ({ setAuth }) => {
                     <a href="#features" className="text-gray-600 hover:text-blue-600 font-medium transition">Features</a>
                     <Link to="/dsa-path" className="text-gray-600 hover:text-blue-600 font-medium transition">DSA Path</Link>
                     <Link to="/cp-path" className="text-gray-600 hover:text-blue-600 font-medium transition">CP Path</Link>
+                    <Link to="/cp-sheet" className="text-gray-600 hover:text-blue-600 font-medium transition">CP Sheet</Link>
 
                     {isAuthenticated ? (
                         <ProfileMenu setAuth={setAuth} />

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     Calculator, Cpu, Hash, FunctionSquare, Target, Search, Layers, Zap,
     Share2, TreeDeciduous, GitMerge, ScanLine, AlignLeft, Award, Sparkles,
-    ChevronDown, CheckCircle, ExternalLink, FolderOpen, Folder
+    ChevronDown, CheckCircle, ExternalLink, FolderOpen, Folder, Lock
 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import problemData from '../data/little_sheep_yawn_problems.json';
 
-const CPSheet = () => {
+const CPSheet = ({ isAuthenticated }) => {
     // State for expanded sections (Modules)
     const [expandedModules, setExpandedModules] = useState({ "Number Theory": true });
 
@@ -48,6 +49,19 @@ const CPSheet = () => {
     // Toggle problem solved status
     const toggleProblem = (problemId, e) => {
         e.stopPropagation();
+
+        if (!isAuthenticated) {
+            toast.error("Please login to track your progress!", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
+
         setSolvedProblems(prev => ({
             ...prev,
             [problemId]: !prev[problemId]
@@ -106,6 +120,7 @@ const CPSheet = () => {
         Object.values(subTopics).flat()
     );
     const totalProblems = allProblems.length;
+    const totalSolved = allProblems.filter(p => solvedProblems[p.id]).length;
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -115,8 +130,19 @@ const CPSheet = () => {
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-3 mt-2">
                         Little Sheep's Training Sheet
                     </h1>
-                    <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-                        <span className="font-bold text-gray-900">{totalProblems}</span> Rated Problems. 100% Unrated Free.
+                    <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-4">
+                        A curated collection of <span className="font-bold text-gray-900">{totalProblems}</span> solved problems from Codeforces,
+                        organized by CP modules.
+                    </p>
+                    {/* Overall Progress */}
+                    <div className="max-w-xl mx-auto bg-gray-50 rounded-full h-4 overflow-hidden border border-gray-200">
+                        <div
+                            className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-700 ease-out"
+                            style={{ width: `${(totalSolved / totalProblems) * 100}%` }}
+                        ></div>
+                    </div>
+                    <p className="text-gray-400 text-sm mt-2">
+                        Total Progress: {totalSolved} / {totalProblems} Solved
                     </p>
                 </div>
 
@@ -146,8 +172,9 @@ const CPSheet = () => {
                                                 <h3 className="text-xl font-bold text-gray-900">
                                                     {index + 1}. {moduleName}
                                                 </h3>
+                                                {/* Prominent Solved Count */}
                                                 <div className="flex items-center gap-2 mt-1">
-                                                    <span className="text-sm text-gray-500 font-medium">
+                                                    <span className="text-base font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                                                         {solvedCount} / {moduleProblems.length} Solved
                                                     </span>
                                                 </div>
@@ -182,7 +209,7 @@ const CPSheet = () => {
                                                         <div className="flex items-center gap-3">
                                                             {isExpanded ? <FolderOpen className="h-4 w-4 text-blue-400" /> : <Folder className="h-4 w-4 text-gray-400" />}
                                                             <span className="font-semibold text-gray-700 text-sm">{subTopicName}</span>
-                                                            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                                                            <span className="text-xs text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-full font-medium shadow-sm">
                                                                 {subSolved}/{problems.length}
                                                             </span>
                                                         </div>
@@ -196,12 +223,20 @@ const CPSheet = () => {
                                                                 <tbody>
                                                                     {problems.map((problem) => (
                                                                         <tr key={problem.id} className={`border-b border-gray-50 transition-colors group ${solvedProblems[problem.id] ? 'bg-blue-50/30' : 'hover:bg-gray-50'}`}>
-                                                                            <td className="py-2 px-4 w-12 text-center">
+                                                                            <td className="py-2 px-4 w-12 text-center pointer-events-auto">
                                                                                 <button
                                                                                     onClick={(e) => toggleProblem(problem.id, e)}
-                                                                                    className={`p-1 rounded-full ${solvedProblems[problem.id] ? 'text-green-500' : 'text-gray-200 hover:text-gray-400'}`}
+                                                                                    className={`p-1 rounded-full transition-transform active:scale-95 ${solvedProblems[problem.id]
+                                                                                            ? 'text-green-500'
+                                                                                            : 'text-gray-200 hover:text-gray-400'
+                                                                                        }`}
+                                                                                    title={isAuthenticated ? (solvedProblems[problem.id] ? "Mark as unsolved" : "Mark as solved") : "Login to track"}
                                                                                 >
-                                                                                    <CheckCircle className="h-5 w-5" />
+                                                                                    {isAuthenticated || solvedProblems[problem.id] ? (
+                                                                                        <CheckCircle className="h-6 w-6" />
+                                                                                    ) : (
+                                                                                        <Lock className="h-4 w-4 text-gray-300" />
+                                                                                    )}
                                                                                 </button>
                                                                             </td>
                                                                             <td className="py-2 px-4">

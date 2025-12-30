@@ -168,6 +168,29 @@ const AdminContestManager = () => {
         }
     };
 
+    const handleDeleteProblem = async () => {
+        if (!editingProblemId || !window.confirm("Are you sure you want to delete this problem?")) return;
+
+        try {
+            const res = await fetch(`${API_URL}/api/admin/contests/problems/${editingProblemId}`, {
+                method: 'DELETE',
+                headers: { token: localStorage.getItem('token') }
+            });
+
+            if (res.ok) {
+                toast.success("Problem deleted");
+                fetchContestProblems(selectedContest.contest_id);
+                setEditingProblemId(null);
+                setProblemForm({ title: '', description: '', difficulty: 'Medium', topic: '', constraints: '', source: '', test_cases_text: '' });
+            } else {
+                toast.error("Failed to delete problem");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Error deleting problem");
+        }
+    };
+
     return (
         <div className="p-8 max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-8">
@@ -204,7 +227,29 @@ const AdminContestManager = () => {
                                 <div className="flex gap-3">
                                     <button
                                         onClick={async () => {
-                                            if (!window.confirm("Finalize contest and update ratings? Cannot be undone.")) return;
+                                            if (!window.confirm("Are you sure you want to delete this contest?")) return;
+                                            try {
+                                                const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}`, {
+                                                    method: 'DELETE',
+                                                    headers: { token: localStorage.getItem('token') }
+                                                });
+                                                if (res.ok) {
+                                                    toast.success("Contest deleted");
+                                                    fetchContests();
+                                                } else {
+                                                    toast.error("Failed to delete contest");
+                                                }
+                                            } catch (e) {
+                                                toast.error("Error deleting contest");
+                                            }
+                                        }}
+                                        className="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-red-200"
+                                    >
+                                        Delete
+                                    </button>
+                                    <button
+                                        onClick={async () => {
+                                            if (!window.confirm("End contest and update ratings? Only do this AFTER the contest is over.")) return;
                                             try {
                                                 const res = await fetch(`${API_URL}/api/admin/contests/${c.contest_id}/finalize`, {
                                                     method: 'POST',
@@ -220,7 +265,7 @@ const AdminContestManager = () => {
                                         }}
                                         className="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-purple-200"
                                     >
-                                        Finalize
+                                        End Contest
                                     </button>
                                     <button
                                         onClick={() => {
@@ -354,6 +399,15 @@ const AdminContestManager = () => {
                                     <Save size={18} /> {editingProblemId ? "Update Problem" : "Save Problem"}
                                 </button>
                             </div>
+                            {editingProblemId && (
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteProblem}
+                                    className="w-full mt-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 text-sm"
+                                >
+                                    Delete This Problem
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>

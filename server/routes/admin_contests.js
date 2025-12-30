@@ -209,4 +209,37 @@ router.put("/problems/:problem_id", authorization, async (req, res) => {
     }
 });
 
+// Delete a Problem
+router.delete("/problems/:problem_id", authorization, async (req, res) => {
+    try {
+        const { problem_id } = req.params;
+        const deleteRes = await pool.query("DELETE FROM problems WHERE problem_id = $1 RETURNING *", [problem_id]);
+
+        if (deleteRes.rows.length === 0) {
+            return res.status(404).json({ error: "Problem not found" });
+        }
+
+        res.json({ message: "Problem deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Delete a Contest
+router.delete("/:id", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Delete dependent records first (though CASCADE should handle this if set up)
+        await pool.query("DELETE FROM contest_participations WHERE contest_id = $1", [id]);
+        await pool.query("DELETE FROM global_contests WHERE contest_id = $1", [id]);
+
+        res.json({ message: "Contest deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;

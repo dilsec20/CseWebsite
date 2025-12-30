@@ -25,27 +25,51 @@ const AdminContestManager = () => {
 
     const fetchContests = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/contests/global/all`, {
+            const url = `${API_URL}/api/contests/global/all`;
+            console.log("Fetching contests from:", url);
+            const res = await fetch(url, {
                 headers: { token: localStorage.getItem('token') }
             });
+            if (!res.ok) {
+                console.error("Fetch contests failed:", res.status, await res.text());
+                return;
+            }
             const data = await res.json();
             setContests(data);
         } catch (err) {
-            console.error(err);
+            console.error("Error fetching contests:", err);
         }
     };
 
     const handleCreateContest = async (e) => {
         e.preventDefault();
+        const url = `${API_URL}/api/admin/contests/create`;
+        console.log("Attempting to fetch:", url);
+        console.log("Payload:", contestForm);
+
         try {
             console.log("Submitting contest:", contestForm);
-            const res = await fetch(`${API_URL}/api/admin/contests/create`, {
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
                 body: JSON.stringify(contestForm)
             });
 
-            const data = await res.json();
+            console.log("Response Status:", res.status, res.statusText);
+            const contentType = res.headers.get("content-type");
+            console.log("Response Content-Type:", contentType);
+
+            let data;
+            const text = await res.text(); // Get raw text first
+            console.log("Raw Response Body:", text);
+
+            try {
+                data = JSON.parse(text);
+            } catch (jsonErr) {
+                console.error("JSON Parse Error:", jsonErr);
+                console.error("Failed to parse response text:", text);
+                throw new Error(`Server returned non-JSON response (${res.status}). Check console for details.`);
+            }
 
             if (res.ok) {
                 toast.success("Contest created!");

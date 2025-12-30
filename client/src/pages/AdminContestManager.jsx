@@ -38,18 +38,25 @@ const AdminContestManager = () => {
     const handleCreateContest = async (e) => {
         e.preventDefault();
         try {
+            console.log("Submitting contest:", contestForm);
             const res = await fetch(`${API_URL}/admin/contests/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
                 body: JSON.stringify(contestForm)
             });
+
+            const data = await res.json();
+
             if (res.ok) {
                 toast.success("Contest created!");
                 fetchContests();
                 setView('list');
+            } else {
+                throw new Error(data.error || "Failed to create contest");
             }
         } catch (err) {
-            toast.error("Failed to create contest");
+            console.error("Create contest error:", err);
+            toast.error(err.message);
         }
     };
 

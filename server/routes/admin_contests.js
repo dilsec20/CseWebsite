@@ -5,10 +5,21 @@ const authorization = require("../middleware/authorization");
 // Create a new Global Contest
 router.post("/create", authorization, async (req, res) => {
     try {
+        console.log("Admin Create Contest Request Body:", req.body);
+        console.log("Admin User ID:", req.user);
+
         const { title, description, start_time, duration_minutes } = req.body;
         const creator_id = req.user;
 
+        if (!title || !start_time || !duration_minutes) {
+            return res.status(400).json({ error: "Missing required fields (title, start_time, duration)" });
+        }
+
         const startTimeDate = new Date(start_time);
+        if (isNaN(startTimeDate.getTime())) {
+            return res.status(400).json({ error: "Invalid start_time format" });
+        }
+
         const endTimeDate = new Date(startTimeDate.getTime() + duration_minutes * 60000);
 
         const newContest = await pool.query(
@@ -18,8 +29,8 @@ router.post("/create", authorization, async (req, res) => {
 
         res.json(newContest.rows[0]);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
+        console.error("Error creating contest:", err.message);
+        res.status(500).json({ error: "Server Error: " + err.message });
     }
 });
 

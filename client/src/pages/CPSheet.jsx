@@ -240,7 +240,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                                             {/* Rating Filter Input */}
                                                             <div className="ml-4" onClick={(e) => e.stopPropagation()}>
                                                                 <input
-                                                                    type="number"
+                                                                    type="text"
+                                                                    inputMode="numeric"
                                                                     placeholder="Rating..."
                                                                     className="w-24 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 transition-colors bg-gray-50 focus:bg-white"
                                                                     value={filterRating}
@@ -263,8 +264,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                                                                     <button
                                                                                         onClick={(e) => toggleProblem(problem.id, e)}
                                                                                         className={`p-1 rounded-full transition-transform active:scale-95 ${solvedProblems[problem.id]
-                                                                                                ? 'text-green-500'
-                                                                                                : 'text-gray-200 hover:text-gray-400'
+                                                                                            ? 'text-green-500'
+                                                                                            : 'text-gray-200 hover:text-gray-400'
                                                                                             }`}
                                                                                         title={isAuthenticated ? (solvedProblems[problem.id] ? "Mark as unsolved" : "Mark as solved") : "Login to track"}
                                                                                     >

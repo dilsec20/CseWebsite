@@ -139,7 +139,8 @@ router.get("/conversations", authorization, async (req, res) => {
             JOIN users u ON (m.sender_id = u.user_id OR m.receiver_id = u.user_id)
             WHERE (m.sender_id = $1 OR m.receiver_id = $1) AND u.user_id != $1
             ORDER BY contact_id, m.created_at DESC
-            `
+            `,
+            [user_id]
         );
 
         // Sort conversations by time (most recent first)

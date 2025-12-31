@@ -135,10 +135,34 @@ router.post("/:id/finish", authorization, async (req, res) => {
 // Get All Global Contests
 router.get("/global/all", authorization, async (req, res) => {
     try {
+        const user_id = req.user;
+        // Select contests and check if user is registered
         const contests = await pool.query(
-            "SELECT * FROM global_contests ORDER BY start_time DESC"
+            `SELECT c.*, 
+             EXISTS(SELECT 1 FROM contest_participations cp WHERE cp.contest_id = c.contest_id AND cp.user_id = $1) as is_registered
+             FROM global_contests c 
+             ORDER BY c.start_time DESC`,
+            [user_id]
         );
         res.json(contests.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Unregister from Contest
+router.post("/global/:id/unregister", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user_id = req.user;
+
+        await pool.query(
+            "DELETE FROM contest_participations WHERE contest_id = $1 AND user_id = $2",
+            [id, user_id]
+        );
+
+        res.json({ message: "Unregistered successfully" });
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server Error");

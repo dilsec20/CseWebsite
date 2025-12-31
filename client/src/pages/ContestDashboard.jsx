@@ -76,10 +76,34 @@ const ContestDashboard = () => {
             });
             if (res.ok) {
                 toast.success("Registered successfully!");
-                navigate(`/contests/global/${id}`);
+                // Refresh list to update UI
+                const updatedContests = globalContests.map(c =>
+                    c.contest_id === id ? { ...c, is_registered: true } : c
+                );
+                setGlobalContests(updatedContests);
             }
         } catch (err) {
             toast.error("Registration failed");
+        }
+    };
+
+    const unregisterForContest = async (id) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/contests/global/${id}/unregister`, {
+                method: 'POST', // or DELETE if you changed backend, but currently POST
+                headers: { token }
+            });
+            if (res.ok) {
+                toast.warning("Unregistered from contest");
+                // Refresh list
+                const updatedContests = globalContests.map(c =>
+                    c.contest_id === id ? { ...c, is_registered: false } : c
+                );
+                setGlobalContests(updatedContests);
+            }
+        } catch (err) {
+            toast.error("Unregistration failed");
         }
     };
 
@@ -139,6 +163,7 @@ const ContestDashboard = () => {
                                                 <h3 className="text-xl font-bold text-gray-900">{contest.title}</h3>
                                                 {status === 'live' && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-xs font-bold rounded animate-pulse">LIVE</span>}
                                                 {status === 'upcoming' && <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs font-bold rounded">UPCOMING</span>}
+                                                {contest.is_registered && <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold rounded flex items-center gap-1">REGISTERED</span>}
                                             </div>
                                             <p className="text-gray-500 text-sm mb-2">{contest.description}</p>
                                             <div className="flex items-center gap-4 text-sm text-gray-500">
@@ -148,21 +173,46 @@ const ContestDashboard = () => {
                                         </div>
 
                                         <div>
-                                            {status === 'live' && (
-                                                <button
-                                                    onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
-                                                    className="px-6 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-lg shadow-red-200"
-                                                >
-                                                    Enter Contest
-                                                </button>
-                                            )}
-                                            {status === 'upcoming' && (
-                                                <button
-                                                    onClick={() => registerForContest(contest.contest_id)}
-                                                    className="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700"
-                                                >
-                                                    Register
-                                                </button>
+                                            {/* Button Logic:
+                                                1. Status LIVE: Show "Enter Contest" (if registered) or "Register to Enter"
+                                                2. Status UPCOMING: 
+                                                    - Registered? -> "Unregister"
+                                                    - Not Registered? -> "Register"
+                                            */}
+
+                                            {status === 'live' ? (
+                                                contest.is_registered ? (
+                                                    <button
+                                                        onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
+                                                        className="px-6 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-lg shadow-red-200"
+                                                    >
+                                                        Enter Contest
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => registerForContest(contest.contest_id)}
+                                                        className="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700"
+                                                    >
+                                                        Register to Enter
+                                                    </button>
+                                                )
+                                            ) : (
+                                                // UPCOMING
+                                                contest.is_registered ? (
+                                                    <button
+                                                        onClick={() => unregisterForContest(contest.contest_id)}
+                                                        className="px-6 py-2 bg-gray-100 text-gray-600 font-bold rounded-lg hover:bg-gray-200"
+                                                    >
+                                                        Unregister
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => registerForContest(contest.contest_id)}
+                                                        className="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700"
+                                                    >
+                                                        Register
+                                                    </button>
+                                                )
                                             )}
                                         </div>
                                     </div>

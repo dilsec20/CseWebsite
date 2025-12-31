@@ -231,8 +231,19 @@ router.delete("/:id", authorization, async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Delete dependent records first (though CASCADE should handle this if set up)
+        // Delete dependent records first
+        // 1. Delete participations
         await pool.query("DELETE FROM contest_participations WHERE contest_id = $1", [id]);
+
+        // 2. Unlink or Delete problems associated with the contest
+        // Strategy: Link problems to NULL (preserve them as practice) OR Delete them?
+        // User asked to "delete contest", usually implies deleting the whole event.
+        // However, problems might be valuable. Let's Set contest_id to NULL for now to be safe,
+        // or if we want strict cleanup, delete them.
+        // Given this is a specific contest creator, let's just unlink them so they become "Practice" problems.
+        await pool.query("UPDATE problems SET contest_id = NULL WHERE contest_id = $1", [id]);
+
+        // 3. Delete the contest
         await pool.query("DELETE FROM global_contests WHERE contest_id = $1", [id]);
 
         res.json({ message: "Contest deleted successfully" });

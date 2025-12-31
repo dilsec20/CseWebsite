@@ -20,6 +20,7 @@ const AdminContestManager = () => {
     // New State for Management
     const [contestProblems, setContestProblems] = useState([]);
     const [editingProblemId, setEditingProblemId] = useState(null);
+    const [editingContestId, setEditingContestId] = useState(null);
 
     const navigate = useNavigate();
 

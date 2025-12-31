@@ -175,30 +175,88 @@ const BlogEditor = ({ onClose, onSubmit }) => {
 
 const BlogReader = ({ blog: initialBlog, onClose }) => {
     const [blog, setBlog] = useState(initialBlog);
-    const [loading, setLoading] = useState(true);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+    const [isUpvoted, setIsUpvoted] = useState(false);
+    const [likes, setLikes] = useState(0);
 
     useEffect(() => {
         const fetchBlogDetails = async () => {
             try {
                 // Fetching single blog increments the view count on backend
-                const response = await fetch(`${API_URL}/api/blogs/${initialBlog.blog_id}`);
+                const token = localStorage.getItem("token");
+                const headers = token ? { token } : {};
+                const response = await fetch(`${API_URL}/api/blogs/${initialBlog.blog_id}`, { headers });
                 const data = await response.json();
                 if (response.ok) {
                     setBlog(data);
+                    setIsUpvoted(data.is_upvoted);
+                    setLikes(data.likes || 0);
                 }
+
+                // Fetch comments
+                const commentRes = await fetch(`${API_URL}/api/blogs/${initialBlog.blog_id}/comments`);
+                const commentData = await commentRes.json();
+                if (commentRes.ok) setComments(commentData);
+
             } catch (err) {
                 console.error("Failed to fetch blog details", err);
-            } finally {
-                setLoading(false);
             }
         };
         fetchBlogDetails();
     }, [initialBlog.blog_id]);
 
+    const handleUpvote = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) return toast.error("Please login to upvote");
+
+            const res = await fetch(`${API_URL}/api/blogs/${blog.blog_id}/upvote`, {
+                method: 'POST',
+                headers: { token }
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setLikes(data.likes);
+                setIsUpvoted(data.isUpvoted);
+            }
+        } catch (err) {
+            console.error("Upvote failed", err);
+        }
+    };
+
+    const handleComment = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) return toast.error("Please login to comment");
+
+            const res = await fetch(`${API_URL}/api/blogs/${blog.blog_id}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    token
+                },
+                body: JSON.stringify({ content: newComment })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setComments([data, ...comments]);
+                setNewComment("");
+                toast.success("Comment posted!");
+            }
+        } catch (err) {
+            console.error("Comment failed", err);
+            toast.error("Failed to post comment");
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl w-full max-w-2xl shadow-xl animate-in fade-in zoom-in duration-200 max-h-[80vh] flex flex-col">
-                <div className="p-6 border-b flex justify-between items-start bg-gray-50 rounded-t-2xl">
+            <div className="bg-white rounded-2xl w-full max-w-2xl shadow-xl animate-in fade-in zoom-in duration-200 max-h-[85vh] flex flex-col">
+                <div className="p-6 border-b flex justify-between items-start bg-gray-50 rounded-t-2xl shrink-0">
                     <div>
                         <h2 className="font-bold text-xl text-gray-900">{blog.title}</h2>
                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
@@ -217,11 +275,76 @@ const BlogReader = ({ blog: initialBlog, onClose }) => {
                     </div>
                     <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded-full transition"><X className="h-6 w-6" /></button>
                 </div>
-                <div className="p-8 overflow-y-auto leading-relaxed text-gray-800 whitespace-pre-wrap">
-                    {blog.content}
+
+                <div className="flex-1 overflow-y-auto">
+                    <div className="p-8 leading-relaxed text-gray-800 whitespace-pre-wrap border-b border-gray-100">
+                        {blog.content}
+                    </div>
+
+                    {/* Comments Section */}
+                    <div className="p-6 bg-gray-50">
+                        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <MessageSquare className="h-4 w-4" /> Comments ({comments.length})
+                        </h3>
+
+                        {/* New Comment Input */}
+                        <form onSubmit={handleComment} className="mb-6 flex gap-3">
+                            <input
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Add a comment..."
+                                className="flex-1 px-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                            <button type="submit" disabled={!newComment.trim()} className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Post
+                            </button>
+                        </form>
+
+                        {/* Comments List */}
+                        <div className="space-y-4">
+                            {comments.length === 0 ? (
+                                <p className="text-gray-400 text-sm italic text-center">No comments yet.</p>
+                            ) : (
+                                comments.map(comment => (
+                                    <div key={comment.comment_id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div className="h-6 w-6 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                                                {comment.profile_picture ? (
+                                                    <img src={comment.profile_picture} alt={comment.author_name} className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <User className="h-3 w-3 text-gray-500" />
+                                                )}
+                                            </div>
+                                            <span className="font-bold text-xs text-gray-800">{comment.author_name}</span>
+                                            <span className="text-xs text-gray-400">• {new Date(comment.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        <p className="text-gray-700 text-sm">{comment.content}</p>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <div className="p-4 border-t bg-gray-50 rounded-b-2xl text-right">
-                    <button onClick={onClose} className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium">Close</button>
+
+                <div className="p-4 border-t bg-white rounded-b-2xl flex justify-between items-center shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={handleUpvote}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition ${isUpvoted ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${isUpvoted ? 'fill-current' : 'fill-none'}`} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                            </svg>
+                            {likes}
+                        </button>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-500 rounded-xl font-medium cursor-default">
+                            <MessageSquare className="h-4 w-4" />
+                            {comments.length}
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="px-6 py-2 bg-gray-900 text-white rounded-xl hover:bg-gray-800 text-sm font-bold shadow-lg shadow-gray-200">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>

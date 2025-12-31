@@ -77,6 +77,21 @@ CREATE TABLE IF NOT EXISTS messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS blog_upvotes (
+    blog_id INT REFERENCES blogs(blog_id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (blog_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS blog_comments (
+    comment_id SERIAL PRIMARY KEY,
+    blog_id INT REFERENCES blogs(blog_id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 3. GAMIFICATION UPDATES (For existing tables)
 
 DO $$

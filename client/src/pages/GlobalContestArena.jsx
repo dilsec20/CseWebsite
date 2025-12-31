@@ -20,7 +20,7 @@ const GlobalContestArena = () => {
         const fetchContest = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`${API_URL} /api/contests / global / ${id} `, {
+                const res = await fetch(`${API_URL}/api/contests/global/${id}`, {
                     headers: { token }
                 });
 
@@ -34,7 +34,7 @@ const GlobalContestArena = () => {
 
                 // Fetch participation score if registered
                 if (data.is_registered) {
-                    const partRes = await fetch(`${API_URL} /api/contests / global / ${id}/participation`, { headers: { token } });
+                    const partRes = await fetch(`${API_URL}/api/contests/global/${id}/participation`, { headers: { token } });
                     if (partRes.ok) {
                         const partData = await partRes.json();
                         setScore(partData.score);

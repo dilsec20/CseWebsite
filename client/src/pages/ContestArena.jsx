@@ -146,7 +146,7 @@ const ContestArena = () => {
                                     </div>
                                 </div>
                                 <Link
-                                    to={`/problems/${problem.problem_id}?contest=${id}`}
+                                    to={`/problems/${problem.problem_id}?contest=${id}&type=mock`}
                                     className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center ${solvedProblems.has(problem.problem_id)
                                         ? 'bg-green-100 text-green-700 hover:bg-green-200'
                                         : 'bg-blue-50 text-blue-600 hover:bg-blue-100'

@@ -65,6 +65,7 @@ const SolveProblem = ({ setAuth }) => {
 
     // Contest-related state
     const [contestId, setContestId] = useState(null);
+    const [contestType, setContestType] = useState(null); // 'mock' or 'global'
     const [contestProblems, setContestProblems] = useState([]);
     const [showSidebar, setShowSidebar] = useState(true);
 
@@ -77,9 +78,12 @@ const SolveProblem = ({ setAuth }) => {
         // Check if we're coming from a contest
         const params = new URLSearchParams(location.search);
         const contest = params.get('contest');
+        const type = params.get('type'); // 'mock' or 'global'
+
         if (contest) {
             setContestId(contest);
-            fetchContestProblems(contest);
+            setContestType(type);
+            fetchContestProblems(contest, type);
         }
         getProblem();
         if (localStorage.getItem("token")) {
@@ -123,10 +127,16 @@ const SolveProblem = ({ setAuth }) => {
         }
     };
 
-    const fetchContestProblems = async (contestId) => {
+    const fetchContestProblems = async (contestId, type) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_URL}/api/contests/${contestId}`, {
+            let url = `${API_URL}/api/contests/${contestId}`; // Default to mock
+
+            if (type === 'global') {
+                url = `${API_URL}/api/contests/global/${contestId}`;
+            }
+
+            const response = await fetch(url, {
                 headers: { "token": token }
             });
             const data = await response.json();
@@ -266,7 +276,11 @@ const SolveProblem = ({ setAuth }) => {
 
     const handleBackClick = () => {
         if (contestId) {
-            navigate(`/contests/global/${contestId}`);
+            if (contestType === 'global') {
+                navigate(`/contests/global/${contestId}`);
+            } else {
+                navigate(`/contests/${contestId}`);
+            }
         } else {
             navigate('/problems');
         }
@@ -353,7 +367,7 @@ const SolveProblem = ({ setAuth }) => {
                             {contestProblems.map((p, index) => (
                                 <Link
                                     key={p.problem_id}
-                                    to={`/problems/${p.problem_id}?contest=${contestId}`}
+                                    to={`/problems/${p.problem_id}?contest=${contestId}&type=${contestType}`}
                                     className={`block p-3 rounded-lg transition ${p.problem_id === parseInt(id)
                                         ? 'bg-blue-600 text-white'
                                         : 'bg-slate-800/50 text-slate-300 hover:bg-slate-800'

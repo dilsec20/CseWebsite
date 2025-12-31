@@ -180,18 +180,18 @@ const Profile = () => {
     };
 
     const getRatingBadge = (rating) => {
-        if (rating >= 1000) return { title: 'Master', color: 'text-red-600', bg: 'bg-red-100' };
-        if (rating >= 800) return { title: 'Expert', color: 'text-purple-600', bg: 'bg-purple-100' };
-        if (rating >= 500) return { title: 'Achiever', color: 'text-blue-600', bg: 'bg-blue-100' };
-        if (rating >= 300) return { title: 'Beginner', color: 'text-green-600', bg: 'bg-green-100' };
+        if (rating > 2500) return { title: 'Master', color: 'text-red-600', bg: 'bg-red-100' };
+        if (rating >= 2001) return { title: 'Expert', color: 'text-purple-600', bg: 'bg-purple-100' };
+        if (rating >= 1501) return { title: 'Achiever', color: 'text-blue-600', bg: 'bg-blue-100' };
+        if (rating >= 1001) return { title: 'Beginner', color: 'text-green-600', bg: 'bg-green-100' };
         return { title: 'Unrated', color: 'text-gray-600', bg: 'bg-gray-100' };
     };
 
     const getRatingColor = (rating) => {
-        if (rating >= 1000) return 'text-red-600';
-        if (rating >= 800) return 'text-purple-600';
-        if (rating >= 500) return 'text-blue-600';
-        if (rating >= 300) return 'text-green-600';
+        if (rating > 2500) return 'text-red-600';
+        if (rating >= 2001) return 'text-purple-600';
+        if (rating >= 1501) return 'text-blue-600';
+        if (rating >= 1001) return 'text-green-600';
         return 'text-gray-600';
     };
 
@@ -542,7 +542,7 @@ const Profile = () => {
                     </div>
 
                     {/* Badge Reference Table - Show when unrated */}
-                    {(profileData.stats?.contest_rating || 0) < 300 && (
+                    {(profileData.stats?.contest_rating || 0) < 1000 && (
                         <div className="mt-6 border-t pt-6">
                             <h3 className="text-sm font-semibold text-gray-700 mb-3">Rating Badge Levels</h3>
                             <div className="overflow-x-auto">
@@ -556,7 +556,7 @@ const Profile = () => {
                                     </thead>
                                     <tbody>
                                         <tr className="border-b hover:bg-gray-50">
-                                            <td className="py-2 px-3">1000+</td>
+                                            <td className="py-2 px-3">2500+</td>
                                             <td className="py-2 px-3">
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-600 font-semibold text-xs">
                                                     Master
@@ -565,7 +565,7 @@ const Profile = () => {
                                             <td className="py-2 px-3 text-red-600 font-medium">Red</td>
                                         </tr>
                                         <tr className="border-b hover:bg-gray-50">
-                                            <td className="py-2 px-3">800-999</td>
+                                            <td className="py-2 px-3">2001-2500</td>
                                             <td className="py-2 px-3">
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-600 font-semibold text-xs">
                                                     Expert
@@ -574,7 +574,7 @@ const Profile = () => {
                                             <td className="py-2 px-3 text-purple-600 font-medium">Purple</td>
                                         </tr>
                                         <tr className="border-b hover:bg-gray-50">
-                                            <td className="py-2 px-3">500-799</td>
+                                            <td className="py-2 px-3">1501-2000</td>
                                             <td className="py-2 px-3">
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-600 font-semibold text-xs">
                                                     Achiever
@@ -583,7 +583,7 @@ const Profile = () => {
                                             <td className="py-2 px-3 text-blue-600 font-medium">Blue</td>
                                         </tr>
                                         <tr className="border-b hover:bg-gray-50">
-                                            <td className="py-2 px-3">300-499</td>
+                                            <td className="py-2 px-3">1001-1500</td>
                                             <td className="py-2 px-3">
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-600 font-semibold text-xs">
                                                     Beginner
@@ -592,7 +592,7 @@ const Profile = () => {
                                             <td className="py-2 px-3 text-green-600 font-medium">Green</td>
                                         </tr>
                                         <tr className="hover:bg-gray-50">
-                                            <td className="py-2 px-3">0-299</td>
+                                            <td className="py-2 px-3">0-1000</td>
                                             <td className="py-2 px-3">
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-600 font-semibold text-xs">
                                                     Unrated
@@ -635,25 +635,25 @@ const Profile = () => {
                                         tickLine={false}
                                         axisLine={false}
                                     />
-                                    {/* Colored background zones */}
-                                    <ReferenceArea y1={0} y2={300} fill="#f3f4f6" fillOpacity={0.9} />
-                                    <ReferenceArea y1={300} y2={500} fill="#dcfce7" fillOpacity={0.9} />
-                                    <ReferenceArea y1={500} y2={800} fill="#dbeafe" fillOpacity={0.9} />
-                                    <ReferenceArea y1={800} y2={1000} fill="#f3e8ff" fillOpacity={0.9} />
-                                    <ReferenceArea y1={1000} y2={10000} fill="#fee2e2" fillOpacity={0.9} />
+                                    {/* Colored background zones (Corrected Ranges) */}
+                                    <ReferenceArea y1={0} y2={1000} fill="#f3f4f6" fillOpacity={0.9} />
+                                    <ReferenceArea y1={1001} y2={1500} fill="#dcfce7" fillOpacity={0.9} />
+                                    <ReferenceArea y1={1501} y2={2000} fill="#dbeafe" fillOpacity={0.9} />
+                                    <ReferenceArea y1={2001} y2={2500} fill="#f3e8ff" fillOpacity={0.9} />
+                                    <ReferenceArea y1={2501} y2={10000} fill="#fee2e2" fillOpacity={0.9} />
 
                                     <YAxis
                                         stroke="#94a3b8"
                                         fontSize={11}
                                         tickLine={false}
                                         axisLine={false}
-                                        domain={[0, 1200]}
-                                        ticks={[0, 300, 500, 800, 1000]}
+                                        domain={[0, 3000]}
+                                        ticks={[0, 1000, 1500, 2000, 2500, 3000]}
                                         tickFormatter={(value) => {
-                                            if (value === 1000) return 'Master';
-                                            if (value === 800) return 'Expert';
-                                            if (value === 500) return 'Achiever';
-                                            if (value === 300) return 'Beginner';
+                                            if (value === 2500) return 'Master';
+                                            if (value === 2000) return 'Expert';
+                                            if (value === 1500) return 'Achiever';
+                                            if (value === 1000) return 'Beginner';
                                             if (value === 0) return 'Unrated';
                                             return '';
                                         }}
@@ -666,10 +666,10 @@ const Profile = () => {
                                             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                                         }}
                                         formatter={(value) => {
-                                            const badge = value >= 1000 ? 'Master' :
-                                                value >= 800 ? 'Expert' :
-                                                    value >= 500 ? 'Achiever' :
-                                                        value >= 300 ? 'Beginner' : 'Unrated';
+                                            const badge = value > 2500 ? 'Master' :
+                                                value >= 2001 ? 'Expert' :
+                                                    value >= 1501 ? 'Achiever' :
+                                                        value >= 1001 ? 'Beginner' : 'Unrated';
                                             return [`${value} pts (${badge})`, 'Rating'];
                                         }}
                                     />

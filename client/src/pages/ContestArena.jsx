@@ -76,36 +76,21 @@ const ContestArena = () => {
     const [score, setScore] = useState(0);
 
     useEffect(() => {
-        const fetchSolvedStatus = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                if (!token) return;
-
-                const response = await fetch(`${API_URL}/api/problems/solved`, {
-                    headers: { "token": token }
-                });
-                const data = await response.json();
-                const solvedSet = new Set(data.map(p => p.problem_id));
-                setSolvedProblems(solvedSet);
-
-                // Calculate score
-                let currentScore = 0;
-                problems.forEach(p => {
-                    if (solvedSet.has(p.problem_id)) {
-                        if (p.difficulty === 'Easy') currentScore += 20;
-                        else if (p.difficulty === 'Medium') currentScore += 40;
-                        else if (p.difficulty === 'Hard') currentScore += 80;
-                    }
-                });
-                setScore(currentScore);
-
-            } catch (err) {
-                console.error("Error fetching solved status:", err);
-            }
-        };
-
         if (problems.length > 0) {
-            fetchSolvedStatus();
+            const solvedSet = new Set();
+            let currentScore = 0;
+
+            problems.forEach(p => {
+                if (p.solved) {
+                    solvedSet.add(p.problem_id);
+                    if (p.difficulty === 'Easy') currentScore += 20;
+                    else if (p.difficulty === 'Medium') currentScore += 40;
+                    else if (p.difficulty === 'Hard') currentScore += 80;
+                }
+            });
+
+            setSolvedProblems(solvedSet);
+            setScore(currentScore);
         }
     }, [problems]);
 

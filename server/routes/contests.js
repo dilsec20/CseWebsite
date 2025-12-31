@@ -87,7 +87,7 @@ router.get("/:id", authorization, async (req, res) => {
 
         // Get problems for this contest
         const problemsResult = await pool.query(
-            `SELECT p.* FROM problems p 
+            `SELECT p.*, cp.solved FROM problems p 
              INNER JOIN contest_problems cp ON p.problem_id = cp.problem_id 
              WHERE cp.session_id = $1
              ORDER BY p.difficulty, p.problem_id`,

@@ -112,9 +112,12 @@ router.get("/", authorization, async (req, res) => {
             : 0;
 
 
-        // Get contests attended
+        // Get contests attended (Sum of Global Participations + Finished Generated Contest Sessions)
         const contestsAttended = await pool.query(
-            "SELECT COUNT(*) as count FROM contest_participations WHERE user_id = $1",
+            `SELECT (
+                (SELECT COUNT(*) FROM contest_participations WHERE user_id = $1) + 
+                (SELECT COUNT(*) FROM contest_sessions WHERE user_id = $1 AND status = 'finished')
+            ) as count`,
             [userId]
         );
 
@@ -142,9 +145,21 @@ router.get("/", authorization, async (req, res) => {
 
 
         // Get contest solutions (sum of all solved problems in contests)
-        // This query might need adjustment depending on how we track "contest solutions" exactly
-        // For Global Contests, we can just recount them or leave as 0 for now as it's less critical
-        const totalContestSolutions = 0; // Placeholder or implement query if needed
+        // 1. Solved in Generated Contests (contest_problems table)
+        // 2. Solved in Global Contests (submissions table where problem has contest_id)
+        const contestSolutionsQuery = await pool.query(
+            `SELECT (
+                (SELECT COUNT(*) FROM contest_problems WHERE session_id IN (SELECT session_id FROM contest_sessions WHERE user_id = $1) AND solved = true) +
+                (SELECT COUNT(DISTINCT s.problem_id) 
+                 FROM submissions s
+                 JOIN problems p ON s.problem_id = p.problem_id
+                 WHERE s.user_id = $1 
+                 AND s.status = 'Accepted' 
+                 AND p.contest_id IS NOT NULL)
+            ) as count`,
+            [userId]
+        );
+        const totalContestSolutions = parseInt(contestSolutionsQuery.rows[0].count);
 
         // Get submission calendar (daily counts for last year)
         const submissionCalendar = await pool.query(

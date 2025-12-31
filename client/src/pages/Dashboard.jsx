@@ -62,11 +62,17 @@ const Dashboard = ({ setAuth }) => {
     }, []);
 
     const getRatingColor = (rating) => {
-        if (rating >= 1000) return 'text-red-600';
-        if (rating >= 800) return 'text-purple-600';
-        if (rating >= 500) return 'text-blue-600';
-        if (rating >= 300) return 'text-green-600';
-        return 'text-gray-600';
+        if (!rating) return 'text-black';
+        if (rating < 1200) return 'text-gray-500 font-bold';
+        if (rating < 1400) return 'text-green-600 font-bold';
+        if (rating < 1600) return 'text-cyan-600 font-bold';
+        if (rating < 1900) return 'text-blue-600 font-bold';
+        if (rating < 2100) return 'text-purple-600 font-bold';
+        if (rating < 2300) return 'text-orange-600 font-bold';
+        if (rating < 2400) return 'text-orange-600 font-bold';
+        if (rating < 2600) return 'text-red-600 font-bold';
+        if (rating < 3000) return 'text-red-700 font-extrabold';
+        return 'text-red-900 font-black'; // Legendary Grandmaster
     };
 
     return (

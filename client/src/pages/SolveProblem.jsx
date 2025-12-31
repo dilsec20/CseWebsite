@@ -266,7 +266,7 @@ const SolveProblem = ({ setAuth }) => {
 
     const handleBackClick = () => {
         if (contestId) {
-            navigate(`/contests/${contestId}`);
+            navigate(`/contests/global/${contestId}`);
         } else {
             navigate('/problems');
         }

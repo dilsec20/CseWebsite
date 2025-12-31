@@ -151,6 +151,10 @@ if (process.env.NODE_ENV === 'production' || fs.existsSync(distPath)) {
   });
 }
 
+// Auto-fix schema on startup
+const fixSchema = require('./scripts/fix_schema');
+fixSchema();
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });

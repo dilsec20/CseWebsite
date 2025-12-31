@@ -255,7 +255,7 @@ const ContestDashboard = () => {
                                                     onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
                                                     className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50"
                                                 >
-                                                    View Results & Practice
+                                                    Practice
                                                 </button>
                                             </div>
                                         </div>

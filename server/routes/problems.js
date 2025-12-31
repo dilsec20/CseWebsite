@@ -6,7 +6,7 @@ const authorization = require("../middleware/authorization");
 router.get("/", async (req, res) => {
     try {
         const problems = await pool.query(
-            "SELECT problem_id, title, difficulty, topic FROM problems ORDER BY problem_id"
+            "SELECT problem_id, title, difficulty, topic FROM problems WHERE contest_id IS NULL ORDER BY problem_id"
         );
         res.json(problems.rows);
     } catch (err) {

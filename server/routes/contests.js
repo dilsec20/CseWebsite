@@ -133,10 +133,23 @@ router.post("/:id/finish", authorization, async (req, res) => {
 // ==========================================
 
 // Get All Global Contests
-router.get("/global/all", authorization, async (req, res) => {
+// Get All Global Contests (Public with optional auth)
+router.get("/global/all", async (req, res) => {
     try {
-        const user_id = req.user;
-        // Select contests and check if user is registered
+        let user_id = null;
+        const token = req.header("token");
+
+        if (token) {
+            try {
+                const payload = require("jsonwebtoken").verify(token, process.env.jwtSecret);
+                user_id = payload.user;
+            } catch (err) {
+                // Invalid token, treat as guest
+                console.warn("Invalid token in public route:", err.message);
+            }
+        }
+
+        // Select contests and check if user is registered (if logged in)
         const contests = await pool.query(
             `SELECT c.*, 
              EXISTS(SELECT 1 FROM contest_participations cp WHERE cp.contest_id = c.contest_id AND cp.user_id = $1) as is_registered

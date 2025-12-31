@@ -15,8 +15,10 @@ const ContestDashboard = () => {
         const fetchGlobal = async () => {
             try {
                 const token = localStorage.getItem("token");
+                const headers = token ? { token } : {};
+
                 const res = await fetch(`${API_URL}/api/contests/global/all`, {
-                    headers: { token }
+                    headers: headers
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -38,15 +40,23 @@ const ContestDashboard = () => {
         fetchGlobal();
     }, []);
 
+    const checkLogin = () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            toast.error("Please login first!", {
+                theme: "colored"
+            });
+            return false;
+        }
+        return true;
+    };
+
     const startMockContest = async () => {
+        if (!checkLogin()) return;
+
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                toast.error("Please login to start a contest");
-                return;
-            }
-
             const response = await fetch(`${API_URL}/api/contests/start`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "token": token }
@@ -68,6 +78,8 @@ const ContestDashboard = () => {
     };
 
     const registerForContest = async (id) => {
+        if (!checkLogin()) return;
+
         try {
             const token = localStorage.getItem("token");
             const res = await fetch(`${API_URL}/api/contests/global/${id}/register`, {
@@ -88,6 +100,8 @@ const ContestDashboard = () => {
     };
 
     const unregisterForContest = async (id) => {
+        if (!checkLogin()) return;
+
         try {
             const token = localStorage.getItem("token");
             const res = await fetch(`${API_URL}/api/contests/global/${id}/unregister`, {
@@ -104,6 +118,12 @@ const ContestDashboard = () => {
             }
         } catch (err) {
             toast.error("Unregistration failed");
+        }
+    };
+
+    const handlePracticeClick = (contestId) => {
+        if (checkLogin()) {
+            navigate(`/contests/global/${contestId}`);
         }
     };
 
@@ -173,17 +193,11 @@ const ContestDashboard = () => {
                                         </div>
 
                                         <div>
-                                            {/* Button Logic:
-                                                1. Status LIVE: Show "Enter Contest" (if registered) or "Register to Enter"
-                                                2. Status UPCOMING: 
-                                                    - Registered? -> "Unregister"
-                                                    - Not Registered? -> "Register"
-                                            */}
-
+                                            {/* Button Logic */}
                                             {status === 'live' ? (
                                                 contest.is_registered ? (
                                                     <button
-                                                        onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
+                                                        onClick={() => handlePracticeClick(contest.contest_id)}
                                                         className="px-6 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-lg shadow-red-200"
                                                     >
                                                         Enter Contest
@@ -236,8 +250,6 @@ const ContestDashboard = () => {
                                 .filter(c => new Date(c.end_time) <= new Date())
                                 .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
                                 .map(contest => {
-                                    const start = new Date(contest.start_time);
-
                                     return (
                                         <div key={contest.contest_id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 transition hover:shadow-md opacity-75 hover:opacity-100">
                                             <div>
@@ -252,7 +264,7 @@ const ContestDashboard = () => {
 
                                             <div>
                                                 <button
-                                                    onClick={() => navigate(`/contests/global/${contest.contest_id}`)}
+                                                    onClick={() => handlePracticeClick(contest.contest_id)}
                                                     className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50"
                                                 >
                                                     Practice

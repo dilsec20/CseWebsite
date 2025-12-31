@@ -75,7 +75,7 @@ const StreakCounter = () => {
 };
 
 const NavbarMessageIcon = () => {
-  const { openChat } = useChat();
+  const { openChat, hasUnreadMessages } = useChat();
   return (
     <button
       onClick={() => openChat()}
@@ -83,6 +83,9 @@ const NavbarMessageIcon = () => {
       title="Messages"
     >
       <MessageSquareText className="h-6 w-6" />
+      {hasUnreadMessages && (
+        <span className="absolute top-1 right-1 h-3 w-3 bg-red-500 rounded-full border-2 border-white"></span>
+      )}
     </button>
   );
 };

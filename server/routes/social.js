@@ -182,4 +182,19 @@ router.get("/messages/:id", authorization, async (req, res) => {
     }
 });
 
+// GET /api/social/unread - Check for any unread messages
+router.get("/unread", authorization, async (req, res) => {
+    try {
+        const user_id = req.user;
+        const unread = await pool.query(
+            "SELECT 1 FROM messages WHERE receiver_id = $1 AND is_read = false LIMIT 1",
+            [user_id]
+        );
+        res.json({ hasUnread: unread.rows.length > 0 });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 module.exports = router;

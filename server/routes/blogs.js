@@ -35,7 +35,14 @@ router.get("/:id", async (req, res) => {
             return res.status(404).json({ error: "Blog not found" });
         }
 
-        res.json(blog.rows[0]);
+        // Increment views
+        await pool.query("UPDATE blogs SET views = COALESCE(views, 0) + 1 WHERE blog_id = $1", [id]);
+
+        // Return updated view count (locally update the object)
+        const blogData = blog.rows[0];
+        blogData.views = (blogData.views || 0) + 1;
+
+        res.json(blogData);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: "Server error" });

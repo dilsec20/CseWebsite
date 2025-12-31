@@ -60,4 +60,78 @@ router.post("/", authorization, async (req, res) => {
     }
 });
 
+// DELETE /api/blogs/:id - Delete a blog post
+router.delete("/:id", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user_id = req.user;
+
+        // Check if blog exists and belongs to user
+        const blog = await pool.query("SELECT * FROM blogs WHERE blog_id = $1", [id]);
+
+        if (blog.rows.length === 0) {
+            return res.status(404).json({ error: "Blog not found" });
+        }
+
+        if (blog.rows[0].user_id !== user_id) {
+            return res.status(403).json({ error: "Not authorized to delete this blog" });
+        }
+
+        await pool.query("DELETE FROM blogs WHERE blog_id = $1", [id]);
+        res.json({ message: "Blog deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// PUT /api/blogs/:id - Update a blog post
+router.put("/:id", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+        const user_id = req.user;
+
+        // Check if blog exists and belongs to user
+        const blog = await pool.query("SELECT * FROM blogs WHERE blog_id = $1", [id]);
+
+        if (blog.rows.length === 0) {
+            return res.status(404).json({ error: "Blog not found" });
+        }
+
+        if (blog.rows[0].user_id !== user_id) {
+            return res.status(403).json({ error: "Not authorized to update this blog" });
+        }
+
+        const updatedBlog = await pool.query(
+            "UPDATE blogs SET title = $1, content = $2 WHERE blog_id = $3 RETURNING *",
+            [title, content, id]
+        );
+
+        res.json(updatedBlog.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// GET /api/blogs/user/my-posts - Get all posts by current user
+router.get("/user/my-posts", authorization, async (req, res) => {
+    try {
+        const user_id = req.user;
+        const blogs = await pool.query(
+            `SELECT b.*, u.username as author_name 
+             FROM blogs b
+             JOIN users u ON b.user_id = u.user_id
+             WHERE b.user_id = $1
+             ORDER BY b.created_at DESC`,
+            [user_id]
+        );
+        res.json(blogs.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 module.exports = router;

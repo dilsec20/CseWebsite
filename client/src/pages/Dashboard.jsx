@@ -10,7 +10,8 @@ import {
     CheckCircle,
     Clock,
     Zap,
-    TrendingUp
+    TrendingUp,
+    MessageSquare
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import { API_URL } from '../config';
@@ -97,6 +98,9 @@ const Dashboard = ({ setAuth }) => {
                     </Link>
                     <Link to="/contests" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
                         <Trophy className="h-5 w-5" /> Contests
+                    </Link>
+                    <Link to="/my-blogs" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
+                        <MessageSquare className="h-5 w-5" /> Your Posts
                     </Link>
                 </nav>
 

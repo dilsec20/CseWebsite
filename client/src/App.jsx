@@ -30,6 +30,7 @@ import DSAModule from './pages/DSAModule';
 import CPPath from './pages/CPPath';
 import CPModule from './pages/CPModule';
 import CPSheet from './pages/CPSheet';
+import MyBlogs from './pages/MyBlogs';
 
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
@@ -227,6 +228,7 @@ function App() {
           <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
           <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
           <Route path="/knowledge-base" element={<KnowledgeBase />} />
+          <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
           <Route path="/quiz/:id" element={<Quiz />} />
           <Route path="/contests" element={<ContestDashboard />} />
           <Route path="/contests/:id" element={<ContestArena />} />

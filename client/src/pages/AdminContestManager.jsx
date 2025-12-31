@@ -66,43 +66,69 @@ const AdminContestManager = () => {
 
     const handleCreateContest = async (e) => {
         e.preventDefault();
-        const url = `${API_URL}/api/admin/contests/create`;
-        console.log("Attempting to fetch:", url);
-        console.log("Payload:", contestForm);
+
+        let url = `${API_URL}/api/admin/contests/create`;
+        let method = 'POST';
+
+        if (editingContestId) {
+            url = `${API_URL}/api/admin/contests/${editingContestId}/update`;
+            method = 'PUT';
+        }
+
+        console.log(`Attempting to ${method}:`, url);
+
+        // Prepare payload with explicit timezone handling
+        // The input is local time, we want to start it as such or ensure backend gets ISO
+        const start = new Date(contestForm.start_time);
+
+        // Ensure we send a valid ISO string. 
+        // If the user picked "12:00" local, the Date constructor creates that moment in local time.
+        // toISOString() converts it to UTC, which is what we want to store in DB usually.
+        const payload = {
+            ...contestForm,
+            start_time: start.toISOString(),
+            // end_time is calculated on server for CREATE usually, but for UPDATE we might need it? 
+            // In CREATE route (backend), it usually calculates end_time from duration. Let's check backend.
+            // ... checked backend ...
+            // CREATE: uses start_time + duration
+            // UPDATE: expects start_time AND end_time.
+            // We need to calculate end_time here for UPDATE if the backend relies on it.
+            // Let's calculate it to be safe.
+            end_time: new Date(start.getTime() + contestForm.duration_minutes * 60000).toISOString()
+        };
+
+        console.log("Payload:", payload);
 
         try {
-            console.log("Submitting contest:", contestForm);
             const res = await fetch(url, {
-                method: 'POST',
+                method: method,
                 headers: { 'Content-Type': 'application/json', token: localStorage.getItem('token') },
-                body: JSON.stringify(contestForm)
+                body: JSON.stringify(payload)
             });
 
             console.log("Response Status:", res.status, res.statusText);
-            const contentType = res.headers.get("content-type");
-            console.log("Response Content-Type:", contentType);
 
+            const text = await res.text();
             let data;
-            const text = await res.text(); // Get raw text first
-            console.log("Raw Response Body:", text);
-
             try {
                 data = JSON.parse(text);
             } catch (jsonErr) {
                 console.error("JSON Parse Error:", jsonErr);
-                console.error("Failed to parse response text:", text);
-                throw new Error(`Server returned non-JSON response (${res.status}). Check console for details.`);
+                throw new Error(`Server returned non-JSON response (${res.status}).`);
             }
 
             if (res.ok) {
-                toast.success("Contest created!");
+                toast.success(editingContestId ? "Contest updated!" : "Contest created!");
                 fetchContests();
                 setView('list');
+                // clear form
+                setContestForm({ title: '', description: '', start_time: '', duration_minutes: 120 });
+                setEditingContestId(null);
             } else {
-                throw new Error(data.error || "Failed to create contest");
+                throw new Error(data.error || "Failed to save contest");
             }
         } catch (err) {
-            console.error("Create contest error:", err);
+            console.error("Save contest error:", err);
             toast.error(err.message);
         }
     };
@@ -367,9 +393,18 @@ const AdminContestManager = () => {
             {view === 'add_problem' && (
                 <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
                     <div className="flex justify-between items-center mb-6">
-                        <div>
-                            <h2 className="text-2xl font-bold">Manage Contest</h2>
-                            <p className="text-gray-500">{selectedContest?.title}</p>
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={() => setView('list')}
+                                className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition"
+                                title="Back to Contest List"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                            </button>
+                            <div>
+                                <h2 className="text-2xl font-bold">Manage Contest</h2>
+                                <p className="text-gray-500">{selectedContest?.title}</p>
+                            </div>
                         </div>
                         <button
                             onClick={() => {

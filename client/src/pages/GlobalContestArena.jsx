@@ -88,9 +88,7 @@ const GlobalContestArena = () => {
         return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     };
 
-    if (!contest) return <div className="p-8 text-center">Loading Contest...</div>;
-
-    // Security Measures
+    // Security Measures State
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [tabSwitchCount, setTabSwitchCount] = useState(0);
 

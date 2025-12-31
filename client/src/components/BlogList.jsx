@@ -16,8 +16,14 @@ const BlogList = ({ user }) => {
         try {
             const response = await fetch(`${API_URL}/api/blogs/recent`);
             const data = await response.json();
-            setBlogs(data);
-            setRecentBlogs(data);
+            if (Array.isArray(data)) {
+                setBlogs(data);
+                setRecentBlogs(data);
+            } else {
+                console.error("Invalid blogs data:", data);
+                setBlogs([]);
+                setRecentBlogs([]);
+            }
             setLoading(false);
         } catch (err) {
             console.error(err);

@@ -186,9 +186,19 @@ router.get("/global/:id", authorization, async (req, res) => {
 
         // Show problems only if contest has started
         if (now >= startTime) {
+            // Query problems with solved status for the current user
             const problemsRes = await pool.query(
-                "SELECT problem_id, title, difficulty, topic FROM problems WHERE contest_id = $1 ORDER BY problem_id",
-                [id]
+                `SELECT p.problem_id, p.title, p.difficulty, p.topic,
+                        EXISTS(
+                            SELECT 1 FROM submissions s 
+                            WHERE s.problem_id = p.problem_id 
+                            AND s.user_id = $2 
+                            AND s.verdict = 'Accepted'
+                        ) as solved
+                 FROM problems p 
+                 WHERE p.contest_id = $1 
+                 ORDER BY p.problem_id`,
+                [id, user_id]
             );
             problems = problemsRes.rows;
         }

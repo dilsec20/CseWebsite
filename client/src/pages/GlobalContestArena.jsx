@@ -169,12 +169,19 @@ const GlobalContestArena = () => {
                                                         <span className="text-xs px-2 py-1 bg-gray-100 text-gray-500 rounded-full">{p.topic}</span>
                                                     </div>
                                                 </div>
-                                                <Link
-                                                    to={`/problems/${p.problem_id}`}
-                                                    className="px-6 py-2 bg-gray-50 text-gray-700 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition"
-                                                >
-                                                    Solve
-                                                </Link>
+                                                <div className="flex items-center gap-3">
+                                                    {p.solved && (
+                                                        <span className="flex items-center gap-1 text-green-600 text-sm font-medium bg-green-50 px-2 py-1 rounded-lg">
+                                                            <CheckCircle className="w-4 h-4" /> Solved
+                                                        </span>
+                                                    )}
+                                                    <Link
+                                                        to={`/problems/${p.problem_id}?contest=${id}`}
+                                                        className={`px-6 py-2 font-medium rounded-lg transition ${p.solved ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-50 text-gray-700 hover:bg-blue-600 hover:text-white'}`}
+                                                    >
+                                                        {p.solved ? "Solve Again" : "Solve"}
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -201,7 +208,7 @@ const GlobalContestArena = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

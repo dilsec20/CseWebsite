@@ -152,7 +152,8 @@ router.get("/global/all", async (req, res) => {
         // Select contests and check if user is registered (if logged in)
         const contests = await pool.query(
             `SELECT c.*, 
-             EXISTS(SELECT 1 FROM contest_participations cp WHERE cp.contest_id = c.contest_id AND cp.user_id = $1) as is_registered
+             EXISTS(SELECT 1 FROM contest_participations cp WHERE cp.contest_id = c.contest_id AND cp.user_id = $1) as is_registered,
+             (SELECT COUNT(*) FROM contest_participations cp WHERE cp.contest_id = c.contest_id) as participant_count
              FROM global_contests c 
              ORDER BY c.start_time DESC`,
             [user_id]

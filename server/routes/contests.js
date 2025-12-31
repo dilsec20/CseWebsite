@@ -193,7 +193,7 @@ router.get("/global/:id", authorization, async (req, res) => {
                             SELECT 1 FROM submissions s 
                             WHERE s.problem_id = p.problem_id 
                             AND s.user_id = $2 
-                            AND s.verdict = 'Accepted'
+                            AND s.status = 'Accepted'
                         ) as solved
                  FROM problems p 
                  WHERE p.contest_id = $1 

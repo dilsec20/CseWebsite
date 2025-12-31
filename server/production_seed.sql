@@ -48,8 +48,32 @@ CREATE TABLE IF NOT EXISTS user_progress (
     user_id UUID REFERENCES users(user_id),
     problem_id INT REFERENCES problems(problem_id),
     solved BOOLEAN DEFAULT FALSE,
-    solved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, problem_id)
+);
+
+CREATE TABLE IF NOT EXISTS blogs (
+    blog_id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    likes INT DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS follows (
+    follower_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    following_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (follower_id, following_id)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    message_id SERIAL PRIMARY KEY,
+    sender_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    receiver_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 3. GAMIFICATION UPDATES (For existing tables)

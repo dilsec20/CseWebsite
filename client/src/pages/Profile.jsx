@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { User, Edit3, Save, X, Linkedin, Github, Mail, Calendar, Award, Code, Upload, CheckCircle, TrendingUp, Trophy } from 'lucide-react';
+import { User, Edit3, Save, X, Linkedin, Github, Mail, Calendar, Award, Code, Upload, CheckCircle, TrendingUp, Trophy, UserPlus, UserMinus, MessageCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import { API_URL } from '../config';
+import { useChat } from '../contexts/ChatContext';
+import UserListModal from '../components/UserListModal';
 
 const Profile = () => {
     const { username } = useParams();
@@ -25,6 +27,12 @@ const Profile = () => {
     });
     const [previewImage, setPreviewImage] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Social State
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [showFollowingModal, setShowFollowingModal] = useState(false);
+    const [followingList, setFollowingList] = useState([]);
+    const { openChat } = useChat();
 
     useEffect(() => {
         getProfileData();
@@ -80,9 +88,77 @@ const Profile = () => {
                 newPassword: ''
             });
             setPreviewImage(data.profile_picture);
+
+            // Check follow status if not own profile
+            if (token && data.user_id && data.username !== myData.username) {
+                checkFollowStatus(data.user_id);
+            }
+
         } catch (err) {
             console.error(err.message);
             toast.error("Failed to load profile");
+        }
+    };
+
+    const checkFollowStatus = async (userId) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/social/status/${userId}`, {
+                headers: { token }
+            });
+            const data = await res.json();
+            setIsFollowing(data.isFollowing);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleFollow = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/social/follow/${profileData.user_id}`, {
+                method: "POST",
+                headers: { token }
+            });
+            if (res.ok) {
+                setIsFollowing(true);
+                toast.success(`You are now following ${profileData.user_name}`);
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Action failed");
+        }
+    };
+
+    const handleUnfollow = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/social/follow/${profileData.user_id}`, {
+                method: "DELETE",
+                headers: { token }
+            });
+            if (res.ok) {
+                setIsFollowing(false);
+                toast.info(`Unfollowed ${profileData.user_name}`);
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Action failed");
+        }
+    };
+
+    const fetchFollowingList = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/social/following`, {
+                headers: { token }
+            });
+            const data = await res.json();
+            setFollowingList(data);
+            setShowFollowingModal(true);
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to load following list");
         }
     };
 
@@ -247,6 +323,45 @@ const Profile = () => {
                             </button>
                         </div>
                     ) : null}
+
+                    {!isOwnProfile && profileData && (
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => openChat(profileData)}
+                                className="flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition font-medium"
+                            >
+                                <MessageCircle className="h-4 w-4 mr-2" />
+                                Send Msg
+                            </button>
+                            {isFollowing ? (
+                                <button
+                                    onClick={handleUnfollow}
+                                    className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
+                                >
+                                    <UserMinus className="h-4 w-4 mr-2" />
+                                    Following
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleFollow}
+                                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium"
+                                >
+                                    <UserPlus className="h-4 w-4 mr-2" />
+                                    Follow
+                                </button>
+                            )}
+                        </div>
+                    )}
+
+                    {isOwnProfile && !isEditing && (
+                        <button
+                            onClick={fetchFollowingList}
+                            className="flex items-center px-4 py-2 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition font-medium border border-gray-200 ml-3"
+                        >
+                            <User className="h-4 w-4 mr-2" />
+                            Following
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -741,6 +856,13 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+            {showFollowingModal && (
+                <UserListModal
+                    title="Following"
+                    users={followingList}
+                    onClose={() => setShowFollowingModal(false)}
+                />
+            )}
         </div>
     );
 };

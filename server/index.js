@@ -135,6 +135,7 @@ app.use("/api/ai", require("./routes/ai"));
 app.use("/api/gamification", require("./routes/gamification"));
 app.use("/api/study-plans", require("./routes/studyPlans"));
 app.use("/api/blogs", require("./routes/blogs"));
+app.use("/api/social", require("./routes/social"));
 
 // Serve static assets in production
 const distPath = path.join(__dirname, '../client/dist');

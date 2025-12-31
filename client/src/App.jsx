@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Code } from 'lucide-react';
+import { Code, MessageSquareText } from 'lucide-react';
 import Landing from './pages/Landing';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -35,6 +35,7 @@ import MyBlogs from './pages/MyBlogs';
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
 import { CodeProvider } from './contexts/CodeContext';
+import { ChatProvider, useChat } from './contexts/ChatContext';
 
 // Streak Counter Component
 const StreakCounter = () => {
@@ -70,6 +71,19 @@ const StreakCounter = () => {
       <span className="text-lg animate-pulse">🔥</span>
       <span className="font-bold text-orange-600">{streak}</span>
     </div>
+  );
+};
+
+const NavbarMessageIcon = () => {
+  const { openChat } = useChat();
+  return (
+    <button
+      onClick={() => openChat()}
+      className="p-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-full transition relative"
+      title="Messages"
+    >
+      <MessageSquareText className="h-6 w-6" />
+    </button>
   );
 };
 
@@ -140,7 +154,12 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
 
           {/* Profile Menu (Right Side) */}
           <div className="flex items-center gap-3">
-            {isAuthenticated && <StreakCounter />}
+            {isAuthenticated && (
+              <>
+                <NavbarMessageIcon />
+                <StreakCounter />
+              </>
+            )}
             {isAuthenticated ? (
               <ProfileMenu setAuth={setAuth} />
             ) : (
@@ -206,41 +225,44 @@ function App() {
 
   return (
     <CodeProvider>
-      <Router>
-        <ToastContainer />
-        <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
-        <ChatbotWrapper />
-        <Routes>
-          <Route path="/" element={<Landing setAuth={setAuth} />} />
-          <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
-          <Route path="/login" element={!isAuthenticated ? <Login setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/dashboard" element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to="/login" />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/study-plan" element={<StudyPlan />} />
-          <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
-          <Route path="/dsa-path" element={<DSAPath />} />
-          <Route path="/dsa/module/:id" element={<DSAModule />} />
-          <Route path="/cp-path" element={<CPPath />} />
-          <Route path="/cp/module/:id" element={<CPModule />} />
-          <Route path="/cp-sheet" element={<CPSheet isAuthenticated={isAuthenticated} />} />
-          <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
-          <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
-          <Route path="/knowledge-base" element={<KnowledgeBase />} />
-          <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
-          <Route path="/quiz/:id" element={<Quiz />} />
-          <Route path="/contests" element={<ContestDashboard />} />
-          <Route path="/contests/:id" element={<ContestArena />} />
-          <Route path="/contests/global/:id" element={isAuthenticated ? <GlobalContestArena /> : <Navigate to="/login" />} />
-          <Route path="/theory/aptitude" element={<AptitudeTheory />} />
-          <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
-          <Route path="/theory/reasoning" element={<ReasoningTheory />} />
-          <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
-          <Route path="/admin/contests" element={isAuthenticated ? <AdminContestManager /> : <Navigate to="/login" />} />
-        </Routes>
-      </Router>
-    </CodeProvider>
+      <ChatProvider isAuthenticated={isAuthenticated}>
+        <Router>
+          <ToastContainer />
+          <GlobalNavbar isAuthenticated={isAuthenticated} setAuth={setAuth} />
+          <ChatbotWrapper />
+          <Routes>
+            <Route path="/" element={<Landing setAuth={setAuth} />} />
+            <Route path="/register" element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
+            <Route path="/login" element={!isAuthenticated ? <Login setAuth={setAuth} /> : <Navigate to="/dashboard" />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/dashboard" element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to="/login" />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/study-plan" element={<StudyPlan />} />
+            <Route path="/profile/:username" element={<Profile setAuth={setAuth} />} />
+            <Route path="/dsa-path" element={<DSAPath />} />
+            <Route path="/dsa/module/:id" element={<DSAModule />} />
+            <Route path="/cp-path" element={<CPPath />} />
+            <Route path="/cp/module/:id" element={<CPModule />} />
+            <Route path="/cp-sheet" element={<CPSheet isAuthenticated={isAuthenticated} />} />
+            <Route path="/problems" element={<ProblemList setAuth={setAuth} />} />
+            <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
+            <Route path="/quiz/:id" element={<Quiz />} />
+            <Route path="/contests" element={<ContestDashboard />} />
+            <Route path="/contests/:id" element={<ContestArena />} />
+            <Route path="/contests/global/:id" element={isAuthenticated ? <GlobalContestArena /> : <Navigate to="/login" />} />
+            <Route path="/theory/aptitude" element={<AptitudeTheory />} />
+            <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
+            <Route path="/theory/reasoning" element={<ReasoningTheory />} />
+            <Route path="/admin" element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" />} />
+            <Route path="/admin/contests" element={isAuthenticated ? <AdminContestManager /> : <Navigate to="/login" />} />
+          </Routes>
+
+        </Router>
+      </ChatProvider>
+    </CodeProvider >
   );
 }
 

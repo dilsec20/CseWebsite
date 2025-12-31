@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import { API_URL } from '../config';
+import BlogList from '../components/BlogList';
 
 const Dashboard = ({ setAuth }) => {
     const [name, setName] = useState("");
@@ -186,75 +187,9 @@ const Dashboard = ({ setAuth }) => {
                         </div>
                     </div>
 
-                    {/* Rating Graph */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
-                        <div className="flex items-center gap-2 mb-6">
-                            <div className="p-2 bg-blue-100 rounded-lg">
-                                <TrendingUp className="h-5 w-5 text-blue-600" />
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900">Rating Progression</h3>
-                        </div>
-                        <div className="h-[300px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart
-                                    data={ratingHistory}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                                    <XAxis
-                                        dataKey="date"
-                                        stroke="#94a3b8"
-                                        fontSize={12}
-                                        tickLine={false}
-                                        axisLine={false}
-                                    />
-                                    {/* Colored background zones */}
-                                    <ReferenceArea y1={0} y2={300} fill="#f3f4f6" fillOpacity={0.7} />
-                                    <ReferenceArea y1={300} y2={500} fill="#dcfce7" fillOpacity={0.7} />
-                                    <ReferenceArea y1={500} y2={800} fill="#dbeafe" fillOpacity={0.7} />
-                                    <ReferenceArea y1={800} y2={1000} fill="#f3e8ff" fillOpacity={0.7} />
-                                    <ReferenceArea y1={1000} y2={10000} fill="#fee2e2" fillOpacity={0.7} />
-
-                                    <YAxis
-                                        stroke="#94a3b8"
-                                        fontSize={11}
-                                        tickLine={false}
-                                        axisLine={false}
-                                        domain={[0, 1200]}
-                                        ticks={[0, 300, 500, 800, 1000]}
-                                        tickFormatter={(value) => {
-                                            if (value === 1000) return 'Master';
-                                            if (value === 800) return 'Expert';
-                                            if (value === 500) return 'Achiever';
-                                            if (value === 300) return 'Beginner';
-                                            if (value === 0) return 'Unrated';
-                                            return '';
-                                        }}
-                                    />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: '#fff',
-                                            border: '1px solid #e2e8f0',
-                                            borderRadius: '0.5rem',
-                                            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                                        }}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="rating"
-                                        stroke="#2563eb"
-                                        strokeWidth={3}
-                                        dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }}
-                                        activeDot={{ r: 6, strokeWidth: 0 }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
+                    {/* Recent Discussions (Replacing Rating Graph) */}
+                    <div className="mb-8 h-[400px]">
+                        <BlogList user={{ name: name }} />
                     </div>
 
                     {/* Content Sections */}

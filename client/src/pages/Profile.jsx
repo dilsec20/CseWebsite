@@ -42,6 +42,7 @@ const Profile = () => {
         try {
             const token = localStorage.getItem("token");
             let data;
+            let currentUsername = null;
 
             // Check if viewing own profile
             if (token) {
@@ -49,6 +50,7 @@ const Profile = () => {
                     headers: { token: token }
                 });
                 const myData = await response.json();
+                currentUsername = myData.username;
 
                 // If no username param or param matches my username (handle), it's my profile
                 if (!username || username === myData.username) {
@@ -90,7 +92,7 @@ const Profile = () => {
             setPreviewImage(data.profile_picture);
 
             // Check follow status if not own profile
-            if (token && data.user_id && data.username !== myData.username) {
+            if (token && data.user_id && data.username !== currentUsername) {
                 checkFollowStatus(data.user_id);
             }
 

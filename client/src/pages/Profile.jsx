@@ -285,83 +285,84 @@ const Profile = () => {
                     <Link to="/dashboard" className="text-blue-600 hover:text-blue-700 font-medium">
                         ← Back to Dashboard
                     </Link>
-                    {!isEditing && isOwnProfile ? (
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
-                        >
-                            <Edit3 className="h-4 w-4 mr-2" />
-                            Edit Profile
-                        </button>
-                    ) : isEditing && isOwnProfile ? (
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setFormData({
-                                        user_name: profileData.user_name || '',
-                                        username: profileData.username || '',
-                                        bio: profileData.bio || '',
-                                        linkedinUrl: profileData.linkedin_url || '',
-                                        githubUrl: profileData.github_url || '',
-                                        oldPassword: '',
-                                        newPassword: ''
-                                    });
-                                    setPreviewImage(profileData.profile_picture);
-                                }}
-                                className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition"
-                            >
-                                <X className="h-4 w-4 mr-2" />
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSaveProfile}
-                                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
-                            >
-                                <Save className="h-4 w-4 mr-2" />
-                                Save Changes
-                            </button>
-                        </div>
-                    ) : null}
-
-                    {!isOwnProfile && profileData && (
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => openChat(profileData)}
-                                className="flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition font-medium"
-                            >
-                                <MessageCircle className="h-4 w-4 mr-2" />
-                                Send Msg
-                            </button>
-                            {isFollowing ? (
+                    <div className="flex items-center gap-3">
+                        {!isEditing && isOwnProfile ? (
+                            <>
                                 <button
-                                    onClick={handleUnfollow}
-                                    className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
+                                    onClick={() => setIsEditing(true)}
+                                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
                                 >
-                                    <UserMinus className="h-4 w-4 mr-2" />
+                                    <Edit3 className="h-4 w-4 mr-2" />
+                                    Edit Profile
+                                </button>
+                                <button
+                                    onClick={fetchFollowingList}
+                                    className="flex items-center px-4 py-2 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition font-medium border border-gray-200"
+                                >
+                                    <User className="h-4 w-4 mr-2" />
                                     Following
                                 </button>
-                            ) : (
+                            </>
+                        ) : isEditing && isOwnProfile ? (
+                            <div className="flex gap-3">
                                 <button
-                                    onClick={handleFollow}
-                                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium"
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        setFormData({
+                                            user_name: profileData.user_name || '',
+                                            username: profileData.username || '',
+                                            bio: profileData.bio || '',
+                                            linkedinUrl: profileData.linkedin_url || '',
+                                            githubUrl: profileData.github_url || '',
+                                            oldPassword: '',
+                                            newPassword: ''
+                                        });
+                                        setPreviewImage(profileData.profile_picture);
+                                    }}
+                                    className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition"
                                 >
-                                    <UserPlus className="h-4 w-4 mr-2" />
-                                    Follow
+                                    <X className="h-4 w-4 mr-2" />
+                                    Cancel
                                 </button>
-                            )}
-                        </div>
-                    )}
+                                <button
+                                    onClick={handleSaveProfile}
+                                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
+                                >
+                                    <Save className="h-4 w-4 mr-2" />
+                                    Save Changes
+                                </button>
+                            </div>
+                        ) : null}
 
-                    {isOwnProfile && !isEditing && (
-                        <button
-                            onClick={fetchFollowingList}
-                            className="flex items-center px-4 py-2 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition font-medium border border-gray-200 ml-3"
-                        >
-                            <User className="h-4 w-4 mr-2" />
-                            Following
-                        </button>
-                    )}
+                        {!isOwnProfile && profileData && (
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => openChat(profileData)}
+                                    className="flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition font-medium"
+                                >
+                                    <MessageCircle className="h-4 w-4 mr-2" />
+                                    Send Msg
+                                </button>
+                                {isFollowing ? (
+                                    <button
+                                        onClick={handleUnfollow}
+                                        className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-medium"
+                                    >
+                                        <UserMinus className="h-4 w-4 mr-2" />
+                                        Following
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handleFollow}
+                                        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium"
+                                    >
+                                        <UserPlus className="h-4 w-4 mr-2" />
+                                        Follow
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

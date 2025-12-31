@@ -138,6 +138,7 @@ router.get("/profile/:username", async (req, res) => {
         }));
 
         res.json({
+            user_id: user.user_id,
             user_name: user.user_name,
             username: user.username,
             user_email: user.user_email, // Consider hiding this for public profiles if privacy is a concern

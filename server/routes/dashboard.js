@@ -180,6 +180,7 @@ router.get("/", authorization, async (req, res) => {
         }));
 
         res.json({
+            user_id: userId,
             user_name: user.user_name,
             username: user.username,
             user_email: user.user_email,

@@ -19,14 +19,24 @@ const GlobalContestArena = () => {
     useEffect(() => {
         const fetchContest = async () => {
             try {
+                console.log("[DEBUG] GlobalContestArena mounting with ID:", id);
+                console.log("[DEBUG] Fetching URL:", `${API_URL}/api/contests/global/${id}`);
+
                 const token = localStorage.getItem("token");
                 const res = await fetch(`${API_URL}/api/contests/global/${id}`, {
                     headers: { token }
                 });
 
-                if (!res.ok) throw new Error("Failed to load contest");
+                console.log("[DEBUG] Response status:", res.status);
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    console.error("[DEBUG] Error response:", errText);
+                    throw new Error("Failed to load contest: " + res.status);
+                }
 
                 const data = await res.json();
+                console.log("[DEBUG] Contest data received:", data);
                 setContest(data.contest);
                 setProblems(data.problems);
                 setIsRegistered(data.is_registered);

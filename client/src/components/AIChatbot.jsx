@@ -218,7 +218,7 @@ const AIChatbot = () => {
                     <div className="bg-[#343541] p-3 flex justify-between items-center border-b border-gray-700 select-none">
                         <div className="flex items-center gap-2">
                             <Bot size={18} className="text-gray-300" />
-                            <h3 className="font-medium text-sm text-gray-200">ChatGPT Assistant</h3>
+                            <h3 className="font-medium text-sm text-gray-200">Helper AI</h3>
                         </div>
                         <div className="flex items-center gap-1 mr-4">
                             <button

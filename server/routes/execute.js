@@ -351,6 +351,8 @@ router.post("/submit", authorization, async (req, res) => {
 
 
             // Check if this is part of an active contest (session based)
+            // Check if this is part of an active contest (session based)
+            console.log(`Checking for active mock contest session for user ${userId}...`);
             const activeSession = await pool.query(
                 `SELECT session_id FROM contest_sessions 
                  WHERE user_id = $1 AND status = 'active' 
@@ -360,14 +362,22 @@ router.post("/submit", authorization, async (req, res) => {
 
             if (activeSession.rows.length > 0) {
                 const sessionId = activeSession.rows[0].session_id;
+                console.log(`Found active session: ${sessionId}. updating contest_problems...`);
                 // Update contest problem status
-                await pool.query(
+                const updateRes = await pool.query(
                     `UPDATE contest_problems 
                      SET solved = true 
-                     WHERE session_id = $1 AND problem_id = $2`,
+                     WHERE session_id = $1 AND problem_id = $2 RETURNING *`,
                     [sessionId, problem_id]
                 );
-                console.log(`Contest problem marked as solved for session ${sessionId}`);
+
+                if (updateRes.rowCount > 0) {
+                    console.log(`✅ Mock contest problem marked as solved for session ${sessionId}`);
+                } else {
+                    console.log(`⚠️ Failed to update contest_problems for session ${sessionId}. Problem might not be linked to this session.`);
+                }
+            } else {
+                console.log(`No active mock contest session found for user ${userId}.`);
             }
 
             // ===================================

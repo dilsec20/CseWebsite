@@ -267,6 +267,11 @@ const SolveProblem = ({ setAuth }) => {
                 setOutput(`Verdict: ${parseRes.verdict}\n\nPassed all ${parseRes.total_count} test cases! ✅\n\nCongratulations! Your solution is correct! 🎉`);
             }
 
+            // Refresh contest problems to update sidebar status
+            if (contestId && parseRes.verdict === "Accepted") {
+                fetchContestProblems(contestId, contestType);
+            }
+
         } catch (err) {
             console.error(err.message);
             toast.error("Submission failed");
@@ -375,7 +380,7 @@ const SolveProblem = ({ setAuth }) => {
                                 >
                                     <div className="flex items-center justify-between">
                                         <span className="font-medium text-sm">{String.fromCharCode(65 + index)}. {p.title}</span>
-                                        {verdict === 'Accepted' && p.problem_id === parseInt(id) && (
+                                        {(p.solved || (verdict === 'Accepted' && p.problem_id === parseInt(id))) && (
                                             <CheckCircle className="w-4 h-4 text-green-400" />
                                         )}
                                     </div>

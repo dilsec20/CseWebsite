@@ -23,7 +23,7 @@ const Landing = ({ setAuth }) => {
                     <div className="bg-blue-600 p-2 rounded-lg">
                         <Code className="h-6 w-6 text-white" />
                     </div>
-                    <span className="text-2xl font-bold text-gray-900 tracking-tight">PrepPortal</span>
+                    <span className="text-2xl font-bold text-gray-900 tracking-tight">AceCoder</span>
                 </div>
                 <div className="hidden md:flex items-center space-x-8">
                     <a href="#features" className="text-gray-600 hover:text-blue-600 font-medium transition">Features</a>

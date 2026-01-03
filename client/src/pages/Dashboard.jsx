@@ -82,7 +82,7 @@ const Dashboard = ({ setAuth }) => {
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
                 <div className="p-6 border-b border-gray-100">
                     <Link to="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl">
-                        <Code className="h-6 w-6" /> PrepPortal
+                        <Code className="h-6 w-6" /> AceCoder
                     </Link>
                 </div>
 

@@ -107,7 +107,7 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
           {/* Logo/Brand */}
           <Link to="/dashboard" className="flex items-center gap-2 text-blue-600 font-bold text-xl hover:text-blue-700 transition">
             <Code className="h-6 w-6" />
-            <span>Home</span>
+            <span>Dashboard</span>
           </Link>
 
           {/* Navigation Links */}

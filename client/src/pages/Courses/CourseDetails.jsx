@@ -111,6 +111,29 @@ const CourseDetails = ({ setAuth }) => {
         }));
     };
 
+    const handleUnenroll = async () => {
+        if (!window.confirm("Are you sure you want to unenroll? You will lose your progress.")) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/courses/${id}/enroll`, {
+                method: "DELETE",
+                headers: { token: token }
+            });
+
+            if (res.ok) {
+                toast.success("Unenrolled successfully");
+                setIsEnrolled(false);
+                setCurrentVideo(null); // Reset player view
+            } else {
+                toast.error("Failed to unenroll");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Network error");
+        }
+    };
+
     const getYoutubeId = (url) => {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -150,9 +173,17 @@ const CourseDetails = ({ setAuth }) => {
                                 ></iframe>
                             </div>
                             <div className="lg:col-span-1 bg-gray-50 border-l border-gray-200 flex flex-col h-[500px] lg:h-auto overflow-hidden">
-                                <div className="p-4 border-b border-gray-200 bg-white shadow-sm z-10">
-                                    <h3 className="font-bold text-lg text-gray-900">Course Content</h3>
-                                    <p className="text-sm text-gray-500">{totalVideos} Lessons • {modules.length} Sections</p>
+                                <div className="p-4 border-b border-gray-200 bg-white shadow-sm z-10 flex justify-between items-center">
+                                    <div>
+                                        <h3 className="font-bold text-lg text-gray-900">Course Content</h3>
+                                        <p className="text-sm text-gray-500">{totalVideos} Lessons • {modules.length} Sections</p>
+                                    </div>
+                                    <button
+                                        onClick={handleUnenroll}
+                                        className="text-xs text-red-500 hover:text-red-700 font-medium px-2 py-1 hover:bg-red-50 rounded-md transition"
+                                    >
+                                        Unenroll
+                                    </button>
                                 </div>
 
                                 {/* Accordion Playist */}
@@ -176,8 +207,8 @@ const CourseDetails = ({ setAuth }) => {
                                                             key={vid.video_id}
                                                             onClick={() => setCurrentVideo(vid)}
                                                             className={`w-full flex items-start p-3 text-left transition ${currentVideo.video_id === vid.video_id
-                                                                    ? 'bg-blue-50 border-l-4 border-blue-600'
-                                                                    : 'hover:bg-gray-50 border-l-4 border-transparent'
+                                                                ? 'bg-blue-50 border-l-4 border-blue-600'
+                                                                : 'hover:bg-gray-50 border-l-4 border-transparent'
                                                                 }`}
                                                         >
                                                             <div className="mr-3 mt-1 text-gray-400">
@@ -234,18 +265,29 @@ const CourseDetails = ({ setAuth }) => {
                                     <div className="text-3xl font-bold text-white mb-6">
                                         {course.price > 0 ? `₹${course.price}` : "Free"}
                                     </div>
-                                    <button
-                                        onClick={isEnrolled ? () => { } : handleEnroll}
-                                        disabled={enrollLoading || isEnrolled}
-                                        className={`w-full py-4 font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-2 ${isEnrolled
+                                    <div className="flex flex-col gap-3">
+                                        <button
+                                            onClick={isEnrolled ? () => { } : handleEnroll}
+                                            disabled={enrollLoading || isEnrolled}
+                                            className={`w-full py-4 font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-2 ${isEnrolled
                                                 ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-900/50 cursor-default'
                                                 : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-900/50'
-                                            }`}
-                                    >
-                                        {enrollLoading ? 'Processing...' : (isEnrolled ? 'Enrolled' : 'Enroll Now')}
-                                        {!enrollLoading && !isEnrolled && <ChevronRight className="h-5 w-5" />}
-                                        {isEnrolled && <CheckCircle className="h-5 w-5" />}
-                                    </button>
+                                                }`}
+                                        >
+                                            {enrollLoading ? 'Processing...' : (isEnrolled ? 'Enrolled' : 'Enroll Now')}
+                                            {!enrollLoading && !isEnrolled && <ChevronRight className="h-5 w-5" />}
+                                            {isEnrolled && <CheckCircle className="h-5 w-5" />}
+                                        </button>
+
+                                        {isEnrolled && (
+                                            <button
+                                                onClick={handleUnenroll}
+                                                className="text-sm text-red-400 hover:text-red-300 font-medium transition py-2"
+                                            >
+                                                Unenroll from Course
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

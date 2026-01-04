@@ -224,6 +224,28 @@ router.post("/:id/enroll", authorization, async (req, res) => {
     }
 });
 
+// Unenroll from Course
+router.delete("/:id/enroll", authorization, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user;
+
+        const result = await pool.query(
+            "DELETE FROM enrollments WHERE user_id = $1 AND course_id = $2 RETURNING *",
+            [userId, id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json("Enrollment not found");
+        }
+
+        res.json("Unenrolled successfully");
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json("Server Error");
+    }
+});
+
 // 5. Get My Courses
 router.get("/user/my-courses", authorization, async (req, res) => {
     try {

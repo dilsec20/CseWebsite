@@ -6,6 +6,8 @@ import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 import AddCourseModal from '../../components/Admin/AddCourseModal';
 
+const PLACEHOLDER_IMG_DATA = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='24' fill='%2364748b' text-anchor='middle' dy='.3em'%3ENo Thumbnail%3C/text%3E%3C/svg%3E";
+
 const CourseBrowser = ({ setAuth }) => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -190,7 +192,10 @@ const CourseBrowser = ({ setAuth }) => {
                                             src={course.thumbnail_url || "https://img.youtube.com/vi/placeholder/maxresdefault.jpg"}
                                             alt={course.title}
                                             className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                                            onError={(e) => e.target.src = "https://via.placeholder.com/640x360?text=No+Thumbnail"}
+                                            const PLACEHOLDER_IMG_DATA="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='24' fill='%2364748b' text-anchor='middle' dy='.3em'%3ENo Thumbnail%3C/text%3E%3C/svg%3E";
+
+                                        // ... in return:
+                                        onError={(e) => e.target.src = PLACEHOLDER_IMG_DATA}
                                         />
                                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-800 z-10">
                                             {course.category}

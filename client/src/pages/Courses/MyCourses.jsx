@@ -54,10 +54,13 @@ const MyCourses = ({ setAuth }) => {
                                 <Link to={`/courses/${course.course_id}`} key={course.course_id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
                                     <div className="aspect-video bg-gray-100 relative overflow-hidden">
                                         <img
-                                            src={course.thumbnail_url || "https://via.placeholder.com/640x360?text=Course"}
-                                            alt={course.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                                            onError={(e) => e.target.src = "https://via.placeholder.com/640x360?text=No+Thumbnail"}
+                                            const PLACEHOLDER_IMG_DATA="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='24' fill='%2364748b' text-anchor='middle' dy='.3em'%3ENo Thumbnail%3C/text%3E%3C/svg%3E";
+
+                                        // ... (in return)
+                                        src={course.thumbnail_url || PLACEHOLDER_IMG_DATA}
+                                        alt={course.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                        onError={(e) => e.target.src = PLACEHOLDER_IMG_DATA}
                                         />
                                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
                                             <PlayCircle className="h-12 w-12 text-white drop-shadow-lg scale-90 group-hover:scale-100 transition duration-300" />

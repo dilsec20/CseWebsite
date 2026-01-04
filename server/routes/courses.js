@@ -5,59 +5,18 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configure Multer for Image Upload
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadDir = path.join(__dirname, '../uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'course-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+const { uploadCloud } = require('../utils/cloudinary');
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif|webp/;
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-        cb(new Error("Error: Images Only!"));
-    }
-});
-
-// Middleware to check specific role
-const verifyRole = (role) => async (req, res, next) => {
-    try {
-        const user = await pool.query("SELECT role FROM users WHERE user_id = $1", [req.user]);
-        if (user.rows.length === 0 || user.rows[0].role !== role) {
-            return res.status(403).json("Access Denied");
-        }
-        next();
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json("Server Error");
-    }
-};
-
-const verifyAdmin = verifyRole('admin');
+// ... (keep other imports if needed, but remove local multer config)
 
 // Upload Endpoint
-router.post("/upload", authorization, verifyAdmin, upload.single('image'), (req, res) => {
+router.post("/upload", authorization, verifyAdmin, uploadCloud.single('image'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json("No file uploaded");
         }
-        // Return relative path to be served statically
-        const imageUrl = `/uploads/${req.file.filename}`;
+        // Cloudinary returns the full URL in `req.file.path`
+        const imageUrl = req.file.path;
         res.json({ imageUrl });
     } catch (err) {
         console.error(err);

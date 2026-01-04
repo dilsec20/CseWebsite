@@ -31,6 +31,9 @@ import CPPath from './pages/CPPath';
 import CPModule from './pages/CPModule';
 import CPSheet from './pages/CPSheet';
 import MyBlogs from './pages/MyBlogs';
+import CourseBrowser from './pages/Courses/CourseBrowser';
+import CourseDetails from './pages/Courses/CourseDetails';
+import MyCourses from './pages/Courses/MyCourses';
 
 import { API_URL } from './config';
 import AIChatbot from './components/AIChatbot';
@@ -120,6 +123,9 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
             </Link>
             <Link to="/cp-sheet" className="text-gray-700 hover:text-blue-600 font-medium transition">
               CP Sheet
+            </Link>
+            <Link to="/courses" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              Courses
             </Link>
 
             <Link to="/problems" className="text-gray-700 hover:text-blue-600 font-medium transition">
@@ -252,6 +258,12 @@ function App() {
             <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
+
+            {/* Course Routes */}
+            <Route path="/courses" element={isAuthenticated ? <CourseBrowser setAuth={setAuth} /> : <Navigate to="/login" />} />
+            <Route path="/courses/:id" element={isAuthenticated ? <CourseDetails setAuth={setAuth} /> : <Navigate to="/login" />} />
+            <Route path="/my-courses" element={isAuthenticated ? <MyCourses setAuth={setAuth} /> : <Navigate to="/login" />} />
+
             <Route path="/quiz/:id" element={<Quiz />} />
             <Route path="/contests" element={<ContestDashboard />} />
             <Route path="/contests/:id" element={<ContestArena />} />

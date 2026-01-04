@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 import { toast } from 'react-toastify';
 import {
     LayoutDashboard,
@@ -79,40 +80,8 @@ const Dashboard = ({ setAuth }) => {
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-                <div className="p-6 border-b border-gray-100">
-                    <Link to="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl">
-                        <Code className="h-6 w-6" /> AceCoder
-                    </Link>
-                </div>
-
-                <nav className="flex-1 p-4 space-y-1">
-                    <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-medium">
-                        <LayoutDashboard className="h-5 w-5" /> Dashboard
-                    </Link>
-                    <Link to="/problems" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
-                        <Code className="h-5 w-5" /> Problems
-                    </Link>
-                    <Link to="/knowledge-base" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
-                        <BookOpen className="h-5 w-5" /> Knowledge Base
-                    </Link>
-                    <Link to="/contests" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
-                        <Trophy className="h-5 w-5" /> Contests
-                    </Link>
-                    <Link to="/my-blogs" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
-                        <MessageSquare className="h-5 w-5" /> Your Posts
-                    </Link>
-                </nav>
-
-                <div className="p-4 border-t border-gray-100">
-                    <button
-                        onClick={e => logout(e)}
-                        className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl font-medium w-full transition"
-                    >
-                        <LogOut className="h-5 w-5" /> Logout
-                    </button>
-                </div>
-            </aside>
+            {/* Sidebar */}
+            <Sidebar logout={logout} />
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto">

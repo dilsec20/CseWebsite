@@ -69,15 +69,19 @@ router.post("/upload", authorization, verifyAdmin, upload.single('image'), (req,
 router.get("/", async (req, res) => {
     try {
         const { category } = req.query;
-        let query = "SELECT * FROM courses";
+        let query = `
+      SELECT c.*, COUNT(e.enrollment_id)::int as enrolled_count 
+      FROM courses c 
+      LEFT JOIN enrollments e ON c.course_id = e.course_id 
+    `;
         let params = [];
 
         if (category) {
-            query += " WHERE category = $1";
+            query += " WHERE c.category = $1";
             params.push(category);
         }
 
-        query += " ORDER BY created_at DESC";
+        query += " GROUP BY c.course_id ORDER BY c.created_at DESC";
 
         const courses = await pool.query(query, params);
         res.json(courses.rows);

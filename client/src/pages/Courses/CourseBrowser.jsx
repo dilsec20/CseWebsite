@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import { Search, Filter, Plus, Clock, User, BookOpen, Edit, Trash2 } from 'lucide-react';
+import { Search, Filter, Plus, Clock, User, BookOpen, Edit, Trash2, Users } from 'lucide-react';
 import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 import AddCourseModal from '../../components/Admin/AddCourseModal';
@@ -225,8 +225,15 @@ const CourseBrowser = ({ setAuth }) => {
                                         <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                                             <div className="flex items-center gap-2 text-sm text-gray-500">
                                                 <User className="h-4 w-4" />
-                                                <span className="truncate max-w-[120px]">{course.instructor}</span>
+                                                <span className="truncate max-w-[100px]">{course.instructor}</span>
                                             </div>
+
+                                            {/* Enrollment Count */}
+                                            <div className="flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-full">
+                                                <Users className="h-3 w-3" />
+                                                <span>{course.enrolled_count || 0}</span>
+                                            </div>
+
                                             {enrolledCourseIds.includes(course.course_id) ? (
                                                 <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">Enrolled</span>
                                             ) : (

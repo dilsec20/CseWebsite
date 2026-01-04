@@ -69,7 +69,9 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
             });
             if (response.ok) {
                 const data = await response.json();
-                const fullUrl = `${API_URL}${data.imageUrl}`;
+                const fullUrl = data.imageUrl.startsWith('http')
+                    ? data.imageUrl
+                    : `${API_URL}${data.imageUrl}`;
                 setFormData(prev => ({ ...prev, thumbnail_url: fullUrl }));
                 toast.success("Image uploaded!");
             } else {

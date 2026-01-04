@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash, Youtube, Upload, Image as ImageIcon } from 'lucide-react';
+import { X, Plus, Trash, Youtube, Upload, FolderPlus, Folder, ChevronDown, ChevronRight, FileText } from 'lucide-react';
 import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 
@@ -11,10 +11,14 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
         instructor: "",
         category: "Placement",
         price: 0,
-        videos: [] // { title, video_url, description }
+        modules: [
+            // { title: "Introduction", videos: [] }
+        ]
     });
 
-    // Video input state
+    // State for temporary inputs
+    const [newModuleTitle, setNewModuleTitle] = useState("");
+    const [activeModuleIndex, setActiveModuleIndex] = useState(0); // Which module is open
     const [videoInput, setVideoInput] = useState({
         title: "",
         video_url: "",
@@ -26,6 +30,14 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
 
     useEffect(() => {
         if (initialData) {
+            // Transform flat videos if necessary, or use nested modules if backend returns them
+            let loadedModules = initialData.modules || [];
+
+            // Backward compatibility: If no modules but videos exist, put them in a "General" module
+            if (loadedModules.length === 0 && initialData.videos && initialData.videos.length > 0) {
+                loadedModules = [{ title: "General", videos: initialData.videos }];
+            }
+
             setFormData({
                 title: initialData.title || "",
                 description: initialData.description || "",
@@ -33,19 +45,20 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                 instructor: initialData.instructor || "",
                 category: initialData.category || "Placement",
                 price: initialData.price || 0,
-                videos: initialData.videos || []
+                modules: loadedModules
             });
+            if (loadedModules.length > 0) setActiveModuleIndex(0);
+        } else {
+            // Default start with one module
+            setFormData(prev => ({ ...prev, modules: [{ title: "Section 1", videos: [] }] }));
         }
     }, [initialData]);
 
-    // Handle Local Image Upload
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
         const uploadData = new FormData();
         uploadData.append('image', file);
-
         setUploading(true);
         try {
             const token = localStorage.getItem("token");
@@ -54,13 +67,8 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                 headers: { token },
                 body: uploadData
             });
-
             if (response.ok) {
                 const data = await response.json();
-                // Construct full URL if needed, or stick to relative path handled by backend
-                // Assuming backend returns relative path like '/uploads/file.png'
-                // We need to prepend API_URL if served from same domain or handle it.
-                // For simplicity, let's prepend API_URL if it's relative
                 const fullUrl = `${API_URL}${data.imageUrl}`;
                 setFormData(prev => ({ ...prev, thumbnail_url: fullUrl }));
                 toast.success("Image uploaded!");
@@ -74,22 +82,51 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
         setUploading(false);
     };
 
-    const handleAddVideo = () => {
+    // --- Module Management ---
+    const addModule = () => {
+        setFormData({
+            ...formData,
+            modules: [...formData.modules, { title: newModuleTitle || `Section ${formData.modules.length + 1}`, videos: [] }]
+        });
+        setNewModuleTitle("");
+        setActiveModuleIndex(formData.modules.length); // Open new module
+    };
+
+    const removeModule = (idx) => {
+        if (formData.modules.length <= 1 && idx === 0) {
+            toast.warning("Course must have at least one section.");
+            return;
+        }
+        const newModules = [...formData.modules];
+        newModules.splice(idx, 1);
+        setFormData({ ...formData, modules: newModules });
+        if (activeModuleIndex >= newModules.length) setActiveModuleIndex(newModules.length - 1);
+    };
+
+    const updateModuleTitle = (idx, title) => {
+        const newModules = [...formData.modules];
+        newModules[idx].title = title;
+        setFormData({ ...formData, modules: newModules });
+    };
+
+    // --- Video Management ---
+    const addVideoToModule = () => {
         if (!videoInput.title || !videoInput.video_url) {
             toast.error("Video title and URL are required");
             return;
         }
-        setFormData({
-            ...formData,
-            videos: [...formData.videos, { ...videoInput }]
-        });
+
+        const newModules = [...formData.modules];
+        newModules[activeModuleIndex].videos.push({ ...videoInput });
+
+        setFormData({ ...formData, modules: newModules });
         setVideoInput({ title: "", video_url: "", description: "" });
     };
 
-    const handleRemoveVideo = (idx) => {
-        const newVideos = [...formData.videos];
-        newVideos.splice(idx, 1);
-        setFormData({ ...formData, videos: newVideos });
+    const removeVideoFromModule = (mIdx, vIdx) => {
+        const newModules = [...formData.modules];
+        newModules[mIdx].videos.splice(vIdx, 1);
+        setFormData({ ...formData, modules: newModules });
     };
 
     const handleSubmit = async (e) => {
@@ -114,7 +151,7 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
 
             if (response.ok) {
                 toast.success(initialData ? "Course updated!" : "Course created!");
-                onOrchestrate(); // Refresh list
+                onOrchestrate();
                 onClose();
             } else {
                 const err = await response.json();
@@ -129,7 +166,7 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
                 <div className="flex justify-between items-center p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">
                         {initialData ? 'Edit Course' : 'Create New Course'}
@@ -169,7 +206,7 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                             <textarea
                                 required
-                                rows={3}
+                                rows={2}
                                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                                 value={formData.description}
                                 onChange={e => setFormData({ ...formData, description: e.target.value })}
@@ -206,106 +243,174 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                                     />
                                 </div>
                                 {formData.thumbnail_url && (
-                                    <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                                        <img src={formData.thumbnail_url} alt="Preview" className="w-full h-full object-cover" />
+                                    <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-gray-100 border border-gray-200 h-24 w-auto">
+                                        <img src={formData.thumbnail_url} alt="Preview" className="h-full w-auto object-cover" />
                                     </div>
                                 )}
                             </div>
 
                             <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                                    <select
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                                        value={formData.category}
-                                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                                    >
-                                        <option>Placement</option>
-                                        <option>Full Stack</option>
-                                        <option>DSA</option>
-                                        <option>System Design</option>
-                                        <option>Core CS</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                        value={formData.price}
-                                        onChange={e => setFormData({ ...formData, price: e.target.value })}
-                                    />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                                            value={formData.category}
+                                            onChange={e => setFormData({ ...formData, category: e.target.value })}
+                                        >
+                                            <option>Placement</option>
+                                            <option>Full Stack</option>
+                                            <option>DSA</option>
+                                            <option>System Design</option>
+                                            <option>Core CS</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                            value={formData.price}
+                                            onChange={e => setFormData({ ...formData, price: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Video Manager */}
+                        {/* Curriculum Manager */}
                         <div className="border-t border-gray-100 pt-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <Youtube className="h-5 w-5 text-red-600" /> Curriculum Manager
+                                <Folder className="h-5 w-5 text-blue-600" /> Curriculum Builder
                             </h3>
 
-                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-4">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
-                                    <input
-                                        placeholder="Lesson Title"
-                                        className="md:col-span-1 px-3 py-2 border border-gray-200 rounded-lg text-sm"
-                                        value={videoInput.title}
-                                        onChange={e => setVideoInput({ ...videoInput, title: e.target.value })}
-                                    />
-                                    <input
-                                        placeholder="YouTube Link"
-                                        className="md:col-span-2 px-3 py-2 border border-gray-200 rounded-lg text-sm"
-                                        value={videoInput.video_url}
-                                        onChange={e => setVideoInput({ ...videoInput, video_url: e.target.value })}
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <textarea
-                                        placeholder="Theory / Notes for this lesson (Optional)"
-                                        rows={2}
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none"
-                                        value={videoInput.description}
-                                        onChange={e => setVideoInput({ ...videoInput, description: e.target.value })}
-                                    />
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={handleAddVideo}
-                                    className="w-full py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 text-gray-700"
-                                >
-                                    Add Lesson
-                                </button>
-                            </div>
-
-                            <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-                                {formData.videos.map((vid, idx) => (
-                                    <div key={idx} className="flex items-start justify-between p-3 bg-white border border-gray-100 rounded-lg group hover:border-blue-200 transition">
-                                        <div className="flex gap-3 overflow-hidden">
-                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold mt-0.5">
-                                                {idx + 1}
-                                            </span>
-                                            <div className="min-w-0">
-                                                <p className="font-medium text-gray-900 text-sm truncate">{vid.title}</p>
-                                                <p className="text-xs text-gray-500 truncate">{vid.video_url}</p>
-                                                {vid.description && (
-                                                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">{vid.description}</p>
-                                                )}
-                                            </div>
+                            <div className="flex flex-col lg:flex-row gap-6 h-[500px]">
+                                {/* Module List (Sidebar) */}
+                                <div className="w-full lg:w-1/3 border border-gray-200 rounded-xl overflow-hidden flex flex-col bg-gray-50">
+                                    <div className="p-3 border-b border-gray-200 bg-white">
+                                        <div className="flex gap-2">
+                                            <input
+                                                placeholder="New Section Name"
+                                                className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
+                                                value={newModuleTitle}
+                                                onChange={e => setNewModuleTitle(e.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={addModule}
+                                                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                            >
+                                                <Plus className="h-4 w-4" />
+                                            </button>
                                         </div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                                        {formData.modules.map((mod, idx) => (
+                                            <div
+                                                key={idx}
+                                                onClick={() => setActiveModuleIndex(idx)}
+                                                className={`p-3 rounded-lg cursor-pointer border transition flex justify-between items-center group ${activeModuleIndex === idx
+                                                        ? 'bg-blue-50 border-blue-200 shadow-sm'
+                                                        : 'bg-white border-transparent hover:bg-gray-100'
+                                                    }`}
+                                            >
+                                                <div className="overflow-hidden">
+                                                    <div className="font-semibold text-gray-800 text-sm truncate">
+                                                        {activeModuleIndex === idx ? (
+                                                            <input
+                                                                value={mod.title}
+                                                                onChange={(e) => updateModuleTitle(idx, e.target.value)}
+                                                                className="bg-transparent outline-none w-full"
+                                                                onClick={(e) => e.stopPropagation()}
+                                                            />
+                                                        ) : mod.title}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500">{mod.videos.length} Lessons</div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => { e.stopPropagation(); removeModule(idx); }}
+                                                    className="p-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"
+                                                >
+                                                    <Trash className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Videos in Active Module */}
+                                <div className="flex-1 border border-gray-200 rounded-xl overflow-hidden flex flex-col bg-white">
+                                    <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                                        <h4 className="font-bold text-gray-700">
+                                            Videos in "{formData.modules[activeModuleIndex]?.title}"
+                                        </h4>
+                                    </div>
+
+                                    {/* Add Video Form */}
+                                    <div className="p-4 border-b border-gray-200 bg-white space-y-3">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <input
+                                                placeholder="Lesson Title"
+                                                className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                                                value={videoInput.title}
+                                                onChange={e => setVideoInput({ ...videoInput, title: e.target.value })}
+                                            />
+                                            <input
+                                                placeholder="YouTube URL"
+                                                className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                                                value={videoInput.video_url}
+                                                onChange={e => setVideoInput({ ...videoInput, video_url: e.target.value })}
+                                            />
+                                        </div>
+                                        <textarea
+                                            placeholder="Theory / Notes (Optional)"
+                                            rows={2}
+                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none"
+                                            value={videoInput.description}
+                                            onChange={e => setVideoInput({ ...videoInput, description: e.target.value })}
+                                        />
                                         <button
                                             type="button"
-                                            onClick={() => handleRemoveVideo(idx)}
-                                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition opacity-0 group-hover:opacity-100"
+                                            onClick={addModule} // Typo in original thought, meant addVideoToModule
+                                            onClick={addVideoToModule} // Corrected
+                                            className="w-full py-2 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-gray-900 flex items-center justify-center gap-2"
                                         >
-                                            <Trash className="h-4 w-4" />
+                                            <Plus className="h-4 w-4" /> Add Lesson to Section
                                         </button>
                                     </div>
-                                ))}
-                                {formData.videos.length === 0 && (
-                                    <p className="text-center text-gray-400 text-sm py-4">No lessons added yet.</p>
-                                )}
+
+                                    {/* Video List */}
+                                    <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                                        {formData.modules[activeModuleIndex]?.videos.map((vid, idx) => (
+                                            <div key={idx} className="flex items-start justify-between p-3 bg-white border border-gray-100 rounded-lg hover:border-blue-200 group">
+                                                <div className="flex gap-3 overflow-hidden">
+                                                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center text-xs font-bold mt-0.5">
+                                                        {idx + 1}
+                                                    </span>
+                                                    <div className="min-w-0">
+                                                        <p className="font-medium text-gray-900 text-sm truncate">{vid.title}</p>
+                                                        <p className="text-xs text-gray-400 truncate">{vid.video_url}</p>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeVideoFromModule(activeModuleIndex, idx)}
+                                                    className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition opacity-0 group-hover:opacity-100"
+                                                >
+                                                    <Trash className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {formData.modules[activeModuleIndex]?.videos.length === 0 && (
+                                            <div className="flex flex-col items-center justify-center h-full text-gray-400 py-8">
+                                                <Youtube className="h-8 w-8 mb-2 opacity-50" />
+                                                <p className="text-sm">No videos in this section yet.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import { PlayCircle, Lock, CheckCircle, User, Calendar, BookOpen, Clock, ChevronRight, FileText } from 'lucide-react';
+import { PlayCircle, Lock, CheckCircle, User, Calendar, BookOpen, Clock, ChevronRight, FileText, ChevronDown, Folder } from 'lucide-react';
 import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 
 const CourseDetails = ({ setAuth }) => {
     const { id } = useParams();
     const [course, setCourse] = useState(null);
-    const [videos, setVideos] = useState([]);
+    const [modules, setModules] = useState([]);
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [loading, setLoading] = useState(true);
     const [currentVideo, setCurrentVideo] = useState(null);
     const [enrollLoading, setEnrollLoading] = useState(false);
+
+    // Accordion State
+    const [expandedModules, setExpandedModules] = useState({});
 
     useEffect(() => {
         fetchCourseDetails();
@@ -21,7 +24,6 @@ const CourseDetails = ({ setAuth }) => {
 
     const fetchCourseDetails = async () => {
         try {
-            // First fetch public course info (or all info if backend allows)
             const token = localStorage.getItem("token");
             const headers = token ? { token: token } : {};
 
@@ -29,9 +31,24 @@ const CourseDetails = ({ setAuth }) => {
             if (response.ok) {
                 const data = await response.json();
                 setCourse(data);
-                if (data.videos) {
-                    setVideos(data.videos);
+
+                // Backend returns nested "modules" array
+                if (data.modules) {
+                    setModules(data.modules);
+                    // Open first module by default
+                    if (data.modules.length > 0) {
+                        setExpandedModules({ [data.modules[0].module_id]: true });
+                        // Set first video of first module as current if not set
+                        if (data.modules[0].videos.length > 0) {
+                            setCurrentVideo(data.modules[0].videos[0]);
+                        }
+                    }
+                } else if (data.videos) {
+                    // Fallback for flat structure
+                    const flatModule = { module_id: 1, title: "Course Content", videos: data.videos };
+                    setModules([flatModule]);
                     if (data.videos.length > 0) setCurrentVideo(data.videos[0]);
+                    setExpandedModules({ 1: true });
                 }
             }
         } catch (err) {
@@ -75,7 +92,7 @@ const CourseDetails = ({ setAuth }) => {
             if (res.ok) {
                 toast.success("Enrolled successfully!");
                 setIsEnrolled(true);
-                fetchCourseDetails(); // Refresh to get videos if they were hidden
+                fetchCourseDetails();
             } else {
                 const msg = await res.json();
                 toast.error(msg || "Enrollment failed");
@@ -85,6 +102,13 @@ const CourseDetails = ({ setAuth }) => {
             toast.error("Network error");
         }
         setEnrollLoading(false);
+    };
+
+    const toggleModule = (modId) => {
+        setExpandedModules(prev => ({
+            ...prev,
+            [modId]: !prev[modId]
+        }));
     };
 
     const getYoutubeId = (url) => {
@@ -103,6 +127,8 @@ const CourseDetails = ({ setAuth }) => {
 
     if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
     if (!course) return <div className="flex h-screen items-center justify-center">Course not found</div>;
+
+    const totalVideos = modules.reduce((acc, mod) => acc + mod.videos.length, 0);
 
     return (
         <div className="flex h-screen bg-gray-50 text-gray-900 font-sans">
@@ -126,28 +152,50 @@ const CourseDetails = ({ setAuth }) => {
                             <div className="lg:col-span-1 bg-gray-50 border-l border-gray-200 flex flex-col h-[500px] lg:h-auto overflow-hidden">
                                 <div className="p-4 border-b border-gray-200 bg-white shadow-sm z-10">
                                     <h3 className="font-bold text-lg text-gray-900">Course Content</h3>
-                                    <p className="text-sm text-gray-500">{videos.length} Lessons</p>
+                                    <p className="text-sm text-gray-500">{totalVideos} Lessons • {modules.length} Sections</p>
                                 </div>
-                                <div className="overflow-y-auto flex-1 p-2 space-y-1">
-                                    {videos.map((vid, idx) => (
-                                        <button
-                                            key={vid.video_id}
-                                            onClick={() => setCurrentVideo(vid)}
-                                            className={`w-full flex items-start p-3 rounded-lg text-left transition ${currentVideo.video_id === vid.video_id
-                                                ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-200'
-                                                : 'hover:bg-white hover:shadow-sm border border-transparent'
-                                                }`}
-                                        >
-                                            <div className="mr-3 mt-1 text-gray-400">
-                                                {currentVideo.video_id === vid.video_id ? <PlayCircle className="h-5 w-5 text-blue-600" /> : <ChevronRight className="h-5 w-5" />}
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm font-medium ${currentVideo.video_id === vid.video_id ? 'text-blue-700' : 'text-gray-700'}`}>
-                                                    {idx + 1}. {vid.title}
-                                                </p>
-                                                <p className="text-xs text-gray-400 mt-1 max-w-[200px] truncate">{vid.description}</p>
-                                            </div>
-                                        </button>
+
+                                {/* Accordion Playist */}
+                                <div className="overflow-y-auto flex-1 p-2 space-y-2">
+                                    {modules.map((mod) => (
+                                        <div key={mod.module_id} className="bg-white border border-gray-100 rounded-lg overflow-hidden">
+                                            <button
+                                                onClick={() => toggleModule(mod.module_id)}
+                                                className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 text-left transition"
+                                            >
+                                                <span className="font-bold text-gray-800 text-sm flex items-center gap-2">
+                                                    <Folder className="h-4 w-4 text-blue-500" /> {mod.title}
+                                                </span>
+                                                {expandedModules[mod.module_id] ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                                            </button>
+
+                                            {expandedModules[mod.module_id] && (
+                                                <div className="divide-y divide-gray-100">
+                                                    {mod.videos.map((vid, vIdx) => (
+                                                        <button
+                                                            key={vid.video_id}
+                                                            onClick={() => setCurrentVideo(vid)}
+                                                            className={`w-full flex items-start p-3 text-left transition ${currentVideo.video_id === vid.video_id
+                                                                    ? 'bg-blue-50 border-l-4 border-blue-600'
+                                                                    : 'hover:bg-gray-50 border-l-4 border-transparent'
+                                                                }`}
+                                                        >
+                                                            <div className="mr-3 mt-1 text-gray-400">
+                                                                {currentVideo.video_id === vid.video_id ? <PlayCircle className="h-5 w-5 text-blue-600" /> : <ChevronRight className="h-4 w-4" />}
+                                                            </div>
+                                                            <div>
+                                                                <p className={`text-sm font-medium ${currentVideo.video_id === vid.video_id ? 'text-blue-700' : 'text-gray-700'}`}>
+                                                                    {vIdx + 1}. {vid.title}
+                                                                </p>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                    {mod.videos.length === 0 && (
+                                                        <div className="p-4 text-xs text-center text-gray-400">No videos in this section</div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -173,7 +221,7 @@ const CourseDetails = ({ setAuth }) => {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <BookOpen className="h-5 w-5" />
-                                            {videos.length} Lessons
+                                            {totalVideos} Lessons
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <Calendar className="h-5 w-5" />
@@ -187,12 +235,16 @@ const CourseDetails = ({ setAuth }) => {
                                         {course.price > 0 ? `₹${course.price}` : "Free"}
                                     </div>
                                     <button
-                                        onClick={handleEnroll}
-                                        disabled={enrollLoading}
-                                        className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow-lg shadow-blue-900/50 flex items-center justify-center gap-2"
+                                        onClick={isEnrolled ? () => { } : handleEnroll}
+                                        disabled={enrollLoading || isEnrolled}
+                                        className={`w-full py-4 font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-2 ${isEnrolled
+                                                ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-900/50 cursor-default'
+                                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-900/50'
+                                            }`}
                                     >
-                                        {enrollLoading ? 'Enrolling...' : 'Enroll Now'}
-                                        {!enrollLoading && <ChevronRight className="h-5 w-5" />}
+                                        {enrollLoading ? 'Processing...' : (isEnrolled ? 'Enrolled' : 'Enroll Now')}
+                                        {!enrollLoading && !isEnrolled && <ChevronRight className="h-5 w-5" />}
+                                        {isEnrolled && <CheckCircle className="h-5 w-5" />}
                                     </button>
                                 </div>
                             </div>
@@ -203,13 +255,13 @@ const CourseDetails = ({ setAuth }) => {
                 {/* CONTENT LIST / THEORY */}
                 <div className="p-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
-                        {isEnrolled && currentVideo && currentVideo.description && (
+                        {isEnrolled && currentVideo && (
                             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
                                 <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                                     <FileText className="h-5 w-5 text-blue-600" /> Lesson Notes & Theory
                                 </h3>
                                 <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
-                                    {currentVideo.description}
+                                    {currentVideo.description || "No theory for this lesson."}
                                 </div>
                             </div>
                         )}
@@ -221,29 +273,34 @@ const CourseDetails = ({ setAuth }) => {
                             </div>
                         )}
 
-                        {/* If enrolled, video is up top. If not enrolled, show curriculum preview */}
+                        {/* Curriculum Preview (Not Enrolled) */}
                         {!isEnrolled && (
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                                     <h2 className="text-lg font-bold text-gray-900">Curriculum</h2>
-                                    <span className="text-sm text-gray-500">{videos.length} Lessons</span>
+                                    <span className="text-sm text-gray-500">{totalVideos} Lessons</span>
                                 </div>
                                 <div className="divide-y divide-gray-100">
-                                    {videos.length > 0 ? videos.map((vid, idx) => (
-                                        <div key={idx} className={`p-4 flex items-center gap-4 ${!isEnrolled ? 'opacity-70 grayscale' : ''}`}>
-                                            <div className="h-10 w-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                                                {isEnrolled ? <PlayCircle className="h-5 w-5" /> : <Lock className="h-4 w-4" />}
+                                    {modules.map(mod => (
+                                        <div key={mod.module_id} className="bg-gray-50/50">
+                                            <div className="p-3 bg-gray-100 font-bold text-gray-800 text-sm border-y border-gray-200">
+                                                {mod.title}
                                             </div>
-                                            <div className="flex-1">
-                                                <h4 className="font-bold text-gray-900 text-sm">{vid.title}</h4>
-                                                <p className="text-xs text-gray-500 line-clamp-1">{vid.description || "Video Lesson"}</p>
+                                            <div>
+                                                {mod.videos.map((vid, idx) => (
+                                                    <div key={vid.video_id} className="p-4 flex items-center gap-4 opacity-70 grayscale">
+                                                        <div className="h-10 w-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                                            <Lock className="h-4 w-4" />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <h4 className="font-bold text-gray-900 text-sm">{vid.title}</h4>
+                                                            <p className="text-xs text-gray-500 line-clamp-1">{vid.description || "Video Lesson"}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
-                                    )) : (
-                                        <div className="p-8 text-center text-gray-500">
-                                            Content is locked or loading...
-                                        </div>
-                                    )}
+                                    ))}
                                 </div>
                             </div>
                         )}

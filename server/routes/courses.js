@@ -87,7 +87,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// 2. Get Single Course Details
+// 2. Get Single Course Details (Grouped by Module)
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -99,23 +99,56 @@ router.get("/:id", async (req, res) => {
             return res.status(404).json("Course not found");
         }
 
-        // Get videos
-        const videos = await pool.query(
+        // Get Modules
+        const modulesRes = await pool.query(
+            "SELECT * FROM course_modules WHERE course_id = $1 ORDER BY order_index ASC",
+            [id]
+        );
+        const modules = modulesRes.rows;
+
+        // Get Videos
+        const videosRes = await pool.query(
             "SELECT * FROM course_videos WHERE course_id = $1 ORDER BY order_index ASC",
             [id]
         );
+        const videos = videosRes.rows;
 
-        res.json({ ...course.rows[0], videos: videos.rows });
+        // Nest Videos into Modules
+        // Use a map for O(n) access if needed, but array filter is fine for small count
+        const modulesWithVideos = modules.map(mod => ({
+            ...mod,
+            videos: videos.filter(v => v.module_id === mod.module_id)
+        }));
+
+        // Handle orphan videos (if migration failed or corner case)
+        // Only necessary for robustness
+        /*
+        const orphanVideos = videos.filter(v => !v.module_id);
+        if (orphanVideos.length > 0) {
+            modulesWithVideos.push({ module_id: -1, title: "Uncategorized", videos: orphanVideos });
+        }
+        */
+
+        // Flatten for legacy frontend compatibility (optional, but frontend will update)
+        // We will send the nested structure
+
+        res.json({
+            ...course.rows[0],
+            modules: modulesWithVideos,
+            // Legacy support: flatten all videos for easy counting/autoplay
+            // or let frontend compute it
+            videos: videos // Keep flat list for backward compat if frontend needs strict order array
+        });
     } catch (err) {
         console.error(err.message);
         res.status(500).json("Server Error");
     }
 });
 
-// 3. Create Course (Admin Only)
+// 3. Create Course (Admin Only) - Supports Nested Modules
 router.post("/", authorization, verifyAdmin, async (req, res) => {
     try {
-        const { title, description, thumbnail_url, instructor, category, videos, price } = req.body;
+        const { title, description, thumbnail_url, instructor, category, price, modules } = req.body;
 
         // Start transaction
         await pool.query('BEGIN');
@@ -127,12 +160,22 @@ router.post("/", authorization, verifyAdmin, async (req, res) => {
 
         const courseId = newCourse.rows[0].course_id;
 
-        if (videos && videos.length > 0) {
-            for (const [index, video] of videos.entries()) {
-                await pool.query(
-                    "INSERT INTO course_videos (course_id, title, video_url, order_index, description) VALUES ($1, $2, $3, $4, $5)",
-                    [courseId, video.title, video.video_url, index + 1, video.description || '']
+        if (modules && modules.length > 0) {
+            for (const [mIdx, mod] of modules.entries()) {
+                const newModule = await pool.query(
+                    "INSERT INTO course_modules (course_id, title, order_index) VALUES ($1, $2, $3) RETURNING module_id",
+                    [courseId, mod.title, mIdx]
                 );
+                const moduleId = newModule.rows[0].module_id;
+
+                if (mod.videos && mod.videos.length > 0) {
+                    for (const [vIdx, vid] of mod.videos.entries()) {
+                        await pool.query(
+                            "INSERT INTO course_videos (course_id, module_id, title, video_url, order_index, description) VALUES ($1, $2, $3, $4, $5, $6)",
+                            [courseId, moduleId, vid.title, vid.video_url, vIdx, vid.description || '']
+                        );
+                    }
+                }
             }
         }
 
@@ -196,11 +239,11 @@ router.get("/user/my-courses", authorization, async (req, res) => {
     }
 });
 
-// 6. Update Course (Admin Only)
+// 6. Update Course (Admin Only) - Supports Nested Modules
 router.put("/:id", authorization, verifyAdmin, async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, thumbnail_url, instructor, category, price, videos } = req.body;
+        const { title, description, thumbnail_url, instructor, category, price, modules } = req.body;
 
         await pool.query('BEGIN');
 
@@ -217,16 +260,34 @@ router.put("/:id", authorization, verifyAdmin, async (req, res) => {
             return res.status(404).json("Course not found");
         }
 
-        // Replace Videos (Delete all and re-insert is simplest for reordering)
-        // Note: In a large scale app, diffing would be better, but for this scale replacement is fine.
+        // Replace Modules & Videos (Full Reset Strategy)
+        // 1. Delete all course modules (Cascade will delete videos)
+        await pool.query("DELETE FROM course_modules WHERE course_id = $1", [id]);
+
+        // Also delete any orphan videos if any (just in case they weren't cascaded or existed before)
+        // await pool.query("DELETE FROM course_videos WHERE course_id = $1", [id]); 
+        // ^ Cascade on course_modules should handle videos IF they are linked. 
+        // OLD videos might not be linked properly if migration failed, so let's clean up explicitly:
         await pool.query("DELETE FROM course_videos WHERE course_id = $1", [id]);
 
-        if (videos && videos.length > 0) {
-            for (const [index, video] of videos.entries()) {
-                await pool.query(
-                    "INSERT INTO course_videos (course_id, title, video_url, order_index, description) VALUES ($1, $2, $3, $4, $5)",
-                    [id, video.title, video.video_url, index + 1, video.description || '']
+
+        // 2. Re-insert
+        if (modules && modules.length > 0) {
+            for (const [mIdx, mod] of modules.entries()) {
+                const newModule = await pool.query(
+                    "INSERT INTO course_modules (course_id, title, order_index) VALUES ($1, $2, $3) RETURNING module_id",
+                    [id, mod.title, mIdx]
                 );
+                const moduleId = newModule.rows[0].module_id;
+
+                if (mod.videos && mod.videos.length > 0) {
+                    for (const [vIdx, vid] of mod.videos.entries()) {
+                        await pool.query(
+                            "INSERT INTO course_videos (course_id, module_id, title, video_url, order_index, description) VALUES ($1, $2, $3, $4, $5, $6)",
+                            [id, moduleId, vid.title, vid.video_url, vIdx, vid.description || '']
+                        );
+                    }
+                }
             }
         }
 
@@ -249,7 +310,6 @@ router.delete("/:id", authorization, verifyAdmin, async (req, res) => {
         if (course.rows.length === 0) return res.status(404).json("Course not found");
 
         // Delete (Cascade will handle videos and enrollments if configured, otherwise delete manually)
-        // Our DB script has ON DELETE CASCADE.
         await pool.query("DELETE FROM courses WHERE course_id = $1", [id]);
 
         res.json("Course deleted successfully");

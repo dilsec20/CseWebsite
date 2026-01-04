@@ -1,6 +1,38 @@
 const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Configure Multer for Image Upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, '../uploads');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'course-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif|webp/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error("Error: Images Only!"));
+    }
+});
 
 // Middleware to check specific role
 const verifyRole = (role) => async (req, res, next) => {
@@ -17,6 +49,21 @@ const verifyRole = (role) => async (req, res, next) => {
 };
 
 const verifyAdmin = verifyRole('admin');
+
+// Upload Endpoint
+router.post("/upload", authorization, verifyAdmin, upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json("No file uploaded");
+        }
+        // Return relative path to be served statically
+        const imageUrl = `/uploads/${req.file.filename}`;
+        res.json({ imageUrl });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json("Upload failed");
+    }
+});
 
 // 1. Get All Courses (Public)
 router.get("/", async (req, res) => {
@@ -40,8 +87,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// 2. Get Single Course Details (Public/Protected mixed)
-// Returns course info + videos if enrolled (or all videos if free/public logic applies)
+// 2. Get Single Course Details
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -69,14 +115,14 @@ router.get("/:id", async (req, res) => {
 // 3. Create Course (Admin Only)
 router.post("/", authorization, verifyAdmin, async (req, res) => {
     try {
-        const { title, description, thumbnail_url, instructor, category, videos } = req.body;
+        const { title, description, thumbnail_url, instructor, category, videos, price } = req.body;
 
         // Start transaction
         await pool.query('BEGIN');
 
         const newCourse = await pool.query(
-            "INSERT INTO courses (title, description, thumbnail_url, instructor, category, created_by) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-            [title, description, thumbnail_url, instructor, category, req.user]
+            "INSERT INTO courses (title, description, thumbnail_url, instructor, category, price, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [title, description, thumbnail_url, instructor, category, price || 0, req.user]
         );
 
         const courseId = newCourse.rows[0].course_id;
@@ -144,6 +190,69 @@ router.get("/user/my-courses", authorization, async (req, res) => {
         );
 
         res.json(myCourses.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json("Server Error");
+    }
+});
+
+// 6. Update Course (Admin Only)
+router.put("/:id", authorization, verifyAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description, thumbnail_url, instructor, category, price, videos } = req.body;
+
+        await pool.query('BEGIN');
+
+        // Update Course Info
+        const updatedCourse = await pool.query(
+            `UPDATE courses 
+       SET title = $1, description = $2, thumbnail_url = $3, instructor = $4, category = $5, price = $6
+       WHERE course_id = $7 RETURNING *`,
+            [title, description, thumbnail_url, instructor, category, price || 0, id]
+        );
+
+        if (updatedCourse.rows.length === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json("Course not found");
+        }
+
+        // Replace Videos (Delete all and re-insert is simplest for reordering)
+        // Note: In a large scale app, diffing would be better, but for this scale replacement is fine.
+        await pool.query("DELETE FROM course_videos WHERE course_id = $1", [id]);
+
+        if (videos && videos.length > 0) {
+            for (const [index, video] of videos.entries()) {
+                await pool.query(
+                    "INSERT INTO course_videos (course_id, title, video_url, order_index, description) VALUES ($1, $2, $3, $4, $5)",
+                    [id, video.title, video.video_url, index + 1, video.description || '']
+                );
+            }
+        }
+
+        await pool.query('COMMIT');
+        res.json(updatedCourse.rows[0]);
+    } catch (err) {
+        await pool.query('ROLLBACK');
+        console.error(err.message);
+        res.status(500).json("Server Error");
+    }
+});
+
+// 7. Delete Course (Admin Only)
+router.delete("/:id", authorization, verifyAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check existence
+        const course = await pool.query("SELECT * FROM courses WHERE course_id = $1", [id]);
+        if (course.rows.length === 0) return res.status(404).json("Course not found");
+
+        // Delete (Cascade will handle videos and enrollments if configured, otherwise delete manually)
+        // Our DB script has ON DELETE CASCADE.
+        await pool.query("DELETE FROM courses WHERE course_id = $1", [id]);
+
+        res.json("Course deleted successfully");
     } catch (err) {
         console.error(err.message);
         res.status(500).json("Server Error");

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import { Search, Filter, Plus, Clock, User, BookOpen } from 'lucide-react';
+import { Search, Filter, Plus, Clock, User, BookOpen, Edit, Trash2 } from 'lucide-react';
 import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 import AddCourseModal from '../../components/Admin/AddCourseModal';
@@ -12,7 +12,10 @@ const CourseBrowser = ({ setAuth }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [isAdmin, setIsAdmin] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false);
+
+    // Modal State
+    const [showModal, setShowModal] = useState(false);
+    const [editingCourse, setEditingCourse] = useState(null);
 
     useEffect(() => {
         fetchCourses();
@@ -35,22 +38,6 @@ const CourseBrowser = ({ setAuth }) => {
         try {
             const token = localStorage.getItem("token");
             if (!token) return;
-
-            // Check role via dashboard or dedicated endpoint. 
-            // Since we don't have a dedicated "me" endpoint with role in standard setup, 
-            // we'll try to fetch stats which is admin only, or rely on profile.
-            // A better way is to decode token if it has role, or just use dashboard API.
-            // Let's use the dashboard API which returns user details.
-
-            const response = await fetch(`${API_URL}/api/dashboard`, {
-                headers: { token: token }
-            });
-            const parseRes = await response.json();
-            // Assuming the backend dashboard endpoint returns role, or we can add it. 
-            // Currently dashboard.js returns user_name. I'll stick to a simple strategy:
-            // If the user can see the "Add Course" button, good.
-            // Let's checking if the user is admin by hitting the admin stats endpoint casually (if it fails 403, not admin).
-
             const adminCheck = await fetch(`${API_URL}/api/admin/stats`, {
                 headers: { token: token }
             });
@@ -60,6 +47,44 @@ const CourseBrowser = ({ setAuth }) => {
         } catch (err) {
             // Not admin
         }
+    };
+
+    const loadFullCourseForEdit = async (id) => {
+        try {
+            const response = await fetch(`${API_URL}/api/courses/${id}`);
+            const data = await response.json();
+            setEditingCourse(data);
+            setShowModal(true);
+        } catch (err) {
+            toast.error("Failed to load course data");
+        }
+    };
+
+    const handleDelete = async (e, id) => {
+        e.preventDefault(); // Prevent link nav
+        if (!window.confirm("Are you sure you want to delete this course? This cannot be undone.")) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/api/courses/${id}`, {
+                method: 'DELETE',
+                headers: { token }
+            });
+
+            if (res.ok) {
+                toast.success("Course deleted");
+                fetchCourses();
+            } else {
+                toast.error("Delete failed");
+            }
+        } catch (err) {
+            toast.error("Error deleting course");
+        }
+    };
+
+    const handleEditClick = (e, courseId) => {
+        e.preventDefault();
+        loadFullCourseForEdit(courseId);
     };
 
     const filteredCourses = courses.filter(course => {
@@ -92,7 +117,7 @@ const CourseBrowser = ({ setAuth }) => {
                         </div>
                         {isAdmin && (
                             <button
-                                onClick={() => setShowAddModal(true)}
+                                onClick={() => { setEditingCourse(null); setShowModal(true); }}
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
                             >
                                 <Plus className="h-5 w-5" /> Add Course
@@ -134,7 +159,7 @@ const CourseBrowser = ({ setAuth }) => {
                     ) : filteredCourses.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredCourses.map(course => (
-                                <Link to={`/courses/${course.course_id}`} key={course.course_id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+                                <Link to={`/courses/${course.course_id}`} key={course.course_id} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 relative block">
                                     <div className="aspect-video bg-gray-100 relative overflow-hidden">
                                         <img
                                             src={course.thumbnail_url || "https://img.youtube.com/vi/placeholder/maxresdefault.jpg"}
@@ -142,9 +167,29 @@ const CourseBrowser = ({ setAuth }) => {
                                             className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                                             onError={(e) => e.target.src = "https://via.placeholder.com/640x360?text=No+Thumbnail"}
                                         />
-                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-800">
+                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-800 z-10">
                                             {course.category}
                                         </div>
+
+                                        {/* Admin Overlay Actions */}
+                                        {isAdmin && (
+                                            <div className="absolute top-3 right-3 flex gap-2 z-20 opacity-0 group-hover:opacity-100 transition duration-200">
+                                                <button
+                                                    onClick={(e) => handleEditClick(e, course.course_id)}
+                                                    className="p-2 bg-white text-gray-700 hover:text-blue-600 rounded-lg shadow-sm hover:shadow-md transition"
+                                                    title="Edit Course"
+                                                >
+                                                    <Edit className="h-4 w-4" />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => handleDelete(e, course.course_id)}
+                                                    className="p-2 bg-white text-gray-700 hover:text-red-600 rounded-lg shadow-sm hover:shadow-md transition"
+                                                    title="Delete Course"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="p-5">
                                         <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition mb-2 line-clamp-2">
@@ -177,8 +222,12 @@ const CourseBrowser = ({ setAuth }) => {
                 </div>
             </main>
 
-            {showAddModal && (
-                <AddCourseModal onClose={() => setShowAddModal(false)} onOrchestrate={fetchCourses} />
+            {showModal && (
+                <AddCourseModal
+                    onClose={() => setShowModal(false)}
+                    onOrchestrate={fetchCourses}
+                    initialData={editingCourse}
+                />
             )}
         </div>
     );

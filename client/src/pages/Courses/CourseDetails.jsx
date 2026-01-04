@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import { PlayCircle, Lock, CheckCircle, User, Calendar, BookOpen, Clock, ChevronRight } from 'lucide-react';
+import { PlayCircle, Lock, CheckCircle, User, Calendar, BookOpen, Clock, ChevronRight, FileText } from 'lucide-react';
 import { API_URL } from '../../config';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,6 @@ const CourseDetails = ({ setAuth }) => {
             if (response.ok) {
                 const data = await response.json();
                 setCourse(data);
-                // If videos are returned directly (backend logic depends on mixed route)
                 if (data.videos) {
                     setVideos(data.videos);
                     if (data.videos.length > 0) setCurrentVideo(data.videos[0]);
@@ -114,9 +113,9 @@ const CourseDetails = ({ setAuth }) => {
                 <div className="w-full bg-white border-b border-gray-200">
                     {isEnrolled && currentVideo ? (
                         <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-3">
-                            <div className="lg:col-span-2 bg-black aspect-video relative group">
+                            <div className="lg:col-span-2 bg-black aspect-video relative group flex flex-col">
                                 <iframe
-                                    className="w-full h-full"
+                                    className="w-full flex-1"
                                     src={`https://www.youtube.com/embed/${getYoutubeId(currentVideo.video_url)}?autoplay=0&rel=0`}
                                     title="YouTube video player"
                                     frameBorder="0"
@@ -201,9 +200,20 @@ const CourseDetails = ({ setAuth }) => {
                     )}
                 </div>
 
-                {/* CONTENT LIST (Visible only if not enrolled or below landing) */}
+                {/* CONTENT LIST / THEORY */}
                 <div className="p-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
+                        {isEnrolled && currentVideo && currentVideo.description && (
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <FileText className="h-5 w-5 text-blue-600" /> Lesson Notes & Theory
+                                </h3>
+                                <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
+                                    {currentVideo.description}
+                                </div>
+                            </div>
+                        )}
+
                         {!isEnrolled && (
                             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-8">
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">About this course</h2>
@@ -212,29 +222,31 @@ const CourseDetails = ({ setAuth }) => {
                         )}
 
                         {/* If enrolled, video is up top. If not enrolled, show curriculum preview */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                                <h2 className="text-lg font-bold text-gray-900">Curriculum</h2>
-                                <span className="text-sm text-gray-500">{videos.length} Lessons</span>
-                            </div>
-                            <div className="divide-y divide-gray-100">
-                                {videos.length > 0 ? videos.map((vid, idx) => (
-                                    <div key={idx} className={`p-4 flex items-center gap-4 ${!isEnrolled ? 'opacity-70 grayscale' : ''}`}>
-                                        <div className="h-10 w-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                                            {isEnrolled ? <PlayCircle className="h-5 w-5" /> : <Lock className="h-4 w-4" />}
+                        {!isEnrolled && (
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                                    <h2 className="text-lg font-bold text-gray-900">Curriculum</h2>
+                                    <span className="text-sm text-gray-500">{videos.length} Lessons</span>
+                                </div>
+                                <div className="divide-y divide-gray-100">
+                                    {videos.length > 0 ? videos.map((vid, idx) => (
+                                        <div key={idx} className={`p-4 flex items-center gap-4 ${!isEnrolled ? 'opacity-70 grayscale' : ''}`}>
+                                            <div className="h-10 w-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                                {isEnrolled ? <PlayCircle className="h-5 w-5" /> : <Lock className="h-4 w-4" />}
+                                            </div>
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-gray-900 text-sm">{vid.title}</h4>
+                                                <p className="text-xs text-gray-500 line-clamp-1">{vid.description || "Video Lesson"}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1">
-                                            <h4 className="font-bold text-gray-900 text-sm">{vid.title}</h4>
-                                            <p className="text-xs text-gray-500 line-clamp-1">{vid.description || "Video Lesson"}</p>
+                                    )) : (
+                                        <div className="p-8 text-center text-gray-500">
+                                            Content is locked or loading...
                                         </div>
-                                    </div>
-                                )) : (
-                                    <div className="p-8 text-center text-gray-500">
-                                        Content is locked or loading...
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Sidebar Info (Instructor, etc) */}

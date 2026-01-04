@@ -38,16 +38,13 @@ const CourseDetails = ({ setAuth }) => {
                     // Open first module by default
                     if (data.modules.length > 0) {
                         setExpandedModules({ [data.modules[0].module_id]: true });
-                        // Set first video of first module as current if not set
-                        if (data.modules[0].videos.length > 0) {
-                            setCurrentVideo(data.modules[0].videos[0]);
-                        }
+                        // Removed auto-play: User must select a video to start
                     }
                 } else if (data.videos) {
                     // Fallback for flat structure
                     const flatModule = { module_id: 1, title: "Course Content", videos: data.videos };
                     setModules([flatModule]);
-                    if (data.videos.length > 0) setCurrentVideo(data.videos[0]);
+                    // Removed auto-play
                     setExpandedModules({ 1: true });
                 }
             }
@@ -315,31 +312,46 @@ const CourseDetails = ({ setAuth }) => {
                             </div>
                         )}
 
-                        {/* Curriculum Preview (Not Enrolled) */}
-                        {!isEnrolled && (
-                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        {/* Curriculum Overview (Visible when no video is selected) */}
+                        {(!currentVideo) && (
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-8">
                                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                                     <h2 className="text-lg font-bold text-gray-900">Curriculum</h2>
                                     <span className="text-sm text-gray-500">{totalVideos} Lessons</span>
                                 </div>
                                 <div className="divide-y divide-gray-100">
                                     {modules.map(mod => (
-                                        <div key={mod.module_id} className="bg-gray-50/50">
-                                            <div className="p-3 bg-gray-100 font-bold text-gray-800 text-sm border-y border-gray-200">
-                                                {mod.title}
+                                        <div key={mod.module_id} className="bg-white">
+                                            <div className="p-3 bg-gray-50 font-bold text-gray-800 text-sm border-y border-gray-100 flex items-center gap-2">
+                                                <Folder className="h-4 w-4 text-blue-500" /> {mod.title}
                                             </div>
                                             <div>
                                                 {mod.videos.map((vid, idx) => (
-                                                    <div key={vid.video_id} className="p-4 flex items-center gap-4 opacity-70 grayscale">
-                                                        <div className="h-10 w-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                                                            <Lock className="h-4 w-4" />
+                                                    <div
+                                                        key={vid.video_id}
+                                                        onClick={() => isEnrolled ? setCurrentVideo(vid) : null}
+                                                        className={`p-4 flex items-center gap-4 border-b border-gray-50 last:border-0 ${isEnrolled
+                                                            ? 'cursor-pointer hover:bg-blue-50 transition group'
+                                                            : 'opacity-70 grayscale'
+                                                            }`}
+                                                    >
+                                                        <div className={`h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 ${isEnrolled ? 'bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition' : 'bg-gray-100 text-gray-500'}`}>
+                                                            {isEnrolled ? <PlayCircle className="h-5 w-5" /> : <Lock className="h-4 w-4" />}
                                                         </div>
                                                         <div className="flex-1">
-                                                            <h4 className="font-bold text-gray-900 text-sm">{vid.title}</h4>
+                                                            <h4 className={`font-bold text-sm ${isEnrolled ? 'text-gray-900 group-hover:text-blue-700' : 'text-gray-900'}`}>{vid.title}</h4>
                                                             <p className="text-xs text-gray-500 line-clamp-1">{vid.description || "Video Lesson"}</p>
                                                         </div>
+                                                        {isEnrolled && (
+                                                            <div className="opacity-0 group-hover:opacity-100 transition">
+                                                                <PlayCircle className="h-5 w-5 text-blue-600" />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 ))}
+                                                {mod.videos.length === 0 && (
+                                                    <div className="p-4 text-xs text-center text-gray-400 font-medium">No videos in this section</div>
+                                                )}
                                             </div>
                                         </div>
                                     ))}

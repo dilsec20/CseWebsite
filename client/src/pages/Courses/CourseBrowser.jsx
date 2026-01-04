@@ -34,6 +34,31 @@ const CourseBrowser = ({ setAuth }) => {
         }
     };
 
+    const [enrolledCourseIds, setEnrolledCourseIds] = useState([]);
+
+    useEffect(() => {
+        fetchCourses();
+        checkAdmin();
+        fetchEnrolledCourses();
+    }, []);
+
+    const fetchEnrolledCourses = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/courses/user/my-courses`, {
+                headers: { token: token }
+            });
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setEnrolledCourseIds(data.map(c => c.course_id));
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const checkAdmin = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -133,8 +158,8 @@ const CourseBrowser = ({ setAuth }) => {
                                     key={cat}
                                     onClick={() => setSelectedCategory(cat)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedCategory === cat
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                         }`}
                                 >
                                     {cat}
@@ -202,10 +227,14 @@ const CourseBrowser = ({ setAuth }) => {
                                                 <User className="h-4 w-4" />
                                                 <span className="truncate max-w-[120px]">{course.instructor}</span>
                                             </div>
-                                            {course.price > 0 ? (
-                                                <span className="font-bold text-gray-900">₹{course.price}</span>
+                                            {enrolledCourseIds.includes(course.course_id) ? (
+                                                <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">Enrolled</span>
                                             ) : (
-                                                <span className="font-bold text-green-600">Free</span>
+                                                course.price > 0 ? (
+                                                    <span className="font-bold text-gray-900">₹{course.price}</span>
+                                                ) : (
+                                                    <span className="font-bold text-green-600">Free</span>
+                                                )
                                             )}
                                         </div>
                                     </div>

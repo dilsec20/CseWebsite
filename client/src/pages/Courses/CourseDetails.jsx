@@ -49,7 +49,7 @@ const CourseDetails = ({ setAuth }) => {
                 headers: { token: token }
             });
             const data = await response.json();
-            const enrolled = data.find(c => c.course_id === id);
+            const enrolled = data.find(c => String(c.course_id) === String(id));
             if (enrolled) {
                 setIsEnrolled(true);
             }
@@ -134,8 +134,8 @@ const CourseDetails = ({ setAuth }) => {
                                             key={vid.video_id}
                                             onClick={() => setCurrentVideo(vid)}
                                             className={`w-full flex items-start p-3 rounded-lg text-left transition ${currentVideo.video_id === vid.video_id
-                                                    ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-200'
-                                                    : 'hover:bg-white hover:shadow-sm border border-transparent'
+                                                ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-200'
+                                                : 'hover:bg-white hover:shadow-sm border border-transparent'
                                                 }`}
                                         >
                                             <div className="mr-3 mt-1 text-gray-400">

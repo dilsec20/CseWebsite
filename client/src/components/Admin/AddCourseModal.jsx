@@ -311,8 +311,8 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                                                 key={idx}
                                                 onClick={() => setActiveModuleIndex(idx)}
                                                 className={`p-3 rounded-lg cursor-pointer border transition flex justify-between items-center group ${activeModuleIndex === idx
-                                                        ? 'bg-blue-50 border-blue-200 shadow-sm'
-                                                        : 'bg-white border-transparent hover:bg-gray-100'
+                                                    ? 'bg-blue-50 border-blue-200 shadow-sm'
+                                                    : 'bg-white border-transparent hover:bg-gray-100'
                                                     }`}
                                             >
                                                 <div className="overflow-hidden">
@@ -373,8 +373,7 @@ const AddCourseModal = ({ onClose, onOrchestrate, initialData = null }) => {
                                         />
                                         <button
                                             type="button"
-                                            onClick={addModule} // Typo in original thought, meant addVideoToModule
-                                            onClick={addVideoToModule} // Corrected
+                                            onClick={addVideoToModule}
                                             className="w-full py-2 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-gray-900 flex items-center justify-center gap-2"
                                         >
                                             <Plus className="h-4 w-4" /> Add Lesson to Section

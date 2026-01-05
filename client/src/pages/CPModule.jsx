@@ -248,7 +248,7 @@ const CPModule = () => {
                                             });
 
                                             // If we have a problem key, render interactive checkbox
-                                            if (problemKey && selectedTopic?.title?.includes('DP_MustDo')) {
+                                            if (problemKey) {
                                                 const isChecked = solvedProblems[problemKey] || false;
                                                 return (
                                                     <li className="pl-1 flex items-center gap-2" {...props}>

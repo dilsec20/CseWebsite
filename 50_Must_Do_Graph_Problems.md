@@ -7,15 +7,15 @@ If you finish these → Graphs are DONE.
 
 ## 🟢 A. GRAPH BASICS (DFS / BFS FOUNDATION)
 
-- [ ] [Connected Components (DFS/BFS) (GFG)](https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/)
-- [ ] [Graph Traversal - DFS (GFG)](https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/)
-- [ ] [Graph Traversal - BFS (GFG)](https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/)
-- [ ] [Detect Cycle in Undirected Graph (GFG)](https://www.geeksforgeeks.org/detect-cycle-undirected-graph/)
-- [ ] [733. Flood Fill (LeetCode)](https://leetcode.com/problems/flood-fill/)
-- [ ] [200. Number of Islands (LeetCode)](https://leetcode.com/problems/number-of-islands/)
-- [ ] [695. Max Area of Island (LeetCode)](https://leetcode.com/problems/max-area-of-island/)
-- [ ] [261. Graph Valid Tree (LeetCode)](https://leetcode.com/problems/graph-valid-tree/)
-- [ ] [1971. Find if Path Exists (LeetCode)](https://leetcode.com/problems/find-if-path-exists-in-graph/)
+- [ ] [Connected Components (DFS/BFS)](https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/) - GFG
+- [ ] [Graph Traversal - DFS](https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/) - GFG
+- [ ] [Graph Traversal - BFS](https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/) - GFG
+- [ ] [Detect Cycle in Undirected Graph](https://www.geeksforgeeks.org/detect-cycle-undirected-graph/) - GFG
+- [ ] [733. Flood Fill](https://leetcode.com/problems/flood-fill/) - LeetCode
+- [ ] [200. Number of Islands](https://leetcode.com/problems/number-of-islands/) - LeetCode
+- [ ] [695. Max Area of Island](https://leetcode.com/problems/max-area-of-island/) - LeetCode
+- [ ] [261. Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/) - LeetCode
+- [ ] [1971. Find if Path Exists](https://leetcode.com/problems/find-if-path-exists-in-graph/) - LeetCode
 
 📌 **Why:** Builds traversal + visited logic. Without this, nothing else works.
 
@@ -23,14 +23,14 @@ If you finish these → Graphs are DONE.
 
 ## 🟡 B. BFS & SHORTEST PATH (UNWEIGHTED)
 
-- [ ] [Shortest Path in Unweighted Graph (GFG)](https://www.geeksforgeeks.org/shortest-path-unweighted-graph/)
-- [ ] [1091. Shortest Path in Binary Matrix (LeetCode)](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
-- [ ] [994. Rotting Oranges (LeetCode)](https://leetcode.com/problems/rotting-oranges/)
-- [ ] [1197. Minimum Knight Moves (LeetCode)](https://leetcode.com/problems/minimum-knight-moves/)
-- [ ] [127. Word Ladder (LeetCode)](https://leetcode.com/problems/word-ladder/)
-- [ ] [Multi-Source BFS (GFG)](https://www.geeksforgeeks.org/multi-source-shortest-path-in-unweighted-graph/)
-- [ ] [0-1 BFS (CSES)](https://cses.fi/problemset/task/1668)
-- [ ] [CF 1366B – Shuffle](https://codeforces.com/problemset/problem/1366/B)
+- [ ] [Shortest Path in Unweighted Graph](https://www.geeksforgeeks.org/shortest-path-unweighted-graph/) - GFG
+- [ ] [1091. Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/) - LeetCode
+- [ ] [994. Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) - LeetCode
+- [ ] [1197. Minimum Knight Moves](https://leetcode.com/problems/minimum-knight-moves/) - LeetCode
+- [ ] [127. Word Ladder](https://leetcode.com/problems/word-ladder/) - LeetCode
+- [ ] [Multi-Source BFS](https://www.geeksforgeeks.org/multi-source-shortest-path-in-unweighted-graph/) - GFG
+- [ ] [0-1 BFS](https://cses.fi/problemset/task/1668) - CSES
+- [ ] [CF 1366B – Shuffle](https://codeforces.com/problemset/problem/1366/B) - Codeforces
 
 📌 **Why:** Queue-based thinking, level graph, shortest path intuition.
 
@@ -38,13 +38,13 @@ If you finish these → Graphs are DONE.
 
 ## 🟡 C. DIJKSTRA (WEIGHTED SHORTEST PATH)
 
-- [ ] [Dijkstra's Algorithm (GFG)](https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/)
-- [ ] [Print Shortest Path (GFG)](https://www.geeksforgeeks.org/printing-paths-dijkstras-shortest-path-algorithm/)
-- [ ] [1976. Number of Ways to Arrive at Destination (LeetCode)](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)
-- [ ] [1102. Path With Maximum Minimum Value (LeetCode)](https://leetcode.com/problems/path-with-maximum-minimum-value/)
-- [ ] [787. Cheapest Flights Within K Stops (LeetCode)](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
-- [ ] [Shortest Path Faster Algorithm (SPFA) (CP-Algorithms)](https://cp-algorithms.com/graph/bellman_ford.html)
-- [ ] [Dijkstra on Grid (CSES)](https://cses.fi/problemset/task/1671)
+- [ ] [Dijkstra's Algorithm](https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/) - GFG
+- [ ] [Print Shortest Path](https://www.geeksforgeeks.org/printing-paths-dijkstras-shortest-path-algorithm/) - GFG
+- [ ] [1976. Number of Ways to Arrive at Destination](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/) - LeetCode
+- [ ] [1102. Path With Maximum Minimum Value](https://leetcode.com/problems/path-with-maximum-minimum-value/) - LeetCode
+- [ ] [787. Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/) - LeetCode
+- [ ] [SPFA (Shortest Path Faster Algorithm)](https://cp-algorithms.com/graph/bellman_ford.html) - CP-Algorithms
+- [ ] [Dijkstra on Grid](https://cses.fi/problemset/task/1671) - CSES
 
 📌 **Why:** This section gives complete Dijkstra mastery.
 
@@ -52,14 +52,14 @@ If you finish these → Graphs are DONE.
 
 ## 🟠 D. TOPOLOGICAL SORT & DAG DP
 
-- [ ] [CF 207A – Little Elephant and Problem](https://codeforces.com/problemset/problem/220/A)
-- [ ] [CF 510C – Fox And Names](https://codeforces.com/problemset/problem/510/C)
-- [ ] [Longest Path in DAG (GFG)](https://www.geeksforgeeks.org/find-longest-path-directed-acyclic-graph/)
-- [ ] [Shortest Path in DAG (GFG)](https://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/)
-- [ ] [CF 919D – Substring](https://codeforces.com/problemset/problem/919/D)
-- [ ] [CF 115A – Party](https://codeforces.com/problemset/problem/115/A)
-- [ ] [207. Course Schedule (LeetCode)](https://leetcode.com/problems/course-schedule/)
-- [ ] [210. Course Schedule II (LeetCode)](https://leetcode.com/problems/course-schedule-ii/)
+- [ ] [CF 207A – Little Elephant and Problem](https://codeforces.com/problemset/problem/220/A) - Codeforces
+- [ ] [CF 510C – Fox And Names](https://codeforces.com/problemset/problem/510/C) - Codeforces
+- [ ] [Longest Path in DAG](https://www.geeksforgeeks.org/find-longest-path-directed-acyclic-graph/) - GFG
+- [ ] [Shortest Path in DAG](https://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/) - GFG
+- [ ] [CF 919D – Substring](https://codeforces.com/problemset/problem/919/D) - Codeforces
+- [ ] [CF 115A – Party](https://codeforces.com/problemset/problem/115/A) - Codeforces
+- [ ] [207. Course Schedule](https://leetcode.com/problems/course-schedule/) - LeetCode
+- [ ] [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) - LeetCode
 
 📌 **Why:** Dependencies → Topo + DP (very common in CF & interviews).
 
@@ -67,12 +67,12 @@ If you finish these → Graphs are DONE.
 
 ## 🔵 E. DSU & MST (CONNECTIVITY + GREEDY)
 
-- [ ] [Detect Cycle using DSU (GFG)](https://www.geeksforgeeks.org/detect-cycle-in-an-undirected-graph-using-union-find/)
-- [ ] [Number of Connected Components using DSU (LeetCode)](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
-- [ ] [Kruskal's MST (GFG)](https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)
-- [ ] [Prim's Algorithm (GFG)](https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/)
-- [ ] [CF 1000E – We Need More Bosses](https://codeforces.com/problemset/problem/1000/E)
-- [ ] [CF 25C – Roads in Berland](https://codeforces.com/problemset/problem/25/C)
+- [ ] [Detect Cycle using DSU](https://www.geeksforgeeks.org/detect-cycle-in-an-undirected-graph-using-union-find/) - GFG
+- [ ] [Number of Connected Components using DSU](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/) - LeetCode
+- [ ] [Kruskal's MST](https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/) - GFG
+- [ ] [Prim's Algorithm](https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/) - GFG
+- [ ] [CF 1000E – We Need More Bosses](https://codeforces.com/problemset/problem/1000/E) - Codeforces
+- [ ] [CF 25C – Roads in Berland](https://codeforces.com/problemset/problem/25/C) - Codeforces
 
 📌 **Why:** All "connect everything with minimum cost" problems live here.
 
@@ -80,12 +80,12 @@ If you finish these → Graphs are DONE.
 
 ## 🟣 F. TREES (DFS + GRAPH DP)
 
-- [ ] [Tree Traversals - Inorder, Preorder, Postorder (GFG)](https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/)
-- [ ] [543. Diameter of Binary Tree (LeetCode)](https://leetcode.com/problems/diameter-of-binary-tree/)
-- [ ] [Distance Between Two Nodes in Tree (GFG)](https://www.geeksforgeeks.org/find-distance-two-given-nodes/)
-- [ ] [Subtree Sum (GFG)](https://www.geeksforgeeks.org/subtree-given-sum-tree/)
-- [ ] [CF 609E – Minimum Spanning Tree For Each Edge](https://codeforces.com/problemset/problem/609/E)
-- [ ] [CF 1324F – Maximum White Subtree](https://codeforces.com/problemset/problem/1324/F)
+- [ ] [Tree Traversals - Inorder, Preorder, Postorder](https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/) - GFG
+- [ ] [543. Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/) - LeetCode
+- [ ] [Distance Between Two Nodes in Tree](https://www.geeksforgeeks.org/find-distance-two-given-nodes/) - GFG
+- [ ] [Subtree Sum](https://www.geeksforgeeks.org/subtree-given-sum-tree/) - GFG
+- [ ] [CF 609E – Minimum Spanning Tree For Each Edge](https://codeforces.com/problemset/problem/609/E) - Codeforces
+- [ ] [CF 1324F – Maximum White Subtree](https://codeforces.com/problemset/problem/1324/F) - Codeforces
 
 📌 **Why:** Tree = graph without cycles. This section kills tree DP fear.
 
@@ -93,13 +93,13 @@ If you finish these → Graphs are DONE.
 
 ## 🔴 G. ADVANCED GRAPH ALGORITHMS
 
-- [ ] [Strongly Connected Components - Kosaraju (GFG)](https://www.geeksforgeeks.org/strongly-connected-components/)
-- [ ] [Condensation Graph (CP-Algorithms)](https://cp-algorithms.com/graph/strongly-connected-components.html)
-- [ ] [CF 118E – Bertown Roads (Bridges)](https://codeforces.com/problemset/problem/118/E)
-- [ ] [Articulation Points (GFG)](https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/)
-- [ ] [Euler Path and Circuit (GFG)](https://www.geeksforgeeks.org/eulerian-path-and-circuit/)
-- [ ] [CF 776D – The Door Problem (2-SAT)](https://codeforces.com/problemset/problem/776/D)
-- [ ] [CF 786B – Legacy (Segment Tree Graph)](https://codeforces.com/problemset/problem/786/B)
-- [ ] [K-th Shortest Path (GFG)](https://www.geeksforgeeks.org/k-th-shortest-path-digraph/)
+- [ ] [Strongly Connected Components - Kosaraju](https://www.geeksforgeeks.org/strongly-connected-components/) - GFG
+- [ ] [Condensation Graph](https://cp-algorithms.com/graph/strongly-connected-components.html) - CP-Algorithms
+- [ ] [CF 118E – Bertown Roads (Bridges)](https://codeforces.com/problemset/problem/118/E) - Codeforces
+- [ ] [Articulation Points](https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/) - GFG
+- [ ] [Euler Path and Circuit](https://www.geeksforgeeks.org/eulerian-path-and-circuit/) - GFG
+- [ ] [CF 776D – The Door Problem (2-SAT)](https://codeforces.com/problemset/problem/776/D) - Codeforces
+- [ ] [CF 786B – Legacy (Segment Tree Graph)](https://codeforces.com/problemset/problem/786/B) - Codeforces
+- [ ] [K-th Shortest Path](https://www.geeksforgeeks.org/k-th-shortest-path-digraph/) - GFG
 
 📌 **Why:** This section is CF 1800+ level and ICPC-oriented.

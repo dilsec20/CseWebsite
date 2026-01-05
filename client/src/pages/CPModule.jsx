@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
 import 'katex/dist/katex.min.css';
 import { API_URL } from '../config';
 
@@ -15,10 +16,25 @@ const CPModule = () => {
     const [module, setModule] = useState(null);
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [solvedProblems, setSolvedProblems] = useState(() => {
+        const saved = localStorage.getItem('dp_mustdo_solved');
+        return saved ? JSON.parse(saved) : {};
+    });
 
     useEffect(() => {
         fetchModuleData();
     }, [id]);
+
+    useEffect(() => {
+        localStorage.setItem('dp_mustdo_solved', JSON.stringify(solvedProblems));
+    }, [solvedProblems]);
+
+    const toggleProblemSolved = (problemKey) => {
+        setSolvedProblems(prev => ({
+            ...prev,
+            [problemKey]: !prev[problemKey]
+        }));
+    };
 
     const fetchModuleData = async () => {
         try {
@@ -125,7 +141,7 @@ const CPModule = () => {
 
                             <div className="prose prose-blue max-w-none">
                                 <ReactMarkdown
-                                    remarkPlugins={[remarkMath]}
+                                    remarkPlugins={[remarkMath, remarkGfm]}
                                     rehypePlugins={[rehypeKatex]}
                                     components={{
                                         code({ node, inline, className, children, ...props }) {
@@ -162,7 +178,44 @@ const CPModule = () => {
                                         p: ({ node, ...props }) => <p className="text-gray-700 leading-relaxed mb-4 text-lg" {...props} />,
                                         ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
                                         ol: ({ node, ...props }) => <ol className="list-decimal list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
-                                        li: ({ node, ...props }) => <li className="pl-1" {...props} />,
+                                        li: ({ node, children, ...props }) => {
+                                            // Check if this is a task list item (has checkbox)
+                                            const childrenArray = React.Children.toArray(children);
+                                            const firstChild = childrenArray[0];
+
+                                            // Check if this list item contains a link with problem info
+                                            const hasLink = childrenArray.some(child =>
+                                                child?.props?.href || (typeof child === 'object' && child?.type === 'a')
+                                            );
+
+                                            // Extract problem key from the link text or href
+                                            let problemKey = null;
+                                            childrenArray.forEach(child => {
+                                                if (child?.props?.href) {
+                                                    problemKey = child.props.href;
+                                                }
+                                            });
+
+                                            // If we have a problem key, render interactive checkbox
+                                            if (problemKey && selectedTopic?.title?.includes('DP_MustDo')) {
+                                                const isChecked = solvedProblems[problemKey] || false;
+                                                return (
+                                                    <li className="pl-1 flex items-center gap-2" {...props}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isChecked}
+                                                            onChange={() => toggleProblemSolved(problemKey)}
+                                                            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                                        />
+                                                        <span className={isChecked ? 'line-through text-gray-400' : ''}>
+                                                            {childrenArray.filter((_, i) => i > 0)}
+                                                        </span>
+                                                    </li>
+                                                );
+                                            }
+
+                                            return <li className="pl-1" {...props}>{children}</li>;
+                                        },
                                         a: ({ node, href, children, ...props }) => (
                                             <a
                                                 href={href}

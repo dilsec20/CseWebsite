@@ -31,6 +31,7 @@
     "recharts": "^3.4.1",
     "rehype-highlight": "^7.0.2",
     "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "tailwindcss": "^4.1.17",
     "vite": "^5.1.0"

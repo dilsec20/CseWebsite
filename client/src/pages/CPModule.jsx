@@ -230,49 +230,49 @@ const CPModule = () => {
                                         ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
                                         ol: ({ node, ...props }) => <ol className="list-decimal list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
                                         li: ({ node, children, ...props }) => {
-                                            // Check if this is a task list item (has checkbox)
                                             const childrenArray = React.Children.toArray(children);
                                             const firstChild = childrenArray[0];
 
-                                            // Check if this list item contains a link with problem info
-                                            const hasLink = childrenArray.some(child =>
-                                                child?.props?.href || (typeof child === 'object' && child?.type === 'a')
-                                            );
+                                            // Check if this is a task list item (first child is an input checkbox from remarkGfm)
+                                            const isTaskListItem = firstChild?.props?.type === 'checkbox' ||
+                                                (typeof firstChild === 'object' && firstChild?.type === 'input');
 
-                                            // Extract problem key from the link text or href
-                                            let problemKey = null;
-                                            childrenArray.forEach(child => {
-                                                if (child?.props?.href) {
-                                                    problemKey = child.props.href;
+                                            // Only render interactive checkbox for task list items with links
+                                            if (isTaskListItem) {
+                                                // Extract problem key from the link
+                                                let problemKey = null;
+                                                childrenArray.forEach(child => {
+                                                    if (child?.props?.href) {
+                                                        problemKey = child.props.href;
+                                                    }
+                                                });
+
+                                                if (problemKey) {
+                                                    const isChecked = solvedProblems[problemKey] || false;
+                                                    return (
+                                                        <li className="pl-1 flex items-center gap-2" {...props}>
+                                                            {isAuthenticated ? (
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={isChecked}
+                                                                    onChange={() => toggleProblemSolved(problemKey)}
+                                                                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                                                />
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => navigate('/login')}
+                                                                    className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500"
+                                                                    title="Login to track progress"
+                                                                >
+                                                                    <Lock className="w-3 h-3" />
+                                                                </button>
+                                                            )}
+                                                            <span className={isChecked ? 'line-through text-gray-400' : ''}>
+                                                                {childrenArray.filter((_, i) => i > 0)}
+                                                            </span>
+                                                        </li>
+                                                    );
                                                 }
-                                            });
-
-                                            // If we have a problem key, render interactive checkbox
-                                            if (problemKey) {
-                                                const isChecked = solvedProblems[problemKey] || false;
-                                                return (
-                                                    <li className="pl-1 flex items-center gap-2" {...props}>
-                                                        {isAuthenticated ? (
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={isChecked}
-                                                                onChange={() => toggleProblemSolved(problemKey)}
-                                                                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
-                                                            />
-                                                        ) : (
-                                                            <button
-                                                                onClick={() => navigate('/login')}
-                                                                className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500"
-                                                                title="Login to track progress"
-                                                            >
-                                                                <Lock className="w-3 h-3" />
-                                                            </button>
-                                                        )}
-                                                        <span className={isChecked ? 'line-through text-gray-400' : ''}>
-                                                            {childrenArray.filter((_, i) => i > 0)}
-                                                        </span>
-                                                    </li>
-                                                );
                                             }
 
                                             return <li className="pl-1" {...props}>{children}</li>;

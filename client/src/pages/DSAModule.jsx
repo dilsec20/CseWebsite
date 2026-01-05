@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
+import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle, Lock } from 'lucide-react';
 import { API_URL } from '../config';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const DSAModule = () => {
     const { id } = useParams();
@@ -9,10 +15,24 @@ const DSAModule = () => {
     const [module, setModule] = useState(null);
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [solvedProblems, setSolvedProblems] = useState({});
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+    }, []);
 
     useEffect(() => {
         fetchModuleData();
     }, [id]);
+
+    // Fetch solved problems when topic changes
+    useEffect(() => {
+        if (selectedTopic && isAuthenticated) {
+            fetchSolvedProblems();
+        }
+    }, [selectedTopic, isAuthenticated]);
 
     const fetchModuleData = async () => {
         try {
@@ -39,83 +59,55 @@ const DSAModule = () => {
         }
     };
 
-    // Improved Markdown Parser
-    const renderContent = (content) => {
-        if (!content) return null;
-
-        const lines = content.split('\n');
-        const elements = [];
-        let inCodeBlock = false;
-        let codeBuffer = [];
-
-        lines.forEach((line, idx) => {
-            if (line.startsWith('```')) {
-                if (inCodeBlock) {
-                    // End of code block
-                    elements.push(
-                        <div key={`code-${idx}`} className="bg-gray-900 text-gray-100 font-mono p-4 rounded-lg text-sm my-4 overflow-x-auto shadow-inner">
-                            <pre>{codeBuffer.join('\n')}</pre>
-                        </div>
-                    );
-                    codeBuffer = [];
-                }
-                inCodeBlock = !inCodeBlock;
-                return;
+    const fetchSolvedProblems = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/dsa/progress/${selectedTopic.topic_id}`, {
+                headers: { 'token': token }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const solved = {};
+                data.forEach(url => { solved[url] = true; });
+                setSolvedProblems(solved);
             }
+        } catch (err) {
+            console.error('Error fetching progress:', err);
+        }
+    };
 
-            if (inCodeBlock) {
-                codeBuffer.push(line);
-                return;
-            }
+    const toggleProblemSolved = async (problemUrl) => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
 
-            // Regular Markdown
-            if (line.startsWith('# ')) elements.push(<h1 key={idx} className="text-3xl font-bold text-gray-900 mt-8 mb-4 border-b pb-2">{line.replace('# ', '')}</h1>);
-            else if (line.startsWith('## ')) elements.push(<h2 key={idx} className="text-2xl font-bold text-gray-800 mt-6 mb-3">{line.replace('## ', '')}</h2>);
-            else if (line.startsWith('### ')) elements.push(<h3 key={idx} className="text-xl font-bold text-gray-800 mt-4 mb-2">{line.replace('### ', '')}</h3>);
-            else if (line.startsWith('- ')) {
-                // Handle links in list items
-                const content = line.replace('- ', '');
-                const linkMatch = content.match(/\[(.*?)\]\((.*?)\)/);
-                if (linkMatch) {
-                    const [, text, url] = linkMatch;
-                    const isExternal = url.startsWith('http://') || url.startsWith('https://');
+        const wasChecked = solvedProblems[problemUrl];
+        setSolvedProblems(prev => ({
+            ...prev,
+            [problemUrl]: !wasChecked
+        }));
 
-                    // Extract platform and difficulty info after the link
-                    const afterLink = content.substring(content.indexOf(')') + 1).trim();
-
-                    if (isExternal) {
-                        elements.push(
-                            <li key={idx} className="ml-4 text-gray-700 mb-2 list-disc list-inside flex items-center justify-between">
-                                <a
-                                    href={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline font-medium"
-                                >
-                                    {text}
-                                </a>
-                                {afterLink && <span className="text-sm text-gray-500 ml-2">{afterLink}</span>}
-                            </li>
-                        );
-                    } else {
-                        elements.push(
-                            <li key={idx} className="ml-4 text-gray-700 mb-2 list-disc list-inside">
-                                <Link to={url} className="text-blue-600 hover:underline font-medium">
-                                    {text}
-                                </Link>
-                                {afterLink && <span className="text-sm text-gray-500 ml-2">{afterLink}</span>}
-                            </li>
-                        );
-                    }
-                } else {
-                    elements.push(<li key={idx} className="ml-4 text-gray-700 mb-1 list-disc list-inside">{content}</li>);
-                }
-            }
-            else if (line.trim() === '') elements.push(<br key={idx} />);
-            else elements.push(<p key={idx} className="text-gray-700 mb-2 leading-relaxed">{line}</p>);
-        });
-
-        return elements;
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/dsa/progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token
+                },
+                body: JSON.stringify({
+                    topic_id: selectedTopic.topic_id,
+                    problem_url: problemUrl
+                })
+            });
+        } catch (err) {
+            // Revert on error
+            setSolvedProblems(prev => ({
+                ...prev,
+                [problemUrl]: wasChecked
+            }));
+        }
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -126,7 +118,6 @@ const DSAModule = () => {
         const currentIndex = module.topics.findIndex(t => t.topic_id === selectedTopic.topic_id);
         if (currentIndex < module.topics.length - 1) {
             fetchTopicContent(module.topics[currentIndex + 1].topic_id);
-            // Scroll to top
             window.scrollTo(0, 0);
         }
     };
@@ -136,7 +127,6 @@ const DSAModule = () => {
         const currentIndex = module.topics.findIndex(t => t.topic_id === selectedTopic.topic_id);
         if (currentIndex > 0) {
             fetchTopicContent(module.topics[currentIndex - 1].topic_id);
-            // Scroll to top
             window.scrollTo(0, 0);
         }
     };
@@ -199,7 +189,109 @@ const DSAModule = () => {
                             )}
 
                             <div className="prose prose-blue max-w-none">
-                                {renderContent(selectedTopic.content)}
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkMath, remarkGfm]}
+                                    rehypePlugins={[rehypeKatex]}
+                                    components={{
+                                        code({ node, inline, className, children, ...props }) {
+                                            const match = /language-(\w+)/.exec(className || '');
+                                            return !inline && match ? (
+                                                <div className="rounded-xl overflow-hidden my-6 shadow-md border border-gray-800">
+                                                    <div className="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800">
+                                                        <div className="flex gap-1.5">
+                                                            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                                            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                                        </div>
+                                                        <span className="text-xs font-mono text-gray-400">{match[1]}</span>
+                                                    </div>
+                                                    <SyntaxHighlighter
+                                                        style={vscDarkPlus}
+                                                        language={match[1]}
+                                                        PreTag="div"
+                                                        customStyle={{ margin: 0, borderRadius: 0 }}
+                                                        {...props}
+                                                    >
+                                                        {String(children).replace(/\n$/, '')}
+                                                    </SyntaxHighlighter>
+                                                </div>
+                                            ) : (
+                                                <code className={`${className} bg-gray-100 text-red-600 px-1.5 py-0.5 rounded-md font-mono text-sm border border-gray-200`} {...props}>
+                                                    {children}
+                                                </code>
+                                            );
+                                        },
+                                        h1: ({ node, ...props }) => <h1 className="text-3xl font-extrabold text-blue-900 mt-10 mb-6 pb-2 border-b-2 border-blue-100" {...props} />,
+                                        h2: ({ node, ...props }) => <h2 className="text-2xl font-bold text-gray-800 mt-8 mb-4 flex items-center gap-2" {...props} />,
+                                        h3: ({ node, ...props }) => <h3 className="text-xl font-bold text-gray-700 mt-6 mb-3" {...props} />,
+                                        p: ({ node, ...props }) => <p className="text-gray-700 leading-relaxed mb-4 text-lg" {...props} />,
+                                        ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
+                                        ol: ({ node, ...props }) => <ol className="list-decimal list-outside ml-6 space-y-2 mb-6 text-gray-700" {...props} />,
+                                        li: ({ node, children, ...props }) => {
+                                            const childrenArray = React.Children.toArray(children);
+                                            const firstChild = childrenArray[0];
+
+                                            // Check if this is a task list item (first child is an input checkbox from remarkGfm)
+                                            const isTaskListItem = firstChild?.props?.type === 'checkbox' ||
+                                                (typeof firstChild === 'object' && firstChild?.type === 'input');
+
+                                            // Only render interactive checkbox for task list items with links
+                                            if (isTaskListItem) {
+                                                // Extract problem key from the link
+                                                let problemKey = null;
+                                                childrenArray.forEach(child => {
+                                                    if (child?.props?.href) {
+                                                        problemKey = child.props.href;
+                                                    }
+                                                });
+
+                                                if (problemKey) {
+                                                    const isChecked = solvedProblems[problemKey] || false;
+                                                    return (
+                                                        <li className="pl-1 flex items-center gap-2" {...props}>
+                                                            {isAuthenticated ? (
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={isChecked}
+                                                                    onChange={() => toggleProblemSolved(problemKey)}
+                                                                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                                                />
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => navigate('/login')}
+                                                                    className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500"
+                                                                    title="Login to track progress"
+                                                                >
+                                                                    <Lock className="w-3 h-3" />
+                                                                </button>
+                                                            )}
+                                                            <span className={isChecked ? 'line-through text-gray-400' : ''}>
+                                                                {childrenArray.filter((_, i) => i > 0)}
+                                                            </span>
+                                                        </li>
+                                                    );
+                                                }
+                                            }
+
+                                            return <li className="pl-1" {...props}>{children}</li>;
+                                        },
+                                        a: ({ node, href, children, ...props }) => (
+                                            <a
+                                                href={href}
+                                                className="!text-blue-600 font-bold hover:!text-blue-800 hover:!underline transition-colors duration-200 inline-flex items-center gap-1"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                {...props}
+                                            >
+                                                {children} <ChevronRight className="h-3 w-3" />
+                                            </a>
+                                        ),
+                                        blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-6 bg-blue-50 rounded-r-lg italic text-gray-700" {...props} />,
+                                        strong: ({ node, ...props }) => <strong className="font-bold text-gray-900" {...props} />,
+                                    }}
+                                >
+                                    {selectedTopic.content}
+                                </ReactMarkdown>
                             </div>
 
                             {selectedTopic.problem_id && (

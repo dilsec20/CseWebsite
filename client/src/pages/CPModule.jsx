@@ -239,37 +239,56 @@ const CPModule = () => {
 
                                             // Only render interactive checkbox for task list items with links
                                             if (isTaskListItem) {
-                                                // Extract problem key from the link
+                                                // Extract problem key and platform info
                                                 let problemKey = null;
-                                                childrenArray.forEach(child => {
+                                                let linkElement = null;
+                                                let platformInfo = [];
+
+                                                childrenArray.forEach((child, idx) => {
+                                                    if (idx === 0) return; // Skip checkbox
                                                     if (child?.props?.href) {
                                                         problemKey = child.props.href;
+                                                        linkElement = child;
+                                                    } else if (typeof child === 'string') {
+                                                        const trimmed = child.trim();
+                                                        if (trimmed && trimmed !== '-') {
+                                                            platformInfo.push(trimmed.replace(/^-\s*/, ''));
+                                                        }
                                                     }
                                                 });
 
                                                 if (problemKey) {
                                                     const isChecked = solvedProblems[problemKey] || false;
+                                                    const platformText = platformInfo.join(' ').trim();
+
                                                     return (
-                                                        <li className="pl-1 flex items-center gap-2" {...props}>
-                                                            {isAuthenticated ? (
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={isChecked}
-                                                                    onChange={() => toggleProblemSolved(problemKey)}
-                                                                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
-                                                                />
-                                                            ) : (
-                                                                <button
-                                                                    onClick={() => navigate('/login')}
-                                                                    className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500"
-                                                                    title="Login to track progress"
-                                                                >
-                                                                    <Lock className="w-3 h-3" />
-                                                                </button>
+                                                        <li className="pl-1 flex items-center justify-between gap-2" {...props}>
+                                                            <div className="flex items-center gap-2">
+                                                                {isAuthenticated ? (
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={isChecked}
+                                                                        onChange={() => toggleProblemSolved(problemKey)}
+                                                                        className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer flex-shrink-0"
+                                                                    />
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={() => navigate('/login')}
+                                                                        className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500 flex-shrink-0"
+                                                                        title="Login to track progress"
+                                                                    >
+                                                                        <Lock className="w-3 h-3" />
+                                                                    </button>
+                                                                )}
+                                                                <span className={isChecked ? 'line-through text-gray-400' : ''}>
+                                                                    {linkElement}
+                                                                </span>
+                                                            </div>
+                                                            {platformText && (
+                                                                <span className="text-sm text-gray-500 whitespace-nowrap flex-shrink-0">
+                                                                    {platformText}
+                                                                </span>
                                                             )}
-                                                            <span className={isChecked ? 'line-through text-gray-400' : ''}>
-                                                                {childrenArray.filter((_, i) => i > 0)}
-                                                            </span>
                                                         </li>
                                                     );
                                                 }

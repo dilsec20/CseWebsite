@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const pool = require("../db");
+const authorization = require("../middleware/authorization");
 
 // Get all CP Modules
 router.get("/modules", async (req, res) => {
@@ -54,4 +55,49 @@ router.get("/topics/:id", async (req, res) => {
     }
 });
 
+// Get user's CP problem progress for a topic (authenticated)
+router.get("/progress/:topicId", authorization, async (req, res) => {
+    try {
+        const userId = req.user;
+        const { topicId } = req.params;
+
+        const result = await pool.query(
+            "SELECT problem_url FROM cp_problem_progress WHERE user_id = $1 AND topic_id = $2 AND solved = true",
+            [userId, topicId]
+        );
+
+        const solvedUrls = result.rows.map(r => r.problem_url);
+        res.json({ solved: solvedUrls });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Toggle CP problem progress (authenticated)
+router.post("/progress", authorization, async (req, res) => {
+    try {
+        const userId = req.user;
+        const { topicId, problemUrl, solved } = req.body;
+
+        if (!topicId || !problemUrl) {
+            return res.status(400).json({ error: "topicId and problemUrl are required" });
+        }
+
+        // Upsert: insert or update
+        await pool.query(`
+            INSERT INTO cp_problem_progress (user_id, topic_id, problem_url, solved)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (user_id, topic_id, problem_url)
+            DO UPDATE SET solved = $4, updated_at = NOW()
+        `, [userId, topicId, problemUrl, solved]);
+
+        res.json({ success: true, solved });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;
+

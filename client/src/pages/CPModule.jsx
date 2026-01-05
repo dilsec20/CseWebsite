@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ChevronRight, ChevronLeft } from 'lucide-react';
+import { BookOpen, ChevronRight, ChevronLeft, Lock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -16,24 +16,75 @@ const CPModule = () => {
     const [module, setModule] = useState(null);
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [solvedProblems, setSolvedProblems] = useState(() => {
-        const saved = localStorage.getItem('dp_mustdo_solved');
-        return saved ? JSON.parse(saved) : {};
-    });
+    const [solvedProblems, setSolvedProblems] = useState({});
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
         fetchModuleData();
     }, [id]);
 
+    // Fetch progress when topic changes (for authenticated users)
     useEffect(() => {
-        localStorage.setItem('dp_mustdo_solved', JSON.stringify(solvedProblems));
-    }, [solvedProblems]);
+        if (isAuthenticated && selectedTopic?.topic_id) {
+            fetchProgress(selectedTopic.topic_id);
+        }
+    }, [selectedTopic?.topic_id, isAuthenticated]);
 
-    const toggleProblemSolved = (problemKey) => {
+    const fetchProgress = async (topicId) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/cp/progress/${topicId}`, {
+                headers: { token }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const solvedMap = {};
+                data.solved.forEach(url => { solvedMap[url] = true; });
+                setSolvedProblems(solvedMap);
+            }
+        } catch (err) {
+            console.error('Error fetching progress:', err);
+        }
+    };
+
+    const toggleProblemSolved = async (problemUrl) => {
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+
+        const newSolvedState = !solvedProblems[problemUrl];
         setSolvedProblems(prev => ({
             ...prev,
-            [problemKey]: !prev[problemKey]
+            [problemUrl]: newSolvedState
         }));
+
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/cp/progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    token
+                },
+                body: JSON.stringify({
+                    topicId: selectedTopic.topic_id,
+                    problemUrl,
+                    solved: newSolvedState
+                })
+            });
+        } catch (err) {
+            console.error('Error saving progress:', err);
+            // Revert on error
+            setSolvedProblems(prev => ({
+                ...prev,
+                [problemUrl]: !newSolvedState
+            }));
+        }
     };
 
     const fetchModuleData = async () => {
@@ -201,12 +252,22 @@ const CPModule = () => {
                                                 const isChecked = solvedProblems[problemKey] || false;
                                                 return (
                                                     <li className="pl-1 flex items-center gap-2" {...props}>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={isChecked}
-                                                            onChange={() => toggleProblemSolved(problemKey)}
-                                                            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
-                                                        />
+                                                        {isAuthenticated ? (
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={isChecked}
+                                                                onChange={() => toggleProblemSolved(problemKey)}
+                                                                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                                            />
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => navigate('/login')}
+                                                                className="w-4 h-4 flex items-center justify-center text-gray-400 hover:text-blue-500"
+                                                                title="Login to track progress"
+                                                            >
+                                                                <Lock className="w-3 h-3" />
+                                                            </button>
+                                                        )}
                                                         <span className={isChecked ? 'line-through text-gray-400' : ''}>
                                                             {childrenArray.filter((_, i) => i > 0)}
                                                         </span>

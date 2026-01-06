@@ -55,7 +55,29 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
             unique_visitors_today: parseInt((await pool.query(`
                 SELECT COUNT(DISTINCT ip_address) FROM visitor_logs 
                 WHERE (visit_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date
-            `)).rows[0].count)
+            `)).rows[0].count),
+
+            // Top traffic sources (referrers) - last 7 days
+            top_referrers: (await pool.query(`
+                SELECT 
+                    CASE 
+                        WHEN referrer IS NULL OR referrer = '' THEN 'Direct'
+                        WHEN referrer LIKE '%google%' THEN 'Google'
+                        WHEN referrer LIKE '%facebook%' THEN 'Facebook'
+                        WHEN referrer LIKE '%twitter%' OR referrer LIKE '%t.co%' THEN 'Twitter/X'
+                        WHEN referrer LIKE '%linkedin%' THEN 'LinkedIn'
+                        WHEN referrer LIKE '%instagram%' THEN 'Instagram'
+                        WHEN referrer LIKE '%youtube%' THEN 'YouTube'
+                        WHEN referrer LIKE '%github%' THEN 'GitHub'
+                        ELSE SUBSTRING(referrer FROM 'https?://([^/]+)') 
+                    END as source,
+                    COUNT(*) as visits
+                FROM visitor_logs 
+                WHERE visit_time > NOW() - INTERVAL '7 days'
+                GROUP BY source
+                ORDER BY visits DESC
+                LIMIT 10
+            `)).rows
         });
     } catch (err) {
         console.error(err.message);

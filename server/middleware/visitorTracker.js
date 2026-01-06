@@ -29,11 +29,12 @@ const visitorTracker = async (req, res, next) => {
 
         const user_agent = req.headers['user-agent'];
         const page_url = req.originalUrl;
+        const referrer = req.headers['referer'] || req.headers['referrer'] || null;
 
         // Fire and forget - don't await to avoid slowing down response
         pool.query(
-            "INSERT INTO visitor_logs (ip_address, user_agent, page_url) VALUES ($1, $2, $3)",
-            [ip_address, user_agent, page_url]
+            "INSERT INTO visitor_logs (ip_address, user_agent, page_url, referrer) VALUES ($1, $2, $3, $4)",
+            [ip_address, user_agent, page_url, referrer]
         ).catch(err => console.error('Visitor tracking error:', err.message));
 
         next();

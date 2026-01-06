@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Code, Trophy, TrendingUp, Shield, Search, Eye } from 'lucide-react';
+import { Users, Code, Trophy, TrendingUp, Shield, Search, Eye, Globe } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
@@ -161,6 +161,31 @@ const AdminDashboard = () => {
                         <div className="text-sm text-gray-500 mt-1">Total Page Views</div>
                     </div>
                 </div>
+
+                {/* Traffic Sources - Last 7 Days */}
+                {stats.top_referrers && stats.top_referrers.length > 0 && (
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                                <Globe className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold text-gray-900">Traffic Sources</h2>
+                                <p className="text-sm text-gray-500">Where your visitors came from (last 7 days)</p>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            {stats.top_referrers.map((ref, index) => (
+                                <div key={index} className="bg-gray-50 rounded-xl p-4 text-center">
+                                    <div className="text-2xl font-bold text-gray-900">{ref.visits}</div>
+                                    <div className="text-sm text-gray-600 truncate" title={ref.source}>
+                                        {ref.source || 'Unknown'}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* User List */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">

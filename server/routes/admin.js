@@ -57,7 +57,7 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
                 WHERE (visit_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date
             `)).rows[0].count),
 
-            // Top traffic sources (referrers) - last 7 days
+            // Top traffic sources (referrers) - last 7 days, excluding internal navigation
             top_referrers: (await pool.query(`
                 SELECT 
                     CASE 
@@ -75,6 +75,7 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
                     COUNT(*) as visits
                 FROM visitor_logs 
                 WHERE visit_time > NOW() - INTERVAL '7 days'
+                  AND (referrer IS NULL OR referrer NOT LIKE '%acecoder.site%')
                 GROUP BY source
                 ORDER BY visits DESC
                 LIMIT 10

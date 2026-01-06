@@ -154,11 +154,11 @@ const AdminDashboard = () => {
                                 <Eye className="h-6 w-6" />
                             </div>
                             <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
-                                {stats.visits_today} today
+                                {stats.unique_visitors_today} today
                             </span>
                         </div>
-                        <div className="text-3xl font-bold text-gray-900">{stats.total_visits}</div>
-                        <div className="text-sm text-gray-500 mt-1">Total Page Views</div>
+                        <div className="text-3xl font-bold text-gray-900">{stats.total_unique_visitors}</div>
+                        <div className="text-sm text-gray-500 mt-1">Unique Visitors (All-time)</div>
                     </div>
                 </div>
 

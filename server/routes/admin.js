@@ -57,6 +57,9 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
                 WHERE (visit_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date
             `)).rows[0].count),
 
+            // Total unique visitors (all-time) - distinct people who ever visited
+            total_unique_visitors: parseInt((await pool.query("SELECT COUNT(DISTINCT ip_address) FROM visitor_logs")).rows[0].count),
+
             // Top traffic sources (referrers) - last 7 days, excluding internal navigation
             top_referrers: (await pool.query(`
                 SELECT 

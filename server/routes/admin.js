@@ -41,10 +41,21 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
             new_users_7d: parseInt(recentUsers.rows[0].count),
             total_solved: parseInt(solvedCount.rows[0].count),
 
-            // Visitor Stats
+            // Visitor Stats (using IST timezone for daily reset at midnight IST)
+            // Total all-time visits
             total_visits: parseInt((await pool.query("SELECT COUNT(*) FROM visitor_logs")).rows[0].count),
-            visits_today: parseInt((await pool.query("SELECT COUNT(*) FROM visitor_logs WHERE visit_time::date = CURRENT_DATE")).rows[0].count),
-            unique_visitors_today: parseInt((await pool.query("SELECT COUNT(DISTINCT ip_address) FROM visitor_logs WHERE visit_time::date = CURRENT_DATE")).rows[0].count)
+
+            // Visits today (IST) - counts all page views today
+            visits_today: parseInt((await pool.query(`
+                SELECT COUNT(*) FROM visitor_logs 
+                WHERE (visit_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date
+            `)).rows[0].count),
+
+            // Unique visitors today (IST) - each IP counts once per day
+            unique_visitors_today: parseInt((await pool.query(`
+                SELECT COUNT(DISTINCT ip_address) FROM visitor_logs 
+                WHERE (visit_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date
+            `)).rows[0].count)
         });
     } catch (err) {
         console.error(err.message);

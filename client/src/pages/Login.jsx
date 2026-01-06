@@ -66,7 +66,9 @@ const Login = ({ setAuth }) => {
                             </div>
                             <input
                                 type="text"
+                                id="email"
                                 name="email"
+                                autoComplete="username"
                                 value={email}
                                 onChange={onChange}
                                 className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
@@ -84,7 +86,9 @@ const Login = ({ setAuth }) => {
                             </div>
                             <input
                                 type="password"
+                                id="password"
                                 name="password"
+                                autoComplete="current-password"
                                 value={password}
                                 onChange={onChange}
                                 className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"

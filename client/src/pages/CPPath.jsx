@@ -32,6 +32,7 @@ const CPPath = () => {
         if (title.includes('String')) return <AlignLeft className="h-6 w-6 text-red-600" />;
         if (title.includes('Game')) return <Award className="h-6 w-6 text-yellow-600" />;
         if (title.includes('Search')) return <Search className="h-6 w-6 text-indigo-600" />;
+        if (title.includes('Constructive')) return <Layers className="h-6 w-6 text-pink-600" />;
         return <BookOpen className="h-6 w-6 text-gray-600" />;
     };
 

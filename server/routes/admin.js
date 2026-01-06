@@ -69,6 +69,7 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
                         WHEN referrer LIKE '%instagram%' THEN 'Instagram'
                         WHEN referrer LIKE '%youtube%' THEN 'YouTube'
                         WHEN referrer LIKE '%github%' THEN 'GitHub'
+                        WHEN referrer LIKE '%reddit%' THEN 'Reddit'
                         ELSE SUBSTRING(referrer FROM 'https?://([^/]+)') 
                     END as source,
                     COUNT(*) as visits

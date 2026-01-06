@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 5000;
 
 // CORS Configuration
 app.use(cors());
+const visitorTracker = require('./middleware/visitorTracker');
+app.use(visitorTracker); // Track visits
 app.use(express.json({ limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

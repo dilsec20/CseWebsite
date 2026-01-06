@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Code, Trophy, TrendingUp, Shield, Search } from 'lucide-react';
+import { Users, Code, Trophy, TrendingUp, Shield, Search, Eye } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
@@ -146,6 +146,19 @@ const AdminDashboard = () => {
                                 : 0}
                         </div>
                         <div className="text-sm text-gray-500 mt-1">Avg Submissions / User</div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                                <Eye className="h-6 w-6" />
+                            </div>
+                            <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
+                                {stats.visits_today} today
+                            </span>
+                        </div>
+                        <div className="text-3xl font-bold text-gray-900">{stats.total_visits}</div>
+                        <div className="text-sm text-gray-500 mt-1">Total Page Views</div>
                     </div>
                 </div>
 

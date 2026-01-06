@@ -39,7 +39,12 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
             total_users: parseInt(userCount.rows[0].count),
             total_submissions: parseInt(submissionCount.rows[0].count),
             new_users_7d: parseInt(recentUsers.rows[0].count),
-            total_solved: parseInt(solvedCount.rows[0].count)
+            total_solved: parseInt(solvedCount.rows[0].count),
+
+            // Visitor Stats
+            total_visits: parseInt((await pool.query("SELECT COUNT(*) FROM visitor_logs")).rows[0].count),
+            visits_today: parseInt((await pool.query("SELECT COUNT(*) FROM visitor_logs WHERE visit_time::date = CURRENT_DATE")).rows[0].count),
+            unique_visitors_today: parseInt((await pool.query("SELECT COUNT(DISTINCT ip_address) FROM visitor_logs WHERE visit_time::date = CURRENT_DATE")).rows[0].count)
         });
     } catch (err) {
         console.error(err.message);

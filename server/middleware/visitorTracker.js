@@ -15,7 +15,18 @@ const visitorTracker = async (req, res, next) => {
         // Improved logic: Track only initial page loads or significant API hits?
         // Simple approach: Track everything that isn't a static asset.
 
-        const ip_address = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        let ip_address = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+        // Handle multiple IPs in x-forwarded-for (e.g. "client, proxy1, proxy2")
+        if (ip_address && typeof ip_address === 'string' && ip_address.includes(',')) {
+            ip_address = ip_address.split(',')[0].trim();
+        }
+
+        // Truncate to 45 chars to fit in DB (IPv6 mapped IPv4 is < 45, standard IPv6 < 45)
+        if (ip_address && ip_address.length > 45) {
+            ip_address = ip_address.substring(0, 45);
+        }
+
         const user_agent = req.headers['user-agent'];
         const page_url = req.originalUrl;
 

@@ -136,16 +136,7 @@ const ContestSolveProblem = () => {
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, [contestEnded, timeLeft]);
 
-    // Auto-enter full-screen on mount
-    useEffect(() => {
-        if (problem && contest && timeLeft > 0 && !isFullScreen && !contestEnded) {
-            // Small delay to ensure component is ready
-            const timer = setTimeout(() => {
-                enterFullScreen();
-            }, 500);
-            return () => clearTimeout(timer);
-        }
-    }, [problem, contest]);
+
 
     // Fetch problem and contest data
     useEffect(() => {
@@ -298,55 +289,7 @@ const ContestSolveProblem = () => {
         );
     }
 
-    // Security Overlay - Show when not in full-screen mode
-    if (!isFullScreen && !contestEnded && timeLeft > 0) {
-        return (
-            <div className="fixed inset-0 z-50 bg-[#0d0d1a] flex flex-col items-center justify-center p-8 text-center">
-                <Shield className="h-24 w-24 text-red-500 mb-6 animate-pulse" />
-                <h1 className="text-4xl font-bold text-white mb-4">Full Screen Required</h1>
-                <p className="text-xl text-gray-300 max-w-2xl mb-8">
-                    This contest requires <strong className="text-cyan-400">Full Screen Mode</strong> to ensure fair competition.
-                    <br />
-                    <span className="text-red-400">Do not exit full screen or switch tabs during the contest.</span>
-                </p>
 
-                <div className="bg-gray-900/50 p-6 rounded-xl border border-gray-700 mb-8 max-w-md w-full">
-                    <div className="flex justify-between text-gray-400 mb-3">
-                        <span>Time Remaining:</span>
-                        <span className="font-mono text-green-400 font-bold">{formatTime(timeLeft)}</span>
-                    </div>
-                    <div className="flex justify-between text-gray-400 mb-3">
-                        <span>Tab Switches:</span>
-                        <span className={`font-bold ${tabSwitchCount > 0 ? 'text-red-400' : 'text-green-400'}`}>{tabSwitchCount}</span>
-                    </div>
-                    {tabSwitchCount > 0 && (
-                        <div className="mt-4 p-3 bg-red-900/30 rounded-lg border border-red-800">
-                            <p className="text-red-400 text-sm flex items-center gap-2">
-                                <AlertTriangle className="w-4 h-4" />
-                                Warning: {tabSwitchCount} violation(s) detected
-                            </p>
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex gap-4">
-                    <button
-                        onClick={enterFullScreen}
-                        className="px-10 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xl rounded-2xl shadow-lg shadow-cyan-500/30 transition transform hover:scale-105"
-                    >
-                        Enter Full Screen
-                    </button>
-                    <button
-                        onClick={handleEndContest}
-                        className="px-6 py-4 bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium rounded-2xl border border-gray-600 transition flex items-center gap-2"
-                    >
-                        <LogOut className="w-5 h-5" />
-                        End Contest
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="h-screen bg-[#1a1a2e] text-gray-100 flex flex-col overflow-hidden">
@@ -536,7 +479,7 @@ const ContestSolveProblem = () => {
 
                     <div className="flex-1 overflow-hidden">
                         <SimpleCodeEditor
-                            code={code}
+                            code={code || ''}
                             setCode={setCode}
                             language={language}
                             theme="vs-dark"

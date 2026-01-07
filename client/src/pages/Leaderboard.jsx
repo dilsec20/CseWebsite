@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Flame, Target, Medal, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trophy, Target, Medal, Crown, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const Leaderboard = () => {
     const [users, setUsers] = useState([]);
@@ -57,7 +57,7 @@ const Leaderboard = () => {
                                     </th>
                                     <th className="px-6 py-4 text-center font-semibold">
                                         <div className="flex items-center justify-center gap-2">
-                                            <Flame size={18} /> Streak
+                                            <Star size={18} /> Rating
                                         </div>
                                     </th>
                                 </tr>
@@ -99,12 +99,9 @@ const Leaderboard = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-center">
-                                            <div className="flex items-center justify-center gap-1.5 text-orange-500 font-bold">
-                                                <Flame size={18} className={user.current_streak > 0 ? "fill-orange-500 animate-pulse" : "text-gray-300"} />
-                                                <span className={user.current_streak > 0 ? "text-orange-600" : "text-gray-400"}>
-                                                    {user.current_streak}
-                                                </span>
-                                            </div>
+                                            <span className="font-mono font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">
+                                                {user.contest_rating || 0}
+                                            </span>
                                         </td>
                                     </tr>
                                 ))}

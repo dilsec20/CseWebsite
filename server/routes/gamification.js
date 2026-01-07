@@ -2,23 +2,23 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-// GET /api/gamification/leaderboard (Paginated)
+// GET /api/gamification/leaderboard (Paginated) - Ranked by Contest Rating
 router.get('/leaderboard', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = 50;
         const offset = (page - 1) * limit;
 
-        // Get total count
-        const countResult = await pool.query("SELECT COUNT(*) FROM users WHERE total_solved > 0");
+        // Get total count of users with contest rating
+        const countResult = await pool.query("SELECT COUNT(*) FROM users WHERE contest_rating > 0");
         const totalUsers = parseInt(countResult.rows[0].count);
         const totalPages = Math.ceil(totalUsers / limit);
 
         const result = await pool.query(`
-            SELECT username, profile_picture, total_solved, current_streak
+            SELECT username, profile_picture, total_solved, contest_rating
             FROM users
-            WHERE total_solved > 0
-            ORDER BY total_solved DESC, current_streak DESC
+            WHERE contest_rating > 0
+            ORDER BY contest_rating DESC, total_solved DESC
             LIMIT $1 OFFSET $2
         `, [limit, offset]);
 

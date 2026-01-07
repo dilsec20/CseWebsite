@@ -90,16 +90,35 @@ router.get("/stats", authorization, verifyAdmin, async (req, res) => {
     }
 });
 
-// Get User List
+// Get User List (Paginated)
 router.get("/users", authorization, verifyAdmin, async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 50;
+        const offset = (page - 1) * limit;
+
+        // Get total count
+        const countResult = await pool.query("SELECT COUNT(*) FROM users");
+        const totalUsers = parseInt(countResult.rows[0].count);
+        const totalPages = Math.ceil(totalUsers / limit);
+
         const users = await pool.query(
             `SELECT user_id, user_name, username, user_email, role, created_at 
              FROM users 
              ORDER BY created_at DESC 
-             LIMIT 50`
+             LIMIT $1 OFFSET $2`,
+            [limit, offset]
         );
-        res.json(users.rows);
+
+        res.json({
+            users: users.rows,
+            pagination: {
+                current_page: page,
+                total_pages: totalPages,
+                total_users: totalUsers,
+                per_page: limit
+            }
+        });
     } catch (err) {
         console.error(err.message);
         res.status(500).json("Server Error");

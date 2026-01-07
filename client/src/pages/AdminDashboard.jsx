@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Code, Trophy, TrendingUp, Shield, Search, Eye, Globe } from 'lucide-react';
+import { Users, Code, Trophy, TrendingUp, Shield, Search, Eye, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
@@ -9,6 +9,8 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [userPage, setUserPage] = useState(1);
+    const [userPagination, setUserPagination] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -35,10 +37,11 @@ const AdminDashboard = () => {
             const statsData = await statsRes.json();
             setStats(statsData);
 
-            // Fetch Users
-            const usersRes = await fetch(`${API_URL}/api/admin/users`, { headers });
+            // Fetch Users (paginated)
+            const usersRes = await fetch(`${API_URL}/api/admin/users?page=${userPage}`, { headers });
             const usersData = await usersRes.json();
-            setUsers(usersData);
+            setUsers(usersData.users || []);
+            setUserPagination(usersData.pagination || null);
 
             setLoading(false);
         } catch (err) {
@@ -268,6 +271,37 @@ const AdminDashboard = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Pagination Controls */}
+                    {userPagination && userPagination.total_pages > 1 && (
+                        <div className="mt-4 flex justify-between items-center px-4">
+                            <div className="text-sm text-gray-500">
+                                Showing page {userPagination.current_page} of {userPagination.total_pages} ({userPagination.total_users} total users)
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => {
+                                        setUserPage(p => p - 1);
+                                        setTimeout(fetchAdminData, 100);
+                                    }}
+                                    disabled={userPagination.current_page === 1}
+                                    className="px-4 py-2 border rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                >
+                                    <ChevronLeft className="h-4 w-4" /> Previous
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setUserPage(p => p + 1);
+                                        setTimeout(fetchAdminData, 100);
+                                    }}
+                                    disabled={userPagination.current_page === userPagination.total_pages}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
+                                >
+                                    Next <ChevronRight className="h-4 w-4" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

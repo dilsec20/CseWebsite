@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Flame, Target, Medal, Crown } from 'lucide-react';
+import { Trophy, Flame, Target, Medal, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Leaderboard = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [pagination, setPagination] = useState(null);
 
     useEffect(() => {
         fetchLeaderboard();
-    }, []);
+    }, [page]);
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/gamification/leaderboard`, {
+            setLoading(true);
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/gamification/leaderboard?page=${page}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             const data = await res.json();
             if (res.ok) {
-                setUsers(data);
+                setUsers(data.leaderboard || []);
+                setPagination(data.pagination || null);
             }
         } catch (error) {
             console.error(error);
@@ -26,10 +30,11 @@ const Leaderboard = () => {
     };
 
     const getRankIcon = (rank) => {
-        if (rank === 0) return <Crown className="text-yellow-400 fill-yellow-400" size={24} />;
-        if (rank === 1) return <Medal className="text-gray-300 fill-gray-300" size={24} />;
-        if (rank === 2) return <Medal className="text-amber-600 fill-amber-600" size={24} />;
-        return <span className="font-bold text-gray-500 w-6 text-center">{rank + 1}</span>;
+        const actualRank = (page - 1) * 50 + rank;
+        if (actualRank === 0) return <Crown className="text-yellow-400 fill-yellow-400" size={24} />;
+        if (actualRank === 1) return <Medal className="text-gray-300 fill-gray-300" size={24} />;
+        if (actualRank === 2) return <Medal className="text-amber-600 fill-amber-600" size={24} />;
+        return <span className="font-bold text-gray-500 w-6 text-center">{actualRank + 1}</span>;
     };
 
     return (
@@ -84,7 +89,7 @@ const Leaderboard = () => {
                                                     <p className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
                                                         @{user.username}
                                                     </p>
-                                                    {idx === 0 && <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Champion</span>}
+                                                    {(page - 1) * 50 + idx === 0 && <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Champion</span>}
                                                 </div>
                                             </div>
                                         </td>
@@ -106,6 +111,31 @@ const Leaderboard = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Pagination Controls */}
+                    {pagination && pagination.total_pages > 1 && (
+                        <div className="p-4 border-t border-gray-100 flex justify-between items-center bg-gray-50">
+                            <div className="text-sm text-gray-500">
+                                Page {pagination.current_page} of {pagination.total_pages} ({pagination.total_users} coders)
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setPage(p => p - 1)}
+                                    disabled={pagination.current_page === 1}
+                                    className="px-4 py-2 border rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white"
+                                >
+                                    <ChevronLeft className="h-4 w-4" /> Previous
+                                </button>
+                                <button
+                                    onClick={() => setPage(p => p + 1)}
+                                    disabled={pagination.current_page === pagination.total_pages}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
+                                >
+                                    Next <ChevronRight className="h-4 w-4" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

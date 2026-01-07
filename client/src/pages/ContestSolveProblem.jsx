@@ -210,7 +210,7 @@ const ContestSolveProblem = () => {
         if (!problem) return;
         setRunLoading(true);
         setOutput('');
-        setVerdict(null);
+        // Don't reset verdict here, strictly for Output tab functionality
 
         try {
             const token = localStorage.getItem("token");
@@ -224,11 +224,32 @@ const ContestSolveProblem = () => {
                     input: problem.test_case_input || ''
                 })
             });
-            const data = await res.json();
-            setOutput(data.output || data.error || "No output");
+            const parseRes = await res.json();
+
+            if (parseRes.compile && parseRes.compile.code !== 0) {
+                setOutput(`Compilation Error:\n${parseRes.compile.stderr}`);
+            } else if (parseRes.run && parseRes.run.code !== 0) {
+                setOutput(`Runtime Error:\n${parseRes.run.stderr || 'Program crashed'}`);
+            } else {
+                const actualOutput = (parseRes.run?.stdout || '').trim();
+                const expectedOutput = (parseRes.expected_output || '').trim();
+
+                if (!parseRes.expected_output) {
+                    setOutput(`⚠️ No sample test case available\n\nYour code ran successfully:\n\nOutput:\n${actualOutput || '(no output)'}`);
+                } else {
+                    const passed = actualOutput === expectedOutput;
+
+                    if (passed) {
+                        setOutput(`✅ Sample Test Case Passed!\n\nInput:\n${problem.test_case_input}\n\nExpected Output:\n${expectedOutput}\n\nYour Output:\n${actualOutput}`);
+                    } else {
+                        setOutput(`❌ Sample Test Case Failed\n\nInput:\n${problem.test_case_input}\n\nExpected Output:\n${expectedOutput}\n\nYour Output:\n${actualOutput}`);
+                    }
+                }
+            }
             setRightTab('output');
         } catch (err) {
-            setOutput("Error running code");
+            console.error(err);
+            setOutput("Error running code: " + err.message);
         } finally {
             setRunLoading(false);
         }

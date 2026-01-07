@@ -479,8 +479,8 @@ const ContestSolveProblem = () => {
 
                     <div className="flex-1 overflow-hidden">
                         <SimpleCodeEditor
-                            code={code || ''}
-                            setCode={setCode}
+                            value={code || ''}
+                            onChange={setCode}
                             language={language}
                             theme="vs-dark"
                         />

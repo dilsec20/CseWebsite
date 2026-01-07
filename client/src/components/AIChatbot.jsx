@@ -176,7 +176,7 @@ const AIChatbot = () => {
         setIsOpen(false);
         // Reset chat history when closed
         setMessages([
-            { role: 'ai', content: 'Hello Coder! How can i help you?' }
+            { role: 'ai', content: 'Hello Coder! How can i help you ?' }
         ]);
         setInput('');
     };
@@ -192,10 +192,10 @@ const AIChatbot = () => {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="bg-black/90 hover:bg-black text-white p-4 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center justify-center ring-1 ring-gray-700"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-3 py-1.5 rounded-lg shadow-lg transition-all hover:scale-105 font-bold text-sm tracking-wide"
                     title="Ask AI Helper"
                 >
-                    <MessageCircle size={28} />
+                    AI
                 </button>
             )}
 

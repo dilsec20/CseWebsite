@@ -226,25 +226,23 @@ const DSAModule = () => {
                         </button>
                     ))}
 
-                    {/* My Notes Sidebar Item - Only for authenticated users */}
-                    {isAuthenticated && (
-                        <button
-                            onClick={() => {
-                                setShowNotesView(true);
-                                setSelectedTopic(null);
-                            }}
-                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${showNotesView
-                                ? 'bg-purple-50 text-purple-700 font-medium'
-                                : 'text-gray-600 hover:bg-gray-50'
-                                }`}
-                        >
-                            <span className="flex items-center gap-3">
-                                <FileText className="h-4 w-4 text-purple-500" />
-                                My Notes
-                            </span>
-                            {showNotesView && <ChevronRight className="h-4 w-4" />}
-                        </button>
-                    )}
+                    {/* My Notes Sidebar Item - Visible to all users */}
+                    <button
+                        onClick={() => {
+                            setShowNotesView(true);
+                            setSelectedTopic(null);
+                        }}
+                        className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${showNotesView
+                            ? 'bg-purple-50 text-purple-700 font-medium'
+                            : 'text-gray-600 hover:bg-gray-50'
+                            }`}
+                    >
+                        <span className="flex items-center gap-3">
+                            <FileText className="h-4 w-4 text-purple-500" />
+                            My Notes
+                        </span>
+                        {showNotesView && <ChevronRight className="h-4 w-4" />}
+                    </button>
                 </div>
             </div>
 
@@ -272,7 +270,20 @@ const DSAModule = () => {
                                 Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
                             </p>
 
-                            {isEditingNote ? (
+                            {!isAuthenticated ? (
+                                /* Login Prompt for non-authenticated users */
+                                <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                                    <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Login to Save Notes</h3>
+                                    <p className="text-gray-500 mb-4">Create an account or login to write and save your personal notes for this module.</p>
+                                    <button
+                                        onClick={() => navigate('/login')}
+                                        className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"
+                                    >
+                                        Login to Continue
+                                    </button>
+                                </div>
+                            ) : isEditingNote ? (
                                 <>
                                     <textarea
                                         value={userNote}

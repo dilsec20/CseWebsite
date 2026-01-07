@@ -10,13 +10,13 @@ router.post("/start", authorization, async (req, res) => {
 
         // Select Random Problems from database: 1 Easy, 2 Medium, 2 Hard
         const easyResult = await pool.query(
-            "SELECT * FROM problems WHERE difficulty = 'Easy' ORDER BY RANDOM() LIMIT 1"
+            "SELECT * FROM problems WHERE difficulty = 'Easy' AND contest_id IS NULL ORDER BY RANDOM() LIMIT 1"
         );
         const mediumResult = await pool.query(
-            "SELECT * FROM problems WHERE difficulty = 'Medium' ORDER BY RANDOM() LIMIT 2"
+            "SELECT * FROM problems WHERE difficulty = 'Medium' AND contest_id IS NULL ORDER BY RANDOM() LIMIT 2"
         );
         const hardResult = await pool.query(
-            "SELECT * FROM problems WHERE difficulty = 'Hard' ORDER BY RANDOM() LIMIT 2"
+            "SELECT * FROM problems WHERE difficulty = 'Hard' AND contest_id IS NULL ORDER BY RANDOM() LIMIT 2"
         );
 
         console.log('[CONTEST START] Problems found - Easy:', easyResult.rows.length, 'Medium:', mediumResult.rows.length, 'Hard:', hardResult.rows.length);

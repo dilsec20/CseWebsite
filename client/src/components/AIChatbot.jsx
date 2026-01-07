@@ -54,7 +54,7 @@ const AIChatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { getCode } = useCodeContext();
     const [messages, setMessages] = useState([
-        { role: 'ai', content: 'Hello Coder! How can i help you?' }
+        { role: 'ai', content: 'Hello Coder! How can i help you ?' }
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -222,7 +222,7 @@ const AIChatbot = () => {
                         </div>
                         <div className="flex items-center gap-1 mr-4">
                             <button
-                                onClick={() => setMessages([{ role: 'ai', content: 'Hello Coder! How can i help you?' }])}
+                                onClick={() => setMessages([{ role: 'ai', content: 'Hello Coder! How can i help you ?' }])}
                                 className="hover:bg-gray-700 p-1.5 rounded transition text-gray-400 hover:text-white"
                                 title="Clear Chat"
                             >

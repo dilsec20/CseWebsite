@@ -64,14 +64,19 @@ const ContestSolveProblem = () => {
     const containerRef = useRef(null);
 
     // Enter full-screen mode
-    const enterFullScreen = () => {
+    const enterFullScreen = async () => {
         const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
+        try {
+            if (elem.requestFullscreen) {
+                await elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                await elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                await elem.msRequestFullscreen();
+            }
+        } catch (err) {
+            console.log("Full-screen request blocked or failed:", err);
+            // The security overlay will simply show up, asking user to click manually.
         }
     };
 

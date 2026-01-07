@@ -110,11 +110,14 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
           {/* Logo/Brand */}
           <Link to="/dashboard" className="flex items-center gap-2 text-blue-600 font-bold text-xl hover:text-blue-700 transition">
             <Code className="h-6 w-6" />
-            <span>Dashboard</span>
+            <span>AceCoder</span>
           </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-6">
+            <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              Dashboard
+            </Link>
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
             </Link>
@@ -135,7 +138,7 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
               Contests
             </Link>
             <Link to="/leaderboard" className="text-gray-700 hover:text-blue-600 font-medium transition flex items-center gap-1">
-              <span className="hidden lg:inline">Ranks</span>
+              <span className="hidden lg:inline">Leaderboard</span>
               <span className="lg:hidden">Ranks</span>
             </Link>
           </div>

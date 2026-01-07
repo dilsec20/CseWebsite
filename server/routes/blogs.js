@@ -41,9 +41,10 @@ router.get("/:id", async (req, res) => {
         let isUpvoted = false;
         const token = req.header("token");
         if (token) {
+            let user_id; // Declare user_id outside the try block
             try {
-                const payload = require("jsonwebtoken").verify(token, process.env.jwtSecret);
-                const user_id = payload.user;
+                const payload = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
+                user_id = payload.user.id; // Assign to the declared user_id
                 const upvoteCheck = await pool.query(
                     "SELECT 1 FROM blog_upvotes WHERE blog_id = $1 AND user_id = $2",
                     [id, user_id]

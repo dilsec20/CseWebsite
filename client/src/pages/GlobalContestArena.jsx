@@ -89,41 +89,8 @@ const GlobalContestArena = () => {
     };
 
     // Security Measures State
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const [tabSwitchCount, setTabSwitchCount] = useState(0);
-
-    // 1. Enforce Full Screen
-    useEffect(() => {
-        const handleFullScreenChange = () => {
-            const isFS = document.fullscreenElement !== null;
-            setIsFullScreen(isFS);
-
-            if (!isFS && hasStarted && timeLeft > 0) {
-                toast.error("⚠️ Warning: Full Screen Required!", {
-                    autoClose: 5000,
-                    theme: "colored"
-                });
-            }
-        };
-
-        document.addEventListener('fullscreenchange', handleFullScreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    }, [hasStarted, timeLeft]);
-
-    // 2. Detect Tab Switching
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.hidden && hasStarted && timeLeft > 0) {
-                setTabSwitchCount(prev => prev + 1);
-                toast.warn(`⚠️ Tab Switching Detected! Warning ${tabSwitchCount + 1}`, {
-                    theme: "colored"
-                });
-            }
-        };
-
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-    }, [hasStarted, timeLeft, tabSwitchCount]);
+    // Full screen enforcement removed as per user request
+    const [isFullScreen, setIsFullScreen] = useState(false); // Kept for state compatibility if needed, but unused for blocking
 
     const enterFullScreen = async () => {
         try {
@@ -136,38 +103,7 @@ const GlobalContestArena = () => {
 
     if (!contest) return <div className="p-8 text-center">Loading Contest...</div>;
 
-    // Security Blocking Modal
-    if (hasStarted && timeLeft > 0 && isRegistered && !isFullScreen) {
-        return (
-            <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm">
-                <AlertTriangle className="h-24 w-24 text-red-500 mb-6 animate-pulse" />
-                <h1 className="text-4xl font-bold text-white mb-4">Security Violation</h1>
-                <p className="text-xl text-gray-300 max-w-2xl mb-8">
-                    This contest requires <strong>Full Screen Mode</strong> to prevent cheating.
-                    <br />
-                    Please do not switch tabs or exit full screen.
-                </p>
-
-                <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 mb-8 max-w-md w-full">
-                    <div className="flex justify-between text-gray-400 mb-2">
-                        <span>Timer Running:</span>
-                        <span className="font-mono text-green-400">{formatTime(timeLeft)}</span>
-                    </div>
-                    <div className="flex justify-between text-gray-400">
-                        <span>Tab Switches:</span>
-                        <span className="text-orange-400">{tabSwitchCount}</span>
-                    </div>
-                </div>
-
-                <button
-                    onClick={enterFullScreen}
-                    className="px-10 py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-xl rounded-2xl shadow-lg shadow-red-500/30 transition transform hover:scale-105"
-                >
-                    Enable Full Screen to Continue
-                </button>
-            </div>
-        );
-    }
+    // Security Blocking Modal REMOVED
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">

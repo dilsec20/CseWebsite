@@ -22,7 +22,7 @@ const Dashboard = ({ setAuth }) => {
     const [name, setName] = useState("");
     const [stats, setStats] = useState({
         problems_solved: 0,
-        current_streak: 0,
+        active_days: 0,
         hours_spent: 0,
         total_submissions: 0
     });
@@ -127,12 +127,12 @@ const Dashboard = ({ setAuth }) => {
                                 <div className="p-3 bg-yellow-100 rounded-xl">
                                     <Zap className="h-6 w-6 text-yellow-600" />
                                 </div>
-                                <span className={`text-sm font-bold ${stats.current_streak > 0 ? 'text-green-500' : 'text-gray-400'}`}>
-                                    {stats.current_streak > 0 ? 'Active' : 'Inactive'}
+                                <span className={`text-sm font-bold ${stats.active_days > 0 ? 'text-green-500' : 'text-gray-400'}`}>
+                                    {stats.active_days > 0 ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
-                            <h3 className="text-gray-500 text-sm font-medium">Current Streak</h3>
-                            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.current_streak} {stats.current_streak === 1 ? 'Day' : 'Days'}</p>
+                            <h3 className="text-gray-500 text-sm font-medium">Active Days</h3>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.active_days} {stats.active_days === 1 ? 'Day' : 'Days'}</p>
                         </div>
 
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">

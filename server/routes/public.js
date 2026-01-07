@@ -35,33 +35,12 @@ router.get("/profile/:username", async (req, res) => {
             [userId]
         );
 
-        // Calculate current streak
-        const streakQuery = await pool.query(
-            `SELECT DISTINCT DATE(submitted_at) as submission_date 
-             FROM submissions 
-             WHERE user_id = $1 
-             ORDER BY submission_date DESC`,
+        // Calculate Active Days
+        const activeDaysQuery = await pool.query(
+            "SELECT COUNT(DISTINCT DATE(submitted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')) as count FROM submissions WHERE user_id = $1",
             [userId]
         );
-
-        let currentStreak = 0;
-        if (streakQuery.rows.length > 0) {
-            const today = new Date().toISOString().split('T')[0];
-            const lastSubmission = new Date(streakQuery.rows[0].submission_date).toISOString().split('T')[0];
-
-            if (today === lastSubmission) {
-                currentStreak = 1;
-                for (let i = 0; i < streakQuery.rows.length - 1; i++) {
-                    const curr = new Date(streakQuery.rows[i].submission_date);
-                    const next = new Date(streakQuery.rows[i + 1].submission_date);
-                    const diffTime = Math.abs(curr - next);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (diffDays === 1) currentStreak++;
-                    else break;
-                }
-            }
-        }
+        const activeDays = parseInt(activeDaysQuery.rows[0].count);
 
         // Get problems solved by difficulty
         const easyProblems = await pool.query(
@@ -153,7 +132,7 @@ router.get("/profile/:username", async (req, res) => {
                 medium_solved: parseInt(mediumProblems.rows[0].count),
                 hard_solved: parseInt(hardProblems.rows[0].count),
                 total_submissions: parseInt(totalSubmissions.rows[0].count),
-                current_streak: currentStreak,
+                active_days: activeDays,
                 hours_spent: hoursSpent,
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,

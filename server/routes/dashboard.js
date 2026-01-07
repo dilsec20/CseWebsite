@@ -36,8 +36,12 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        // Calculate current streak (Now fetched from users table)
-        const currentStreak = user.current_streak || 0;
+        // Calculate Active Days (Total unique days with at least one submission)
+        const activeDaysQuery = await pool.query(
+            "SELECT COUNT(DISTINCT DATE(submitted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')) as count FROM submissions WHERE user_id = $1",
+            [userId]
+        );
+        const activeDays = parseInt(activeDaysQuery.rows[0].count);
 
         // Get problems solved by difficulty
         const easyProblems = await pool.query(
@@ -197,7 +201,7 @@ router.get("/", authorization, async (req, res) => {
             stats: {
                 problems_solved: parseInt(problemsSolved.rows[0].count),
                 total_submissions: parseInt(totalSubmissions.rows[0].count),
-                current_streak: currentStreak,
+                active_days: activeDays,
                 hours_spent: hoursSpent,
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,

@@ -598,9 +598,9 @@ const Profile = () => {
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-yellow-600 mb-1">
-                                {profileData.stats?.current_streak || 0}
+                                {profileData.stats?.active_days || 0}
                             </div>
-                            <div className="text-sm text-gray-600">Day Streak</div>
+                            <div className="text-sm text-gray-600">Active Days</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-green-600 mb-1">

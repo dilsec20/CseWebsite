@@ -23,6 +23,7 @@ const CPModule = () => {
     const [userNote, setUserNote] = useState('');
     const [noteSaving, setNoteSaving] = useState(false);
     const [noteLastSaved, setNoteLastSaved] = useState(null);
+    const [showNotesView, setShowNotesView] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -207,8 +208,11 @@ const CPModule = () => {
                     {module.topics.map((topic, idx) => (
                         <button
                             key={topic.topic_id}
-                            onClick={() => fetchTopicContent(topic.topic_id)}
-                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${selectedTopic?.topic_id === topic.topic_id
+                            onClick={() => {
+                                setShowNotesView(false);
+                                fetchTopicContent(topic.topic_id);
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${selectedTopic?.topic_id === topic.topic_id && !showNotesView
                                 ? 'bg-blue-50 text-blue-700 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50'
                                 }`}
@@ -217,15 +221,82 @@ const CPModule = () => {
                                 <span className="text-xs font-mono text-gray-400">{idx + 1}.</span>
                                 {topic.title}
                             </span>
-                            {selectedTopic?.topic_id === topic.topic_id && <ChevronRight className="h-4 w-4" />}
+                            {selectedTopic?.topic_id === topic.topic_id && !showNotesView && <ChevronRight className="h-4 w-4" />}
                         </button>
                     ))}
+
+                    {/* My Notes Sidebar Item - Only for authenticated users */}
+                    {isAuthenticated && (
+                        <button
+                            onClick={() => {
+                                setShowNotesView(true);
+                                setSelectedTopic(null);
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${showNotesView
+                                ? 'bg-purple-50 text-purple-700 font-medium'
+                                : 'text-gray-600 hover:bg-gray-50'
+                                }`}
+                        >
+                            <span className="flex items-center gap-3">
+                                <FileText className="h-4 w-4 text-purple-500" />
+                                My Notes
+                            </span>
+                            {showNotesView && <ChevronRight className="h-4 w-4" />}
+                        </button>
+                    )}
                 </div>
             </div>
 
             {/* Main Content */}
             <div className="flex-1 min-w-0">
-                {selectedTopic ? (
+                {showNotesView ? (
+                    /* Notes View */
+                    <div className="max-w-4xl mx-auto px-8 py-12">
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
+                            <div className="flex items-center gap-3 mb-6">
+                                <FileText className="h-8 w-8 text-purple-600" />
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-900">My Notes</h1>
+                                    <p className="text-gray-500 text-sm">Personal notes for {module.title}</p>
+                                </div>
+                            </div>
+
+                            {noteLastSaved && (
+                                <p className="text-xs text-gray-400 mb-4">
+                                    Last saved: {new Date(noteLastSaved).toLocaleString()}
+                                </p>
+                            )}
+
+                            <p className="text-gray-600 mb-4">
+                                Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
+                            </p>
+
+                            <textarea
+                                value={userNote}
+                                onChange={(e) => setUserNote(e.target.value)}
+                                placeholder="Add your notes here...\n\n• Quick tricks\n• Important formulas\n• Key concepts to remember\n• Common mistakes to avoid"
+                                className="w-full h-80 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50 font-mono text-sm"
+                            />
+
+                            <div className="mt-4 flex gap-3">
+                                <button
+                                    onClick={saveUserNote}
+                                    disabled={noteSaving}
+                                    className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50 font-medium"
+                                >
+                                    <Save className="h-4 w-4" />
+                                    {noteSaving ? 'Saving...' : 'Save Notes'}
+                                </button>
+                                <button
+                                    onClick={() => setUserNote('')}
+                                    className="px-6 py-2.5 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition font-medium"
+                                >
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ) : selectedTopic ? (
                     <div className="max-w-4xl mx-auto px-8 py-12">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
                             {selectedTopic.video_url && (
@@ -391,38 +462,6 @@ const CPModule = () => {
                                 Next Topic <ChevronRight className="h-4 w-4" />
                             </button>
                         </div>
-
-                        {/* User Notes Section - Only for authenticated users */}
-                        {isAuthenticated && (
-                            <div className="mt-10 pt-8 border-t border-gray-200">
-                                <div className="flex items-center gap-2 mb-4">
-                                    <FileText className="h-5 w-5 text-purple-600" />
-                                    <h3 className="text-lg font-semibold text-gray-800">My Notes</h3>
-                                    {noteLastSaved && (
-                                        <span className="text-xs text-gray-400 ml-auto">
-                                            Last saved: {new Date(noteLastSaved).toLocaleString()}
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="text-sm text-gray-500 mb-3">
-                                    Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
-                                </p>
-                                <textarea
-                                    value={userNote}
-                                    onChange={(e) => setUserNote(e.target.value)}
-                                    placeholder="Add your notes here... (e.g., quick tricks, formulas, important points)"
-                                    className="w-full h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50"
-                                />
-                                <button
-                                    onClick={saveUserNote}
-                                    disabled={noteSaving}
-                                    className="mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50"
-                                >
-                                    <Save className="h-4 w-4" />
-                                    {noteSaving ? 'Saving...' : 'Save Notes'}
-                                </button>
-                            </div>
-                        )}
                     </div>
                 ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">Select a topic</div>

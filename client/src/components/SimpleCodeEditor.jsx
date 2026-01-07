@@ -1,21 +1,22 @@
 import React from 'react';
 import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs';
+import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-c';
 import 'prismjs/components/prism-cpp';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-java';
 import '../vscode-theme.css';
 
-const SimpleCodeEditor = ({ value, onChange, language = 'cpp' }) => {
+const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
 
     // Helper to get Prism grammar
     const getGrammar = (lang) => {
-        if (lang === 'cpp' || lang === 'c') return languages.cpp;
-        if (lang === 'python') return languages.python;
-        if (lang === 'java') return languages.java;
-        return languages.clike; // Fallback
+        if (lang === 'cpp' || lang === 'c') return Prism.languages.cpp;
+        if (lang === 'python') return Prism.languages.python;
+        if (lang === 'java') return Prism.languages.java;
+        return Prism.languages.clike || Prism.languages.javascript; // Fallback
     };
 
     // Auto-closing pairs for brackets, parentheses, and braces
@@ -32,6 +33,9 @@ const SimpleCodeEditor = ({ value, onChange, language = 'cpp' }) => {
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const selectedText = value.substring(start, end);
+
+        // ... rest of handleKeyDown is correct but let's just make sure value is safe
+        // (value default is "" so it is safe)
 
         // Handle Tab key
         if (e.key === 'Tab') {
@@ -144,10 +148,10 @@ const SimpleCodeEditor = ({ value, onChange, language = 'cpp' }) => {
             </div>
             <div className="flex-1 overflow-auto" style={{ backgroundColor: '#1e1e1e' }}>
                 <Editor
-                    value={value}
+                    value={value || ""}
                     onValueChange={onChange}
                     onKeyDown={handleKeyDown}
-                    highlight={(code) => highlight(code, getGrammar(language) || languages.clike, language)}
+                    highlight={(code) => Prism.highlight(code, getGrammar(language) || Prism.languages.clike || Prism.languages.javascript || {}, language)}
                     padding={16}
                     textareaClassName="focus:outline-none"
                     style={{

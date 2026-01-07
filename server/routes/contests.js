@@ -141,8 +141,8 @@ router.get("/global/all", async (req, res) => {
 
         if (token) {
             try {
-                const payload = require("jsonwebtoken").verify(token, process.env.jwtSecret);
-                user_id = payload.user;
+                const payload = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
+                user_id = payload.user.id;
             } catch (err) {
                 // Invalid token, treat as guest
                 console.warn("Invalid token in public route:", err.message);

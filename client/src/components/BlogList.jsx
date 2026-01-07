@@ -94,6 +94,9 @@ const BlogList = ({ user }) => {
                                 <h4 className="font-semibold text-gray-900 group-hover:text-blue-700 text-sm mb-1 line-clamp-1">
                                     {blog.title}
                                 </h4>
+                                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                                    {blog.content?.substring(0, 100)}{blog.content?.length > 100 ? '...' : ''}
+                                </p>
                                 <div className="flex justify-between items-center text-xs text-gray-500">
                                     <div className="flex items-center gap-2">
                                         <span className="flex items-center gap-1 font-medium text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded">

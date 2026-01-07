@@ -19,7 +19,7 @@ router.get('/leaderboard', async (req, res) => {
                 u.username, 
                 u.profile_picture, 
                 u.rating AS contest_rating,
-                (SELECT COUNT(*) FROM contest_sessions cs WHERE cs.user_id = u.user_id AND cs.status = 'completed') AS contests_attended
+                (SELECT COUNT(*) FROM contest_participations cp WHERE cp.user_id = u.user_id) AS contests_attended
             FROM users u
             WHERE u.rating > 0
             ORDER BY u.rating DESC

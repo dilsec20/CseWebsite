@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle, Lock } from 'lucide-react';
+import { BookOpen, Code, ChevronRight, ChevronLeft, CheckCircle, Lock, Save, FileText, Edit3, Trash2 } from 'lucide-react';
 import { API_URL } from '../config';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -18,6 +18,13 @@ const DSAModule = () => {
     const [solvedProblems, setSolvedProblems] = useState({});
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    // Notes state
+    const [userNote, setUserNote] = useState('');
+    const [noteSaving, setNoteSaving] = useState(false);
+    const [noteLastSaved, setNoteLastSaved] = useState(null);
+    const [showNotesView, setShowNotesView] = useState(false);
+    const [isEditingNote, setIsEditingNote] = useState(false);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsAuthenticated(!!token);
@@ -26,6 +33,57 @@ const DSAModule = () => {
     useEffect(() => {
         fetchModuleData();
     }, [id]);
+
+    // Fetch user notes when module changes (for authenticated users)
+    useEffect(() => {
+        if (isAuthenticated && id) {
+            fetchUserNote();
+        }
+    }, [id, isAuthenticated]);
+
+    const fetchUserNote = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/dsa/notes/${id}`, {
+                headers: { token }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserNote(data.content || '');
+                setNoteLastSaved(data.updated_at);
+                setIsEditingNote(!data.content || data.content.trim() === '');
+            }
+        } catch (err) {
+            console.error('Error fetching note:', err);
+        }
+    };
+
+    const saveUserNote = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            setNoteSaving(true);
+            const response = await fetch(`${API_URL}/api/dsa/notes/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    token
+                },
+                body: JSON.stringify({ content: userNote })
+            });
+            if (response.ok) {
+                setNoteLastSaved(new Date().toISOString());
+                setIsEditingNote(false);
+            }
+        } catch (err) {
+            console.error('Error saving note:', err);
+        } finally {
+            setNoteSaving(false);
+        }
+    };
 
     // Fetch solved problems when topic changes
     useEffect(() => {
@@ -151,8 +209,11 @@ const DSAModule = () => {
                     {module.topics.map((topic, idx) => (
                         <button
                             key={topic.topic_id}
-                            onClick={() => fetchTopicContent(topic.topic_id)}
-                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${selectedTopic?.topic_id === topic.topic_id
+                            onClick={() => {
+                                setShowNotesView(false);
+                                fetchTopicContent(topic.topic_id);
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${selectedTopic?.topic_id === topic.topic_id && !showNotesView
                                 ? 'bg-blue-50 text-blue-700 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50'
                                 }`}
@@ -161,15 +222,122 @@ const DSAModule = () => {
                                 <span className="text-xs font-mono text-gray-400">{idx + 1}.</span>
                                 {topic.title}
                             </span>
-                            {selectedTopic?.topic_id === topic.topic_id && <ChevronRight className="h-4 w-4" />}
+                            {selectedTopic?.topic_id === topic.topic_id && !showNotesView && <ChevronRight className="h-4 w-4" />}
                         </button>
                     ))}
+
+                    {/* My Notes Sidebar Item - Only for authenticated users */}
+                    {isAuthenticated && (
+                        <button
+                            onClick={() => {
+                                setShowNotesView(true);
+                                setSelectedTopic(null);
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-lg mb-1 flex items-center justify-between transition ${showNotesView
+                                ? 'bg-purple-50 text-purple-700 font-medium'
+                                : 'text-gray-600 hover:bg-gray-50'
+                                }`}
+                        >
+                            <span className="flex items-center gap-3">
+                                <FileText className="h-4 w-4 text-purple-500" />
+                                My Notes
+                            </span>
+                            {showNotesView && <ChevronRight className="h-4 w-4" />}
+                        </button>
+                    )}
                 </div>
             </div>
 
             {/* Main Content */}
             <div className="flex-1 min-w-0">
-                {selectedTopic ? (
+                {showNotesView ? (
+                    /* Notes View */
+                    <div className="max-w-4xl mx-auto px-8 py-12">
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
+                            <div className="flex items-center gap-3 mb-6">
+                                <FileText className="h-8 w-8 text-purple-600" />
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-900">My Notes</h1>
+                                    <p className="text-gray-500 text-sm">Personal notes for {module.title}</p>
+                                </div>
+                            </div>
+
+                            {noteLastSaved && (
+                                <p className="text-xs text-gray-400 mb-4">
+                                    Last saved: {new Date(noteLastSaved).toLocaleString()}
+                                </p>
+                            )}
+
+                            <p className="text-gray-600 mb-4">
+                                Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
+                            </p>
+
+                            {isEditingNote ? (
+                                <>
+                                    <textarea
+                                        value={userNote}
+                                        onChange={(e) => setUserNote(e.target.value)}
+                                        placeholder="Add your notes here...\n\n• Quick tricks\n• Important formulas\n• Key concepts to remember"
+                                        className="w-full h-80 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50 font-mono text-sm"
+                                    />
+                                    <div className="mt-4 flex gap-3">
+                                        <button
+                                            onClick={saveUserNote}
+                                            disabled={noteSaving}
+                                            className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50 font-medium"
+                                        >
+                                            <Save className="h-4 w-4" />
+                                            {noteSaving ? 'Saving...' : 'Save Notes'}
+                                        </button>
+                                        {userNote && noteLastSaved && (
+                                            <button
+                                                onClick={() => setIsEditingNote(false)}
+                                                className="px-6 py-2.5 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition font-medium"
+                                            >
+                                                Cancel
+                                            </button>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    {userNote ? (
+                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[200px] whitespace-pre-wrap font-mono text-sm text-gray-800">
+                                            {userNote}
+                                        </div>
+                                    ) : (
+                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[100px] flex items-center justify-center text-gray-400">
+                                            No notes yet. Click Edit to add some!
+                                        </div>
+                                    )}
+                                    <div className="mt-4 flex gap-3">
+                                        <button
+                                            onClick={() => setIsEditingNote(true)}
+                                            className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 font-medium"
+                                        >
+                                            <Edit3 className="h-4 w-4" />
+                                            Edit
+                                        </button>
+                                        {userNote && (
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm('Are you sure you want to delete your notes?')) {
+                                                        setUserNote('');
+                                                        setIsEditingNote(true);
+                                                    }
+                                                }}
+                                                className="px-6 py-2.5 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition flex items-center gap-2 font-medium"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                Delete
+                                            </button>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                ) : selectedTopic ? (
                     <div className="max-w-4xl mx-auto px-8 py-12">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
                             {selectedTopic.video_url && (

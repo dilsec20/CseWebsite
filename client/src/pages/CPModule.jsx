@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ChevronRight, ChevronLeft, Lock, Save, FileText } from 'lucide-react';
+import { BookOpen, ChevronRight, ChevronLeft, Lock, Save, FileText, Edit3, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -24,6 +24,7 @@ const CPModule = () => {
     const [noteSaving, setNoteSaving] = useState(false);
     const [noteLastSaved, setNoteLastSaved] = useState(null);
     const [showNotesView, setShowNotesView] = useState(false);
+    const [isEditingNote, setIsEditingNote] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -50,6 +51,8 @@ const CPModule = () => {
                 const data = await response.json();
                 setUserNote(data.content || '');
                 setNoteLastSaved(data.updated_at);
+                // If note exists, show view mode; if empty, show edit mode
+                setIsEditingNote(!data.content || data.content.trim() === '');
             }
         } catch (err) {
             console.error('Error fetching note:', err);
@@ -72,6 +75,7 @@ const CPModule = () => {
             });
             if (response.ok) {
                 setNoteLastSaved(new Date().toISOString());
+                setIsEditingNote(false); // Exit edit mode after saving
             }
         } catch (err) {
             console.error('Error saving note:', err);
@@ -271,29 +275,73 @@ const CPModule = () => {
                                 Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
                             </p>
 
-                            <textarea
-                                value={userNote}
-                                onChange={(e) => setUserNote(e.target.value)}
-                                placeholder="Add your notes here...\n\n• Quick tricks\n• Important formulas\n• Key concepts to remember\n• Common mistakes to avoid"
-                                className="w-full h-80 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50 font-mono text-sm"
-                            />
+                            {isEditingNote ? (
+                                /* Edit Mode */
+                                <>
+                                    <textarea
+                                        value={userNote}
+                                        onChange={(e) => setUserNote(e.target.value)}
+                                        placeholder="Add your notes here...\n\n• Quick tricks\n• Important formulas\n• Key concepts to remember\n• Common mistakes to avoid"
+                                        className="w-full h-80 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50 font-mono text-sm"
+                                    />
 
-                            <div className="mt-4 flex gap-3">
-                                <button
-                                    onClick={saveUserNote}
-                                    disabled={noteSaving}
-                                    className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50 font-medium"
-                                >
-                                    <Save className="h-4 w-4" />
-                                    {noteSaving ? 'Saving...' : 'Save Notes'}
-                                </button>
-                                <button
-                                    onClick={() => setUserNote('')}
-                                    className="px-6 py-2.5 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition font-medium"
-                                >
-                                    Clear
-                                </button>
-                            </div>
+                                    <div className="mt-4 flex gap-3">
+                                        <button
+                                            onClick={saveUserNote}
+                                            disabled={noteSaving}
+                                            className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50 font-medium"
+                                        >
+                                            <Save className="h-4 w-4" />
+                                            {noteSaving ? 'Saving...' : 'Save Notes'}
+                                        </button>
+                                        {userNote && noteLastSaved && (
+                                            <button
+                                                onClick={() => setIsEditingNote(false)}
+                                                className="px-6 py-2.5 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition font-medium"
+                                            >
+                                                Cancel
+                                            </button>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                /* View Mode */
+                                <>
+                                    {userNote ? (
+                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[200px] whitespace-pre-wrap font-mono text-sm text-gray-800">
+                                            {userNote}
+                                        </div>
+                                    ) : (
+                                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-[100px] flex items-center justify-center text-gray-400">
+                                            No notes yet. Click Edit to add some!
+                                        </div>
+                                    )}
+
+                                    <div className="mt-4 flex gap-3">
+                                        <button
+                                            onClick={() => setIsEditingNote(true)}
+                                            className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 font-medium"
+                                        >
+                                            <Edit3 className="h-4 w-4" />
+                                            Edit
+                                        </button>
+                                        {userNote && (
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm('Are you sure you want to delete your notes?')) {
+                                                        setUserNote('');
+                                                        setIsEditingNote(true);
+                                                    }
+                                                }}
+                                                className="px-6 py-2.5 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition flex items-center gap-2 font-medium"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                Delete
+                                            </button>
+                                        )}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 ) : selectedTopic ? (

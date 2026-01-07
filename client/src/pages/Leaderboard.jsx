@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Target, Medal, Crown, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { Trophy, Medal, Crown, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const Leaderboard = () => {
     const [users, setUsers] = useState([]);
@@ -53,7 +53,7 @@ const Leaderboard = () => {
                                     <th className="px-6 py-4 text-left font-semibold">Rank</th>
                                     <th className="px-6 py-4 text-left font-semibold">Coder</th>
                                     <th className="px-6 py-4 text-center font-semibold flex items-center justify-center gap-2">
-                                        <Target size={18} /> Solved
+                                        <Trophy size={18} /> Contests
                                     </th>
                                     <th className="px-6 py-4 text-center font-semibold">
                                         <div className="flex items-center justify-center gap-2">
@@ -95,7 +95,7 @@ const Leaderboard = () => {
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <span className="font-mono font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-lg">
-                                                {user.total_solved}
+                                                {user.contests_attended || 0}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-center">

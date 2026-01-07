@@ -15,7 +15,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetchAdminData();
-    }, []);
+    }, [userPage]);
 
     const fetchAdminData = async () => {
         try {
@@ -280,21 +280,15 @@ const AdminDashboard = () => {
                             </div>
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => {
-                                        setUserPage(p => p - 1);
-                                        setTimeout(fetchAdminData, 100);
-                                    }}
+                                    onClick={() => setUserPage(p => p - 1)}
                                     disabled={userPagination.current_page === 1}
                                     className="px-4 py-2 border rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                 >
                                     <ChevronLeft className="h-4 w-4" /> Previous
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        setUserPage(p => p + 1);
-                                        setTimeout(fetchAdminData, 100);
-                                    }}
-                                    disabled={userPagination.current_page === userPagination.total_pages}
+                                    onClick={() => setUserPage(p => p + 1)}
+                                    disabled={userPagination.current_page >= userPagination.total_pages}
                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
                                 >
                                     Next <ChevronRight className="h-4 w-4" />

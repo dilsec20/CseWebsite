@@ -128,7 +128,7 @@ const Leaderboard = () => {
                                 </button>
                                 <button
                                     onClick={() => setPage(p => p + 1)}
-                                    disabled={pagination.current_page === pagination.total_pages}
+                                    disabled={pagination.current_page >= pagination.total_pages}
                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
                                 >
                                     Next <ChevronRight className="h-4 w-4" />

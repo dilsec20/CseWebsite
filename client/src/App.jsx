@@ -196,6 +196,10 @@ const ChatbotWrapper = () => {
   if (location.pathname.startsWith('/contests')) {
     return null;
   }
+  // Hide chatbot when solving a contest problem (has ?contest= in URL)
+  if (location.pathname.startsWith('/problems') && location.search.includes('contest=')) {
+    return null;
+  }
   return <AIChatbot />;
 };
 

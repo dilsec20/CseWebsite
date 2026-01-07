@@ -226,7 +226,7 @@ const ContestSolveProblem = () => {
                     code,
                     language,
                     problem_id: problemId,
-                    input: problem.sample_input || ''
+                    input: problem.test_case_input || ''
                 })
             });
             const data = await res.json();
@@ -396,20 +396,20 @@ const ContestSolveProblem = () => {
                                 </div>
                             )}
 
-                            {problem.sample_input && (
+                            {problem.test_case_input && (
                                 <div className="mt-6">
                                     <h3 className="text-lg font-semibold text-white mb-2">Sample Input</h3>
                                     <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
-                                        {problem.sample_input}
+                                        {problem.test_case_input}
                                     </pre>
                                 </div>
                             )}
 
-                            {problem.sample_output && (
+                            {problem.test_case_output && (
                                 <div className="mt-4">
                                     <h3 className="text-lg font-semibold text-white mb-2">Sample Output</h3>
                                     <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto">
-                                        {problem.sample_output}
+                                        {problem.test_case_output}
                                     </pre>
                                 </div>
                             )}
@@ -523,7 +523,7 @@ const ContestSolveProblem = () => {
                         <div className="flex-1 overflow-y-auto p-4 font-mono text-sm">
                             {rightTab === 'testcase' && (
                                 <div className="text-gray-400">
-                                    <pre className="bg-gray-900/50 p-3 rounded">{problem.sample_input || 'No sample input'}</pre>
+                                    <pre className="bg-gray-900/50 p-3 rounded">{problem.test_case_input || 'No sample input'}</pre>
                                 </div>
                             )}
                             {rightTab === 'output' && (
@@ -543,9 +543,9 @@ const ContestSolveProblem = () => {
                                     {testResults && testResults.length > 0 && (
                                         <div className="space-y-2">
                                             {testResults.map((tr, i) => (
-                                                <div key={i} className={`flex items-center gap-2 p-2 rounded ${tr.passed ? 'bg-green-900/20' : 'bg-red-900/20'
+                                                <div key={i} className={`flex items-center gap-2 p-2 rounded ${tr.status === 'Passed' ? 'bg-green-900/20' : 'bg-red-900/20'
                                                     }`}>
-                                                    {tr.passed ? (
+                                                    {tr.status === 'Passed' ? (
                                                         <Check className="w-4 h-4 text-green-400" />
                                                     ) : (
                                                         <X className="w-4 h-4 text-red-400" />

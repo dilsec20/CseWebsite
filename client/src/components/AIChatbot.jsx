@@ -187,7 +187,7 @@ const AIChatbot = () => {
     };
 
     return (
-        <div className="fixed bottom-6 left-6 z-50 font-sans">
+        <div className="fixed bottom-0 left-6 z-50 font-sans">
             {/* Toggle Button */}
             {!isOpen && (
                 <button

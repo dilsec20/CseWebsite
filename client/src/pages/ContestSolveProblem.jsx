@@ -56,10 +56,10 @@ const ContestSolveProblem = () => {
     const [contestProblems, setContestProblems] = useState([]);
     const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
 
-    // Security: Full-screen enforcement
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const [tabSwitchCount, setTabSwitchCount] = useState(0);
-    const [contestEnded, setContestEnded] = useState(false);
+    // Security: Full-screen enforcement REMOVED as per user request
+    const contestEnded = false; // Simplified state replacement or just keep the used one if needed. 
+    // Actually setContestEnded is used. Let's keep that.
+    const [isContestEnded, setContestEnded] = useState(false);
 
     const containerRef = useRef(null);
 
@@ -99,42 +99,7 @@ const ContestSolveProblem = () => {
         navigate(`/contests/global/${contestId}`);
     };
 
-    // Full-screen change detection
-    useEffect(() => {
-        const handleFullScreenChange = () => {
-            const fullScreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-            setIsFullScreen(!!fullScreenElement);
-
-            // If user exited full-screen and contest not ended, this is a violation
-            if (!fullScreenElement && !contestEnded && timeLeft > 0) {
-                setTabSwitchCount(prev => prev + 1);
-                toast.warning("⚠️ Security Warning: Full-screen mode required!");
-            }
-        };
-
-        document.addEventListener('fullscreenchange', handleFullScreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-        document.addEventListener('msfullscreenchange', handleFullScreenChange);
-
-        return () => {
-            document.removeEventListener('fullscreenchange', handleFullScreenChange);
-            document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-            document.removeEventListener('msfullscreenchange', handleFullScreenChange);
-        };
-    }, [contestEnded, timeLeft]);
-
-    // Tab visibility detection
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.hidden && !contestEnded && timeLeft > 0) {
-                setTabSwitchCount(prev => prev + 1);
-                toast.warning("⚠️ Tab switch detected!");
-            }
-        };
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [contestEnded, timeLeft]);
+    // Security enforcement hooks REMOVED
 
 
 
@@ -142,6 +107,12 @@ const ContestSolveProblem = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Reset code when problem changes
+                setCode(BOILERPLATES[language]);
+                setVerdict(null);
+                setTestResults([]);
+                setOutput('');
+
                 const token = localStorage.getItem("token");
 
                 const problemRes = await fetch(`${API_URL}/api/problems/${problemId}`, {
@@ -300,12 +271,7 @@ const ContestSolveProblem = () => {
                         <Trophy className="w-4 h-4 text-yellow-500" />
                         <span className="font-medium text-sm">{contest.title}</span>
                     </div>
-                    {tabSwitchCount > 0 && (
-                        <div className="flex items-center gap-1 px-2 py-1 bg-red-900/50 text-red-400 text-xs rounded-lg">
-                            <AlertTriangle className="w-3 h-3" />
-                            {tabSwitchCount} violations
-                        </div>
-                    )}
+
                 </div>
 
                 {/* Problem Navigation */}

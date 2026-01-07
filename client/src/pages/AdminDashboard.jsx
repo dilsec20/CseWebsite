@@ -221,8 +221,12 @@ const AdminDashboard = () => {
                                     <tr key={user.user_id} className="hover:bg-gray-50 transition">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
-                                                    {user.user_name.substring(0, 2).toUpperCase()}
+                                                <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm overflow-hidden">
+                                                    {user.profile_picture ? (
+                                                        <img src={user.profile_picture} alt={user.user_name} className="h-full w-full object-cover" />
+                                                    ) : (
+                                                        user.user_name.substring(0, 2).toUpperCase()
+                                                    )}
                                                 </div>
                                                 <div>
                                                     <div className="font-medium text-gray-900">{user.user_name}</div>

@@ -103,7 +103,7 @@ router.get("/users", authorization, verifyAdmin, async (req, res) => {
         const totalPages = Math.ceil(totalUsers / limit);
 
         const users = await pool.query(
-            `SELECT user_id, user_name, username, user_email, role, created_at 
+            `SELECT user_id, user_name, username, user_email, role, created_at, profile_picture 
              FROM users 
              ORDER BY created_at DESC 
              LIMIT $1 OFFSET $2`,

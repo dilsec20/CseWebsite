@@ -99,5 +99,55 @@ router.post("/progress", authorization, async (req, res) => {
     }
 });
 
+// ==================== USER NOTES ====================
+
+// Get user's note for a module (authenticated)
+router.get("/notes/:moduleId", authorization, async (req, res) => {
+    try {
+        const userId = req.user;
+        const { moduleId } = req.params;
+
+        const result = await pool.query(
+            "SELECT content, updated_at FROM cp_user_notes WHERE user_id = $1 AND module_id = $2",
+            [userId, moduleId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.json({ content: "", updated_at: null });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Save/Update user's note for a module (authenticated)
+router.put("/notes/:moduleId", authorization, async (req, res) => {
+    try {
+        const userId = req.user;
+        const { moduleId } = req.params;
+        const { content } = req.body;
+
+        if (content === undefined) {
+            return res.status(400).json({ error: "content is required" });
+        }
+
+        // Upsert: insert or update
+        await pool.query(`
+            INSERT INTO cp_user_notes (user_id, module_id, content, updated_at)
+            VALUES ($1, $2, $3, NOW())
+            ON CONFLICT (user_id, module_id)
+            DO UPDATE SET content = $3, updated_at = NOW()
+        `, [userId, moduleId, content]);
+
+        res.json({ success: true, message: "Note saved!" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ChevronRight, ChevronLeft, Lock } from 'lucide-react';
+import { BookOpen, ChevronRight, ChevronLeft, Lock, Save, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -19,11 +19,65 @@ const CPModule = () => {
     const [solvedProblems, setSolvedProblems] = useState({});
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    // Notes state
+    const [userNote, setUserNote] = useState('');
+    const [noteSaving, setNoteSaving] = useState(false);
+    const [noteLastSaved, setNoteLastSaved] = useState(null);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsAuthenticated(!!token);
         fetchModuleData();
     }, [id]);
+
+    // Fetch user notes when module changes (for authenticated users)
+    useEffect(() => {
+        if (isAuthenticated && id) {
+            fetchUserNote();
+        }
+    }, [id, isAuthenticated]);
+
+    const fetchUserNote = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/cp/notes/${id}`, {
+                headers: { token }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserNote(data.content || '');
+                setNoteLastSaved(data.updated_at);
+            }
+        } catch (err) {
+            console.error('Error fetching note:', err);
+        }
+    };
+
+    const saveUserNote = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            setNoteSaving(true);
+            const response = await fetch(`${API_URL}/api/cp/notes/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    token
+                },
+                body: JSON.stringify({ content: userNote })
+            });
+            if (response.ok) {
+                setNoteLastSaved(new Date().toISOString());
+            }
+        } catch (err) {
+            console.error('Error saving note:', err);
+        } finally {
+            setNoteSaving(false);
+        }
+    };
 
     // Fetch progress when topic changes (for authenticated users)
     useEffect(() => {
@@ -337,6 +391,38 @@ const CPModule = () => {
                                 Next Topic <ChevronRight className="h-4 w-4" />
                             </button>
                         </div>
+
+                        {/* User Notes Section - Only for authenticated users */}
+                        {isAuthenticated && (
+                            <div className="mt-10 pt-8 border-t border-gray-200">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <FileText className="h-5 w-5 text-purple-600" />
+                                    <h3 className="text-lg font-semibold text-gray-800">My Notes</h3>
+                                    {noteLastSaved && (
+                                        <span className="text-xs text-gray-400 ml-auto">
+                                            Last saved: {new Date(noteLastSaved).toLocaleString()}
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-sm text-gray-500 mb-3">
+                                    Write your personal notes, tricks, and key concepts for this module. Perfect for revision!
+                                </p>
+                                <textarea
+                                    value={userNote}
+                                    onChange={(e) => setUserNote(e.target.value)}
+                                    placeholder="Add your notes here... (e.g., quick tricks, formulas, important points)"
+                                    className="w-full h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-gray-800 bg-gray-50"
+                                />
+                                <button
+                                    onClick={saveUserNote}
+                                    disabled={noteSaving}
+                                    className="mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2 disabled:opacity-50"
+                                >
+                                    <Save className="h-4 w-4" />
+                                    {noteSaving ? 'Saving...' : 'Save Notes'}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">Select a topic</div>

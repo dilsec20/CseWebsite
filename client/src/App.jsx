@@ -137,9 +137,8 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
             <Link to="/contests" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Contests
             </Link>
-            <Link to="/leaderboard" className="text-gray-700 hover:text-blue-600 font-medium transition flex items-center gap-1">
-              <span className="hidden lg:inline">Leaderboard</span>
-              <span className="lg:hidden">Ranks</span>
+            <Link to="/leaderboard" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              Ranks
             </Link>
           </div>
 

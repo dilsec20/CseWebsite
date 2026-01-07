@@ -74,6 +74,64 @@ router.post("/test-cases/add", authorization, async (req, res) => {
     }
 });
 
+// Update a Test Case
+router.put("/test-cases/:test_case_id", authorization, async (req, res) => {
+    try {
+        const { test_case_id } = req.params;
+        const { input, expected_output, is_sample } = req.body;
+
+        const updated = await pool.query(
+            "UPDATE test_cases SET input = $1, expected_output = $2, is_sample = $3 WHERE test_case_id = $4 RETURNING *",
+            [input, expected_output, is_sample || false, test_case_id]
+        );
+
+        if (updated.rows.length === 0) {
+            return res.status(404).json({ error: "Test case not found" });
+        }
+
+        res.json(updated.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Delete a Test Case
+router.delete("/test-cases/:test_case_id", authorization, async (req, res) => {
+    try {
+        const { test_case_id } = req.params;
+
+        const deleted = await pool.query(
+            "DELETE FROM test_cases WHERE test_case_id = $1 RETURNING *",
+            [test_case_id]
+        );
+
+        if (deleted.rows.length === 0) {
+            return res.status(404).json({ error: "Test case not found" });
+        }
+
+        res.json({ message: "Test case deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Get Test Cases for a Problem
+router.get("/problems/:problem_id/test-cases", authorization, async (req, res) => {
+    try {
+        const { problem_id } = req.params;
+        const testCases = await pool.query(
+            "SELECT * FROM test_cases WHERE problem_id = $1 ORDER BY test_case_id ASC",
+            [problem_id]
+        );
+        res.json(testCases.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 // Update Contest
 router.put("/:id/update", authorization, async (req, res) => {
     try {
@@ -97,6 +155,20 @@ router.put("/:id/update", authorization, async (req, res) => {
 router.post("/:id/finalize", authorization, async (req, res) => {
     try {
         const { id } = req.params;
+
+        // FIRST: Check if contest exists and is still active (not already finalized)
+        const contestCheck = await pool.query(
+            "SELECT is_active FROM global_contests WHERE contest_id = $1",
+            [id]
+        );
+
+        if (contestCheck.rows.length === 0) {
+            return res.status(404).json({ error: "Contest not found" });
+        }
+
+        if (contestCheck.rows[0].is_active === false) {
+            return res.status(400).json({ error: "Contest already finalized. Ratings have already been calculated." });
+        }
 
         // 1. Get all participants with scores > 0
         const participants = await pool.query(

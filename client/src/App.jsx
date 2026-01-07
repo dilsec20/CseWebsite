@@ -23,6 +23,7 @@ import ReasoningTheory from './pages/ReasoningTheory';
 import ProfileMenu from './components/ProfileMenu';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminContestManager from './pages/AdminContestManager';
+import ContestSolveProblem from './pages/ContestSolveProblem';
 import Leaderboard from './pages/Leaderboard';
 import StudyPlan from './pages/StudyPlan'; // NEW
 import DSAPath from './pages/DSAPath';
@@ -196,6 +197,10 @@ const ChatbotWrapper = () => {
   if (location.pathname.startsWith('/contests')) {
     return null;
   }
+  // Hide chatbot on contest problem pages (LeetCode style UI)
+  if (location.pathname.startsWith('/contest/')) {
+    return null;
+  }
   // Hide chatbot when solving a contest problem (has ?contest= in URL)
   if (location.pathname.startsWith('/problems') && location.search.includes('contest=')) {
     return null;
@@ -274,6 +279,7 @@ function App() {
             <Route path="/contests" element={<ContestDashboard />} />
             <Route path="/contests/:id" element={<ContestArena />} />
             <Route path="/contests/global/:id" element={isAuthenticated ? <GlobalContestArena /> : <Navigate to="/login" />} />
+            <Route path="/contest/:contestId/problem/:problemId" element={isAuthenticated ? <ContestSolveProblem /> : <Navigate to="/login" />} />
             <Route path="/theory/aptitude" element={<AptitudeTheory />} />
             <Route path="/theory/cs-fundamentals" element={<CSFundamentalsTheory />} />
             <Route path="/theory/reasoning" element={<ReasoningTheory />} />

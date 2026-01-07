@@ -356,15 +356,15 @@ const ContestSolveProblem = () => {
 
                 {/* Problem Navigation */}
                 <div className="flex items-center gap-2">
-                    {contestProblems.map((p, i) => (
+                    {(contestProblems || []).map((p, i) => (
                         <button
                             key={p.problem_id}
                             onClick={() => navigateToProblem(i)}
                             className={`w-8 h-8 rounded-lg text-sm font-bold transition ${p.problem_id == problemId
-                                    ? 'bg-cyan-600 text-white'
-                                    : p.solved
-                                        ? 'bg-green-600/20 text-green-400 border border-green-600/50'
-                                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                                ? 'bg-cyan-600 text-white'
+                                : p.solved
+                                    ? 'bg-green-600/20 text-green-400 border border-green-600/50'
+                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                                 }`}
                         >
                             {String.fromCharCode(65 + i)}
@@ -400,8 +400,8 @@ const ContestSolveProblem = () => {
                         <button
                             onClick={() => setActiveTab('description')}
                             className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition ${activeTab === 'description'
-                                    ? 'text-cyan-400 border-b-2 border-cyan-400'
-                                    : 'text-gray-500 hover:text-gray-300'
+                                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                                : 'text-gray-500 hover:text-gray-300'
                                 }`}
                         >
                             <FileText className="w-4 h-4" />
@@ -417,8 +417,8 @@ const ContestSolveProblem = () => {
                             <h1 className="text-2xl font-bold text-white mt-1">{problem.title}</h1>
                             <div className="flex gap-2 mt-3">
                                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-400' :
-                                        problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-400' :
-                                            'bg-red-900/50 text-red-400'
+                                    problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-400' :
+                                        'bg-red-900/50 text-red-400'
                                     }`}>
                                     {problem.difficulty}
                                 </span>
@@ -586,7 +586,7 @@ const ContestSolveProblem = () => {
                                     ) : (
                                         <div className="text-gray-500">Submit your code to see results...</div>
                                     )}
-                                    {testResults.length > 0 && (
+                                    {testResults && testResults.length > 0 && (
                                         <div className="space-y-2">
                                             {testResults.map((tr, i) => (
                                                 <div key={i} className={`flex items-center gap-2 p-2 rounded ${tr.passed ? 'bg-green-900/20' : 'bg-red-900/20'

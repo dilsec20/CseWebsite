@@ -15,10 +15,14 @@ router.get('/leaderboard', async (req, res) => {
         const totalPages = Math.ceil(totalUsers / limit);
 
         const result = await pool.query(`
-            SELECT username, profile_picture, contests_attended, rating AS contest_rating
-            FROM users
-            WHERE rating > 0
-            ORDER BY rating DESC, contests_attended DESC
+            SELECT 
+                u.username, 
+                u.profile_picture, 
+                u.rating AS contest_rating,
+                (SELECT COUNT(*) FROM contest_sessions cs WHERE cs.user_id = u.user_id AND cs.status = 'completed') AS contests_attended
+            FROM users u
+            WHERE u.rating > 0
+            ORDER BY u.rating DESC
             LIMIT $1 OFFSET $2
         `, [limit, offset]);
 

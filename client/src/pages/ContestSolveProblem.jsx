@@ -161,16 +161,22 @@ const ContestSolveProblem = () => {
                 });
                 if (contestRes.ok) {
                     const data = await contestRes.json();
-                    setContest(data.contest);
-                    setContestProblems(data.problems);
+                    setContest(data.contest || null);
+                    setContestProblems(data.problems || []);
 
-                    const idx = data.problems.findIndex(p => p.problem_id == problemId);
-                    setCurrentProblemIndex(idx >= 0 ? idx : 0);
+                    if (data.problems && data.problems.length > 0) {
+                        const idx = data.problems.findIndex(p => p.problem_id == problemId);
+                        setCurrentProblemIndex(idx >= 0 ? idx : 0);
+                    }
 
-                    const end = new Date(data.contest.end_time);
-                    const now = new Date();
-                    if (now < end) {
-                        setTimeLeft(Math.floor((end - now) / 1000));
+                    if (data.contest && data.contest.end_time) {
+                        const end = new Date(data.contest.end_time);
+                        const now = new Date();
+                        if (now < end) {
+                            setTimeLeft(Math.floor((end - now) / 1000));
+                        } else {
+                            setTimeLeft(0); // Past contest
+                        }
                     }
                 }
             } catch (err) {

@@ -267,6 +267,13 @@ const ContestSolveProblem = () => {
             {/* Header - LeetCode Style */}
             <header className="bg-[#16162a] border-b border-gray-800 px-4 py-2 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate(`/contests/global/${contestId}`)}
+                        className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition"
+                        title="Back to Contest Dashboard"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
                     <div className="flex items-center gap-2">
                         <Trophy className="w-4 h-4 text-yellow-500" />
                         <span className="font-medium text-sm">{contest.title}</span>
@@ -299,13 +306,6 @@ const ContestSolveProblem = () => {
                         <Clock className={`w-4 h-4 ${timeLeft && timeLeft < 300 ? 'animate-pulse' : ''}`} />
                         <span className="font-mono font-bold">{formatTime(timeLeft)}</span>
                     </div>
-                    <button
-                        onClick={handleEndContest}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-red-900/50 hover:bg-red-800 text-red-400 text-sm font-medium rounded-lg transition"
-                    >
-                        <LogOut className="w-4 h-4" />
-                        End Contest
-                    </button>
                 </div>
             </header>
 

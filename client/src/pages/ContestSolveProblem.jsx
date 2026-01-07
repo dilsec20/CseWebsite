@@ -56,6 +56,9 @@ const ContestSolveProblem = () => {
     const [contestProblems, setContestProblems] = useState([]);
     const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
 
+    // Submissions State
+    const [submissions, setSubmissions] = useState([]);
+
     // Security: Full-screen enforcement REMOVED as per user request
     const contestEnded = false; // Simplified state replacement or just keep the used one if needed. 
     // Actually setContestEnded is used. Let's keep that.
@@ -103,6 +106,23 @@ const ContestSolveProblem = () => {
 
 
 
+    // Fetch submissions
+    const fetchSubmissions = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/problems/${problemId}/submissions`, {
+                headers: { "token": token }
+            });
+            const data = await response.json();
+            setSubmissions(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error("Error fetching submissions:", err);
+            setSubmissions([]);
+        }
+    };
+
     // Fetch problem and contest data
     useEffect(() => {
         const fetchData = async () => {
@@ -146,6 +166,10 @@ const ContestSolveProblem = () => {
                         }
                     }
                 }
+
+                // Fetch submissions for the new problem
+                fetchSubmissions();
+
             } catch (err) {
                 console.error(err);
             }
@@ -239,6 +263,10 @@ const ContestSolveProblem = () => {
             } else {
                 toast.error(data.verdict || "Wrong Answer");
             }
+
+            // Refresh submissions list
+            fetchSubmissions();
+
         } catch (err) {
             toast.error("Submission failed");
         } finally {
@@ -312,6 +340,7 @@ const ContestSolveProblem = () => {
             {/* Main Content - Split Pane */}
             <div ref={containerRef} className="flex-1 flex overflow-hidden">
                 {/* Left Panel - Problem Description */}
+                {/* Left Panel - Problem Description & Submissions */}
                 <div
                     className="flex flex-col bg-[#1e1e3f] border-r border-gray-800"
                     style={{ width: `${splitPos}%` }}
@@ -327,59 +356,118 @@ const ContestSolveProblem = () => {
                             <FileText className="w-4 h-4" />
                             Description
                         </button>
+                        <button
+                            onClick={() => setActiveTab('submissions')}
+                            className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition ${activeTab === 'submissions'
+                                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                                : 'text-gray-500 hover:text-gray-300'
+                                }`}
+                        >
+                            <Clock className="w-4 h-4" />
+                            Submissions
+                        </button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-6">
-                        <div className="mb-4">
-                            <span className="text-cyan-400 font-mono text-sm">
-                                Problem {String.fromCharCode(65 + currentProblemIndex)}
-                            </span>
-                            <h1 className="text-2xl font-bold text-white mt-1">{problem.title}</h1>
-                            <div className="flex gap-2 mt-3">
-                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-400' :
-                                    problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-400' :
-                                        'bg-red-900/50 text-red-400'
-                                    }`}>
-                                    {problem.difficulty}
-                                </span>
-                                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-900/50 text-blue-400">
-                                    {problem.topic}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="prose prose-invert max-w-none">
-                            <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
-                                {problem.description}
-                            </div>
-
-                            {problem.constraints && (
-                                <div className="mt-6">
-                                    <h3 className="text-lg font-semibold text-white mb-2">Constraints</h3>
-                                    <div className="bg-gray-800/50 rounded-lg p-4 text-gray-300 font-mono text-sm">
-                                        {problem.constraints}
+                        {activeTab === 'description' ? (
+                            <>
+                                <div className="mb-4">
+                                    <span className="text-cyan-400 font-mono text-sm">
+                                        Problem {String.fromCharCode(65 + currentProblemIndex)}
+                                    </span>
+                                    <h1 className="text-2xl font-bold text-white mt-1">{problem.title}</h1>
+                                    <div className="flex gap-2 mt-3">
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-400' :
+                                            problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-400' :
+                                                'bg-red-900/50 text-red-400'
+                                            }`}>
+                                            {problem.difficulty}
+                                        </span>
+                                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-900/50 text-blue-400">
+                                            {problem.topic}
+                                        </span>
                                     </div>
                                 </div>
-                            )}
 
-                            {problem.test_case_input && (
-                                <div className="mt-6">
-                                    <h3 className="text-lg font-semibold text-white mb-2">Sample Input</h3>
-                                    <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
-                                        {problem.test_case_input}
-                                    </pre>
-                                </div>
-                            )}
+                                <div className="prose prose-invert max-w-none">
+                                    <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                        {problem.description}
+                                    </div>
 
-                            {problem.test_case_output && (
-                                <div className="mt-4">
-                                    <h3 className="text-lg font-semibold text-white mb-2">Sample Output</h3>
-                                    <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto">
-                                        {problem.test_case_output}
-                                    </pre>
+                                    {problem.constraints && (
+                                        <div className="mt-6">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Constraints</h3>
+                                            <div className="bg-gray-800/50 rounded-lg p-4 text-gray-300 font-mono text-sm">
+                                                {problem.constraints}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {problem.test_case_input && (
+                                        <div className="mt-6">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Input</h3>
+                                            <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                                                {problem.test_case_input}
+                                            </pre>
+                                        </div>
+                                    )}
+
+                                    {problem.test_case_output && (
+                                        <div className="mt-4">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Output</h3>
+                                            <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto">
+                                                {problem.test_case_output}
+                                            </pre>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
+                            </>
+                        ) : (
+                            <div className="space-y-4">
+                                <h2 className="text-xl font-bold text-white mb-4">My Submissions</h2>
+                                {submissions.length === 0 ? (
+                                    <div className="text-center py-8 text-gray-500">
+                                        No submissions yet.
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {submissions.map((sub) => (
+                                            <div
+                                                key={sub.submission_id}
+                                                className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors"
+                                            >
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold ${sub.status === 'Accepted' ? 'bg-green-900/50 text-green-400' :
+                                                        sub.status === 'Compilation Error' ? 'bg-yellow-900/50 text-yellow-400' :
+                                                            'bg-red-900/50 text-red-400'
+                                                        }`}>
+                                                        {sub.status}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500">
+                                                        {new Date(sub.submitted_at).toLocaleString()}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center justify-between mt-3">
+                                                    <span className="text-xs text-gray-400 font-mono bg-gray-900 px-2 py-1 rounded">
+                                                        {sub.language}
+                                                    </span>
+                                                    <button
+                                                        onClick={() => {
+                                                            setCode(sub.code);
+                                                            if (sub.language) setLanguage(sub.language);
+                                                            toast.info(`Code loaded (${sub.language || 'cpp'})`);
+                                                        }}
+                                                        className="text-xs bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded transition-colors"
+                                                    >
+                                                        Load Code
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 

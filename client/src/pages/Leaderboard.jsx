@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Trophy, Medal, Crown, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const Leaderboard = () => {
@@ -35,6 +36,19 @@ const Leaderboard = () => {
         if (actualRank === 1) return <Medal className="text-gray-300 fill-gray-300" size={24} />;
         if (actualRank === 2) return <Medal className="text-amber-600 fill-amber-600" size={24} />;
         return <span className="font-bold text-gray-500 w-6 text-center">{actualRank + 1}</span>;
+    };
+
+    // Rating-based username color (same as profile/dashboard)
+    const getRatingColor = (rating) => {
+        if (!rating) return 'text-gray-500';
+        if (rating < 1200) return 'text-gray-500 font-bold';
+        if (rating < 1400) return 'text-green-600 font-bold';
+        if (rating < 1600) return 'text-cyan-600 font-bold';
+        if (rating < 1900) return 'text-blue-600 font-bold';
+        if (rating < 2100) return 'text-purple-600 font-bold';
+        if (rating < 2300) return 'text-orange-600 font-bold';
+        if (rating < 2600) return 'text-red-600 font-bold';
+        return 'text-red-700 font-extrabold';
     };
 
     return (
@@ -86,10 +100,13 @@ const Leaderboard = () => {
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <p className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                                    <Link
+                                                        to={`/profile/${user.username}`}
+                                                        className={`font-semibold hover:underline transition-colors ${getRatingColor(user.contest_rating)}`}
+                                                    >
                                                         @{user.username}
-                                                    </p>
-                                                    {(page - 1) * 50 + idx === 0 && <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Champion</span>}
+                                                    </Link>
+                                                    {(page - 1) * 50 + idx === 0 && <span className="ml-2 text-[10px] bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Champion</span>}
                                                 </div>
                                             </div>
                                         </td>

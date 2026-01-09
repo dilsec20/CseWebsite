@@ -20,56 +20,37 @@ router.get("/", authorization, async (req, res) => {
 
         const user = userInfo.rows[0];
 
-        // ... (Keep existing problem counts queries) ...
-
-        // Get problems solved count
-        const problemsSolved = await pool.query(
+        // 1. Prepare all query promises (Parallel Execution)
+        const problemsSolvedPromise = pool.query(
             `SELECT COUNT(DISTINCT problem_id) as count 
              FROM submissions 
              WHERE user_id = $1 AND status = 'Accepted'`,
             [userId]
         );
 
-        // Get total submissions count
-        const totalSubmissions = await pool.query(
+        const totalSubmissionsPromise = pool.query(
             "SELECT COUNT(*) as count FROM submissions WHERE user_id = $1",
             [userId]
         );
 
-        // Calculate Active Days (Total unique days with at least one submission)
-        const activeDaysQuery = await pool.query(
+        const activeDaysPromise = pool.query(
             "SELECT COUNT(DISTINCT DATE(submitted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata')) as count FROM submissions WHERE user_id = $1",
             [userId]
         );
-        const activeDays = parseInt(activeDaysQuery.rows[0].count);
 
-        // Get problems solved by difficulty
-        const easyProblems = await pool.query(
-            `SELECT COUNT(DISTINCT s.problem_id) as count
+        // Combined Difficulty Query
+        const difficultyPromise = pool.query(
+            `SELECT 
+                COUNT(DISTINCT CASE WHEN p.difficulty = 'Easy' THEN s.problem_id END) as easy,
+                COUNT(DISTINCT CASE WHEN p.difficulty = 'Medium' THEN s.problem_id END) as medium,
+                COUNT(DISTINCT CASE WHEN p.difficulty = 'Hard' THEN s.problem_id END) as hard
              FROM submissions s
              JOIN problems p ON s.problem_id = p.problem_id
-             WHERE s.user_id = $1 AND s.status = 'Accepted' AND p.difficulty = 'Easy'`,
+             WHERE s.user_id = $1 AND s.status = 'Accepted'`,
             [userId]
         );
 
-        const mediumProblems = await pool.query(
-            `SELECT COUNT(DISTINCT s.problem_id) as count
-             FROM submissions s
-             JOIN problems p ON s.problem_id = p.problem_id
-             WHERE s.user_id = $1 AND s.status = 'Accepted' AND p.difficulty = 'Medium'`,
-            [userId]
-        );
-
-        const hardProblems = await pool.query(
-            `SELECT COUNT(DISTINCT s.problem_id) as count
-             FROM submissions s
-             JOIN problems p ON s.problem_id = p.problem_id
-             WHERE s.user_id = $1 AND s.status = 'Accepted' AND p.difficulty = 'Hard'`,
-            [userId]
-        );
-
-        // Get topic-wise progress
-        const topicProgress = await pool.query(
+        const topicProgressPromise = pool.query(
             `SELECT 
                 p.topic,
                 COUNT(DISTINCT p.problem_id) as total_problems,
@@ -81,17 +62,7 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        const progress = topicProgress.rows.map(row => ({
-            topic: row.topic,
-            total: parseInt(row.total_problems),
-            solved: parseInt(row.solved_problems),
-            percentage: row.total_problems > 0
-                ? Math.round((row.solved_problems / row.total_problems) * 100)
-                : 0
-        }));
-
-        // Get recommended problems
-        const recommended = await pool.query(
+        const recommendedPromise = pool.query(
             `SELECT DISTINCT ON (p.problem_id) 
                 p.problem_id, p.title, p.difficulty, p.topic
              FROM problems p
@@ -102,8 +73,7 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        // Calculate time spent
-        const timeSpent = await pool.query(
+        const timeSpentPromise = pool.query(
             `SELECT 
                 EXTRACT(EPOCH FROM (MAX(submitted_at) - MIN(submitted_at))) / 3600 as hours
              FROM submissions
@@ -111,13 +81,7 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        const hoursSpent = timeSpent.rows[0]?.hours
-            ? parseFloat(timeSpent.rows[0].hours).toFixed(1)
-            : 0;
-
-
-        // Get contests attended (Sum of Global Participations + Finished Generated Contest Sessions)
-        const contestsAttended = await pool.query(
+        const contestsAttendedPromise = pool.query(
             `SELECT (
                 (SELECT COUNT(*) FROM contest_participations WHERE user_id = $1) + 
                 (SELECT COUNT(*) FROM contest_sessions WHERE user_id = $1 AND status = 'finished')
@@ -125,10 +89,7 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        // Fetch Rating History from contest_participations
-        // We want data points: { date, rating }
-        // We use check post_rating from participations where contest is finished
-        const ratingHistoryQuery = await pool.query(
+        const ratingHistoryPromise = pool.query(
             `SELECT gc.end_time as date, cp.post_rating as rating
              FROM contest_participations cp
              JOIN global_contests gc ON cp.contest_id = gc.contest_id
@@ -137,21 +98,7 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        const ratingHistory = ratingHistoryQuery.rows.map(row => ({
-            date: new Date(row.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
-            rating: row.rating
-        }));
-
-        // If no history, maybe add initial point?
-        if (ratingHistory.length === 0) {
-            ratingHistory.push({ date: 'Start', rating: 0 });
-        }
-
-
-        // Get contest solutions (sum of all solved problems in contests)
-        // 1. Solved in Generated Contests (contest_problems table)
-        // 2. Solved in Global Contests (submissions table where problem has contest_id)
-        const contestSolutionsQuery = await pool.query(
+        const contestSolutionsPromise = pool.query(
             `SELECT (
                 (SELECT COUNT(*) FROM contest_problems WHERE session_id IN (SELECT session_id FROM contest_sessions WHERE user_id = $1) AND solved = true) +
                 (SELECT COUNT(DISTINCT s.problem_id) 
@@ -163,10 +110,8 @@ router.get("/", authorization, async (req, res) => {
             ) as count`,
             [userId]
         );
-        const totalContestSolutions = parseInt(contestSolutionsQuery.rows[0].count);
 
-        // Get submission calendar (daily counts for last year)
-        const submissionCalendar = await pool.query(
+        const submissionCalendarPromise = pool.query(
             `SELECT 
                 DATE(submitted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Kolkata') as date,
                 COUNT(*) as count
@@ -177,6 +122,60 @@ router.get("/", authorization, async (req, res) => {
             ORDER BY date ASC`,
             [userId]
         );
+
+        // 2. Await all promises simultaneously
+        const [
+            problemsSolved,
+            totalSubmissions,
+            activeDaysQuery,
+            difficultyCounts,
+            topicProgress,
+            recommended,
+            timeSpent,
+            contestsAttended,
+            ratingHistoryQuery,
+            contestSolutions,
+            submissionCalendar
+        ] = await Promise.all([
+            problemsSolvedPromise,
+            totalSubmissionsPromise,
+            activeDaysPromise,
+            difficultyPromise,
+            topicProgressPromise,
+            recommendedPromise,
+            timeSpentPromise,
+            contestsAttendedPromise,
+            ratingHistoryPromise,
+            contestSolutionsPromise,
+            submissionCalendarPromise
+        ]);
+
+        // 3. Process Results
+        const activeDays = parseInt(activeDaysQuery.rows[0].count);
+
+        const progress = topicProgress.rows.map(row => ({
+            topic: row.topic,
+            total: parseInt(row.total_problems),
+            solved: parseInt(row.solved_problems),
+            percentage: row.total_problems > 0
+                ? Math.round((row.solved_problems / row.total_problems) * 100)
+                : 0
+        }));
+
+        const hoursSpent = timeSpent.rows[0]?.hours
+            ? parseFloat(timeSpent.rows[0].hours).toFixed(1)
+            : 0;
+
+        const ratingHistory = ratingHistoryQuery.rows.map(row => ({
+            date: new Date(row.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+            rating: row.rating
+        }));
+
+        if (ratingHistory.length === 0) {
+            ratingHistory.push({ date: 'Start', rating: 0 });
+        }
+
+        const totalContestSolutions = parseInt(contestSolutions.rows[0].count);
 
         const calendarData = submissionCalendar.rows.map(row => ({
             date: new Date(row.date).toISOString().split('T')[0],
@@ -206,9 +205,9 @@ router.get("/", authorization, async (req, res) => {
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,
                 contest_rating: user.rating || 0, // Show 0 if unrated
-                easy_solved: parseInt(easyProblems.rows[0].count),
-                medium_solved: parseInt(mediumProblems.rows[0].count),
-                hard_solved: parseInt(hardProblems.rows[0].count)
+                easy_solved: parseInt(difficultyCounts.rows[0].easy),
+                medium_solved: parseInt(difficultyCounts.rows[0].medium),
+                hard_solved: parseInt(difficultyCounts.rows[0].hard)
             }
         });
 

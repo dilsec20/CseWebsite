@@ -8,7 +8,11 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD
-    }
+    },
+    // Fix for cloud environments: Force IPv4 and increase timeout
+    family: 4,
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 5000     // 5 seconds
 });
 
 // Generate 6-digit OTP

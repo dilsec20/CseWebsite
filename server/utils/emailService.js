@@ -1,6 +1,13 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend lazily or check for key
+let resend;
+const initResend = () => {
+    if (!resend && process.env.RESEND_API_KEY) {
+        resend = new Resend(process.env.RESEND_API_KEY);
+    }
+    return resend;
+};
 
 // Generate 6-digit OTP
 function generateOTP() {
@@ -10,14 +17,15 @@ function generateOTP() {
 // Send OTP email
 async function sendOTPEmail(email, otp, userName = 'User') {
     // Only send if API key is present
-    if (!process.env.RESEND_API_KEY) {
+    const client = initResend();
+    if (!client) {
         console.error('❌ RESEND_API_KEY is missing');
         return { success: false, error: 'Internal Server Error: Missing Email Configuration' };
     }
 
     try {
-        const { data, error } = await resend.emails.send({
-            from: 'PrepPortal <onboarding@resend.dev>', // Default Resend testing domain
+        const { data, error } = await client.emails.send({
+            from: 'PrepPortal <no-reply@acecoder.site>', // Updated to verified domain
             to: email,
             subject: 'Password Reset OTP - PrepPortal',
             html: `

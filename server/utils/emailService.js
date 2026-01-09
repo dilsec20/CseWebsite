@@ -27,7 +27,7 @@ async function sendOTPEmail(email, otp, userName = 'User') {
         const { data, error } = await client.emails.send({
             from: 'AceCoder <no-reply@acecoder.site>', // Updated to verified domain
             to: email,
-            subject: 'Password Reset OTP - PrepPortal',
+            subject: 'Password Reset OTP - AceCoder',
             html: `
             <!DOCTYPE html>
             <html>

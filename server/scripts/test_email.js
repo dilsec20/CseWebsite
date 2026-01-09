@@ -1,52 +1,38 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 
 async function testEmail() {
-    console.log('📧 Testing Email Configuration...');
-    console.log(`User: ${process.env.EMAIL_USER}`);
-    // Don't log the password
+    console.log('📧 Testing Resend Email Configuration...');
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-        console.error('❌ EMAIL_USER or EMAIL_PASSWORD missing in .env');
+    if (!process.env.RESEND_API_KEY) {
+        console.error('❌ RESEND_API_KEY is missing in .env');
+        console.log('Please add RESEND_API_KEY=re_... to your .env file.');
         return;
     }
 
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
-        }
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
-        console.log('Attempting to verify transporter connection...');
-        await transporter.verify();
-        console.log('✅ Transporter connection successful!');
+        console.log('Attempting to send test email via Resend...');
 
-        console.log('Attempting to send test email...');
-        const info = await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // Send to self
-            subject: 'Test Email from PrepPortal Debugger',
-            text: 'If you receive this, your email configuration handles are correct!'
+        const { data, error } = await resend.emails.send({
+            from: 'PrepPortal Debugger <onboarding@resend.dev>',
+            to: 'delivered@resend.dev', // Resend's test address that always succeeds
+            subject: 'Resend Integation Test',
+            html: '<p><strong>It works!</strong> Resend is configured correctly.</p>'
         });
 
+        if (error) {
+            console.error('❌ Resend Test Failed:', error);
+            return;
+        }
+
         console.log('✅ Email sent successfully!');
-        console.log('Message ID:', info.messageId);
+        console.log('ID:', data.id);
+        console.log('\nNote: "onboarding@resend.dev" can only send to yourself or "delivered@resend.dev" until you verify your domain.');
 
     } catch (error) {
-        console.error('❌ Email Test Failed:', error);
-
-        if (error.code === 'EAUTH') {
-            console.log('\n💡 Hint: For Gmail, you probably need to use an "App Password" instead of your login password.');
-            console.log('1. Go to Google Account > Security');
-            console.log('2. Enable 2-Step Verification');
-            console.log('3. Search for "App Passwords"');
-            console.log('4. Create one and use it as EMAIL_PASSWORD');
-        }
+        console.error('❌ Unexpected Error:', error);
     }
 }
 

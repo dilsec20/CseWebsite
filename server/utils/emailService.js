@@ -1,19 +1,6 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// Create email transporter
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
-    },
-    // Fix for cloud environments: Force IPv4 and increase timeout
-    family: 4,
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 5000     // 5 seconds
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Generate 6-digit OTP
 function generateOTP() {
@@ -22,11 +9,18 @@ function generateOTP() {
 
 // Send OTP email
 async function sendOTPEmail(email, otp, userName = 'User') {
-    const mailOptions = {
-        from: `PrepPortal <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: 'Password Reset OTP - PrepPortal',
-        html: `
+    // Only send if API key is present
+    if (!process.env.RESEND_API_KEY) {
+        console.error('❌ RESEND_API_KEY is missing');
+        return { success: false, error: 'Internal Server Error: Missing Email Configuration' };
+    }
+
+    try {
+        const { data, error } = await resend.emails.send({
+            from: 'PrepPortal <onboarding@resend.dev>', // Default Resend testing domain
+            to: email,
+            subject: 'Password Reset OTP - PrepPortal',
+            html: `
             <!DOCTYPE html>
             <html>
             <head>
@@ -69,15 +63,19 @@ async function sendOTPEmail(email, otp, userName = 'User') {
                 </div>
             </body>
             </html>
-        `
-    };
+            `
+        });
 
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('✅ Email sent:', info.messageId);
-        return { success: true, messageId: info.messageId };
+        if (error) {
+            console.error('❌ Resend Email Error:', error);
+            return { success: false, error: error.message };
+        }
+
+        console.log('✅ Email sent successfully:', data.id);
+        return { success: true, messageId: data.id };
+
     } catch (error) {
-        console.error('❌ Email error:', error);
+        console.error('❌ Unexpected Email Error:', error);
         return { success: false, error: error.message };
     }
 }

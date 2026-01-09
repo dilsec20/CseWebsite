@@ -70,7 +70,7 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, rememberMe } = req.body;
 
         // Find user by email OR username
         const user = await pool.query(
@@ -89,7 +89,9 @@ router.post("/login", async (req, res) => {
         }
 
         // Generate JWT token
-        const token = jwtGenerator(user.rows[0].user_id);
+        // If rememberMe is true, set expiration to 30 days, otherwise default to 1 hour
+        const expiresIn = rememberMe ? "30d" : "1h";
+        const token = jwtGenerator(user.rows[0].user_id, expiresIn);
 
         res.json({ token });
     } catch (err) {

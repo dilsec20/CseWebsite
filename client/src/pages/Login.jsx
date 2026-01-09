@@ -7,10 +7,11 @@ import { API_URL } from '../config';
 const Login = ({ setAuth }) => {
     const [inputs, setInputs] = useState({
         email: "",
-        password: ""
+        password: "",
+        rememberMe: false
     });
 
-    const { email, password } = inputs;
+    const { email, password, rememberMe } = inputs;
 
     const onChange = e =>
         setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -18,7 +19,7 @@ const Login = ({ setAuth }) => {
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
-            const body = { email, password };
+            const body = { email, password, rememberMe };
             const response = await fetch(
                 `${API_URL}/auth/login`,
                 {
@@ -98,7 +99,20 @@ const Login = ({ setAuth }) => {
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-end mb-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="rememberMe"
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={e => setInputs(prev => ({ ...prev, rememberMe: e.target.checked }))}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                            />
+                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 cursor-pointer">
+                                Remember me
+                            </label>
+                        </div>
                         <Link to="/forgot-password" class="text-sm font-medium text-blue-600 hover:text-blue-500">
                             Forgot your password?
                         </Link>

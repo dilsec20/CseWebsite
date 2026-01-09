@@ -38,6 +38,13 @@ const Dashboard = ({ setAuth }) => {
             const response = await fetch(`${API_URL}/api/dashboard/`, {
                 headers: { token: localStorage.getItem("token") }
             });
+
+            if (response.status === 403) {
+                toast.error("Session expired. Please login again.");
+                localStorage.removeItem("token");
+                setAuth(false);
+                return;
+            }
             const parseRes = await response.json();
 
             if (parseRes.user_name) {

@@ -49,6 +49,13 @@ const Profile = () => {
                 const response = await fetch(`${API_URL}/api/dashboard/`, {
                     headers: { token: token }
                 });
+
+                if (response.status === 403) {
+                    toast.error("Session expired. Please login again.");
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                    return;
+                }
                 const myData = await response.json();
                 currentUsername = myData.username;
 

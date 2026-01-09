@@ -89,9 +89,9 @@ router.post("/login", async (req, res) => {
         }
 
         // Generate JWT token
-        // If rememberMe is true, set expiration to 30 days, otherwise default to 1 hour
-        const expiresIn = rememberMe ? "30d" : "1h";
-        const token = jwtGenerator(user.rows[0].user_id, expiresIn);
+        // Generate JWT token
+        // Default to 30 days (defined in jwtGenerator)
+        const token = jwtGenerator(user.rows[0].user_id);
 
         res.json({ token });
     } catch (err) {

@@ -12,7 +12,8 @@ import {
     Clock,
     Zap,
     TrendingUp,
-    MessageSquare
+    MessageSquare,
+    User
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import { API_URL } from '../config';
@@ -23,7 +24,8 @@ const Dashboard = ({ setAuth }) => {
     const [stats, setStats] = useState({
         problems_solved: 0,
         active_days: 0,
-        hours_spent: 0,
+        total_users: 0,
+        new_users_this_week: 0,
         total_submissions: 0
     });
     const [progress, setProgress] = useState([]);
@@ -138,11 +140,14 @@ const Dashboard = ({ setAuth }) => {
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-3 bg-green-100 rounded-xl">
-                                    <Clock className="h-6 w-6 text-green-600" />
+                                    <User className="h-6 w-6 text-green-600" />
                                 </div>
+                                <span className="text-sm font-bold text-green-500">
+                                    +{stats.new_users_this_week} this week
+                                </span>
                             </div>
-                            <h3 className="text-gray-500 text-sm font-medium">Hours Spent</h3>
-                            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.hours_spent}</p>
+                            <h3 className="text-gray-500 text-sm font-medium">Total Registered Users</h3>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.total_users}</p>
                         </div>
 
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">

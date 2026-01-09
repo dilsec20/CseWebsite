@@ -102,14 +102,18 @@ router.get("/", authorization, async (req, res) => {
             [userId]
         );
 
-        // Get Total Users & New Users This Week
-        const totalUsersQuery = await pool.query("SELECT COUNT(*) FROM users");
-        const totalUsers = parseInt(totalUsersQuery.rows[0].count);
-
-        const newUsersQuery = await pool.query(
-            "SELECT COUNT(*) FROM users WHERE created_at > NOW() - INTERVAL '7 days'"
+        // Calculate time spent
+        const timeSpent = await pool.query(
+            `SELECT 
+                EXTRACT(EPOCH FROM (MAX(submitted_at) - MIN(submitted_at))) / 3600 as hours
+             FROM submissions
+             WHERE user_id = $1`,
+            [userId]
         );
-        const newUsersThisWeek = parseInt(newUsersQuery.rows[0].count);
+
+        const hoursSpent = timeSpent.rows[0]?.hours
+            ? parseFloat(timeSpent.rows[0].hours).toFixed(1)
+            : 0;
 
 
         // Get contests attended (Sum of Global Participations + Finished Generated Contest Sessions)
@@ -198,8 +202,7 @@ router.get("/", authorization, async (req, res) => {
                 problems_solved: parseInt(problemsSolved.rows[0].count),
                 total_submissions: parseInt(totalSubmissions.rows[0].count),
                 active_days: activeDays,
-                total_users: totalUsers,
-                new_users_this_week: newUsersThisWeek,
+                hours_spent: hoursSpent,
                 contests_attended: parseInt(contestsAttended.rows[0].count),
                 contest_solutions: totalContestSolutions,
                 contest_rating: user.rating || 0, // Show 0 if unrated

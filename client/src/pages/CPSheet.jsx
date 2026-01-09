@@ -146,7 +146,7 @@ const CPSheet = ({ isAuthenticated }) => {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 text-center relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-3 mt-2">
-                        Little Sheep's Training Sheet
+                        Codeforces Training Sheet
                     </h1>
                     <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-4">
                         A curated collection of <span className="font-bold text-gray-900">{totalProblems}</span> solved problems from Codeforces,

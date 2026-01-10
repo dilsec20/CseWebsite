@@ -64,7 +64,8 @@ const CPSheet = ({ isAuthenticated }) => {
             const subData = await subRes.json();
 
             if (subData.status === 'OK') {
-                const newSolved = { ...solvedProblems };
+                // Reset solved state to ensure we only show the current user's progress
+                const newSolved = {};
                 let count = 0;
 
                 subData.result.forEach(sub => {
@@ -211,7 +212,7 @@ const CPSheet = ({ isAuthenticated }) => {
                                     />
                                     <div className="flex flex-col leading-none">
                                         <span className={`text-sm font-bold ${cfUser.rank === "legendary grandmaster" ? "text-red-600 first-letter:text-black" :
-                                                getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
+                                            getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
                                             }`}>
                                             {cfUser.handle}
                                         </span>
@@ -242,8 +243,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                 onClick={syncWithCodeforces}
                                 disabled={isSyncing}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isSyncing
-                                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                                        : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
+                                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                    : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
                                     }`}
                             >
                                 <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />

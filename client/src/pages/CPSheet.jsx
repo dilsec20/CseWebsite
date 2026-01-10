@@ -128,8 +128,14 @@ const CPSheet = ({ isAuthenticated }) => {
     // Toggle problem solved status manually
     const toggleProblem = (problemId, e) => {
         e.stopPropagation();
-        // Allow manual toggle even without auth for tracker usage
 
+        // If synced with Codeforces, prevent manual toggle
+        if (cfUser) {
+            toast.info("Progress is managed by Codeforces Sync");
+            return;
+        }
+
+        // Allow manual toggle even without auth for tracker usage
         setSolvedProblems(prev => ({
             ...prev,
             [problemId]: !prev[problemId]

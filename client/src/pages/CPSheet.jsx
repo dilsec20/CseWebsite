@@ -17,6 +17,9 @@ const CPSheet = ({ isAuthenticated }) => {
     // State for rating filters
     const [ratingFilters, setRatingFilters] = useState({});
 
+    // State for solved filters
+    const [solvedFilters, setSolvedFilters] = useState({});
+
     // State for solved problems (persisted in local storage)
     const [solvedProblems, setSolvedProblems] = useState(() => {
         const saved = localStorage.getItem('cp_sheet_solved');
@@ -103,7 +106,7 @@ const CPSheet = ({ isAuthenticated }) => {
 
     // Toggle sub-topic expansion
     const toggleSubTopic = (moduleName, subTopicName, e) => {
-        if (e.target.tagName === 'INPUT') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
         e.stopPropagation();
         setExpandedSubTopics(prev => ({
             ...prev,
@@ -121,6 +124,17 @@ const CPSheet = ({ isAuthenticated }) => {
             [moduleName]: {
                 ...(prev[moduleName] || {}),
                 [subTopicName]: value
+            }
+        }));
+    };
+
+    // Handle solved filter change
+    const handleSolvedFilterChange = (moduleName, subTopicName, checked) => {
+        setSolvedFilters(prev => ({
+            ...prev,
+            [moduleName]: {
+                ...(prev[moduleName] || {}),
+                [subTopicName]: checked
             }
         }));
     };
@@ -218,7 +232,7 @@ const CPSheet = ({ isAuthenticated }) => {
                                     />
                                     <div className="flex flex-col leading-none">
                                         <span className={`text-sm font-bold ${cfUser.rank === "legendary grandmaster" ? "text-red-600 first-letter:text-black" :
-                                            getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
+                                                getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
                                             }`}>
                                             {cfUser.handle}
                                         </span>
@@ -249,8 +263,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                 onClick={syncWithCodeforces}
                                 disabled={isSyncing}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isSyncing
-                                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                                    : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
+                                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                        : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
                                     }`}
                             >
                                 <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />
@@ -325,9 +339,13 @@ const CPSheet = ({ isAuthenticated }) => {
 
                                         // Filtering Logic
                                         const filterRating = ratingFilters[moduleName]?.[subTopicName] || '';
-                                        const displayProblems = filterRating
-                                            ? problems.filter(p => p.rating === parseInt(filterRating))
-                                            : problems;
+                                        const filterSolved = solvedFilters[moduleName]?.[subTopicName];
+
+                                        const displayProblems = problems.filter(p => {
+                                            const matchesRating = !filterRating || p.rating === parseInt(filterRating);
+                                            const matchesSolved = !filterSolved || solvedProblems[p.id];
+                                            return matchesRating && matchesSolved;
+                                        });
 
                                         return (
                                             <div key={subTopicName} className="border-b border-slate-50 last:border-0">
@@ -343,8 +361,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                                             {solvedCount}/{problems.length}
                                                         </span>
 
-                                                        {/* Rating Filter Input */}
-                                                        <div className="ml-4" onClick={(e) => e.stopPropagation()}>
+                                                        {/* Rating & Solved Filter */}
+                                                        <div className="ml-4 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
                                                             <input
                                                                 type="text"
                                                                 inputMode="numeric"
@@ -353,6 +371,16 @@ const CPSheet = ({ isAuthenticated }) => {
                                                                 value={filterRating}
                                                                 onChange={(e) => handleFilterChange(moduleName, subTopicName, e.target.value)}
                                                             />
+
+                                                            <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+                                                                    checked={!!filterSolved}
+                                                                    onChange={(e) => handleSolvedFilterChange(moduleName, subTopicName, e.target.checked)}
+                                                                />
+                                                                <span className="text-xs text-slate-500 font-medium">Solved</span>
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -410,7 +438,7 @@ const CPSheet = ({ isAuthenticated }) => {
                                                                 </table>
                                                             ) : (
                                                                 <div className="p-4 text-center text-sm text-slate-400 italic">
-                                                                    No problems found with rating {filterRating}
+                                                                    No problems found matching filters
                                                                 </div>
                                                             )}
                                                         </div>

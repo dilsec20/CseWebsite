@@ -66,9 +66,9 @@ const CPSheet = ({ isAuthenticated }) => {
 
                 subData.result.forEach(sub => {
                     if (sub.verdict === 'OK') {
-                        // Create ID match: ContestID + Index (e.g., 4A, 1343C)
-                        const problemId = `${sub.problem.contestId}${sub.problem.index}`;
-                        
+                        // Create ID match: ContestID-Index (e.g., 4-A, 1343-C) matching our JSON data
+                        const problemId = `${sub.problem.contestId}-${sub.problem.index}`;
+
                         // Mark as solved
                         newSolved[problemId] = true;
                     }
@@ -78,7 +78,7 @@ const CPSheet = ({ isAuthenticated }) => {
                 const now = new Date().toLocaleString();
                 setLastSynced(now);
                 localStorage.setItem('cf_last_synced', now);
-                
+
                 toast.success(`Synced! Updated solved problems for ${user.handle}`);
             }
         } catch (error) {
@@ -114,7 +114,7 @@ const CPSheet = ({ isAuthenticated }) => {
     const toggleProblem = (problemId, e) => {
         e.stopPropagation();
         // Allow manual toggle even without auth for tracker usage
-        
+
         setSolvedProblems(prev => ({
             ...prev,
             [problemId]: !prev[problemId]
@@ -169,12 +169,12 @@ const CPSheet = ({ isAuthenticated }) => {
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans pb-12">
-            
+
             {/* --- HERO HEADER --- */}
             <div className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        
+
                         {/* Branding */}
                         <div className="flex items-center gap-3">
                             <div className="h-10 w-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
@@ -190,16 +190,15 @@ const CPSheet = ({ isAuthenticated }) => {
                         <div className="flex items-center gap-3 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
                             {cfUser ? (
                                 <div className="flex items-center gap-3 px-2">
-                                    <img 
-                                        src={cfUser.titlePhoto} 
-                                        alt="Avatar" 
+                                    <img
+                                        src={cfUser.titlePhoto}
+                                        alt="Avatar"
                                         className="h-8 w-8 rounded-full border border-slate-300"
                                     />
                                     <div className="flex flex-col leading-none">
-                                        <span className={`text-sm font-bold ${
-                                            cfUser.rank === "legendary grandmaster" ? "text-red-600 first-letter:text-black" : 
-                                            getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1] 
-                                        }`}>
+                                        <span className={`text-sm font-bold ${cfUser.rank === "legendary grandmaster" ? "text-red-600 first-letter:text-black" :
+                                                getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
+                                            }`}>
                                             {cfUser.handle}
                                         </span>
                                         <span className="text-[10px] text-slate-400">
@@ -215,8 +214,8 @@ const CPSheet = ({ isAuthenticated }) => {
                             )}
 
                             <div className="relative">
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     placeholder="CF Handle" // e.g., tourist
                                     className="bg-white border border-slate-200 text-sm rounded-md px-3 py-1.5 w-32 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all"
                                     value={cfHandle}
@@ -225,14 +224,13 @@ const CPSheet = ({ isAuthenticated }) => {
                                 />
                             </div>
 
-                            <button 
+                            <button
                                 onClick={syncWithCodeforces}
                                 disabled={isSyncing}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                                    isSyncing 
-                                    ? "bg-slate-100 text-slate-400 cursor-not-allowed" 
-                                    : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
-                                }`}
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isSyncing
+                                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                        : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
+                                    }`}
                             >
                                 <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />
                                 {isSyncing ? "Syncing..." : "Sync"}
@@ -246,7 +244,7 @@ const CPSheet = ({ isAuthenticated }) => {
                         <span>{totalSolved} / {totalProblems} Solved ({progressPercentage}%)</span>
                     </div>
                     <div className="h-1.5 w-full bg-slate-100 rounded-full mt-1 overflow-hidden">
-                        <div 
+                        <div
                             className="h-full bg-blue-500 rounded-full transition-all duration-1000 ease-out"
                             style={{ width: `${progressPercentage}%` }}
                         ></div>
@@ -259,7 +257,7 @@ const CPSheet = ({ isAuthenticated }) => {
 
             {/* --- MAIN CONTENT --- */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-                
+
                 {orderedModules.map((moduleName, idx) => {
                     const subTopics = problemData[moduleName] || {};
                     const moduleProblems = Object.values(subTopics).flat();
@@ -270,9 +268,9 @@ const CPSheet = ({ isAuthenticated }) => {
 
                     return (
                         <div key={moduleName} className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
-                            
+
                             {/* Module Header */}
-                            <div 
+                            <div
                                 onClick={() => toggleModule(moduleName)}
                                 className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors"
                             >
@@ -307,7 +305,7 @@ const CPSheet = ({ isAuthenticated }) => {
                                         return (
                                             <div key={subTopicName} className="border-b border-slate-50 last:border-0">
                                                 {/* Subtopic Header */}
-                                                <div 
+                                                <div
                                                     onClick={(e) => toggleSubTopic(moduleName, subTopicName, e)}
                                                     className="flex items-center justify-between py-3 px-4 pl-14 hover:bg-slate-50 cursor-pointer transition-colors"
                                                 >
@@ -340,13 +338,12 @@ const CPSheet = ({ isAuthenticated }) => {
                                                                             <tr key={prob.id} className={`group hover:bg-blue-50/30 transition-colors ${isSolved ? "bg-green-50/30" : ""}`}>
                                                                                 <td className="py-2 px-4 text-center text-slate-400 text-xs font-mono">{i + 1}</td>
                                                                                 <td className="py-2 px-4">
-                                                                                    <a 
-                                                                                        href={prob.link} 
-                                                                                        target="_blank" 
+                                                                                    <a
+                                                                                        href={prob.link}
+                                                                                        target="_blank"
                                                                                         rel="noreferrer"
-                                                                                        className={`font-medium transition-colors flex items-center gap-2 group-hover:text-blue-600 ${
-                                                                                            isSolved ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700"
-                                                                                        }`}
+                                                                                        className={`font-medium transition-colors flex items-center gap-2 group-hover:text-blue-600 ${isSolved ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700"
+                                                                                            }`}
                                                                                     >
                                                                                         {prob.name}
                                                                                         <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
@@ -358,11 +355,10 @@ const CPSheet = ({ isAuthenticated }) => {
                                                                                     </span>
                                                                                 </td>
                                                                                 <td className="py-2 px-4 text-right">
-                                                                                    <button 
+                                                                                    <button
                                                                                         onClick={(e) => toggleProblem(prob.id, e)}
-                                                                                        className={`p-1 rounded-full transition-all active:scale-95 ${
-                                                                                            isSolved ? "text-green-600 bg-green-100" : "text-slate-300 hover:text-slate-500"
-                                                                                        }`}
+                                                                                        className={`p-1 rounded-full transition-all active:scale-95 ${isSolved ? "text-green-600 bg-green-100" : "text-slate-300 hover:text-slate-500"
+                                                                                            }`}
                                                                                     >
                                                                                         {isSolved ? <CheckCircle className="h-5 w-5" /> : <div className="h-5 w-5 rounded-full border-2 border-current"></div>}
                                                                                     </button>

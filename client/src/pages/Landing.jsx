@@ -55,12 +55,12 @@ const Landing = ({ setAuth }) => {
                             <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2"></span>
                             New: Contest Arena Live
                         </div>
-                        <h1 className="text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-6">
-                            Master Your <br />
-                            <span className="gradient-text">Placement Prep</span>
+                        <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                            AceCoder – Learn Coding & <br />
+                            <span className="gradient-text">Competitive Programming</span>
                         </h1>
-                        <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-lg">
-                            The all-in-one platform to crack your dream job. Practice DSA, master CS fundamentals, and compete in live coding contests.
+                        <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
+                            AceCoder is an online platform for programmers to practice Data Structures and Algorithms, competitive programming, interview questions, and problem solving.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Link

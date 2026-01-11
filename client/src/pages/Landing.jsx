@@ -56,8 +56,8 @@ const Landing = ({ setAuth }) => {
                             New: Contest Arena Live
                         </div>
                         <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-                            AceCoder – Learn Coding & <br />
-                            <span className="gradient-text">Competitive Programming</span>
+                            AceCoder<br />
+                            <span className="gradient-text">DSA & Competitive Programming</span>
                         </h1>
                         <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
                             AceCoder is an online platform for programmers to practice Data Structures and Algorithms, competitive programming, interview questions, and problem solving.

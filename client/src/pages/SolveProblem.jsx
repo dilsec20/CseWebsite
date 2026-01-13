@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import SimpleCodeEditor from '../components/SimpleCodeEditor';
-import { Play, Send, ArrowLeft, CheckCircle, XCircle, Loader, ChevronRight } from 'lucide-react';
+import { Play, Send, ArrowLeft, CheckCircle, XCircle, Loader, ChevronRight, Code2, FileText, Terminal, Check, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '../config';
 
@@ -13,13 +13,14 @@ const BOILERPLATES = {
 using namespace std;
 
 int main() {
-    // Write your code here
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    // Your code here
     
     return 0;
 }`,
-    python: `import sys
-
-# Write your code here
+    python: `# Write your code here
 def solve():
     pass
 
@@ -40,12 +41,10 @@ const SolveProblem = ({ setAuth }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const { setCode: setGlobalCode, setProblemContext } = useCodeContext(); // Use Context
+    const { setCode: setGlobalCode, setProblemContext } = useCodeContext();
     const [problem, setProblem] = useState(null);
-    const [language, setLanguage] = useState('cpp'); // Default language
+    const [language, setLanguage] = useState('cpp');
     const [code, setCode] = useState(BOILERPLATES.cpp);
-
-    // ... (other state)
 
     // Sync code to global context whenever it changes
     useEffect(() => {
@@ -61,24 +60,28 @@ const SolveProblem = ({ setAuth }) => {
     const [totalCount, setTotalCount] = useState(0);
 
     const [activeTab, setActiveTab] = useState('description');
+    const [rightTab, setRightTab] = useState('testcase');
     const [submissions, setSubmissions] = useState([]);
 
     // Contest-related state
     const [contestId, setContestId] = useState(null);
-    const [contestType, setContestType] = useState(null); // 'mock' or 'global'
+    const [contestType, setContestType] = useState(null);
     const [contestProblems, setContestProblems] = useState([]);
     const [showSidebar, setShowSidebar] = useState(true);
 
+    // Resizable split pane
+    const [splitPos, setSplitPos] = useState(45);
+    const containerRef = useRef(null);
+
     useEffect(() => {
-        // Reset code explicitly (local state)
         setCode(BOILERPLATES[language]);
         setVerdict(null);
         setOutput('');
+        setTestResults([]);
 
-        // Check if we're coming from a contest
         const params = new URLSearchParams(location.search);
         const contest = params.get('contest');
-        const type = params.get('type'); // 'mock' or 'global'
+        const type = params.get('type');
 
         if (contest) {
             setContestId(contest);
@@ -89,15 +92,12 @@ const SolveProblem = ({ setAuth }) => {
         if (localStorage.getItem("token")) {
             fetchSubmissions();
         }
-    }, [id, location.search]); // Removed language dependency to prevent auto-reset on refresh if we persisted it, but here it resets on ID change
+    }, [id, location.search]);
 
 
     const handleLanguageChange = (e) => {
         const newLang = e.target.value;
         const currentBoilerplate = BOILERPLATES[language];
-
-        // If code is modified from boilerplate, ask confirmation (Simplified for now: Just switch if it matches boilerplate or empty)
-        // Ideally: if (code !== currentBoilerplate && !window.confirm("Switching language will reset your code. Continue?")) return;
 
         if (code !== currentBoilerplate && code.trim() !== '') {
             if (!window.confirm("Switching language will reset your current code. Are you sure?")) {
@@ -119,7 +119,6 @@ const SolveProblem = ({ setAuth }) => {
                 headers: { "token": token }
             });
             const data = await response.json();
-            // Ensure data is always an array
             setSubmissions(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error("Error fetching submissions:", err);
@@ -130,7 +129,7 @@ const SolveProblem = ({ setAuth }) => {
     const fetchContestProblems = async (contestId, type) => {
         try {
             const token = localStorage.getItem("token");
-            let url = `${API_URL}/api/contests/${contestId}`; // Default to mock
+            let url = `${API_URL}/api/contests/${contestId}`;
 
             if (type === 'global') {
                 url = `${API_URL}/api/contests/global/${contestId}`;
@@ -150,8 +149,6 @@ const SolveProblem = ({ setAuth }) => {
         try {
             const response = await fetch(`${API_URL}/api/problems/${id}`);
             const jsonData = await response.json();
-            console.log('Problem data received:', jsonData);
-            console.log('Description length:', jsonData.description?.length);
             setProblem(jsonData);
         } catch (err) {
             console.error(err.message);
@@ -162,9 +159,8 @@ const SolveProblem = ({ setAuth }) => {
     const handleRun = async () => {
         setRunLoading(true);
         setOutput('');
-        setVerdict(null);
         try {
-            const body = { code, language, problem_id: id }; // Use updated language variable
+            const body = { code, language, problem_id: id };
             const response = await fetch(`${API_URL}/api/execute/run`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -174,22 +170,16 @@ const SolveProblem = ({ setAuth }) => {
 
             if (parseRes.compile && parseRes.compile.code !== 0) {
                 setOutput(`Compilation Error:\n${parseRes.compile.stderr}`);
-                setVerdict('error');
             } else if (parseRes.run.code !== 0) {
                 setOutput(`Runtime Error:\n${parseRes.run.stderr || 'Program crashed'}`);
-                setVerdict('error');
             } else {
-                // Safely handle potentially undefined values
                 const actualOutput = (parseRes.run?.stdout || '').trim();
                 const expectedOutput = (parseRes.expected_output || '').trim();
 
-                // If no expected output is available, just show the actual output
                 if (!parseRes.expected_output) {
                     setOutput(`⚠️ No test cases available\n\nYour code ran successfully:\n\nOutput:\n${actualOutput || '(no output)'}\n\nNote: Submit to validate against all test cases.`);
-                    setVerdict(null);
                 } else {
                     const passed = actualOutput === expectedOutput;
-                    setVerdict(passed ? 'passed' : 'failed');
 
                     if (passed) {
                         setOutput(`✅ Sample Test Case Passed!\n\nInput:\n${problem.test_case_input}\n\nExpected Output:\n${expectedOutput}\n\nYour Output:\n${actualOutput}`);
@@ -198,6 +188,7 @@ const SolveProblem = ({ setAuth }) => {
                     }
                 }
             }
+            setRightTab('output');
         } catch (err) {
             console.error(err.message);
             toast.error("Execution failed");
@@ -208,6 +199,8 @@ const SolveProblem = ({ setAuth }) => {
 
     const handleSubmit = async () => {
         setSubmitLoading(true);
+        setVerdict(null);
+        setTestResults([]);
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -216,7 +209,7 @@ const SolveProblem = ({ setAuth }) => {
                 return;
             }
 
-            const body = { problem_id: id, code, language }; // Use updated language variable
+            const body = { problem_id: id, code, language };
             const response = await fetch(`${API_URL}/api/execute/submit`, {
                 method: "POST",
                 headers: {
@@ -231,7 +224,6 @@ const SolveProblem = ({ setAuth }) => {
             if (parseRes.verdict === "Accepted") {
                 setVerdict("Accepted");
                 toast.success(`Perfect! Passed all ${parseRes.total_count} test cases!`);
-                // Trigger global streak update
                 window.dispatchEvent(new Event('streakUpdated'));
             } else if (parseRes.verdict === "Compilation Error") {
                 setVerdict("Compilation Error");
@@ -247,8 +239,8 @@ const SolveProblem = ({ setAuth }) => {
             setTestResults(parseRes.test_results || []);
             setPassedCount(parseRes.passed_count || 0);
             setTotalCount(parseRes.total_count || 0);
+            setRightTab('result');
 
-            // Refresh submissions list
             fetchSubmissions();
 
             if (parseRes.first_failure) {
@@ -267,7 +259,6 @@ const SolveProblem = ({ setAuth }) => {
                 setOutput(`Verdict: ${parseRes.verdict}\n\nPassed all ${parseRes.total_count} test cases! ✅\n\nCongratulations! Your solution is correct! 🎉`);
             }
 
-            // Refresh contest problems to update sidebar status
             if (contestId && parseRes.verdict === "Accepted") {
                 fetchContestProblems(contestId, contestType);
             }
@@ -292,78 +283,80 @@ const SolveProblem = ({ setAuth }) => {
     };
 
     if (!problem) return (
-        <div className="flex items-center justify-center h-screen bg-slate-900">
-            <Loader className="w-8 h-8 text-blue-500 animate-spin" />
+        <div className="flex items-center justify-center h-screen bg-[#1a1a2e]">
+            <Loader className="w-8 h-8 text-cyan-500 animate-spin" />
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-slate-900 text-white flex flex-col">
-            {/* Header*/}
-            <div className="h-14 border-b border-slate-800 bg-slate-900/50 backdrop-blur flex items-center justify-between px-4">
+        <div className="h-screen bg-[#1a1a2e] text-gray-100 flex flex-col overflow-hidden">
+            {/* Header */}
+            <header className="bg-[#16162a] border-b border-gray-800 px-4 py-2 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-4">
-                    <button onClick={handleBackClick} className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                        <ArrowLeft className="w-5 h-5 text-slate-400" />
+                    <button onClick={handleBackClick} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition">
+                        <ArrowLeft className="w-5 h-5" />
                     </button>
                     <div className="flex items-center gap-2">
                         <h1 className="font-semibold text-lg">{problem?.title}</h1>
-                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${problem?.difficulty === 'Easy' ? 'bg-green-500/10 text-green-500' :
-                            problem?.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500' :
-                                'bg-red-500/10 text-red-500'
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${problem?.difficulty === 'Easy' ? 'bg-green-900/50 text-green-400' :
+                            problem?.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-400' :
+                                'bg-red-900/50 text-red-400'
                             }`}>
                             {problem?.difficulty}
                         </span>
+                        {problem?.topic && (
+                            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-900/50 text-blue-400">
+                                {problem?.topic}
+                            </span>
+                        )}
                         {contestId && (
-                            <span className="ml-2 px-2 py-0.5 bg-blue-500/10 text-blue-500 rounded text-xs font-medium">
+                            <span className="ml-2 px-2 py-0.5 bg-cyan-900/50 text-cyan-400 rounded text-xs font-medium">
                                 Contest #{contestId}
                             </span>
                         )}
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                    {/* Language Selector */}
-                    <div className="relative">
-                        <select
-                            value={language}
-                            onChange={handleLanguageChange}
-                            className="bg-slate-800 text-slate-300 text-sm font-medium px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="cpp">C++ (g++ 17)</option>
-                            <option value="python">Python 3</option>
-                            <option value="java">Java 17</option>
-                        </select>
-                    </div>
-
+                <div className="flex items-center gap-2">
+                    <Code2 className="w-4 h-4 text-gray-400" />
+                    <select
+                        value={language}
+                        onChange={handleLanguageChange}
+                        className="bg-gray-800 text-gray-300 text-sm rounded-lg px-3 py-1.5 border border-gray-700 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+                    >
+                        <option value="cpp">C++ 17</option>
+                        <option value="python">Python 3</option>
+                        <option value="java">Java 17</option>
+                    </select>
                     <button
                         onClick={handleRun}
                         disabled={runLoading}
-                        className="flex items-center gap-2 px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md transition-colors text-sm font-medium disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
                     >
-                        {runLoading ? <Loader className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-                        Run
+                        <Play className="w-4 h-4" />
+                        {runLoading ? 'Running...' : 'Run'}
                     </button>
                     <button
                         onClick={handleSubmit}
                         disabled={submitLoading}
-                        className="flex items-center gap-2 px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors text-sm font-medium disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
                     >
-                        {submitLoading ? <Loader className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                        Submit
+                        <Send className="w-4 h-4" />
+                        {submitLoading ? 'Submitting...' : 'Submit'}
                     </button>
                 </div>
-            </div>
+            </header>
 
             {/* Main Content */}
-            <div className="flex-1 flex overflow-hidden">
+            <div ref={containerRef} className="flex-1 flex overflow-hidden">
                 {/* Contest Sidebar */}
                 {contestId && contestProblems.length > 0 && showSidebar && (
-                    <div className="w-64 border-r border-slate-800 bg-slate-900/50 p-4 overflow-y-auto">
+                    <div className="w-64 border-r border-gray-800 bg-[#16162a] p-4 overflow-y-auto">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-semibold text-slate-300">Contest Problems</h3>
+                            <h3 className="text-sm font-semibold text-gray-300">Contest Problems</h3>
                             <button
                                 onClick={() => setShowSidebar(false)}
-                                className="text-slate-500 hover:text-slate-300"
+                                className="text-gray-500 hover:text-gray-300"
                             >
                                 <ChevronRight className="w-4 h-4" />
                             </button>
@@ -374,8 +367,8 @@ const SolveProblem = ({ setAuth }) => {
                                     key={p.problem_id}
                                     to={`/problems/${p.problem_id}?contest=${contestId}&type=${contestType}`}
                                     className={`block p-3 rounded-lg transition ${p.problem_id === parseInt(id)
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-800/50 text-slate-300 hover:bg-slate-800'
+                                        ? 'bg-cyan-600 text-white'
+                                        : 'bg-gray-800/50 text-gray-300 hover:bg-gray-800'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between">
@@ -395,74 +388,85 @@ const SolveProblem = ({ setAuth }) => {
                     </div>
                 )}
 
-                {/* Toggle Sidebar Button (when hidden) */}
+                {/* Toggle Sidebar Button */}
                 {contestId && !showSidebar && (
                     <button
                         onClick={() => setShowSidebar(true)}
-                        className="absolute left-0 top-20 bg-slate-800 p-2 rounded-r-lg hover:bg-slate-700 transition-colors z-10"
+                        className="absolute left-0 top-20 bg-gray-800 p-2 rounded-r-lg hover:bg-gray-700 transition-colors z-10"
                     >
                         <ChevronRight className="w-4 h-4 rotate-180" />
                     </button>
                 )}
 
                 {/* Left Panel - Problem Description & Submissions */}
-                <div className="w-1/2 border-r border-slate-800 flex flex-col bg-slate-900 overflow-hidden">
-                    {/* Tabs */}
-                    <div className="flex border-b border-slate-800">
+                <div
+                    className="flex flex-col bg-[#1e1e3f] border-r border-gray-800"
+                    style={{ width: `${splitPos}%` }}
+                >
+                    <div className="flex border-b border-gray-800 bg-[#16162a]">
                         <button
                             onClick={() => setActiveTab('description')}
-                            className={`px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'description'
-                                ? 'text-blue-500 border-b-2 border-blue-500 bg-slate-800/50'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
+                            className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition ${activeTab === 'description'
+                                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                                : 'text-gray-500 hover:text-gray-300'
                                 }`}
                         >
+                            <FileText className="w-4 h-4" />
                             Description
                         </button>
                         <button
                             onClick={() => setActiveTab('submissions')}
-                            className={`px-6 py-3 text-sm font-medium transition-colors ${activeTab === 'submissions'
-                                ? 'text-blue-500 border-b-2 border-blue-500 bg-slate-800/50'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
+                            className={`px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition ${activeTab === 'submissions'
+                                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                                : 'text-gray-500 hover:text-gray-300'
                                 }`}
                         >
+                            <Terminal className="w-4 h-4" />
                             Submissions
                         </button>
                     </div>
 
-                    {/* Tab Content */}
-                    <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-6">
                         {activeTab === 'description' ? (
-                            <div className="prose prose-invert max-w-none">
-                                <h2 className="text-xl font-bold text-slate-200 mb-4">Description</h2>
-                                <div className="whitespace-pre-wrap text-slate-300 leading-relaxed mb-6">
-                                    {problem.description || "No description available"}
-                                </div>
+                            <>
+                                <div className="prose prose-invert max-w-none">
+                                    <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                                        {problem.description || "No description available"}
+                                    </div>
 
-                                {problem.test_case_input && (
-                                    <div className="mt-6">
-                                        <h3 className="text-sm font-semibold text-slate-200 mb-3">Sample Test Case</h3>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <div className="text-xs text-slate-500 mb-1">Input</div>
-                                                <div className="bg-slate-800/50 rounded-lg p-3 text-sm font-mono text-slate-300 whitespace-pre-wrap">
-                                                    {problem.test_case_input}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div className="text-xs text-slate-500 mb-1">Output</div>
-                                                <div className="bg-slate-800/50 rounded-lg p-3 text-sm font-mono text-slate-300 whitespace-pre-wrap">
-                                                    {problem.test_case_output}
-                                                </div>
+                                    {problem.constraints && (
+                                        <div className="mt-6">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Constraints</h3>
+                                            <div className="bg-gray-800/50 rounded-lg p-4 text-gray-300 font-mono text-sm">
+                                                {problem.constraints}
                                             </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+
+                                    {problem.test_case_input && (
+                                        <div className="mt-6">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Input</h3>
+                                            <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                                                {problem.test_case_input}
+                                            </pre>
+                                        </div>
+                                    )}
+
+                                    {problem.test_case_output && (
+                                        <div className="mt-4">
+                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Output</h3>
+                                            <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto">
+                                                {problem.test_case_output}
+                                            </pre>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         ) : (
                             <div className="space-y-4">
-                                <h2 className="text-xl font-bold text-slate-200 mb-4">My Submissions</h2>
+                                <h2 className="text-xl font-bold text-white mb-4">My Submissions</h2>
                                 {submissions.length === 0 ? (
-                                    <div className="text-center py-8 text-slate-500">
+                                    <div className="text-center py-8 text-gray-500">
                                         No submissions yet. Solve the problem to see your history!
                                     </div>
                                 ) : (
@@ -470,33 +474,30 @@ const SolveProblem = ({ setAuth }) => {
                                         {submissions.map((sub) => (
                                             <div
                                                 key={sub.submission_id}
-                                                className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors"
+                                                className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors"
                                             >
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <span className={`px-2 py-1 rounded text-xs font-bold ${sub.status === 'Accepted' ? 'bg-green-500/20 text-green-400' :
-                                                        sub.status === 'Compilation Error' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                            'bg-red-500/20 text-red-400'
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold ${sub.status === 'Accepted' ? 'bg-green-900/50 text-green-400' :
+                                                        sub.status === 'Compilation Error' ? 'bg-yellow-900/50 text-yellow-400' :
+                                                            'bg-red-900/50 text-red-400'
                                                         }`}>
                                                         {sub.status}
                                                     </span>
-                                                    <span className="text-xs text-slate-500">
+                                                    <span className="text-xs text-gray-500">
                                                         {new Date(sub.submitted_at).toLocaleString()}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center justify-between mt-3">
-                                                    <span className="text-xs text-slate-400 font-mono bg-slate-900 px-2 py-1 rounded">
+                                                    <span className="text-xs text-gray-400 font-mono bg-gray-900 px-2 py-1 rounded">
                                                         {sub.language}
                                                     </span>
                                                     <button
                                                         onClick={() => {
                                                             setCode(sub.code);
-                                                            // Also try to detect language if possible, otherwise default to cpp or keep current
-                                                            // Ideally store language in DB and retrieve it.
-                                                            // For now assuming existing submissions might have a language field we aren't using yet or it's default.
                                                             if (sub.language) setLanguage(sub.language);
                                                             toast.info(`Code loaded (${sub.language || 'cpp'})`);
                                                         }}
-                                                        className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded transition-colors"
+                                                        className="text-xs bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded transition-colors"
                                                     >
                                                         Load Code
                                                     </button>
@@ -510,36 +511,112 @@ const SolveProblem = ({ setAuth }) => {
                     </div>
                 </div>
 
-                {/* Right Panel - Code Editor & Output */}
-                <div className="w-1/2 flex flex-col bg-[#1e1e1e]">
-                    <div className="flex-1 relative">
+                {/* Resizer */}
+                <div
+                    className="w-1 bg-gray-800 hover:bg-cyan-600 cursor-col-resize transition"
+                    onMouseDown={(e) => {
+                        const startX = e.clientX;
+                        const startPos = splitPos;
+                        const container = containerRef.current;
+
+                        const onMouseMove = (e) => {
+                            const containerWidth = container.offsetWidth;
+                            const delta = e.clientX - startX;
+                            const newPos = startPos + (delta / containerWidth) * 100;
+                            setSplitPos(Math.max(25, Math.min(75, newPos)));
+                        };
+
+                        const onMouseUp = () => {
+                            document.removeEventListener('mousemove', onMouseMove);
+                            document.removeEventListener('mouseup', onMouseUp);
+                        };
+
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                    }}
+                />
+
+                {/* Right Panel - Code Editor */}
+                <div className="flex flex-col flex-1 bg-[#1e1e3f]">
+                    <div className="flex-1 overflow-hidden">
                         <SimpleCodeEditor
                             value={code}
                             onChange={setCode}
-                            language={language === 'python' ? 'python' : language === 'java' ? 'java' : 'cpp'} // Ensure editor highlighting matches
+                            language={language === 'python' ? 'python' : language === 'java' ? 'java' : 'cpp'}
                         />
                     </div>
 
-                    {/* Output Panel */}
-                    <div className="h-1/3 border-t border-slate-800 bg-slate-900 flex flex-col">
-                        <div className="px-4 py-2 border-b border-slate-800 bg-slate-800/30 flex items-center justify-between">
-                            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Output</span>
-                            {verdict && (
-                                <span className={`text-xs font-medium px-2 py-0.5 rounded ${verdict === 'Accepted' || verdict === 'passed' ? 'bg-green-500/10 text-green-500' :
-                                    verdict === 'failed' || verdict === 'Wrong Answer' ? 'bg-red-500/10 text-red-500' :
-                                        'bg-yellow-500/10 text-yellow-500'
-                                    }`}>
-                                    {verdict === 'passed' ? 'Accepted' :
-                                        verdict === 'failed' ? 'Wrong Answer' :
-                                            verdict}
-                                </span>
-                            )}
+                    {/* Output Panel with Tabs */}
+                    <div className="h-48 border-t border-gray-800 bg-[#16162a] flex flex-col">
+                        <div className="flex border-b border-gray-800">
+                            <button
+                                onClick={() => setRightTab('testcase')}
+                                className={`px-4 py-2 text-sm font-medium flex items-center gap-2 ${rightTab === 'testcase' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-500'
+                                    }`}
+                            >
+                                <Terminal className="w-4 h-4" />
+                                Testcase
+                            </button>
+                            <button
+                                onClick={() => setRightTab('output')}
+                                className={`px-4 py-2 text-sm font-medium flex items-center gap-2 ${rightTab === 'output' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-500'
+                                    }`}
+                            >
+                                <Code2 className="w-4 h-4" />
+                                Output
+                            </button>
+                            <button
+                                onClick={() => setRightTab('result')}
+                                className={`px-4 py-2 text-sm font-medium flex items-center gap-2 ${rightTab === 'result' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-500'
+                                    }`}
+                            >
+                                {verdict === 'Accepted' ? (
+                                    <Check className="w-4 h-4 text-green-400" />
+                                ) : verdict ? (
+                                    <X className="w-4 h-4 text-red-400" />
+                                ) : (
+                                    <FileText className="w-4 h-4" />
+                                )}
+                                Result
+                            </button>
                         </div>
-                        <div className="flex-1 p-4 font-mono text-sm overflow-auto custom-scrollbar">
-                            {output ? (
-                                <pre className="whitespace-pre-wrap text-slate-300">{output}</pre>
-                            ) : (
-                                <div className="text-slate-600 italic">Run your code to see output...</div>
+
+                        <div className="flex-1 overflow-y-auto p-4 font-mono text-sm">
+                            {rightTab === 'testcase' && (
+                                <div className="text-gray-400">
+                                    <pre className="bg-gray-900/50 p-3 rounded">{problem.test_case_input || 'No sample input'}</pre>
+                                </div>
+                            )}
+                            {rightTab === 'output' && (
+                                <pre className={`${output.includes('Error') ? 'text-red-400' : 'text-gray-300'}`}>
+                                    {output || 'Run your code to see output...'}
+                                </pre>
+                            )}
+                            {rightTab === 'result' && (
+                                <div>
+                                    {verdict ? (
+                                        <div className={`text-lg font-bold mb-3 ${verdict === 'Accepted' ? 'text-green-400' : 'text-red-400'}`}>
+                                            {verdict}
+                                        </div>
+                                    ) : (
+                                        <div className="text-gray-500">Submit your code to see results...</div>
+                                    )}
+                                    {testResults && testResults.length > 0 && (
+                                        <div className="space-y-2">
+                                            {testResults.map((tr, i) => (
+                                                <div key={i} className={`flex items-center gap-2 p-2 rounded ${tr.status === 'Passed' ? 'bg-green-900/20' : 'bg-red-900/20'
+                                                    }`}>
+                                                    {tr.status === 'Passed' ? (
+                                                        <Check className="w-4 h-4 text-green-400" />
+                                                    ) : (
+                                                        <X className="w-4 h-4 text-red-400" />
+                                                    )}
+                                                    <span className="text-gray-300">Test Case {i + 1}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             )}
                         </div>
                     </div>

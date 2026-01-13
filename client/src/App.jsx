@@ -104,6 +104,12 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
     return null;
   }
 
+  // Hide navbar on problem solving page to provide full screen experience
+  // Matches /problems/123 but NOT /problems (list)
+  if (location.pathname.startsWith('/problems/') && location.pathname.length > 9) {
+    return null;
+  }
+
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="w-full px-4 sm:px-6 lg:px-8">

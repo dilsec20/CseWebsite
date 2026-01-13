@@ -13,19 +13,11 @@ const BOILERPLATES = {
 using namespace std;
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
     
     // Your code here
     
     return 0;
 }`,
-    python: `# Write your code here
-def solve():
-    pass
-
-if __name__ == "__main__":
-    solve()`,
     java: `import java.util.*;
 import java.io.*;
 
@@ -325,7 +317,6 @@ const SolveProblem = ({ setAuth }) => {
                         className="bg-gray-800 text-gray-300 text-sm rounded-lg px-3 py-1.5 border border-gray-700 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
                     >
                         <option value="cpp">C++ 17</option>
-                        <option value="python">Python 3</option>
                         <option value="java">Java 17</option>
                     </select>
                     <button
@@ -566,7 +557,7 @@ const SolveProblem = ({ setAuth }) => {
                         <SimpleCodeEditor
                             value={code}
                             onChange={setCode}
-                            language={language === 'python' ? 'python' : language === 'java' ? 'java' : 'cpp'}
+                            language={language === 'java' ? 'java' : 'cpp'}
                         />
                     </div>
 

@@ -252,67 +252,95 @@ router.post("/submit", authorization, async (req, res) => {
             }
         }
 
-        // Step 3: Sample passed, now run ALL test cases (sequential, but no delay for speed)
+        // Step 3: Run ALL test cases in Parallel (with batching to respect API limits)
+        const BATCH_SIZE = 5; // Piston API is robust, but 5 is a safe parallel limit
+
         let passedCount = 0;
         const testResults = [];
-        let firstFailure = null;
-        let testCaseNumber = 0;
+        let firstFailure = null; // We need to thread-safe this logic effectively
 
-        for (const testCase of allTestCases.rows) {
-            testCaseNumber++;
+        // Helper to process a single batch
+        const processBatch = async (batch) => {
+            const promises = batch.map(async ({ testCase, index }) => {
+                const testCaseNumber = index + 1;
+                try {
+                    const result = await executeCode(testCase);
 
-            try {
-                const result = await executeCode(testCase);
-
-                if (result.success) {
-                    passedCount++;
-                }
-
-                testResults.push({
-                    test_case_id: testCase.test_case_id,
-                    test_case_number: testCaseNumber,
-                    status: result.success ? 'Passed' : 'Failed',
-                    is_sample: testCase.is_sample
-                });
-
-                // Store first failure
-                if (!result.success && !firstFailure) {
-                    firstFailure = {
-                        test_case_number: testCaseNumber,
-                        is_sample: testCase.is_sample,
-                        error_type: result.error_type
-                    };
-
-                    // Show input/output ONLY for sample test cases
-                    if (testCase.is_sample) {
-                        firstFailure.input = testCase.input;
-                        firstFailure.expected = result.expected;
-                        firstFailure.actual = result.output || result.error;
-                    } else {
-                        // For hidden test cases, just show it failed
-                        firstFailure.message = `Failed on hidden test case #${testCaseNumber}`;
+                    if (result.success) {
+                        // Atomic increment (JS is single threaded event loop, so this is safe)
+                        passedCount++;
                     }
-                }
 
-            } catch (error) {
-                testResults.push({
-                    test_case_id: testCase.test_case_id,
-                    test_case_number: testCaseNumber,
-                    status: 'Error',
-                    is_sample: testCase.is_sample,
-                    error: error.message
-                });
-
-                if (!firstFailure) {
-                    firstFailure = {
+                    // Store Result
+                    const resultObj = {
+                        test_case_id: testCase.test_case_id,
                         test_case_number: testCaseNumber,
-                        is_sample: testCase.is_sample,
-                        error_type: 'Execution Error',
-                        message: `Error on test case #${testCaseNumber}`
+                        status: result.success ? 'Passed' : 'Failed',
+                        is_sample: testCase.is_sample
                     };
+
+                    // Critical Section: First Failure
+                    if (!result.success) {
+                        // Check if this is the failure with the lowest index so far
+                        // (Since they complete out of order)
+                        const currentFailure = {
+                            test_case_number: testCaseNumber,
+                            is_sample: testCase.is_sample,
+                            error_type: result.error_type
+                        };
+
+                        if (testCase.is_sample) {
+                            currentFailure.input = testCase.input;
+                            currentFailure.expected = result.expected;
+                            currentFailure.actual = result.output || result.error;
+                        } else {
+                            currentFailure.message = `Failed on hidden test case #${testCaseNumber}`;
+                        }
+
+                        // Update firstFailure if it's null OR if this failure has a lower index
+                        if (!firstFailure || testCaseNumber < firstFailure.test_case_number) {
+                            firstFailure = currentFailure;
+                        }
+                    }
+
+                    return resultObj;
+                } catch (error) {
+                    const errObj = {
+                        test_case_id: testCase.test_case_id,
+                        test_case_number: testCaseNumber,
+                        status: 'Error',
+                        is_sample: testCase.is_sample,
+                        error: error.message
+                    };
+
+                    if (!firstFailure || testCaseNumber < firstFailure.test_case_number) {
+                        firstFailure = {
+                            test_case_number: testCaseNumber,
+                            is_sample: testCase.is_sample,
+                            error_type: 'Execution Error',
+                            message: `Error on test case #${testCaseNumber}`
+                        };
+                    }
+                    return errObj;
                 }
-            }
+            });
+
+            return Promise.all(promises);
+        };
+
+        // Create pairs of (item, index) for stability
+        const indexedCases = allTestCases.rows.map((tc, i) => ({ testCase: tc, index: i }));
+
+        // Process in batches
+        for (let i = 0; i < indexedCases.length; i += BATCH_SIZE) {
+            const batch = indexedCases.slice(i, i + BATCH_SIZE);
+            console.log(`🚀 Running batch ${Math.floor(i / BATCH_SIZE) + 1} (${batch.length} cases)...`);
+            const batchResults = await processBatch(batch);
+            testResults.push(...batchResults);
         }
+
+        // Sort results by test_case_number to ensure user sees 1, 2, 3...
+        testResults.sort((a, b) => a.test_case_number - b.test_case_number);
 
 
         const totalCount = allTestCases.rows.length;

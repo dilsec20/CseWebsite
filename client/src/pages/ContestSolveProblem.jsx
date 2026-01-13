@@ -17,12 +17,7 @@ int main() {
     
     return 0;
 }`,
-    python: `# Write your code here
-def solve():
-    pass
 
-if __name__ == "__main__":
-    solve()`,
     java: `import java.util.*;
 import java.io.*;
 
@@ -255,15 +250,19 @@ const ContestSolveProblem = () => {
         }
     };
 
+    // Stream-enabled Submit Handler
     const handleSubmit = async () => {
         if (!problem) return;
         setSubmitLoading(true);
         setVerdict(null);
         setTestResults([]);
+        setOutput('Initializing submission...');
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_URL}/api/execute/submit`, {
+            if (!token) return;
+
+            const response = await fetch(`${API_URL}/api/execute/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', token },
                 body: JSON.stringify({
@@ -274,22 +273,73 @@ const ContestSolveProblem = () => {
                     contest_type: contestType
                 })
             });
-            const data = await res.json();
-            setVerdict(data.verdict);
-            setTestResults(data.test_results || []);
-            setRightTab('result');
 
-            if (data.verdict === 'Accepted') {
-                toast.success("🎉 Accepted!");
-            } else {
-                toast.error(data.verdict || "Wrong Answer");
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n\n');
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const jsonStr = line.replace('data: ', '');
+                        try {
+                            const data = JSON.parse(jsonStr);
+
+                            if (data.type === 'status' || data.type === 'progress') {
+                                // Update Progress UI
+                                if (data.message) {
+                                    setOutput(prev => {
+                                        return `${data.message}\n(Processed ${data.current || 0}/${data.total || '?'} cases)`;
+                                    });
+                                }
+                            }
+                            else if (data.type === 'final') {
+                                // Final Result Handling
+                                const parseRes = data;
+                                setVerdict(parseRes.verdict);
+                                setTestResults(parseRes.test_results || []);
+                                setRightTab('result');
+
+                                if (parseRes.verdict === 'Accepted') {
+                                    toast.success("🎉 Accepted!");
+                                } else {
+                                    toast.error(parseRes.verdict || "Wrong Answer");
+                                }
+
+                                // Refresh submissions list
+                                fetchSubmissions();
+
+                                if (parseRes.first_failure) {
+                                    let failureOutput = '';
+
+                                    if (parseRes.sample_failed) {
+                                        failureOutput = `❌ Sample Test Case Failed!\n\nInput:\n${parseRes.first_failure.input}\n\nExpected Output:\n${parseRes.first_failure.expected}\n\nYour Output:\n${parseRes.first_failure.actual}\n\n💡 Fix your code to pass the sample test case first!`;
+                                    } else if (parseRes.first_failure.message) {
+                                        failureOutput = `✅ Sample test case passed!\n\n❌ ${parseRes.first_failure.message}\n\n💡 Debug your code for edge cases and hidden scenarios.`;
+                                    } else {
+                                        failureOutput = `Failed Test:\nExpected: ${parseRes.first_failure.expected}\nYour Output: ${parseRes.first_failure.actual}`;
+                                    }
+
+                                    setOutput(`Verdict: ${parseRes.verdict}\n\nPassed: ${parseRes.passed_count}/${parseRes.total_count} test cases\n\n${failureOutput}`);
+                                } else {
+                                    setOutput(`Verdict: ${parseRes.verdict}\n\nPassed all ${parseRes.total_count} test cases! ✅\n\nCongratulations! Your solution is correct! 🎉`);
+                                }
+                            }
+                        } catch (e) {
+                            console.error("Error parsing stream chunk", e);
+                        }
+                    }
+                }
             }
-
-            // Refresh submissions list
-            fetchSubmissions();
 
         } catch (err) {
             toast.error("Submission failed");
+            setOutput(`Submission Error: ${err.message}`);
         } finally {
             setSubmitLoading(false);
         }
@@ -528,7 +578,7 @@ const ContestSolveProblem = () => {
                                 className="bg-gray-800 text-gray-300 text-sm rounded-lg px-3 py-1.5 border border-gray-700 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
                             >
                                 <option value="cpp">C++ 17</option>
-                                <option value="python">Python 3</option>
+
                                 <option value="java">Java 17</option>
                             </select>
                         </div>

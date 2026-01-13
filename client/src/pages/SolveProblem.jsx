@@ -430,34 +430,58 @@ const SolveProblem = ({ setAuth }) => {
                         {activeTab === 'description' ? (
                             <>
                                 <div className="prose prose-invert max-w-none">
+                                    {/* Parsed Problem Description - removes embedded examples/constraints */}
                                     <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
-                                        {problem.description || "No description available"}
+                                        {(() => {
+                                            let desc = problem.description || "No description available";
+                                            // Remove everything after Example/Constraints/Sample to avoid duplication
+                                            const cutPatterns = [
+                                                /\n\*\*Example\s*\d*[:.]?\*\*/i,
+                                                /\nExample\s*\d*[:.]?\s*\n/i,
+                                                /\n\*\*Constraints[:.]?\*\*/i,
+                                                /\nConstraints[:.]?\s*\n/i,
+                                                /\nSample Input[:.]?\s*\n/i,
+                                                /\nSample Output[:.]?\s*\n/i
+                                            ];
+                                            for (const pattern of cutPatterns) {
+                                                const match = desc.match(pattern);
+                                                if (match) {
+                                                    desc = desc.substring(0, match.index);
+                                                    break;
+                                                }
+                                            }
+                                            return desc.trim();
+                                        })()}
                                     </div>
 
-                                    {problem.constraints && (
+                                    {/* Sample Test Case Box */}
+                                    {problem.test_case_input && (
                                         <div className="mt-6">
-                                            <h3 className="text-lg font-semibold text-white mb-2">Constraints</h3>
-                                            <div className="bg-gray-800/50 rounded-lg p-4 text-gray-300 font-mono text-sm">
-                                                {problem.constraints}
+                                            <h3 className="text-lg font-semibold text-white mb-3">Sample Test Case</h3>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <div className="text-xs text-gray-500 mb-1 uppercase tracking-wide">Input</div>
+                                                    <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto border border-gray-800">
+                                                        {problem.test_case_input}
+                                                    </pre>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xs text-gray-500 mb-1 uppercase tracking-wide">Output</div>
+                                                    <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto border border-gray-800">
+                                                        {problem.test_case_output}
+                                                    </pre>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
 
-                                    {problem.test_case_input && (
+                                    {/* Constraints Box */}
+                                    {problem.constraints && (
                                         <div className="mt-6">
-                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Input</h3>
-                                            <pre className="bg-gray-900 rounded-lg p-4 text-green-400 font-mono text-sm overflow-x-auto">
-                                                {problem.test_case_input}
-                                            </pre>
-                                        </div>
-                                    )}
-
-                                    {problem.test_case_output && (
-                                        <div className="mt-4">
-                                            <h3 className="text-lg font-semibold text-white mb-2">Sample Output</h3>
-                                            <pre className="bg-gray-900 rounded-lg p-4 text-cyan-400 font-mono text-sm overflow-x-auto">
-                                                {problem.test_case_output}
-                                            </pre>
+                                            <h3 className="text-lg font-semibold text-white mb-3">Constraints</h3>
+                                            <div className="bg-gray-900 rounded-lg p-4 text-gray-300 font-mono text-sm border border-gray-800 whitespace-pre-wrap">
+                                                {problem.constraints}
+                                            </div>
                                         </div>
                                     )}
                                 </div>

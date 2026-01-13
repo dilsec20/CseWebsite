@@ -252,72 +252,65 @@ router.post("/submit", authorization, async (req, res) => {
             }
         }
 
-        // Step 3: Sample passed, now run ALL test cases in PARALLEL (much faster!)
+        // Step 3: Sample passed, now run ALL test cases (sequential, but no delay for speed)
         let passedCount = 0;
+        const testResults = [];
         let firstFailure = null;
+        let testCaseNumber = 0;
 
-        // Execute all test cases in parallel (with concurrency limit of 3)
-        const executeWithIndex = async (testCase, index) => {
-            const testCaseNumber = index + 1;
+        for (const testCase of allTestCases.rows) {
+            testCaseNumber++;
+
             try {
                 const result = await executeCode(testCase);
-                return {
+
+                if (result.success) {
+                    passedCount++;
+                }
+
+                testResults.push({
                     test_case_id: testCase.test_case_id,
                     test_case_number: testCaseNumber,
                     status: result.success ? 'Passed' : 'Failed',
-                    is_sample: testCase.is_sample,
-                    success: result.success,
-                    result: result
-                };
+                    is_sample: testCase.is_sample
+                });
+
+                // Store first failure
+                if (!result.success && !firstFailure) {
+                    firstFailure = {
+                        test_case_number: testCaseNumber,
+                        is_sample: testCase.is_sample,
+                        error_type: result.error_type
+                    };
+
+                    // Show input/output ONLY for sample test cases
+                    if (testCase.is_sample) {
+                        firstFailure.input = testCase.input;
+                        firstFailure.expected = result.expected;
+                        firstFailure.actual = result.output || result.error;
+                    } else {
+                        // For hidden test cases, just show it failed
+                        firstFailure.message = `Failed on hidden test case #${testCaseNumber}`;
+                    }
+                }
+
             } catch (error) {
-                return {
+                testResults.push({
                     test_case_id: testCase.test_case_id,
                     test_case_number: testCaseNumber,
                     status: 'Error',
                     is_sample: testCase.is_sample,
-                    success: false,
                     error: error.message
-                };
-            }
-        };
+                });
 
-        // Run up to 3 tests concurrently to avoid overwhelming Piston API
-        const concurrencyLimit = 3;
-        const results = [];
-        for (let i = 0; i < allTestCases.rows.length; i += concurrencyLimit) {
-            const batch = allTestCases.rows.slice(i, i + concurrencyLimit);
-            const batchResults = await Promise.all(
-                batch.map((tc, j) => executeWithIndex(tc, i + j))
-            );
-            results.push(...batchResults);
-        }
-
-        // Process results
-        const testResults = results.map(r => ({
-            test_case_id: r.test_case_id,
-            test_case_number: r.test_case_number,
-            status: r.status,
-            is_sample: r.is_sample
-        }));
-
-        passedCount = results.filter(r => r.success).length;
-
-        // Find first failure (by test case order)
-        const firstFailedResult = results.find(r => !r.success);
-        if (firstFailedResult) {
-            const testCase = allTestCases.rows[firstFailedResult.test_case_number - 1];
-            firstFailure = {
-                test_case_number: firstFailedResult.test_case_number,
-                is_sample: firstFailedResult.is_sample,
-                error_type: firstFailedResult.result?.error_type || 'Execution Error'
-            };
-
-            if (firstFailedResult.is_sample) {
-                firstFailure.input = testCase.input;
-                firstFailure.expected = firstFailedResult.result?.expected;
-                firstFailure.actual = firstFailedResult.result?.output || firstFailedResult.result?.error || firstFailedResult.error;
-            } else {
-                firstFailure.message = `Failed on hidden test case #${firstFailedResult.test_case_number}`;
+                if (!firstFailure) {
+                    firstFailure = {
+                        test_case_number: testCaseNumber,
+                        is_sample: testCase.is_sample,
+                        error_type: 'Execution Error',
+                        message: `Error on test case #${testCaseNumber}`
+                    };
+                }
             }
         }
 

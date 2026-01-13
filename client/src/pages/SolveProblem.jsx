@@ -193,6 +193,8 @@ const SolveProblem = ({ setAuth }) => {
         setSubmitLoading(true);
         setVerdict(null);
         setTestResults([]);
+        setOutput('Initializing submission...');
+
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -202,6 +204,8 @@ const SolveProblem = ({ setAuth }) => {
             }
 
             const body = { problem_id: id, code, language };
+
+            // Use fetch for streaming
             const response = await fetch(`${API_URL}/api/execute/submit`, {
                 method: "POST",
                 headers: {
@@ -211,53 +215,88 @@ const SolveProblem = ({ setAuth }) => {
                 body: JSON.stringify(body)
             });
 
-            const parseRes = await response.json();
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
 
-            if (parseRes.verdict === "Accepted") {
-                setVerdict("Accepted");
-                toast.success(`Perfect! Passed all ${parseRes.total_count} test cases!`);
-                window.dispatchEvent(new Event('streakUpdated'));
-            } else if (parseRes.verdict === "Compilation Error") {
-                setVerdict("Compilation Error");
-                toast.error("Compilation Error");
-            } else if (parseRes.verdict === "Runtime Error") {
-                setVerdict("Runtime Error");
-                toast.error("Runtime Error");
-            } else {
-                setVerdict("Wrong Answer");
-                toast.error(`Wrong Answer - Passed ${parseRes.passed_count}/${parseRes.total_count} test cases`);
-            }
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
 
-            setTestResults(parseRes.test_results || []);
-            setPassedCount(parseRes.passed_count || 0);
-            setTotalCount(parseRes.total_count || 0);
-            setRightTab('result');
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n\n');
 
-            fetchSubmissions();
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const jsonStr = line.replace('data: ', '');
+                        try {
+                            const data = JSON.parse(jsonStr);
 
-            if (parseRes.first_failure) {
-                let failureOutput = '';
+                            if (data.type === 'status' || data.type === 'progress') {
+                                // Update Progress UI
+                                if (data.message) {
+                                    setOutput(prev => {
+                                        // Keep only the last line if it's a progress update
+                                        return `${data.message}\n(Processed ${data.current || 0}/${data.total || '?'} cases)`;
+                                    });
+                                }
+                            }
+                            else if (data.type === 'final') {
+                                // Final Result Handling
+                                const parseRes = data;
 
-                if (parseRes.sample_failed) {
-                    failureOutput = `❌ Sample Test Case Failed!\n\nInput:\n${parseRes.first_failure.input}\n\nExpected Output:\n${parseRes.first_failure.expected}\n\nYour Output:\n${parseRes.first_failure.actual}\n\n💡 Fix your code to pass the sample test case first!`;
-                } else if (parseRes.first_failure.message) {
-                    failureOutput = `✅ Sample test case passed!\n\n❌ ${parseRes.first_failure.message}\n\n💡 Debug your code for edge cases and hidden scenarios.`;
-                } else {
-                    failureOutput = `Failed Test:\nExpected: ${parseRes.first_failure.expected}\nYour Output: ${parseRes.first_failure.actual}`;
+                                if (parseRes.verdict === "Accepted") {
+                                    setVerdict("Accepted");
+                                    toast.success(`Perfect! Passed all ${parseRes.total_count} test cases!`);
+                                    window.dispatchEvent(new Event('streakUpdated'));
+                                } else if (parseRes.verdict === "Compilation Error") {
+                                    setVerdict("Compilation Error");
+                                    toast.error("Compilation Error");
+                                } else if (parseRes.verdict === "Runtime Error") {
+                                    setVerdict("Runtime Error");
+                                    toast.error("Runtime Error");
+                                } else {
+                                    setVerdict("Wrong Answer");
+                                    toast.error(`Wrong Answer - Passed ${parseRes.passed_count}/${parseRes.total_count} test cases`);
+                                }
+
+                                setTestResults(parseRes.test_results || []);
+                                setPassedCount(parseRes.passed_count || 0);
+                                setTotalCount(parseRes.total_count || 0);
+                                setRightTab('result');
+
+                                fetchSubmissions();
+
+                                if (parseRes.first_failure) {
+                                    let failureOutput = '';
+
+                                    if (parseRes.sample_failed) {
+                                        failureOutput = `❌ Sample Test Case Failed!\n\nInput:\n${parseRes.first_failure.input}\n\nExpected Output:\n${parseRes.first_failure.expected}\n\nYour Output:\n${parseRes.first_failure.actual}\n\n💡 Fix your code to pass the sample test case first!`;
+                                    } else if (parseRes.first_failure.message) {
+                                        failureOutput = `✅ Sample test case passed!\n\n❌ ${parseRes.first_failure.message}\n\n💡 Debug your code for edge cases and hidden scenarios.`;
+                                    } else {
+                                        failureOutput = `Failed Test:\nExpected: ${parseRes.first_failure.expected}\nYour Output: ${parseRes.first_failure.actual}`;
+                                    }
+
+                                    setOutput(`Verdict: ${parseRes.verdict}\n\nPassed: ${parseRes.passed_count}/${parseRes.total_count} test cases\n\n${failureOutput}`);
+                                } else {
+                                    setOutput(`Verdict: ${parseRes.verdict}\n\nPassed all ${parseRes.total_count} test cases! ✅\n\nCongratulations! Your solution is correct! 🎉`);
+                                }
+
+                                if (contestId && parseRes.verdict === "Accepted") {
+                                    fetchContestProblems(contestId, contestType);
+                                }
+                            }
+                        } catch (e) {
+                            console.error("Error parsing stream chunk", e);
+                        }
+                    }
                 }
-
-                setOutput(`Verdict: ${parseRes.verdict}\n\nPassed: ${parseRes.passed_count}/${parseRes.total_count} test cases\n\n${failureOutput}`);
-            } else {
-                setOutput(`Verdict: ${parseRes.verdict}\n\nPassed all ${parseRes.total_count} test cases! ✅\n\nCongratulations! Your solution is correct! 🎉`);
-            }
-
-            if (contestId && parseRes.verdict === "Accepted") {
-                fetchContestProblems(contestId, contestType);
             }
 
         } catch (err) {
             console.error(err.message);
             toast.error("Submission failed");
+            setOutput(`Submission Error: ${err.message}`);
         }
         setSubmitLoading(false);
     };

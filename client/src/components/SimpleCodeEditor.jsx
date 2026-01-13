@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Editor from 'react-simple-code-editor';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
@@ -10,13 +10,36 @@ import 'prismjs/components/prism-java';
 import '../vscode-theme.css';
 
 const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
+    const editorRef = useRef(null);
+    const lineNumbersRef = useRef(null);
+    const [lineCount, setLineCount] = useState(1);
+
+    // Update line count when value changes
+    useEffect(() => {
+        const lines = (value || "").split('\n').length;
+        setLineCount(lines);
+    }, [value]);
+
+    // Sync scroll between line numbers and editor
+    useEffect(() => {
+        const editorContainer = editorRef.current?.querySelector('.editor-container');
+        const lineNumbers = lineNumbersRef.current;
+
+        if (editorContainer && lineNumbers) {
+            const handleScroll = () => {
+                lineNumbers.scrollTop = editorContainer.scrollTop;
+            };
+            editorContainer.addEventListener('scroll', handleScroll);
+            return () => editorContainer.removeEventListener('scroll', handleScroll);
+        }
+    }, []);
 
     // Helper to get Prism grammar
     const getGrammar = (lang) => {
         if (lang === 'cpp' || lang === 'c') return Prism.languages.cpp;
         if (lang === 'python') return Prism.languages.python;
         if (lang === 'java') return Prism.languages.java;
-        return Prism.languages.clike || Prism.languages.javascript; // Fallback
+        return Prism.languages.clike || Prism.languages.javascript;
     };
 
     // Auto-closing pairs for brackets, parentheses, and braces
@@ -34,9 +57,6 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
         const end = textarea.selectionEnd;
         const selectedText = value.substring(start, end);
 
-        // ... rest of handleKeyDown is correct but let's just make sure value is safe
-        // (value default is "" so it is safe)
-
         // Handle Tab key
         if (e.key === 'Tab') {
             e.preventDefault();
@@ -52,16 +72,13 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
         else if (e.key === 'Enter') {
             e.preventDefault();
 
-            // Get current line
             const beforeCursor = value.substring(0, start);
             const currentLineStart = beforeCursor.lastIndexOf('\n') + 1;
             const currentLine = beforeCursor.substring(currentLineStart);
 
-            // Calculate indentation of current line
             const indentMatch = currentLine.match(/^(\s*)/);
             const currentIndent = indentMatch ? indentMatch[1] : '';
 
-            // Check if cursor is between braces {}
             const charBefore = value[start - 1];
             const charAfter = value[start];
             const isBetweenBraces = charBefore === '{' && charAfter === '}';
@@ -69,17 +86,14 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
             let newValue, newCursorPos;
 
             if (isBetweenBraces) {
-                // Add extra indentation and closing brace on new line
                 const extraIndent = currentIndent + '    ';
                 newValue = value.substring(0, start) + '\n' + extraIndent + '\n' + currentIndent + value.substring(end);
                 newCursorPos = start + 1 + extraIndent.length;
             } else if (charBefore === '{') {
-                // Just opened a brace, add extra indentation
                 const extraIndent = currentIndent + '    ';
                 newValue = value.substring(0, start) + '\n' + extraIndent + value.substring(end);
                 newCursorPos = start + 1 + extraIndent.length;
             } else {
-                // Normal enter, maintain current indentation
                 newValue = value.substring(0, start) + '\n' + currentIndent + value.substring(end);
                 newCursorPos = start + 1 + currentIndent.length;
             }
@@ -95,7 +109,6 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
             e.preventDefault();
             const closing = closingPairs[e.key];
 
-            // If text is selected, wrap it
             if (start !== end) {
                 const newValue = value.substring(0, start) + e.key + selectedText + closing + value.substring(end);
                 onChange(newValue);
@@ -104,7 +117,6 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
                     textarea.selectionEnd = end + 1;
                 }, 0);
             } else {
-                // Insert opening and closing pair
                 const newValue = value.substring(0, start) + e.key + closing + value.substring(end);
                 onChange(newValue);
                 setTimeout(() => {
@@ -118,7 +130,6 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
             const charBefore = value[start - 1];
             const charAfter = value[start];
 
-            // If cursor is between matching pairs, delete both
             if (closingPairs[charBefore] === charAfter && start === end) {
                 e.preventDefault();
                 const newValue = value.substring(0, start - 1) + value.substring(end + 1);
@@ -140,30 +151,95 @@ const SimpleCodeEditor = ({ value = "", onChange, language = 'cpp' }) => {
         }
     };
 
+    // Generate line numbers
+    const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1);
+
     return (
-        <div className="w-full h-full flex flex-col rounded-md overflow-hidden shadow-sm" style={{ backgroundColor: '#1e1e1e' }}>
-            <div className="px-4 py-2 text-sm flex-shrink-0 flex items-center justify-between" style={{ backgroundColor: '#252526', color: '#858585', borderBottom: '1px solid #3e3e42' }}>
-                <span className="font-semibold">{language?.toUpperCase() || 'CPP'}</span>
-                <span className="text-xs">Code Editor</span>
+        <div
+            ref={editorRef}
+            className="w-full h-full flex flex-col overflow-hidden"
+            style={{
+                backgroundColor: '#1e1e2e',
+                borderRadius: '8px',
+                border: '1px solid #313244'
+            }}
+        >
+            {/* Header Bar */}
+            <div
+                className="px-4 py-2 text-sm flex-shrink-0 flex items-center justify-between"
+                style={{
+                    backgroundColor: '#181825',
+                    color: '#6c7086',
+                    borderBottom: '1px solid #313244'
+                }}
+            >
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-[#f38ba8]"></div>
+                        <div className="w-3 h-3 rounded-full bg-[#f9e2af]"></div>
+                        <div className="w-3 h-3 rounded-full bg-[#a6e3a1]"></div>
+                    </div>
+                    <span className="ml-2 font-medium text-[#cdd6f4]">{language?.toUpperCase() || 'CPP'}</span>
+                </div>
+                <span className="text-xs text-[#6c7086]">Lines: {lineCount}</span>
             </div>
-            <div className="flex-1 overflow-auto" style={{ backgroundColor: '#1e1e1e' }}>
-                <Editor
-                    value={value || ""}
-                    onValueChange={onChange}
-                    onKeyDown={handleKeyDown}
-                    highlight={(code) => Prism.highlight(code, getGrammar(language) || Prism.languages.clike || Prism.languages.javascript || {}, language)}
-                    padding={16}
-                    textareaClassName="focus:outline-none"
+
+            {/* Editor with Line Numbers */}
+            <div className="flex-1 flex overflow-hidden">
+                {/* Line Numbers Gutter */}
+                <div
+                    ref={lineNumbersRef}
+                    className="flex-shrink-0 overflow-hidden select-none"
                     style={{
+                        backgroundColor: '#181825',
+                        color: '#6c7086',
                         fontFamily: '"Fira Code", "Cascadia Code", "Consolas", monospace',
                         fontSize: 14,
-                        backgroundColor: '#1e1e1e',
-                        color: '#d4d4d4',
-                        minHeight: '100%',
-                        lineHeight: '1.6'
+                        lineHeight: '1.6',
+                        padding: '16px 0',
+                        textAlign: 'right',
+                        minWidth: '50px',
+                        borderRight: '1px solid #313244'
                     }}
-                    placeholder="// Write your C++ code here..."
-                />
+                >
+                    {lineNumbers.map((num) => (
+                        <div
+                            key={num}
+                            style={{
+                                paddingRight: '12px',
+                                paddingLeft: '12px',
+                                height: '22.4px' // lineHeight * fontSize
+                            }}
+                        >
+                            {num}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Code Editor */}
+                <div
+                    className="flex-1 overflow-auto editor-container"
+                    style={{ backgroundColor: '#1e1e2e' }}
+                >
+                    <Editor
+                        value={value || ""}
+                        onValueChange={onChange}
+                        onKeyDown={handleKeyDown}
+                        highlight={(code) => Prism.highlight(code, getGrammar(language) || Prism.languages.clike || Prism.languages.javascript || {}, language)}
+                        padding={16}
+                        textareaClassName="focus:outline-none"
+                        style={{
+                            fontFamily: '"Fira Code", "Cascadia Code", "Consolas", monospace',
+                            fontSize: 14,
+                            backgroundColor: 'transparent',
+                            color: '#cdd6f4',
+                            minHeight: '100%',
+                            lineHeight: '1.6',
+                            caretColor: '#f5c2e7'
+                        }}
+                        placeholder="// Write your code here..."
+                    />
+                </div>
             </div>
         </div>
     );

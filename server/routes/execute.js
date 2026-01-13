@@ -27,7 +27,7 @@ router.post("/run", async (req, res) => {
                     console.log(`⚠️  SIGKILL detected in /run (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`);
 
                     if (retryCount < MAX_RETRIES) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await new Promise(resolve => setTimeout(resolve, 200));
                         return await executeWithRetry(stdin, retryCount + 1);
                     } else {
                         // Return a fake timeout response if max retries reached
@@ -136,7 +136,7 @@ router.post("/submit", authorization, async (req, res) => {
 
                 if (response.data.run.signal === 'SIGKILL' || response.data.compile.signal === 'SIGKILL') {
                     if (retryCount < MAX_RETRIES) {
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await new Promise(resolve => setTimeout(resolve, 200));
                         return await executeCode(testCase, retryCount + 1);
                     }
                     return { success: true, error_type: null, output: '(timeout skipped)', expected: testCase.expected_output };

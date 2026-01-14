@@ -150,26 +150,7 @@ const AptitudeTheory = () => {
                     ))}
                 </div>
 
-                {/* Footer Tips */}
-                <div className="mt-12 bg-gradient-to-r from-gray-900 to-gray-800 p-8 rounded-3xl text-white shadow-xl">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                        <div>
-                            <h3 className="text-2xl font-bold mb-2 flex items-center gap-3">
-                                <Zap className="h-6 w-6 text-yellow-400" />
-                                Ace Your Aptitude Test
-                            </h3>
-                            <p className="text-gray-300 max-w-xl">
-                                Success depends on speed and accuracy. Practice mental math, memorize squares (1-30) & cubes (1-15), and master percentage-fraction conversions.
-                            </p>
-                        </div>
-                        <Link
-                            to="/quizzes"
-                            className="px-6 py-3 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition shadow-lg whitespace-nowrap"
-                        >
-                            Practice Quiz →
-                        </Link>
-                    </div>
-                </div>
+
             </div>
         </div>
     );

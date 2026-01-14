@@ -1,123 +1,172 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, Calculator, Lightbulb, Zap, Search, ChevronDown, ChevronUp } from 'lucide-react';
+import fundamentalsData from '../data/csFundamentals.json';
 
 const CSFundamentalsTheory = () => {
-    const topics = [
-        {
-            title: "Operating Systems",
-            sections: [
-                {
-                    name: "Process vs Thread",
-                    theory: "A process is a program in execution with its own memory space, while a thread is a lightweight process that shares memory with other threads of the same process.",
-                    example: "Example: Chrome browser runs as a process, and each tab runs as a separate thread within that process.",
-                    formula: "Context Switch Time = Time to save state + Time to restore state"
-                },
-                {
-                    name: "CPU Scheduling",
-                    theory: "CPU scheduling determines which process gets CPU time. Common algorithms: FCFS, SJF, Round Robin, Priority.",
-                    example: "Round Robin: Each process gets a fixed time quantum (e.g., 10ms) before switching to the next.",
-                    formula: "Turnaround Time = Completion Time - Arrival Time\nWaiting Time = Turnaround Time - Burst Time"
-                }
-            ]
-        },
-        {
-            title: "Database Management Systems",
-            sections: [
-                {
-                    name: "Normalization",
-                    theory: "Normalization is organizing data to reduce redundancy. Forms: 1NF (atomic values), 2NF (no partial dependency), 3NF (no transitive dependency), BCNF.",
-                    example: "1NF: Each cell contains only one value.\n2NF: Non-key attributes fully depend on primary key.\n3NF: No transitive dependencies.",
-                    formula: "1NF → 2NF → 3NF → BCNF"
-                },
-                {
-                    name: "ACID Properties",
-                    theory: "Atomicity: All or nothing\nConsistency: Valid state transitions\nIsolation: Concurrent transactions don't interfere\nDurability: Committed data persists",
-                    example: "Bank transfer: Debit from A and Credit to B must both succeed or both fail (Atomicity).",
-                    formula: "ACID = Atomicity + Consistency + Isolation + Durability"
-                }
-            ]
-        },
-        {
-            title: "Object-Oriented Programming",
-            sections: [
-                {
-                    name: "Four Pillars of OOP",
-                    theory: "1. Encapsulation: Bundling data and methods\n2. Inheritance: Reusing code from parent class\n3. Polymorphism: Same interface, different implementation\n4. Abstraction: Hiding complex details",
-                    example: "class Animal { speak() } → class Dog extends Animal { speak() { bark } }",
-                    formula: "OOP = Encapsulation + Inheritance + Polymorphism + Abstraction"
-                },
-                {
-                    name: "Access Modifiers",
-                    theory: "Public: Accessible everywhere\nPrivate: Only within the class\nProtected: Within class and subclasses",
-                    example: "private int age; // Can only be accessed within the class",
-                    formula: "Visibility: Public > Protected > Private"
-                }
-            ]
-        },
-        {
-            title: "Data Structures",
-            sections: [
-                {
-                    name: "Time Complexity",
-                    theory: "Big-O notation describes worst-case time complexity.\nO(1) - Constant\nO(log n) - Logarithmic\nO(n) - Linear\nO(n log n) - Linearithmic\nO(n²) - Quadratic",
-                    example: "Array access: O(1)\nBinary Search: O(log n)\nLinear Search: O(n)\nMerge Sort: O(n log n)\nBubble Sort: O(n²)",
-                    formula: "O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ)"
-                }
-            ]
-        }
-    ];
+    const [expandedTopic, setExpandedTopic] = useState(0); // Default open OS
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredTopics = fundamentalsData.filter(topic =>
+        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        topic.sections.some(s =>
+            s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            s.theory.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-6xl mx-auto p-8">
-                <div className="flex items-center justify-between mb-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+            <div className="max-w-6xl mx-auto p-4 md:p-8">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                     <div>
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">CS Fundamentals - Theory</h1>
-                        <p className="text-gray-600">Comprehensive concepts with examples and formulas</p>
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                            <BookOpen className="h-8 w-8 text-purple-600" />
+                            CS Fundamentals - Complete Theory
+                        </h1>
+                        <p className="text-gray-600">Core Concepts • OS • Networking • DBMS • OOPs</p>
                     </div>
-                    <Link to="/knowledge-base" className="flex items-center text-blue-600 hover:underline">
+                    <Link to="/knowledge-base" className="flex items-center text-purple-600 hover:underline font-medium">
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Knowledge Base
+                        Back
                     </Link>
                 </div>
 
-                <div className="space-y-8">
-                    {topics.map((topic, idx) => (
-                        <div key={idx} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6">
-                                <div className="flex items-center">
-                                    <BookOpen className="h-8 w-8 text-white mr-3" />
-                                    <h2 className="text-2xl font-bold text-white">{topic.title}</h2>
-                                </div>
-                            </div>
+                {/* Search */}
+                <div className="mb-6 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search CS concepts, OS scheduling, database normalization..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-sm"
+                    />
+                </div>
 
-                            <div className="p-6 space-y-6">
-                                {topic.sections.map((section, sIdx) => (
-                                    <div key={sIdx} className="border-l-4 border-blue-500 pl-6">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3">{section.name}</h3>
-
-                                        <div className="mb-4">
-                                            <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Theory</h4>
-                                            <p className="text-gray-700 whitespace-pre-line">{section.theory}</p>
+                {/* Topics Container */}
+                <div className="space-y-6">
+                    {filteredTopics.length > 0 ? (
+                        filteredTopics.map((topic, idx) => (
+                            <div key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
+                                {/* Topic Header */}
+                                <button
+                                    onClick={() => setExpandedTopic(expandedTopic === idx ? null : idx)}
+                                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 p-5 flex items-center justify-between text-left"
+                                >
+                                    <div className="flex items-center">
+                                        <BookOpen className="h-7 w-7 text-white mr-3 opacity-90" />
+                                        <div>
+                                            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">{topic.title}</h2>
+                                            <p className="text-purple-100 text-xs mt-1">Foundational concepts & principles</p>
                                         </div>
-
-                                        <div className="mb-4 bg-green-50 p-4 rounded-lg">
-                                            <h4 className="text-sm font-semibold text-green-700 uppercase mb-2">Example</h4>
-                                            <pre className="text-gray-800 whitespace-pre-wrap font-mono text-sm">{section.example}</pre>
-                                        </div>
-
-                                        {section.formula && (
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <h4 className="text-sm font-semibold text-blue-700 uppercase mb-2">Formula / Key Points</h4>
-                                                <pre className="text-blue-900 font-mono text-sm whitespace-pre-wrap">{section.formula}</pre>
-                                            </div>
-                                        )}
                                     </div>
-                                ))}
+                                    {expandedTopic === idx ? (
+                                        <ChevronUp className="h-6 w-6 text-white opacity-80" />
+                                    ) : (
+                                        <ChevronDown className="h-6 w-6 text-white opacity-80" />
+                                    )}
+                                </button>
+
+                                {/* Sections List */}
+                                {(expandedTopic === idx || searchTerm) && (
+                                    <div className="p-6 space-y-10 animate-fadeIn">
+                                        {topic.sections.map((section, sIdx) => (
+                                            <div key={sIdx} className="relative pl-8 border-l-4 border-purple-500 hover:border-purple-600 transition-colors">
+                                                {/* Number Badge */}
+                                                <div className="absolute -left-[1.35rem] top-0 w-8 h-8 bg-purple-100 border-2 border-white shadow-sm rounded-full flex items-center justify-center text-purple-700 font-bold text-sm">
+                                                    {sIdx + 1}
+                                                </div>
+
+                                                <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center">
+                                                    {section.name}
+                                                </h3>
+
+                                                <div className="grid lg:grid-cols-2 gap-6">
+                                                    {/* Theory Column */}
+                                                    <div className="space-y-6">
+                                                        <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                                <BookOpen className="h-3 w-3" /> Core Theory
+                                                            </h4>
+                                                            <p className="text-gray-700 whitespace-pre-line leading-relaxed text-sm lg:text-base">
+                                                                {section.theory}
+                                                            </p>
+                                                        </div>
+
+                                                        {section.formula && (
+                                                            <div className="bg-purple-50 p-5 rounded-xl border-l-4 border-purple-500 shadow-sm transition hover:shadow-md">
+                                                                <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                                    <Calculator className="h-3 w-3" /> Key Logic / Formula
+                                                                </h4>
+                                                                <pre className="text-purple-900 font-mono text-sm whitespace-pre-wrap font-semibold leading-relaxed">
+                                                                    {section.formula}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Visual/Example Column */}
+                                                    <div className="space-y-6">
+                                                        <div className="bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500 shadow-sm">
+                                                            <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                                <Lightbulb className="h-3 w-3" /> Practical Example
+                                                            </h4>
+                                                            <pre className="text-gray-800 whitespace-pre-wrap font-mono text-sm leading-relaxed">
+                                                                {section.example}
+                                                            </pre>
+                                                        </div>
+
+                                                        {section.shortcut && (
+                                                            <div className="bg-amber-50 p-5 rounded-xl border-l-4 border-amber-400 shadow-sm">
+                                                                <h4 className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                                    <Zap className="h-3 w-3" /> Interview Tip / Shortcut
+                                                                </h4>
+                                                                <pre className="text-amber-900 whitespace-pre-wrap text-sm leading-relaxed font-medium">
+                                                                    {section.shortcut}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
+                        ))
+                    ) : (
+                        <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
+                            <BookOpen className="h-16 w-16 text-gray-200 mx-auto mb-4" />
+                            <h3 className="text-xl font-bold text-gray-400">No results found</h3>
+                            <p className="text-gray-400">Try searching for a different CS concept</p>
                         </div>
-                    ))}
+                    )}
+                </div>
+
+                {/* Quick Prep Tips */}
+                <div className="mt-12 bg-gradient-to-r from-purple-900 to-indigo-800 p-8 rounded-3xl text-white shadow-xl">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                        <div>
+                            <h3 className="text-2xl font-bold mb-2 flex items-center gap-3">
+                                <Zap className="h-6 w-6 text-yellow-400" />
+                                Quick CS Prep Guide
+                            </h3>
+                            <ul className="text-purple-100 space-y-1 text-sm md:text-base list-disc list-inside opacity-90">
+                                <li>Understand process states and thread synchronization.</li>
+                                <li>Practice SQL queries for joins and normalization.</li>
+                                <li>Master OOP design patterns for inheritance vs composition.</li>
+                                <li>Learn networking layers and subnetting calculations.</li>
+                            </ul>
+                        </div>
+                        <Link
+                            to="/quizzes"
+                            className="bg-white text-purple-900 px-8 py-3 rounded-xl font-extrabold hover:bg-purple-50 transition shadow-lg transform active:scale-95"
+                        >
+                            Take CS Quiz →
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,14 +2,18 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 
-// GET /api/blogs/recent - Get recent blogs (type = 'blog')
+// ============================================
+// IMPORTANT: Specific routes MUST come BEFORE wildcard /:id routes!
+// ============================================
+
+// GET /api/blogs/recent - Get recent blogs (type = 'blog' only)
 router.get("/recent", async (req, res) => {
     try {
         const blogs = await pool.query(
             `SELECT b.*, u.username as author_name, u.user_id as author_id 
              FROM blogs b
              JOIN users u ON b.user_id = u.user_id
-             WHERE b.type = 'blog' OR b.type IS NULL
+             WHERE b.type = 'blog'
              ORDER BY b.created_at DESC
              LIMIT 20`
         );
@@ -20,14 +24,14 @@ router.get("/recent", async (req, res) => {
     }
 });
 
-// GET /api/blogs/discussions - Get discussions (type = 'discussion')
+// GET /api/blogs/discussions - Get discussions (type = 'discussion' or NULL for existing posts)
 router.get("/discussions", async (req, res) => {
     try {
         const blogs = await pool.query(
             `SELECT b.*, u.username as author_name, u.user_id as author_id 
              FROM blogs b
              JOIN users u ON b.user_id = u.user_id
-             WHERE b.type = 'discussion'
+             WHERE b.type = 'discussion' OR b.type IS NULL
              ORDER BY b.created_at DESC
              LIMIT 10`
         );
@@ -37,6 +41,49 @@ router.get("/discussions", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
+// GET /api/blogs/user/my-posts - Get all DISCUSSIONS by current user
+// MUST be before /:id route!
+router.get("/user/my-posts", authorization, async (req, res) => {
+    try {
+        const user_id = req.user;
+        const blogs = await pool.query(
+            `SELECT b.*, u.username as author_name 
+             FROM blogs b
+             JOIN users u ON b.user_id = u.user_id
+             WHERE b.user_id = $1 AND (b.type = 'discussion' OR b.type IS NULL)
+             ORDER BY b.created_at DESC`,
+            [user_id]
+        );
+        res.json(blogs.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// GET /api/blogs/user/my-blogs - Get all BLOGS by current user
+router.get("/user/my-blogs", authorization, async (req, res) => {
+    try {
+        const user_id = req.user;
+        const blogs = await pool.query(
+            `SELECT b.*, u.username as author_name 
+             FROM blogs b
+             JOIN users u ON b.user_id = u.user_id
+             WHERE b.user_id = $1 AND b.type = 'blog'
+             ORDER BY b.created_at DESC`,
+            [user_id]
+        );
+        res.json(blogs.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ============================================
+// Wildcard routes come AFTER specific routes
+// ============================================
 
 // GET /api/blogs/:id - Get single blog/discussion
 router.get("/:id", async (req, res) => {
@@ -90,12 +137,21 @@ router.post("/", authorization, async (req, res) => {
         const { title, content, type = 'discussion' } = req.body;
         const user_id = req.user;
 
-        const newBlog = await pool.query(
-            "INSERT INTO blogs (user_id, title, content, type) VALUES ($1, $2, $3, $4) RETURNING *",
-            [user_id, title, content, type]
-        );
-
-        res.json(newBlog.rows[0]);
+        // Check if type column exists, if not just insert without it
+        try {
+            const newBlog = await pool.query(
+                "INSERT INTO blogs (user_id, title, content, type) VALUES ($1, $2, $3, $4) RETURNING *",
+                [user_id, title, content, type]
+            );
+            res.json(newBlog.rows[0]);
+        } catch (typeErr) {
+            // Fallback if type column doesn't exist yet
+            const newBlog = await pool.query(
+                "INSERT INTO blogs (user_id, title, content) VALUES ($1, $2, $3) RETURNING *",
+                [user_id, title, content]
+            );
+            res.json(newBlog.rows[0]);
+        }
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: "Server error" });
@@ -149,44 +205,6 @@ router.put("/:id", authorization, async (req, res) => {
         );
 
         res.json(updatedBlog.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// GET /api/blogs/user/my-posts - Get all DISCUSSIONS by current user
-router.get("/user/my-posts", authorization, async (req, res) => {
-    try {
-        const user_id = req.user;
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.user_id = $1 AND (b.type = 'discussion' OR b.type IS NULL)
-             ORDER BY b.created_at DESC`,
-            [user_id]
-        );
-        res.json(blogs.rows);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// GET /api/blogs/user/my-blogs - Get all BLOGS by current user
-router.get("/user/my-blogs", authorization, async (req, res) => {
-    try {
-        const user_id = req.user;
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.user_id = $1 AND b.type = 'blog'
-             ORDER BY b.created_at DESC`,
-            [user_id]
-        );
-        res.json(blogs.rows);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: "Server error" });

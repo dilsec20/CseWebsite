@@ -146,28 +146,7 @@ const CSFundamentalsTheory = () => {
                 </div>
 
                 {/* Quick Prep Tips */}
-                <div className="mt-12 bg-gradient-to-r from-purple-900 to-indigo-800 p-8 rounded-3xl text-white shadow-xl">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                        <div>
-                            <h3 className="text-2xl font-bold mb-2 flex items-center gap-3">
-                                <Zap className="h-6 w-6 text-yellow-400" />
-                                Quick CS Prep Guide
-                            </h3>
-                            <ul className="text-purple-100 space-y-1 text-sm md:text-base list-disc list-inside opacity-90">
-                                <li>Understand process states and thread synchronization.</li>
-                                <li>Practice SQL queries for joins and normalization.</li>
-                                <li>Master OOP design patterns for inheritance vs composition.</li>
-                                <li>Learn networking layers and subnetting calculations.</li>
-                            </ul>
-                        </div>
-                        <Link
-                            to="/quizzes"
-                            className="bg-white text-purple-900 px-8 py-3 rounded-xl font-extrabold hover:bg-purple-50 transition shadow-lg transform active:scale-95"
-                        >
-                            Take CS Quiz →
-                        </Link>
-                    </div>
-                </div>
+
             </div>
         </div>
     );

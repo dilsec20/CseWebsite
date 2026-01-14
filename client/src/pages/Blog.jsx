@@ -67,8 +67,7 @@ const Blog = () => {
         }
     };
 
-    // Helper to create excerpt from content
-    const createExcerpt = (content, maxLength = 200) => {
+    const createExcerpt = (content, maxLength = 180) => {
         if (!content) return '';
         const stripped = content.replace(/<[^>]+>/g, '');
         return stripped.length > maxLength
@@ -88,7 +87,7 @@ const Blog = () => {
         <div className="min-h-screen bg-gray-50">
             {/* Compact Header */}
             <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
-                <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
                             <BookOpen className="h-5 w-5 text-white" />
@@ -108,78 +107,160 @@ const Blog = () => {
                 </div>
             </div>
 
-            {/* Main Content - Full Width for Blogs */}
-            <div className="max-w-5xl mx-auto px-4 py-8">
-                {loading ? (
-                    <div className="space-y-4">
-                        {[1, 2, 3].map(i => (
-                            <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
-                                <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
-                                <div className="h-4 bg-gray-100 rounded w-full mb-2"></div>
-                                <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+            {/* 3-Column Layout: Left Ad | Blogs | Right Ad */}
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                    {/* Left Sidebar - Ads */}
+                    <aside className="hidden lg:block lg:col-span-2">
+                        <div className="sticky top-24 space-y-6">
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Sponsored</div>
+                                <div className="min-h-[400px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                ) : blogs.length === 0 ? (
-                    <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-100 text-center">
-                        <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold text-gray-700 mb-2">No blogs yet</h3>
-                        <p className="text-gray-500 mb-6">Be the first to share your knowledge!</p>
-                        <button
-                            onClick={handleWriteClick}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
-                        >
-                            <PenTool className="h-4 w-4" />
-                            Write a Blog
-                        </button>
-                    </div>
-                ) : (
-                    <div className="space-y-6">
-                        {blogs.map(blog => (
-                            <Link
-                                key={blog.blog_id}
-                                to={`/blog/${blog.blog_id}`}
-                                className="block bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all duration-200 group"
-                            >
-                                <div className="flex justify-between items-start mb-3">
-                                    <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors flex-1">
-                                        {blog.title}
-                                    </h2>
-                                    <div className="flex items-center gap-3 text-sm text-gray-400 ml-4">
-                                        <span className="flex items-center gap-1">
-                                            <Eye className="h-4 w-4" />
-                                            {blog.views || 0}
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                            <ThumbsUp className="h-4 w-4" />
-                                            {blog.likes || 0}
-                                        </span>
-                                    </div>
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Ad</div>
+                                <div className="min-h-[300px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
                                 </div>
+                            </div>
+                        </div>
+                    </aside>
 
-                                <p className="text-gray-600 mb-4 leading-relaxed">
-                                    {createExcerpt(blog.content)}
-                                </p>
-
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                                        <span className="flex items-center gap-1.5 font-medium text-gray-700">
-                                            <User className="h-4 w-4" />
-                                            {blog.author_name}
-                                        </span>
-                                        <span className="flex items-center gap-1.5">
-                                            <Calendar className="h-4 w-4" />
-                                            {formatDate(blog.created_at)}
-                                        </span>
+                    {/* Main Blog Content - Center */}
+                    <main className="lg:col-span-8">
+                        {loading ? (
+                            <div className="space-y-4">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
+                                        <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+                                        <div className="h-4 bg-gray-100 rounded w-full mb-2"></div>
+                                        <div className="h-4 bg-gray-100 rounded w-3/4"></div>
                                     </div>
-                                    <span className="text-blue-600 font-medium text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        Read more <ArrowRight className="h-4 w-4" />
-                                    </span>
+                                ))}
+                            </div>
+                        ) : blogs.length === 0 ? (
+                            <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-100 text-center">
+                                <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold text-gray-700 mb-2">No blogs yet</h3>
+                                <p className="text-gray-500 mb-6">Be the first to share your knowledge!</p>
+                                <button
+                                    onClick={handleWriteClick}
+                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                                >
+                                    <PenTool className="h-4 w-4" />
+                                    Write a Blog
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-5">
+                                {blogs.map(blog => (
+                                    <Link
+                                        key={blog.blog_id}
+                                        to={`/blog/${blog.blog_id}`}
+                                        className="block bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all duration-200 group"
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <h2 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors flex-1 pr-4">
+                                                {blog.title}
+                                            </h2>
+                                            <div className="flex items-center gap-3 text-sm text-gray-400 shrink-0">
+                                                <span className="flex items-center gap-1">
+                                                    <Eye className="h-4 w-4" />
+                                                    {blog.views || 0}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <ThumbsUp className="h-4 w-4" />
+                                                    {blog.likes || 0}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                                            {createExcerpt(blog.content)}
+                                        </p>
+
+                                        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                                            <div className="flex items-center gap-3 text-xs text-gray-500">
+                                                <span className="flex items-center gap-1 font-medium text-gray-700">
+                                                    <User className="h-3.5 w-3.5" />
+                                                    {blog.author_name}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="h-3.5 w-3.5" />
+                                                    {formatDate(blog.created_at)}
+                                                </span>
+                                            </div>
+                                            <span className="text-blue-600 font-medium text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Read <ArrowRight className="h-3.5 w-3.5" />
+                                            </span>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Right Sidebar - Ads & Quick Links */}
+                    <aside className="hidden lg:block lg:col-span-2">
+                        <div className="sticky top-24 space-y-6">
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Advertisement</div>
+                                <div className="min-h-[400px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
                                 </div>
-                            </Link>
-                        ))}
-                    </div>
-                )}
+                            </div>
+
+                            {/* Quick Links */}
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                <h3 className="font-bold text-gray-800 mb-3 text-sm">Quick Links</h3>
+                                <div className="space-y-2 text-sm">
+                                    <Link to="/problems" className="block text-gray-600 hover:text-blue-600 transition">
+                                        → Problems
+                                    </Link>
+                                    <Link to="/dsa-path" className="block text-gray-600 hover:text-blue-600 transition">
+                                        → DSA Path
+                                    </Link>
+                                    <Link to="/cp-sheet" className="block text-gray-600 hover:text-blue-600 transition">
+                                        → CP Sheet
+                                    </Link>
+                                    <Link to="/contests" className="block text-gray-600 hover:text-blue-600 transition">
+                                        → Contests
+                                    </Link>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Sponsored</div>
+                                <div className="min-h-[300px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
             </div>
 
             {/* Blog Editor Modal */}

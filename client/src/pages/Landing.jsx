@@ -26,7 +26,7 @@ const Landing = ({ setAuth }) => {
                     <span className="text-2xl font-bold text-gray-900 tracking-tight">AceCoder</span>
                 </div>
                 <div className="hidden md:flex items-center space-x-8">
-                    <a href="#features" className="text-gray-600 hover:text-blue-600 font-medium transition">Features</a>
+                    <Link to="/blog" className="text-gray-600 hover:text-blue-600 font-medium transition">Blog</Link>
                     <Link to="/dsa-path" className="text-gray-600 hover:text-blue-600 font-medium transition">DSA Path</Link>
                     <Link to="/cp-path" className="text-gray-600 hover:text-blue-600 font-medium transition">CP Path</Link>
                     <Link to="/cp-sheet" className="text-gray-600 hover:text-blue-600 font-medium transition">CP Sheet</Link>

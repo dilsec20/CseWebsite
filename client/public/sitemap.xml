@@ -9,6 +9,10 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://acecoder.site/blog</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://acecoder.site/contests</loc>
     <priority>0.8</priority>
   </url>

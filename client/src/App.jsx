@@ -32,6 +32,8 @@ import CPPath from './pages/CPPath';
 import CPModule from './pages/CPModule';
 import CPSheet from './pages/CPSheet';
 import MyBlogs from './pages/MyBlogs';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import CourseBrowser from './pages/Courses/CourseBrowser';
 import CourseDetails from './pages/Courses/CourseDetails';
 import MyCourses from './pages/Courses/MyCourses';
@@ -275,6 +277,8 @@ function App() {
             <Route path="/problems/:id" element={<SolveProblem setAuth={setAuth} />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
 
             {/* Course Routes */}
             <Route path="/courses" element={isAuthenticated ? <CourseBrowser setAuth={setAuth} /> : <Navigate to="/login" />} />

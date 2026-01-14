@@ -124,7 +124,7 @@ const BlogPost = () => {
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
-                <div className="max-w-7xl mx-auto px-4 py-4">
+                <div className="w-full max-w-screen-2xl mx-auto px-2 lg:px-4 py-4">
                     <Link
                         to="/blog"
                         className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition font-medium"
@@ -136,8 +136,8 @@ const BlogPost = () => {
             </div>
 
             {/* 3-Column Layout: Left Ad | Content | Right Ad */}
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="w-full max-w-screen-2xl mx-auto px-2 lg:px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
                     {/* Left Sidebar - Ads (Edge) */}
                     <aside className="hidden lg:block lg:col-span-2">

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import problemData from '../data/little_sheep_yawn_problems.json';
+import GoogleAd from '../components/GoogleAd';
 
 const CPSheet = ({ isAuthenticated }) => {
     // State for expanded sections (Modules)
@@ -232,7 +233,7 @@ const CPSheet = ({ isAuthenticated }) => {
                                     />
                                     <div className="flex flex-col leading-none">
                                         <span className={`text-sm font-bold ${cfUser.rank === "legendary grandmaster" ? "text-red-600 first-letter:text-black" :
-                                                getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
+                                            getRatingColor(cfUser.rating).replace('bg-', 'text-').split(' ')[1]
                                             }`}>
                                             {cfUser.handle}
                                         </span>
@@ -263,8 +264,8 @@ const CPSheet = ({ isAuthenticated }) => {
                                 onClick={syncWithCodeforces}
                                 disabled={isSyncing}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${isSyncing
-                                        ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                                        : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
+                                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                    : "bg-black text-white hover:bg-slate-800 shadow-md shadow-slate-200"
                                     }`}
                             >
                                 <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} />
@@ -290,170 +291,183 @@ const CPSheet = ({ isAuthenticated }) => {
                 </div>
             </div>
 
-            {/* --- MAIN CONTENT --- */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-                {orderedModules.map((moduleName, idx) => {
-                    const subTopics = problemData[moduleName] || {};
-                    const moduleProblems = Object.values(subTopics).flat();
-                    if (moduleProblems.length === 0) return null;
+            {/* --- MAIN CONTENT & ADS --- */}
+            <div className="flex justify-center max-w-[1600px] mx-auto">
 
-                    const modProgress = Math.round((moduleProblems.filter(p => solvedProblems[p.id]).length / moduleProblems.length) * 100);
-                    const isExpanded = expandedModules[moduleName];
+                {/* Left Ad - Visible on XL screens */}
+                <div className="hidden xl:block w-[160px] flex-shrink-0 sticky top-20 h-[calc(100vh-80px)] p-2">
+                    <GoogleAd slot="1234567890" className="h-full w-full" />
+                </div>
 
-                    return (
-                        <div key={moduleName} className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                {/* Main Content Area */}
+                <div className="w-full max-w-7xl px-4 sm:px-6 py-8 space-y-6">
 
-                            {/* Module Header */}
-                            <div
-                                onClick={() => toggleModule(moduleName)}
-                                className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className={`p-2 rounded-lg ${isExpanded ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-500"}`}>
-                                        {getIcon(moduleName)}
-                                    </div>
-                                    <div>
-                                        <h2 className="text-base font-semibold text-slate-900">{idx + 1}. {moduleName}</h2>
-                                        <p className="text-xs text-slate-500 mt-0.5">{moduleProblems.length} Problems</p>
-                                    </div>
-                                </div>
+                    {orderedModules.map((moduleName, idx) => {
+                        const subTopics = problemData[moduleName] || {};
+                        const moduleProblems = Object.values(subTopics).flat();
+                        if (moduleProblems.length === 0) return null;
 
-                                <div className="flex items-center gap-4">
-                                    <div className="hidden sm:flex flex-col items-end w-32">
-                                        <span className="text-xs font-bold text-slate-700">{modProgress}% Done</span>
-                                        <div className="h-1.5 w-full bg-slate-100 rounded-full mt-1">
-                                            <div className="h-full bg-green-500 rounded-full" style={{ width: `${modProgress}%` }}></div>
+                        const modProgress = Math.round((moduleProblems.filter(p => solvedProblems[p.id]).length / moduleProblems.length) * 100);
+                        const isExpanded = expandedModules[moduleName];
+
+                        return (
+                            <div key={moduleName} className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+
+                                {/* Module Header */}
+                                <div
+                                    onClick={() => toggleModule(moduleName)}
+                                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-2 rounded-lg ${isExpanded ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-500"}`}>
+                                            {getIcon(moduleName)}
+                                        </div>
+                                        <div>
+                                            <h2 className="text-base font-semibold text-slate-900">{idx + 1}. {moduleName}</h2>
+                                            <p className="text-xs text-slate-500 mt-0.5">{moduleProblems.length} Problems</p>
                                         </div>
                                     </div>
-                                    <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
-                                </div>
-                            </div>
 
-                            {/* Subtopics */}
-                            {isExpanded && (
-                                <div className="border-t border-slate-100">
-                                    {Object.entries(subTopics).map(([subTopicName, problems]) => {
-                                        const isSubExpanded = expandedSubTopics[moduleName]?.[subTopicName];
-                                        const solvedCount = problems.filter(p => solvedProblems[p.id]).length;
-
-                                        // Filtering Logic
-                                        const filterRating = ratingFilters[moduleName]?.[subTopicName] || '';
-                                        const filterSolved = solvedFilters[moduleName]?.[subTopicName];
-
-                                        const displayProblems = problems.filter(p => {
-                                            const matchesRating = !filterRating || p.rating === parseInt(filterRating);
-                                            const matchesSolved = !filterSolved || solvedProblems[p.id];
-                                            return matchesRating && matchesSolved;
-                                        });
-
-                                        return (
-                                            <div key={subTopicName} className="border-b border-slate-50 last:border-0">
-                                                {/* Subtopic Header */}
-                                                <div
-                                                    onClick={(e) => toggleSubTopic(moduleName, subTopicName, e)}
-                                                    className="flex items-center justify-between py-3 px-4 pl-14 hover:bg-slate-50 cursor-pointer transition-colors"
-                                                >
-                                                    <div className="flex items-center gap-2 flex-1">
-                                                        {isSubExpanded ? <FolderOpen className="h-4 w-4 text-blue-500" /> : <Folder className="h-4 w-4 text-slate-400" />}
-                                                        <span className="text-sm font-medium text-slate-700">{subTopicName}</span>
-                                                        <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded-md font-mono">
-                                                            {solvedCount}/{problems.length}
-                                                        </span>
-
-                                                        {/* Rating & Solved Filter */}
-                                                        <div className="ml-4 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-                                                            <input
-                                                                type="text"
-                                                                inputMode="numeric"
-                                                                placeholder="Rating"
-                                                                className="w-20 px-2 py-1 text-xs border border-slate-200 rounded-md focus:outline-none focus:border-blue-400 bg-white"
-                                                                value={filterRating}
-                                                                onChange={(e) => handleFilterChange(moduleName, subTopicName, e.target.value)}
-                                                            />
-
-                                                            <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
-                                                                    checked={!!filterSolved}
-                                                                    onChange={(e) => handleSolvedFilterChange(moduleName, subTopicName, e.target.checked)}
-                                                                />
-                                                                <span className="text-xs text-slate-500 font-medium">Solved</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Problems Table */}
-                                                {isSubExpanded && (
-                                                    <div className="bg-slate-50/50 pl-14 pr-4 py-2">
-                                                        <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-                                                            {displayProblems.length > 0 ? (
-                                                                <table className="w-full text-left text-sm">
-                                                                    <thead className="bg-slate-50 text-xs text-slate-500 uppercase font-medium border-b border-slate-200">
-                                                                        <tr>
-                                                                            <th className="py-2 px-4 w-12 text-center">#</th>
-                                                                            <th className="py-2 px-4">Problem</th>
-                                                                            <th className="py-2 px-4 text-right">Rating</th>
-                                                                            <th className="py-2 px-4 text-right">Status</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody className="divide-y divide-slate-100">
-                                                                        {displayProblems.map((prob, i) => {
-                                                                            const isSolved = solvedProblems[prob.id];
-                                                                            return (
-                                                                                <tr key={prob.id} className={`group hover:bg-blue-50/30 transition-colors ${isSolved ? "bg-green-50/30" : ""}`}>
-                                                                                    <td className="py-2 px-4 text-center text-slate-400 text-xs font-mono">{i + 1}</td>
-                                                                                    <td className="py-2 px-4">
-                                                                                        <a
-                                                                                            href={prob.link}
-                                                                                            target="_blank"
-                                                                                            rel="noreferrer"
-                                                                                            className={`font-medium transition-colors flex items-center gap-2 group-hover:text-blue-600 ${isSolved ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700"
-                                                                                                }`}
-                                                                                        >
-                                                                                            {prob.name}
-                                                                                            <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <td className="py-2 px-4 text-right">
-                                                                                        <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold border ${getRatingColor(prob.rating)}`}>
-                                                                                            {prob.rating}
-                                                                                        </span>
-                                                                                    </td>
-                                                                                    <td className="py-2 px-4 text-right">
-                                                                                        <button
-                                                                                            onClick={(e) => toggleProblem(prob.id, e)}
-                                                                                            className={`p-1 rounded-full transition-all active:scale-95 ${isSolved ? "text-green-600 bg-green-100" : "text-slate-300 hover:text-slate-500"
-                                                                                                }`}
-                                                                                        >
-                                                                                            {isSolved ? <CheckCircle className="h-5 w-5" /> : <div className="h-5 w-5 rounded-full border-2 border-current"></div>}
-                                                                                        </button>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            );
-                                                                        })}
-                                                                    </tbody>
-                                                                </table>
-                                                            ) : (
-                                                                <div className="p-4 text-center text-sm text-slate-400 italic">
-                                                                    No problems found matching filters
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
+                                    <div className="flex items-center gap-4">
+                                        <div className="hidden sm:flex flex-col items-end w-32">
+                                            <span className="text-xs font-bold text-slate-700">{modProgress}% Done</span>
+                                            <div className="h-1.5 w-full bg-slate-100 rounded-full mt-1">
+                                                <div className="h-full bg-green-500 rounded-full" style={{ width: `${modProgress}%` }}></div>
                                             </div>
-                                        );
-                                    })}
+                                        </div>
+                                        <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                                    </div>
                                 </div>
-                            )}
-                        </div>
-                    );
-                })}
 
+                                {/* Subtopics */}
+                                {isExpanded && (
+                                    <div className="border-t border-slate-100">
+                                        {Object.entries(subTopics).map(([subTopicName, problems]) => {
+                                            const isSubExpanded = expandedSubTopics[moduleName]?.[subTopicName];
+                                            const solvedCount = problems.filter(p => solvedProblems[p.id]).length;
 
+                                            // Filtering Logic
+                                            const filterRating = ratingFilters[moduleName]?.[subTopicName] || '';
+                                            const filterSolved = solvedFilters[moduleName]?.[subTopicName];
+
+                                            const displayProblems = problems.filter(p => {
+                                                const matchesRating = !filterRating || p.rating === parseInt(filterRating);
+                                                const matchesSolved = !filterSolved || solvedProblems[p.id];
+                                                return matchesRating && matchesSolved;
+                                            });
+
+                                            return (
+                                                <div key={subTopicName} className="border-b border-slate-50 last:border-0">
+                                                    {/* Subtopic Header */}
+                                                    <div
+                                                        onClick={(e) => toggleSubTopic(moduleName, subTopicName, e)}
+                                                        className="flex items-center justify-between py-3 px-4 pl-14 hover:bg-slate-50 cursor-pointer transition-colors"
+                                                    >
+                                                        <div className="flex items-center gap-2 flex-1">
+                                                            {isSubExpanded ? <FolderOpen className="h-4 w-4 text-blue-500" /> : <Folder className="h-4 w-4 text-slate-400" />}
+                                                            <span className="text-sm font-medium text-slate-700">{subTopicName}</span>
+                                                            <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded-md font-mono">
+                                                                {solvedCount}/{problems.length}
+                                                            </span>
+
+                                                            {/* Rating & Solved Filter */}
+                                                            <div className="ml-4 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                                                                <input
+                                                                    type="text"
+                                                                    inputMode="numeric"
+                                                                    placeholder="Rating"
+                                                                    className="w-20 px-2 py-1 text-xs border border-slate-200 rounded-md focus:outline-none focus:border-blue-400 bg-white"
+                                                                    value={filterRating}
+                                                                    onChange={(e) => handleFilterChange(moduleName, subTopicName, e.target.value)}
+                                                                />
+
+                                                                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+                                                                        checked={!!filterSolved}
+                                                                        onChange={(e) => handleSolvedFilterChange(moduleName, subTopicName, e.target.checked)}
+                                                                    />
+                                                                    <span className="text-xs text-slate-500 font-medium">Solved</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Problems Table */}
+                                                    {isSubExpanded && (
+                                                        <div className="bg-slate-50/50 pl-14 pr-4 py-2">
+                                                            <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+                                                                {displayProblems.length > 0 ? (
+                                                                    <table className="w-full text-left text-sm">
+                                                                        <thead className="bg-slate-50 text-xs text-slate-500 uppercase font-medium border-b border-slate-200">
+                                                                            <tr>
+                                                                                <th className="py-2 px-4 w-12 text-center">#</th>
+                                                                                <th className="py-2 px-4">Problem</th>
+                                                                                <th className="py-2 px-4 text-right">Rating</th>
+                                                                                <th className="py-2 px-4 text-right">Status</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody className="divide-y divide-slate-100">
+                                                                            {displayProblems.map((prob, i) => {
+                                                                                const isSolved = solvedProblems[prob.id];
+                                                                                return (
+                                                                                    <tr key={prob.id} className={`group hover:bg-blue-50/30 transition-colors ${isSolved ? "bg-green-50/30" : ""}`}>
+                                                                                        <td className="py-2 px-4 text-center text-slate-400 text-xs font-mono">{i + 1}</td>
+                                                                                        <td className="py-2 px-4">
+                                                                                            <a
+                                                                                                href={prob.link}
+                                                                                                target="_blank"
+                                                                                                rel="noreferrer"
+                                                                                                className={`font-medium transition-colors flex items-center gap-2 group-hover:text-blue-600 ${isSolved ? "text-slate-400 line-through decoration-slate-300" : "text-slate-700"
+                                                                                                    }`}
+                                                                                            >
+                                                                                                {prob.name}
+                                                                                                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <td className="py-2 px-4 text-right">
+                                                                                            <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold border ${getRatingColor(prob.rating)}`}>
+                                                                                                {prob.rating}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                        <td className="py-2 px-4 text-right">
+                                                                                            <button
+                                                                                                onClick={(e) => toggleProblem(prob.id, e)}
+                                                                                                className={`p-1 rounded-full transition-all active:scale-95 ${isSolved ? "text-green-600 bg-green-100" : "text-slate-300 hover:text-slate-500"
+                                                                                                    }`}
+                                                                                            >
+                                                                                                {isSolved ? <CheckCircle className="h-5 w-5" /> : <div className="h-5 w-5 rounded-full border-2 border-current"></div>}
+                                                                                            </button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })}
+                                                                        </tbody>
+                                                                    </table>
+                                                                ) : (
+                                                                    <div className="p-4 text-center text-sm text-slate-400 italic">
+                                                                        No problems found matching filters
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Right Ad - Visible on XL screens */}
+                <div className="hidden xl:block w-[160px] flex-shrink-0 sticky top-20 h-[calc(100vh-80px)] p-2">
+                    <GoogleAd slot="1234567890" className="h-full w-full" />
+                </div>
             </div>
         </div>
     );

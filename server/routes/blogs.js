@@ -2,13 +2,32 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 
-// GET /api/blogs/recent - Get recent blogs
+// GET /api/blogs/recent - Get recent blogs (type = 'blog')
 router.get("/recent", async (req, res) => {
     try {
         const blogs = await pool.query(
             `SELECT b.*, u.username as author_name, u.user_id as author_id 
              FROM blogs b
              JOIN users u ON b.user_id = u.user_id
+             WHERE b.type = 'blog' OR b.type IS NULL
+             ORDER BY b.created_at DESC
+             LIMIT 20`
+        );
+        res.json(blogs.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// GET /api/blogs/discussions - Get discussions (type = 'discussion')
+router.get("/discussions", async (req, res) => {
+    try {
+        const blogs = await pool.query(
+            `SELECT b.*, u.username as author_name, u.user_id as author_id 
+             FROM blogs b
+             JOIN users u ON b.user_id = u.user_id
+             WHERE b.type = 'discussion'
              ORDER BY b.created_at DESC
              LIMIT 10`
         );
@@ -19,7 +38,7 @@ router.get("/recent", async (req, res) => {
     }
 });
 
-// GET /api/blogs/:id - Get single blog
+// GET /api/blogs/:id - Get single blog/discussion
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -41,10 +60,9 @@ router.get("/:id", async (req, res) => {
         let isUpvoted = false;
         const token = req.header("token");
         if (token) {
-            let user_id; // Declare user_id outside the try block
             try {
                 const payload = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
-                user_id = payload.user.id; // Assign to the declared user_id
+                const user_id = payload.user.id;
                 const upvoteCheck = await pool.query(
                     "SELECT 1 FROM blog_upvotes WHERE blog_id = $1 AND user_id = $2",
                     [id, user_id]
@@ -55,7 +73,6 @@ router.get("/:id", async (req, res) => {
             }
         }
 
-        // Return updated view count (locally update the object)
         const blogData = blog.rows[0];
         blogData.views = (blogData.views || 0) + 1;
         blogData.is_upvoted = isUpvoted;
@@ -67,15 +84,15 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// POST /api/blogs - Create new blog
+// POST /api/blogs - Create new blog (type from request body, default 'discussion')
 router.post("/", authorization, async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, type = 'discussion' } = req.body;
         const user_id = req.user;
 
         const newBlog = await pool.query(
-            "INSERT INTO blogs (user_id, title, content) VALUES ($1, $2, $3) RETURNING *",
-            [user_id, title, content]
+            "INSERT INTO blogs (user_id, title, content, type) VALUES ($1, $2, $3, $4) RETURNING *",
+            [user_id, title, content, type]
         );
 
         res.json(newBlog.rows[0]);
@@ -91,7 +108,6 @@ router.delete("/:id", authorization, async (req, res) => {
         const { id } = req.params;
         const user_id = req.user;
 
-        // Check if blog exists and belongs to user
         const blog = await pool.query("SELECT * FROM blogs WHERE blog_id = $1", [id]);
 
         if (blog.rows.length === 0) {
@@ -117,7 +133,6 @@ router.put("/:id", authorization, async (req, res) => {
         const { title, content } = req.body;
         const user_id = req.user;
 
-        // Check if blog exists and belongs to user
         const blog = await pool.query("SELECT * FROM blogs WHERE blog_id = $1", [id]);
 
         if (blog.rows.length === 0) {
@@ -140,7 +155,7 @@ router.put("/:id", authorization, async (req, res) => {
     }
 });
 
-// GET /api/blogs/user/my-posts - Get all posts by current user
+// GET /api/blogs/user/my-posts - Get all DISCUSSIONS by current user
 router.get("/user/my-posts", authorization, async (req, res) => {
     try {
         const user_id = req.user;
@@ -148,7 +163,26 @@ router.get("/user/my-posts", authorization, async (req, res) => {
             `SELECT b.*, u.username as author_name 
              FROM blogs b
              JOIN users u ON b.user_id = u.user_id
-             WHERE b.user_id = $1
+             WHERE b.user_id = $1 AND (b.type = 'discussion' OR b.type IS NULL)
+             ORDER BY b.created_at DESC`,
+            [user_id]
+        );
+        res.json(blogs.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// GET /api/blogs/user/my-blogs - Get all BLOGS by current user
+router.get("/user/my-blogs", authorization, async (req, res) => {
+    try {
+        const user_id = req.user;
+        const blogs = await pool.query(
+            `SELECT b.*, u.username as author_name 
+             FROM blogs b
+             JOIN users u ON b.user_id = u.user_id
+             WHERE b.user_id = $1 AND b.type = 'blog'
              ORDER BY b.created_at DESC`,
             [user_id]
         );
@@ -165,7 +199,6 @@ router.post("/:id/upvote", authorization, async (req, res) => {
         const { id } = req.params;
         const user_id = req.user;
 
-        // Check if already upvoted
         const check = await pool.query(
             "SELECT * FROM blog_upvotes WHERE blog_id = $1 AND user_id = $2",
             [id, user_id]
@@ -173,7 +206,6 @@ router.post("/:id/upvote", authorization, async (req, res) => {
 
         let isUpvoted = false;
         if (check.rows.length > 0) {
-            // Already upvoted, remove it (toggle off)
             await pool.query(
                 "DELETE FROM blog_upvotes WHERE blog_id = $1 AND user_id = $2",
                 [id, user_id]
@@ -181,7 +213,6 @@ router.post("/:id/upvote", authorization, async (req, res) => {
             await pool.query("UPDATE blogs SET likes = likes - 1 WHERE blog_id = $1", [id]);
             isUpvoted = false;
         } else {
-            // Not upvoted, add it (toggle on)
             await pool.query(
                 "INSERT INTO blog_upvotes (blog_id, user_id) VALUES ($1, $2)",
                 [id, user_id]
@@ -198,7 +229,7 @@ router.post("/:id/upvote", authorization, async (req, res) => {
     }
 });
 
-// GET /api/blogs/:id/comments - Get comments for a blog
+// GET /api/blogs/:id/comments - Get comments
 router.get("/:id/comments", async (req, res) => {
     try {
         const { id } = req.params;
@@ -217,7 +248,7 @@ router.get("/:id/comments", async (req, res) => {
     }
 });
 
-// POST /api/blogs/:id/comments - Add a comment
+// POST /api/blogs/:id/comments - Add comment
 router.post("/:id/comments", authorization, async (req, res) => {
     try {
         const { id } = req.params;
@@ -233,7 +264,6 @@ router.post("/:id/comments", authorization, async (req, res) => {
             [id, user_id, content]
         );
 
-        // Fetch author details for immediate display
         const commentWithUser = await pool.query(
             `SELECT c.*, u.username as author_name, u.profile_picture 
              FROM blog_comments c

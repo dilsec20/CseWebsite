@@ -83,7 +83,7 @@ const MyBlogs = ({ setAuth }) => {
                     "Content-Type": "application/json",
                     "token": token
                 },
-                body: JSON.stringify({ title, content })
+                body: JSON.stringify({ title, content, type: 'discussion' })
             });
 
             if (response.ok) {

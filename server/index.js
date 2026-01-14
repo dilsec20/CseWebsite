@@ -122,6 +122,33 @@ app.get('/api/admin/disable-rls', async (req, res) => {
   }
 });
 
+// Migrate Blog Type Column
+app.get('/api/admin/migrate-blog-type', async (req, res) => {
+  if (req.query.secret !== 'dilip_admin') return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    console.log('📝 Adding type column to blogs table...');
+
+    // Add type column if not exists
+    await pool.query(`
+      ALTER TABLE blogs 
+      ADD COLUMN IF NOT EXISTS type VARCHAR(20) DEFAULT 'discussion';
+    `);
+
+    // Mark existing posts as discussions (they were created from dashboard)
+    await pool.query(`
+      UPDATE blogs SET type = 'discussion' WHERE type IS NULL;
+    `);
+
+    res.json({
+      status: 'success',
+      message: 'Blog type column added. Existing posts marked as discussions.'
+    });
+  } catch (err) {
+    console.error('Migration failed:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Routes
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/api/dashboard", require("./routes/dashboard"));

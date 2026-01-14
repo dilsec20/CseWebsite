@@ -50,7 +50,7 @@ const Blog = () => {
                     "Content-Type": "application/json",
                     "token": token
                 },
-                body: JSON.stringify({ title, content })
+                body: JSON.stringify({ title, content, type: 'blog' })
             });
 
             if (response.ok) {

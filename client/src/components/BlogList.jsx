@@ -14,7 +14,7 @@ const BlogList = ({ user }) => {
 
     const fetchBlogs = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/blogs/recent`);
+            const response = await fetch(`${API_URL}/api/blogs/discussions`);
             const data = await response.json();
             if (Array.isArray(data)) {
                 setBlogs(data);
@@ -44,7 +44,7 @@ const BlogList = ({ user }) => {
                     "Content-Type": "application/json",
                     "token": token
                 },
-                body: JSON.stringify({ title, content })
+                body: JSON.stringify({ title, content, type: 'discussion' })
             });
 
             if (response.ok) {

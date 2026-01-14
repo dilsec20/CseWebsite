@@ -16,7 +16,7 @@ const Blog = () => {
 
     const fetchBlogs = async () => {
         try {
-            const res = await fetch(`${API_URL}/api/blogs/recent`);
+            const res = await fetch(`${API_URL}/api/blog-posts/recent`);
             const data = await res.json();
             if (Array.isArray(data)) {
                 setBlogs(data);
@@ -44,13 +44,13 @@ const Blog = () => {
     const handleSave = async (title, content) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_URL}/api/blogs`, {
+            const response = await fetch(`${API_URL}/api/blog-posts`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "token": token
                 },
-                body: JSON.stringify({ title, content, type: 'blog' })
+                body: JSON.stringify({ title, content })
             });
 
             if (response.ok) {
@@ -168,8 +168,8 @@ const Blog = () => {
                             <div className="space-y-5">
                                 {blogs.map(blog => (
                                     <Link
-                                        key={blog.blog_id}
-                                        to={`/blog/${blog.blog_id}`}
+                                        key={blog.post_id}
+                                        to={`/blog/${blog.post_id}`}
                                         className="block bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all duration-200 group"
                                     >
                                         <div className="flex justify-between items-start mb-3">

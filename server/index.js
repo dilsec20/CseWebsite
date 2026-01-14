@@ -168,6 +168,7 @@ app.use("/api/blogs", require("./routes/blogs"));
 app.use("/api/social", require("./routes/social"));
 app.use("/api/courses", require("./routes/courses"));
 app.use("/api/upload", require("./routes/upload")); // Cloudinary Image Upload
+app.use("/api/blog-posts", require("./routes/blogPosts")); // Blog Posts (separate from discussions)
 
 // Serve static assets in production
 const distPath = path.join(__dirname, '../client/dist');

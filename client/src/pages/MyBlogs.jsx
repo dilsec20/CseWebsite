@@ -18,7 +18,7 @@ const MyBlogs = ({ setAuth }) => {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const response = await fetch(`${API_URL}/blogs/user/my-posts`, {
+            const response = await fetch(`${API_URL}/api/blogs/user/my-posts`, {
                 headers: { token: token }
             });
 
@@ -45,7 +45,7 @@ const MyBlogs = ({ setAuth }) => {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_URL}/blogs/${id}`, {
+            const response = await fetch(`${API_URL}/api/blogs/${id}`, {
                 method: "DELETE",
                 headers: { token: token }
             });
@@ -72,8 +72,8 @@ const MyBlogs = ({ setAuth }) => {
         try {
             const token = localStorage.getItem("token");
             const url = editingBlog
-                ? `${API_URL}/blogs/${editingBlog.blog_id}`
-                : `${API_URL}/blogs`;
+                ? `${API_URL}/api/blogs/${editingBlog.blog_id}`
+                : `${API_URL}/api/blogs`;
 
             const method = editingBlog ? "PUT" : "POST";
 

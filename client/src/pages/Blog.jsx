@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Eye, ThumbsUp, Calendar, User, ArrowRight, PenTool, X, Image } from 'lucide-react';
+import { BookOpen, Eye, ThumbsUp, Calendar, User, ArrowRight, PenTool, X, Image, MessageSquare } from 'lucide-react';
 import { API_URL } from '../config';
 import { toast } from 'react-toastify';
 import ReactQuill from 'react-quill';
@@ -16,9 +16,11 @@ const Blog = () => {
 
     const fetchBlogs = async () => {
         try {
-            const res = await fetch(`${API_URL}/blogs/recent`);
+            const res = await fetch(`${API_URL}/api/blogs/recent`);
             const data = await res.json();
-            setBlogs(data);
+            if (Array.isArray(data)) {
+                setBlogs(data);
+            }
         } catch (err) {
             console.error("Failed to fetch blogs:", err);
         } finally {
@@ -42,7 +44,7 @@ const Blog = () => {
     const handleSave = async (title, content) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${API_URL}/blogs`, {
+            const response = await fetch(`${API_URL}/api/blogs`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,7 +56,7 @@ const Blog = () => {
             if (response.ok) {
                 toast.success("Blog published!");
                 setShowEditor(false);
-                fetchBlogs(); // Refresh the list
+                fetchBlogs();
             } else {
                 const data = await response.json();
                 toast.error(data.error || "Failed to publish blog");
@@ -66,15 +68,14 @@ const Blog = () => {
     };
 
     // Helper to create excerpt from content
-    const createExcerpt = (content, maxLength = 150) => {
+    const createExcerpt = (content, maxLength = 200) => {
         if (!content) return '';
-        const stripped = content.replace(/<[^>]+>/g, ''); // Remove HTML tags
+        const stripped = content.replace(/<[^>]+>/g, '');
         return stripped.length > maxLength
             ? stripped.substring(0, maxLength) + '...'
             : stripped;
     };
 
-    // Format date
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -84,168 +85,107 @@ const Blog = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {/* Hero Header */}
-            <div className="bg-white border-b border-slate-200 shadow-sm">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="h-12 w-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
-                                    <BookOpen className="h-6 w-6 text-white" />
-                                </div>
-                                <h1 className="text-3xl font-bold text-slate-900">AceCoder Blog</h1>
-                            </div>
-                            <p className="text-slate-600 max-w-xl">
-                                Insights, tutorials, and stories from the competitive programming community.
-                                Learn DSA, master algorithms, and ace your coding interviews.
-                            </p>
+        <div className="min-h-screen bg-gray-50">
+            {/* Compact Header */}
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+                <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                            <BookOpen className="h-5 w-5 text-white" />
                         </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-gray-900">AceCoder Blog</h1>
+                            <p className="text-xs text-gray-500">Tutorials & Insights</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleWriteClick}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+                    >
+                        <PenTool className="h-4 w-4" />
+                        Write
+                    </button>
+                </div>
+            </div>
+
+            {/* Main Content - Full Width for Blogs */}
+            <div className="max-w-5xl mx-auto px-4 py-8">
+                {loading ? (
+                    <div className="space-y-4">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
+                                <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+                                <div className="h-4 bg-gray-100 rounded w-full mb-2"></div>
+                                <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+                            </div>
+                        ))}
+                    </div>
+                ) : blogs.length === 0 ? (
+                    <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-100 text-center">
+                        <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">No blogs yet</h3>
+                        <p className="text-gray-500 mb-6">Be the first to share your knowledge!</p>
                         <button
                             onClick={handleWriteClick}
-                            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition shadow-lg"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
                         >
                             <PenTool className="h-4 w-4" />
                             Write a Blog
                         </button>
                     </div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                    {/* Blog List - Main Column */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {loading ? (
-                            <div className="space-y-6">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 animate-pulse">
-                                        <div className="h-6 bg-slate-200 rounded w-3/4 mb-4"></div>
-                                        <div className="h-4 bg-slate-100 rounded w-full mb-2"></div>
-                                        <div className="h-4 bg-slate-100 rounded w-2/3"></div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : blogs.length === 0 ? (
-                            <div className="bg-white rounded-2xl p-12 shadow-sm border border-slate-100 text-center">
-                                <BookOpen className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold text-slate-700 mb-2">No blogs yet</h3>
-                                <p className="text-slate-500 mb-6">Be the first to share your knowledge with the community!</p>
-                                <button
-                                    onClick={handleWriteClick}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
-                                >
-                                    <PenTool className="h-4 w-4" />
-                                    Write a Blog
-                                </button>
-                            </div>
-                        ) : (
-                            blogs.map(blog => (
-                                <Link
-                                    key={blog.blog_id}
-                                    to={`/blog/${blog.blog_id}`}
-                                    className="block bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300 group"
-                                >
-                                    <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                ) : (
+                    <div className="space-y-6">
+                        {blogs.map(blog => (
+                            <Link
+                                key={blog.blog_id}
+                                to={`/blog/${blog.blog_id}`}
+                                className="block bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-blue-200 transition-all duration-200 group"
+                            >
+                                <div className="flex justify-between items-start mb-3">
+                                    <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors flex-1">
                                         {blog.title}
                                     </h2>
-                                    <p className="text-slate-600 mb-4 leading-relaxed">
-                                        {createExcerpt(blog.content)}
-                                    </p>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-4 text-sm text-slate-500">
-                                            <span className="flex items-center gap-1.5">
-                                                <User className="h-4 w-4" />
-                                                {blog.author_name}
-                                            </span>
-                                            <span className="flex items-center gap-1.5">
-                                                <Calendar className="h-4 w-4" />
-                                                {formatDate(blog.created_at)}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-4 text-sm text-slate-400">
-                                            <span className="flex items-center gap-1">
-                                                <Eye className="h-4 w-4" />
-                                                {blog.views || 0}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <ThumbsUp className="h-4 w-4" />
-                                                {blog.likes || 0}
-                                            </span>
-                                        </div>
+                                    <div className="flex items-center gap-3 text-sm text-gray-400 ml-4">
+                                        <span className="flex items-center gap-1">
+                                            <Eye className="h-4 w-4" />
+                                            {blog.views || 0}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <ThumbsUp className="h-4 w-4" />
+                                            {blog.likes || 0}
+                                        </span>
                                     </div>
-                                    <div className="mt-4 flex items-center gap-1 text-blue-600 font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                                </div>
+
+                                <p className="text-gray-600 mb-4 leading-relaxed">
+                                    {createExcerpt(blog.content)}
+                                </p>
+
+                                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                                        <span className="flex items-center gap-1.5 font-medium text-gray-700">
+                                            <User className="h-4 w-4" />
+                                            {blog.author_name}
+                                        </span>
+                                        <span className="flex items-center gap-1.5">
+                                            <Calendar className="h-4 w-4" />
+                                            {formatDate(blog.created_at)}
+                                        </span>
+                                    </div>
+                                    <span className="text-blue-600 font-medium text-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         Read more <ArrowRight className="h-4 w-4" />
-                                    </div>
-                                </Link>
-                            ))
-                        )}
+                                    </span>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
-
-                    {/* Sidebar - Ad & Info */}
-                    <div className="space-y-6">
-                        {/* Ad Placeholder */}
-                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                            <div className="text-xs text-slate-400 uppercase tracking-wide mb-3">Advertisement</div>
-                            <div
-                                id="blog-sidebar-ad"
-                                className="rounded-xl overflow-hidden min-h-[250px]"
-                            >
-                                {/* AdSense Auto Ad */}
-                                <ins className="adsbygoogle"
-                                    style={{ display: 'block' }}
-                                    data-ad-client="ca-pub-6770525539785120"
-                                    data-ad-slot="auto"
-                                    data-ad-format="auto"
-                                    data-full-width-responsive="true"></ins>
-                            </div>
-                        </div>
-
-                        {/* Quick Links */}
-                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                            <h3 className="font-bold text-slate-900 mb-4">Quick Links</h3>
-                            <div className="space-y-3">
-                                <Link to="/problems" className="block text-slate-600 hover:text-blue-600 transition">
-                                    → Practice Problems
-                                </Link>
-                                <Link to="/dsa-path" className="block text-slate-600 hover:text-blue-600 transition">
-                                    → DSA Learning Path
-                                </Link>
-                                <Link to="/cp-sheet" className="block text-slate-600 hover:text-blue-600 transition">
-                                    → CP Problem Sheet
-                                </Link>
-                                <Link to="/contests" className="block text-slate-600 hover:text-blue-600 transition">
-                                    → Live Contests
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Another Ad Placeholder */}
-                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                            <div className="text-xs text-slate-400 uppercase tracking-wide mb-3">Sponsored</div>
-                            <div
-                                id="blog-sidebar-ad-2"
-                                className="rounded-xl overflow-hidden min-h-[200px]"
-                            >
-                                {/* AdSense Auto Ad */}
-                                <ins className="adsbygoogle"
-                                    style={{ display: 'block' }}
-                                    data-ad-client="ca-pub-6770525539785120"
-                                    data-ad-slot="auto"
-                                    data-ad-format="auto"
-                                    data-full-width-responsive="true"></ins>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                )}
             </div>
 
             {/* Blog Editor Modal */}
             {showEditor && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-xl animate-in fade-in zoom-in duration-200">
+                    <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-xl">
                         <div className="p-4 border-b flex justify-between items-center bg-gray-50">
                             <h3 className="font-bold text-lg">Write a New Blog</h3>
                             <button onClick={() => setShowEditor(false)} className="p-2 hover:bg-gray-200 rounded-full transition">
@@ -263,14 +203,13 @@ const Blog = () => {
     );
 };
 
-// Blog Editor Component
+// Blog Editor Component with Rich Text
 const BlogEditor = ({ onSubmit, onCancel }) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [uploading, setUploading] = useState(false);
     const quillRef = React.useRef(null);
 
-    // Custom image handler for Cloudinary upload
     const imageHandler = React.useCallback(() => {
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
@@ -292,7 +231,7 @@ const BlogEditor = ({ onSubmit, onCancel }) => {
 
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch(`${API_URL}/upload/image`, {
+                const res = await fetch(`${API_URL}/api/upload/image`, {
                     method: 'POST',
                     headers: { token },
                     body: formData
@@ -327,7 +266,6 @@ const BlogEditor = ({ onSubmit, onCancel }) => {
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'indent': '-1' }, { 'indent': '+1' }],
                 ['blockquote', 'code-block'],
                 ['link', 'image'],
                 ['clean']
@@ -341,7 +279,7 @@ const BlogEditor = ({ onSubmit, onCancel }) => {
     const formats = [
         'header', 'bold', 'italic', 'underline', 'strike',
         'color', 'background',
-        'list', 'bullet', 'indent',
+        'list', 'bullet',
         'blockquote', 'code-block',
         'link', 'image'
     ];
@@ -371,14 +309,14 @@ const BlogEditor = ({ onSubmit, onCancel }) => {
                 <div className="flex-1">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                         Content
-                        <span className="text-gray-400 font-normal ml-2">(Use toolbar to add images, format text)</span>
+                        <span className="text-gray-400 font-normal ml-2">(Add images, format text)</span>
                     </label>
                     <div className="border border-gray-200 rounded-xl overflow-hidden relative">
                         {uploading && (
                             <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
                                 <div className="flex items-center gap-2 text-blue-600">
                                     <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                                    Uploading image...
+                                    Uploading...
                                 </div>
                             </div>
                         )}
@@ -389,13 +327,13 @@ const BlogEditor = ({ onSubmit, onCancel }) => {
                             onChange={setContent}
                             modules={modules}
                             formats={formats}
-                            placeholder="Write your blog post here... Click the image icon to upload images"
+                            placeholder="Write your blog post here..."
                             className="h-80"
                         />
                     </div>
                     <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
                         <Image className="h-3 w-3" />
-                        Click the image icon in toolbar to upload images directly (max 5MB)
+                        Click image icon to upload (max 5MB)
                     </p>
                 </div>
             </div>

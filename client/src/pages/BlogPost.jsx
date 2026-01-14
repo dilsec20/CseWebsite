@@ -22,7 +22,7 @@ const BlogPost = () => {
                 const token = localStorage.getItem('token');
                 const headers = token ? { token } : {};
 
-                const res = await fetch(`${API_URL}/blogs/${id}`, { headers });
+                const res = await fetch(`${API_URL}/api/blogs/${id}`, { headers });
                 if (!res.ok) {
                     navigate('/blog');
                     return;
@@ -41,7 +41,7 @@ const BlogPost = () => {
 
         const fetchComments = async () => {
             try {
-                const res = await fetch(`${API_URL}/blogs/${id}/comments`);
+                const res = await fetch(`${API_URL}/api/blogs/${id}/comments`);
                 const data = await res.json();
                 setComments(data);
             } catch (err) {
@@ -60,7 +60,7 @@ const BlogPost = () => {
         }
 
         try {
-            const res = await fetch(`${API_URL}/blogs/${id}/upvote`, {
+            const res = await fetch(`${API_URL}/api/blogs/${id}/upvote`, {
                 method: 'POST',
                 headers: { token: localStorage.getItem('token') }
             });
@@ -82,7 +82,7 @@ const BlogPost = () => {
         }
 
         try {
-            const res = await fetch(`${API_URL}/blogs/${id}/comments`, {
+            const res = await fetch(`${API_URL}/api/blogs/${id}/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

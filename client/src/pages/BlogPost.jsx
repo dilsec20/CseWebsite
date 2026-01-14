@@ -110,7 +110,7 @@ const BlogPost = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         );
@@ -121,13 +121,13 @@ const BlogPost = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <div className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+                <div className="max-w-7xl mx-auto px-4 py-4">
                     <Link
                         to="/blog"
-                        className="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 transition font-medium"
+                        className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition font-medium"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to Blog
@@ -135,23 +135,52 @@ const BlogPost = () => {
                 </div>
             </div>
 
-            {/* Main Content */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* 3-Column Layout: Left Ad | Content | Right Ad */}
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                    {/* Article - Main Column */}
-                    <article className="lg:col-span-3">
-                        <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                    {/* Left Sidebar - Ads (Edge) */}
+                    <aside className="hidden lg:block lg:col-span-2">
+                        <div className="sticky top-24 space-y-6">
+                            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Sponsored</div>
+                                <div className="min-h-[400px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
+                            </div>
+                            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Ad</div>
+                                <div className="min-h-[300px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    {/* Main Content - Center */}
+                    <main className="lg:col-span-8">
+                        {/* Blog Article */}
+                        <article className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-6">
                             {/* Title */}
-                            <h1 className="text-3xl font-bold text-slate-900 mb-6 leading-tight">
+                            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6 leading-tight">
                                 {blog.title}
                             </h1>
 
                             {/* Meta */}
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-8 pb-6 border-b border-slate-100">
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
                                 <Link
                                     to={`/profile/${blog.author_name}`}
-                                    className="flex items-center gap-1.5 hover:text-blue-600 transition"
+                                    className="flex items-center gap-1.5 hover:text-blue-600 transition font-medium"
                                 >
                                     <User className="h-4 w-4" />
                                     {blog.author_name}
@@ -168,32 +197,32 @@ const BlogPost = () => {
 
                             {/* Content */}
                             <div
-                                className="prose prose-slate max-w-none prose-headings:font-bold prose-a:text-blue-600"
+                                className="prose prose-gray max-w-none prose-headings:font-bold prose-a:text-blue-600 prose-img:rounded-xl"
                                 dangerouslySetInnerHTML={{ __html: blog.content }}
                             />
 
                             {/* Actions */}
-                            <div className="mt-10 pt-6 border-t border-slate-100 flex items-center gap-4">
+                            <div className="mt-10 pt-6 border-t border-gray-100 flex items-center gap-4">
                                 <button
                                     onClick={handleUpvote}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition ${isUpvoted
                                         ? 'bg-blue-100 text-blue-600'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-600'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                                         }`}
                                 >
                                     <ThumbsUp className={`h-5 w-5 ${isUpvoted ? 'fill-current' : ''}`} />
                                     {likes} Upvotes
                                 </button>
-                                <span className="flex items-center gap-2 text-slate-500">
+                                <span className="flex items-center gap-2 text-gray-500">
                                     <MessageSquare className="h-5 w-5" />
                                     {comments.length} Comments
                                 </span>
                             </div>
-                        </div>
+                        </article>
 
                         {/* Comments Section */}
-                        <div className="mt-8 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-                            <h2 className="text-xl font-bold text-slate-900 mb-6">Comments</h2>
+                        <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                            <h2 className="text-xl font-bold text-gray-900 mb-6">Comments</h2>
 
                             {/* Comment Form */}
                             <form onSubmit={handleCommentSubmit} className="mb-8">
@@ -203,7 +232,7 @@ const BlogPost = () => {
                                         value={newComment}
                                         onChange={(e) => setNewComment(e.target.value)}
                                         placeholder={isAuthenticated ? "Write a comment..." : "Login to comment"}
-                                        className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition"
+                                        className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition"
                                         disabled={!isAuthenticated}
                                     />
                                     <button
@@ -218,7 +247,7 @@ const BlogPost = () => {
 
                             {/* Comments List */}
                             {comments.length === 0 ? (
-                                <div className="text-center py-8 text-slate-400">
+                                <div className="text-center py-8 text-gray-400">
                                     No comments yet. Be the first to share your thoughts!
                                 </div>
                             ) : (
@@ -233,7 +262,7 @@ const BlogPost = () => {
                                                         className="h-10 w-10 rounded-full object-cover"
                                                     />
                                                 ) : (
-                                                    <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">
+                                                    <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">
                                                         {comment.author_name?.charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
@@ -242,39 +271,47 @@ const BlogPost = () => {
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <Link
                                                         to={`/profile/${comment.author_name}`}
-                                                        className="font-semibold text-slate-900 hover:text-blue-600 transition"
+                                                        className="font-semibold text-gray-900 hover:text-blue-600 transition"
                                                     >
                                                         {comment.author_name}
                                                     </Link>
-                                                    <span className="text-xs text-slate-400">
+                                                    <span className="text-xs text-gray-400">
                                                         {formatDate(comment.created_at)}
                                                     </span>
                                                 </div>
-                                                <p className="text-slate-600">{comment.content}</p>
+                                                <p className="text-gray-600">{comment.content}</p>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             )}
                         </div>
-                    </article>
+                    </main>
 
-                    {/* Sidebar - Ad */}
-                    <aside className="lg:col-span-1 space-y-6">
-                        {/* Ad Placeholder */}
-                        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 sticky top-20">
-                            <div className="text-xs text-slate-400 uppercase tracking-wide mb-3">Sponsored</div>
-                            <div
-                                id="blogpost-sidebar-ad"
-                                className="rounded-xl overflow-hidden min-h-[250px]"
-                            >
-                                {/* AdSense Auto Ad */}
-                                <ins className="adsbygoogle"
-                                    style={{ display: 'block' }}
-                                    data-ad-client="ca-pub-6770525539785120"
-                                    data-ad-slot="auto"
-                                    data-ad-format="auto"
-                                    data-full-width-responsive="true"></ins>
+                    {/* Right Sidebar - Ads (Edge) */}
+                    <aside className="hidden lg:block lg:col-span-2">
+                        <div className="sticky top-24 space-y-6">
+                            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Advertisement</div>
+                                <div className="min-h-[400px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
+                            </div>
+                            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Sponsored</div>
+                                <div className="min-h-[300px]">
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' }}
+                                        data-ad-client="ca-pub-6770525539785120"
+                                        data-ad-slot="auto"
+                                        data-ad-format="vertical"
+                                        data-full-width-responsive="true"></ins>
+                                </div>
                             </div>
                         </div>
                     </aside>

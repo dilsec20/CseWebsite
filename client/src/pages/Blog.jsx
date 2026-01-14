@@ -87,7 +87,7 @@ const Blog = () => {
         <div className="min-h-screen bg-gray-50">
             {/* Compact Header */}
             <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
-                <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div className="w-full max-w-screen-2xl mx-auto px-2 lg:px-4 py-4 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
                             <BookOpen className="h-5 w-5 text-white" />
@@ -108,13 +108,13 @@ const Blog = () => {
             </div>
 
             {/* 3-Column Layout: Left Ad | Blogs | Right Ad */}
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="w-full max-w-screen-2xl mx-auto px-2 lg:px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
                     {/* Left Sidebar - Ads */}
                     <aside className="hidden lg:block lg:col-span-2">
                         <div className="sticky top-24 space-y-6">
-                            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
                                 <div className="text-xs text-gray-400 uppercase tracking-wide mb-2">Sponsored</div>
                                 <div className="min-h-[400px]">
                                     <ins className="adsbygoogle"

@@ -1,0 +1,1009 @@
+[
+    {
+        "title": "1. Number System",
+        "sections": [
+            {
+                "name": "Classification of Numbers",
+                "theory": "Numbers are classified into:\n• Natural Numbers (N): 1, 2, 3, 4... (Counting numbers)\n• Whole Numbers (W): 0, 1, 2, 3... (Natural + Zero)\n• Integers (Z): ...-3, -2, -1, 0, 1, 2, 3...\n• Rational (Q): Can be expressed as p/q where q≠0. Ex: 1/2, 0.5, 0.333..., 3\n• Irrational: Cannot be expressed as p/q. Non-terminating non-recurring decimals. Ex: √2, π, e\n• Real Numbers: All rational + irrational\n• Prime: Exactly 2 factors (1 and itself). Ex: 2,3,5,7,11...\n• Composite: More than 2 factors. Ex: 4,6,8,9...\n• Even: Divisible by 2. Ends in 0,2,4,6,8\n• Odd: Not divisible by 2. Ends in 1,3,5,7,9\n• Co-prime: Two numbers whose HCF is 1. Ex: (8,15), (9,16)",
+                "example": "Q: Find the sum of first 100 natural numbers.\n\nSolution:\nUsing formula: Sum = n(n+1)/2\nn = 100\nSum = 100(100+1)/2\nSum = 100 × 101/2\nSum = 10100/2\nSum = 5050\n\nAnswer: 5050",
+                "formula": "Sum of first n natural numbers = n(n+1)/2\nSum of first n odd numbers = n²\nSum of first n even numbers = n(n+1)\nSum of squares: 1² + 2² + ... + n² = n(n+1)(2n+1)/6\nSum of cubes: 1³ + 2³ + ... + n³ = [n(n+1)/2]²",
+                "shortcut": "• First 10 naturals sum = 55 (memorize)\n• First 100 naturals sum = 5050 (memorize)\n• Sum of n odd = n² (quick mental calc)\n• 2 is the only even prime number\n• 1 is neither prime nor composite"
+            },
+            {
+                "name": "Divisibility Rules",
+                "theory": "Quick tests to check divisibility without actual division:\n• Divisible by 2: Last digit is 0, 2, 4, 6, or 8\n• Divisible by 3: Sum of digits is divisible by 3\n• Divisible by 4: Last 2 digits form number divisible by 4\n• Divisible by 5: Last digit is 0 or 5\n• Divisible by 6: Divisible by both 2 AND 3\n• Divisible by 8: Last 3 digits form number divisible by 8\n• Divisible by 9: Sum of digits is divisible by 9\n• Divisible by 10: Last digit is 0\n• Divisible by 11: Difference between (sum of digits at odd places) and (sum of digits at even places) is 0 or divisible by 11\n• Divisible by 12: Divisible by both 3 AND 4",
+                "example": "Q: Check if 5432178 is divisible by 9.\n\nSolution:\nSum of digits = 5+4+3+2+1+7+8 = 30\nCheck if 30 is divisible by 9:\n30 ÷ 9 = 3 remainder 3\nSince 30 is NOT divisible by 9,\n5432178 is NOT divisible by 9.\n\nAlternate: Remainder when divided by 9 = Remainder of sum\nRemainder = 30 mod 9 = 3\n\nAnswer: Not divisible (Remainder 3)",
+                "formula": "Divisibility by 7: Double the last digit, subtract from remaining number. Repeat until single/double digit.\nDivisibility by 13: Multiply last digit by 4, add to remaining number. If result divisible, original is divisible.\nDivisibility by 11: |Sum(odd position) - Sum(even position)| = 0 or 11k",
+                "shortcut": "• Number divisible by 6, 12, 15, 18 implies divisibility by their factors\n• Sum of digits trick works for 3 and 9 ONLY\n• Remainder when divided by 9 = Remainder of digit sum divided by 9\n• A number 'abcabc' (like 123123) is ALWAYS divisible by 7, 11, and 13"
+            },
+            {
+                "name": "Unit Digit & Cyclicity",
+                "theory": "The unit (last) digit of x^n follows a cyclic pattern:\n\nCycle Length 1 (Constant):\n• 0^n always ends in 0\n• 1^n always ends in 1\n• 5^n always ends in 5\n• 6^n always ends in 6\n\nCycle Length 2:\n• 4: Pattern 4, 6, 4, 6...\n• 9: Pattern 9, 1, 9, 1...\n\nCycle Length 4 (Most Common):\n• 2: Pattern 2, 4, 8, 6, 2, 4, 8, 6...\n• 3: Pattern 3, 9, 7, 1, 3, 9, 7, 1...\n• 7: Pattern 7, 9, 3, 1, 7, 9, 3, 1...\n• 8: Pattern 8, 4, 2, 6, 8, 4, 2, 6...\n\nMethod: Divide power by cycle length, use remainder to find position in cycle.",
+                "example": "Q: Find the unit digit of 7^2023.\n\nSolution:\nBase ends in 7.\nCycle for 7: 7, 9, 3, 1 (length 4)\n\nStep 1: Divide power by cycle length\n2023 ÷ 4 = 505 remainder 3\n\nStep 2: Remainder determines position\nRemainder = 3\nPosition 3 in cycle: 7, 9, 3\n\nUnit digit = 3\n\nAlternate approach:\n7^1 = 7\n7^2 = 49 (unit digit 9)\n7^3 = 343 (unit digit 3)\n7^4 = 2401 (unit digit 1)\nPattern repeats every 4.\n\nAnswer: Unit digit is 3",
+                "formula": "Unit digit of (a × b) = Unit digit of [UD(a) × UD(b)]\nUnit digit of (a + b) = Unit digit of [UD(a) + UD(b)]\nUnit digit of (a - b) = Unit digit of [UD(a) - UD(b)]",
+                "shortcut": "• Any even number raised to ANY power ≥2 gives even unit digit\n• Odd^Odd = Odd, Odd^Even = Odd (unit digit stays odd type)\n• 5 × Any = ends in 0 or 5\n• For bases ending in 2,3,7,8: Divide power by 4\n• For bases ending in 4,9: Divide power by 2\n• Memorize: 2^10 = 1024, so unit digit of 2^10k = 4 always"
+            },
+            {
+                "name": "Tests of Divisibility - Advanced",
+                "theory": "For larger divisors:\n\nDivisibility by 7:\nMethod 1: Double last digit, subtract from rest. Repeat.\nExample: 203 → 20 - 2(3) = 20 - 6 = 14 (divisible)\n\nDivisibility by 13:\nMethod: Multiply last digit by 4, add to rest. Repeat.\n\nDivisibility by 17:\nMethod: Multiply last digit by 5, subtract from rest.\n\nDivisibility by 19:\nMethod: Multiply last digit by 2, add to rest.\n\nDivisibility by combined numbers:\n• Divisible by 24: Divisible by 3 AND 8\n• Divisible by 36: Divisible by 4 AND 9\n• Divisible by 72: Divisible by 8 AND 9",
+                "example": "Q: Check if 343 is divisible by 7.\n\nSolution (Method 1):\nDouble last digit: 2 × 3 = 6\nSubtract from remaining: 34 - 6 = 28\n28 is divisible by 7 ✓\nTherefore, 343 is divisible by 7.\n\nVerification: 343 ÷ 7 = 49\n\nAnswer: Yes, divisible by 7",
+                "formula": "Divisibility test formula:\nFor divisor d, if N = 10a + b, then\nN ≡ (m×b + a) (mod d)\nwhere m is chosen multiplier for that divisor",
+                "shortcut": "• For 7: If confused, just divide and check\n• Numbers like 111, 222, 333... are divisible by 3 and 37\n• Numbers with all same digits (111, 7777) → sum of digits = digit × count"
+            },
+            {
+                "name": "Factorial & Trailing Zeros",
+                "theory": "n! = n × (n-1) × (n-2) × ... × 2 × 1\n0! = 1 (by definition)\n1! = 1\n\nTrailing Zeros in n!:\nCome from pairs of (2 × 5).\nSince 2s are abundant, count number of 5s.\n\nFormula: [n/5] + [n/25] + [n/125] + [n/625]...\nwhere [x] = floor(x)",
+                "example": "Q: How many trailing zeros in 100!?\n\nSolution:\nCount multiples of 5, 25, 125...\n\nMultiples of 5: 100/5 = 20\nMultiples of 25: 100/25 = 4\nMultiples of 125: 100/125 = 0\n\nTotal zeros = 20 + 4 + 0 = 24\n\nExplanation:\n5, 10, 15... (20 numbers give one 5 each)\n25, 50, 75, 100 (4 numbers give additional 5 each)\n\nAnswer: 24 trailing zeros",
+                "formula": "Trailing zeros in n! = ⌊n/5⌋ + ⌊n/25⌋ + ⌊n/125⌋ + ...\nHighest power of prime p in n! = ⌊n/p⌋ + ⌊n/p²⌋ + ⌊n/p³⌋ + ...",
+                "shortcut": "• Usually only first 2-3 terms matter\n• For 50!: 50/5=10, 50/25=2 → 12 zeros\n• For 100!: Memorize 24 zeros\n• For 1000!: 249 zeros"
+            },
+            {
+                "name": "Number of Factors",
+                "theory": "If N = p^a × q^b × r^c (prime factorization)\n\nTotal factors = (a+1)(b+1)(c+1)\nSum of factors = [(p^(a+1)-1)/(p-1)] × [(q^(b+1)-1)/(q-1)] × ...\nProduct of factors = N^(Total factors/2)\n\nTypes of factors:\n• Odd factors: Use only odd prime powers\n• Even factors: Total - Odd\n• Perfect square factors: Use only even powers\n• Prime factors: Count distinct primes",
+                "example": "Q: Find total factors and sum of factors of 36.\n\nSolution:\nPrime factorization: 36 = 2² × 3²\n\nTotal factors = (2+1)(2+1) = 3 × 3 = 9\nFactors: 1, 2, 3, 4, 6, 9, 12, 18, 36\n\nSum of factors:\n= [(2³-1)/(2-1)] × [(3³-1)/(3-1)]\n= [(8-1)/1] × [(27-1)/2]\n= 7 × 13\n= 91\n\nVerification: 1+2+3+4+6+9+12+18+36 = 91 ✓\n\nAnswer: 9 factors, Sum = 91",
+                "formula": "Number of factors = (a+1)(b+1)(c+1) where N = p^a × q^b × r^c\nOdd factors: If N = 2^a × m (m odd), odd factors = factors of m\nPerfect square N: Factors are odd in count\nProduct of all factors = N^(d(N)/2) where d(N) = number of factors",
+                "shortcut": "• Prime number has exactly 2 factors (1 and itself)\n• Prime² has exactly 3 factors\n• Prime³ has exactly 4 factors\n• Perfect squares have ODD number of factors\n• If N has k factors, product = N^(k/2)"
+            },
+            {
+                "name": "LCM and HCF Basics",
+                "theory": "HCF (Highest Common Factor) / GCD (Greatest Common Divisor):\nLargest number that divides all given numbers.\n\nLCM (Least Common Multiple):\nSmallest number that is divisible by all given numbers.\n\nKey Relationship:\nFor two numbers a and b:\nHCF(a,b) × LCM(a,b) = a × b\n\nMethods to find:\n1. Prime Factorization\n2. Division Method\n3. Euclidean Algorithm (for HCF)",
+                "example": "Q: Find HCF and LCM of 12 and 18.\n\nSolution (Prime Factorization):\n12 = 2² × 3\n18 = 2 × 3²\n\nHCF: Take minimum powers\nHCF = 2^min(2,1) × 3^min(1,2)\nHCF = 2¹ × 3¹ = 2 × 3 = 6\n\nLCM: Take maximum powers  \nLCM = 2^max(2,1) × 3^max(1,2)\nLCM = 2² × 3² = 4 × 9 = 36\n\nVerification:\nHCF × LCM = 6 × 36 = 216\na × b = 12 × 18 = 216 ✓\n\nAnswer: HCF = 6, LCM = 36",
+                "formula": "HCF × LCM = Product of two numbers\nHCF of fractions = HCF(numerators) / LCM(denominators)\nLCM of fractions = LCM(numerators) / HCF(denominators)\nHCF(a, b) = HCF(b, a mod b) [Euclidean Algorithm]",
+                "shortcut": "• HCF ≤ min(a,b), LCM ≥ max(a,b)\n• HCF divides LCM always\n• For co-prime numbers: HCF = 1, LCM = a×b\n• Consecutive numbers are always co-prime"
+            },
+            {
+                "name": "Remainder Theorem & Modular Arithmetic",
+                "theory": "Dividend = Divisor × Quotient + Remainder\nN = D × Q + R, where 0 ≤ R < D\n\nNegative Remainder Concept:\nRemainder can be -ve for easier calculation.\nExample: 46 ÷ 5 = Remainder 1 OR Remainder -4\n\nModular Arithmetic:\na ≡ b (mod m) means a and b give same remainder when divided by m\n\nProperties:\nIf a ≡ b (mod m), then:\n• a + c ≡ b + c (mod m)\n• a × c ≡ b × c (mod m)\n• a^n ≡ b^n (mod m)",
+                "example": "Q: Find remainder when 17^23 is divided by 5.\n\nSolution (Using negative remainder):\n17 ≡ -3 (mod 5)  [since 17 = 5×3 + 2 = 5×4 - 3]\n\n17^23 ≡ (-3)^23 (mod 5)\n     ≡ -(3^23) (mod 5)\n\nNow 3^2 = 9 ≡ -1 (mod 5)\n\n3^23 = 3^22 × 3\n     = (3^2)^11 × 3\n     ≡ (-1)^11 × 3 (mod 5)\n     ≡ -1 × 3 (mod 5)\n     ≡ -3 (mod 5)\n     ≡ 2 (mod 5)\n\nSo 17^23 ≡ -2 ≡ 3 (mod 5)\n\nAnswer: Remainder is 3",
+                "formula": "(a + b) mod n = [(a mod n) + (b mod n)] mod n\n(a × b) mod n = [(a mod n) × (b mod n)] mod n\n(a^m) mod n = [(a mod n)^m] mod n\nFermat's Little: If p is prime, a^(p-1) ≡ 1 (mod p)\nWilson's: (p-1)! ≡ -1 (mod p) for prime p",
+                "shortcut": "• (x-1)^n / x → Remainder 1 if n even, x-1 if n odd\n• (x+1)^n / x → Remainder 1 always\n• For remainder by 9, use sum of digits\n• For remainder by 11, use alternating sum"
+            }
+        ]
+    },
+    {
+        "title": "2. HCF & LCM",
+        "sections": [
+            {
+                "name": "HCF (Highest Common Factor)",
+                "theory": "HCF (also called GCD - Greatest Common Divisor):\nThe largest number that divides all given numbers exactly.\n\nMethods to find HCF:\n1. Prime Factorization Method:\n   - Find prime factors of each number\n   - HCF = Product of common prime factors with lowest powers\n\n2. Division Method (Euclidean Algorithm):\n   - Divide larger by smaller\n   - Replace larger with remainder\n   - Repeat until remainder is 0\n   - HCF = Last divisor\n\n3. Listing Factors Method:\n   - List all factors of each number\n   - Find largest common factor",
+                "example": "Q: Find HCF of 48 and 180 using all methods.\n\nMethod 1 (Prime Factorization):\n48 = 2⁴ × 3¹\n180 = 2² × 3² × 5¹\n\nHCF = 2^min(4,2) × 3^min(1,2)\nHCF = 2² × 3¹ = 4 × 3 = 12\n\nMethod 2 (Division Method):\n180 = 48 × 3 + 36\n48 = 36 × 1 + 12\n36 = 12 × 3 + 0\nHCF = 12 (last divisor)\n\nMethod 3 (Listing):\nFactors of 48: 1,2,3,4,6,8,12,16,24,48\nFactors of 180: 1,2,3,4,5,6,9,10,12,15,18,20,30,36,45,60,90,180\nCommon: 1,2,3,4,6,12\nHighest = 12\n\nAnswer: HCF = 12",
+                "formula": "For two numbers a, b:\nHCF(a,b) × LCM(a,b) = a × b\nHCF(a,b) = HCF(b, a mod b) [Euclidean]\nHCF of three numbers: HCF(HCF(a,b), c)\nHCF(ka, kb) = k × HCF(a,b)",
+                "shortcut": "• HCF is always ≤ smallest number\n• HCF of consecutive numbers = 1\n• HCF of two prime numbers = 1\n• HCF(a,b,c) divides (a+b+c)\n• If one number divides another, smaller is HCF"
+            },
+            {
+                "name": "LCM (Least Common Multiple)",
+                "theory": "LCM: The smallest number that is divisible by all given numbers.\n\nMethods to find LCM:\n1. Prime Factorization Method:\n   - Find prime factors of each number\n   - LCM = Product of all prime factors with highest powers\n\n2. Division Method:\n   - Divide numbers by common factors\n   - Continue until no common factor remains\n   - LCM = Product of all divisors × remaining numbers\n\n3. Using HCF:\n   - LCM = (a × b) / HCF(a,b)",
+                "example": "Q: Find LCM of 12, 18, and 24.\n\nMethod 1 (Prime Factorization):\n12 = 2² × 3¹\n18 = 2¹ × 3²\n24 = 2³ × 3¹\n\nLCM = 2^max(2,1,3) × 3^max(1,2,1)\nLCM = 2³ × 3² = 8 × 9 = 72\n\nMethod 2 (Division Method):\n2 | 12  18  24\n2 | 6   9   12\n2 | 3   9   6\n3 | 3   9   3\n  | 1   3   1\n3 | 1   3   1\n  | 1   1   1\n\nLCM = 2 × 2 × 2 × 3 × 3 = 72\n\nVerification:\n72 ÷ 12 = 6 ✓\n72 ÷ 18 = 4 ✓\n72 ÷ 24 = 3 ✓\n\nAnswer: LCM = 72",
+                "formula": "For two numbers a, b:\nLCM(a,b) = (a × b) / HCF(a,b)\nLCM of three: LCM(LCM(a,b), c)\nLCM(ka, kb) = k × LCM(a,b)\nLCM × HCF = Product (for 2 numbers only)",
+                "shortcut": "• LCM is always ≥ largest number\n• LCM of co-prime numbers = their product\n• If one divides another, larger is LCM\n• LCM(a,b,c) is divisible by a, b, and c\n• LCM of consecutive numbers ≈ their product"
+            },
+            {
+                "name": "HCF & LCM of Fractions",
+                "theory": "For fractions:\n\nHCF of fractions = HCF(numerators) / LCM(denominators)\n\nLCM of fractions = LCM(numerators) / HCF(denominators)\n\nLogic:\n• HCF of fractions is the largest fraction dividing all\n• LCM of fractions is the smallest fraction divisible by all",
+                "example": "Q: Find HCF and LCM of 2/3, 4/9, and 8/27.\n\nSolution:\nNumerators: 2, 4, 8\nDenominators: 3, 9, 27\n\nHCF of numerators:\n2 = 2¹\n4 = 2²\n8 = 2³\nHCF = 2¹ = 2\n\nLCM of numerators:\nLCM = 2³ = 8\n\nHCF of denominators:\n3 = 3¹\n9 = 3²\n27 = 3³\nHCF = 3¹ = 3\n\nLCM of denominators:\nLCM = 3³ = 27\n\nHCF of fractions = 2/27\nLCM of fractions = 8/3\n\nAnswer: HCF = 2/27, LCM = 8/3",
+                "formula": "HCF(a/b, c/d) = HCF(numerators) / LCM(denominators)\nLCM(a/b, c/d) = LCM(numerators) / HCF(denominators)",
+                "shortcut": "• Simplify fractions first before calculation\n• HCF of fractions is always ≤ smallest fraction\n• LCM of fractions is always ≥ largest fraction"
+            },
+            {
+                "name": "LCM & HCF Word Problems - Type 1",
+                "theory": "Bell/Light/Event Synchronization Problems:\n• Events repeating at different intervals\n• When do they occur together? → LCM\n• How many times in given period?\n\nFormula: Number of times = (Total Time / LCM) + 1\n(+1 for the starting occurrence)",
+                "example": "Q: Three bells toll at intervals of 9, 12, and 15 minutes. If they toll together at 8:00 AM, when will they toll together again? How many times will they toll together in 3 hours?\n\nSolution:\nFind LCM of 9, 12, 15\n\n9 = 3²\n12 = 2² × 3\n15 = 3 × 5\n\nLCM = 2² × 3² × 5 = 4 × 9 × 5 = 180 minutes\n\n180 minutes = 3 hours\n\nNext together: 8:00 AM + 3 hours = 11:00 AM\n\nIn 3 hours (180 min):\nNumber of times = (180/180) + 1 = 1 + 1 = 2 times\n(At 8:00 AM and 11:00 AM)\n\nAnswer: 11:00 AM, 2 times total",
+                "formula": "Meeting time = LCM(intervals)\nNumber of meetings = ⌊Total time / LCM⌋ + 1\nNext meeting after nth = Start + n × LCM",
+                "shortcut": "• For 2 events: LCM is usually small, manageable\n• For prime intervals: LCM = product\n• Don't forget to add 1 for starting time in count"
+            },
+            {
+                "name": "LCM & HCF Word Problems - Type 2",
+                "theory": "Maximum Size/Capacity Problems:\n• Dividing things into equal groups\n• Largest tile/container that fits exactly → HCF\n• Measuring/cutting to exact lengths\n\nLogic: HCF gives the largest unit that divides all quantities exactly.",
+                "example": "Q: Three ropes of lengths 624m, 936m, and 1040m need to be cut into equal pieces of maximum possible length. What is the length of each piece? How many pieces in total?\n\nSolution:\nFind HCF of 624, 936, 1040\n\n624 = 2⁴ × 3 × 13\n936 = 2³ × 3² × 13\n1040 = 2⁴ × 5 × 13\n\nHCF = 2³ × 13 = 8 × 13 = 104m\n\nLength of each piece = 104m\n\nNumber of pieces:\n624 ÷ 104 = 6\n936 ÷ 104 = 9\n1040 ÷ 104 = 10\n\nTotal pieces = 6 + 9 + 10 = 25\n\nAnswer: 104m per piece, 25 pieces total",
+                "formula": "Maximum size = HCF(all quantities)\nNumber of pieces from each = Quantity / HCF\nTotal pieces = Sum of all individual pieces",
+                "shortcut": "• Keywords: 'Maximum', 'Largest', 'Exactly' → HCF\n• For square tile problems: HCF of length & width\n• HCF result can be checked by division"
+            },
+            {
+                "name": "Number Problems with Remainders",
+                "theory": "Number Problems with Remainders:\n\nType A: Number that leaves same remainder r when divided by a, b, c:\nAnswer = LCM(a,b,c) × k + r (where k = 0,1,2...)\n\nType B: Number that leaves remainders r₁, r₂, r₃ when divided by a, b, c where (a-r₁) = (b-r₂) = (c-r₃) = d:\nAnswer = LCM(a,b,c) - d\n\nType C: Largest number dividing x, y, z leaving remainders r₁, r₂, r₃:\nAnswer = HCF(x-r₁, y-r₂, z-r₃)",
+                "example": "Q: Find the least number which when divided by 12, 15, and 18 leaves remainder 5 in each case.\n\nSolution (Type A):\nWe need LCM(12,15,18) + 5\n\n12 = 2² × 3\n15 = 3 × 5\n18 = 2 × 3²\n\nLCM = 2² × 3² × 5 = 4 × 9 × 5 = 180\n\nLeast number = 180 + 5 = 185\n\nVerification:\n185 ÷ 12 = 15 remainder 5 ✓\n185 ÷ 15 = 12 remainder 5 ✓\n185 ÷ 18 = 10 remainder 5 ✓\n\nAnswer: 185",
+                "formula": "Same remainder r: LCM + r\nDifferent remainders (a-r₁=b-r₂=k): LCM - k\nDivisor leaving remainders: HCF(differences)\nSmallest divisible: LCM",
+                "shortcut": "• 'Leaves remainder' → Add to LCM\n• 'Exactly divisible' → Just LCM\n• For largest divisor → Use HCF of differences\n• If confusing, write out first few multiples"
+            },
+            {
+                "name": "LCM & HCF - Advanced Problems",
+                "theory": "Traffic/Meeting on Circular Track:\n• Two objects moving in SAME direction meet after: LCM(times)/|difference|\n• Two objects moving in OPPOSITE direction meet after: LCM(times)/sum\n\nProduct of Numbers Given:\nIf HCF = h and LCM = l\nNumbers can be h×a and h×b where:\n• HCF(a,b) = 1 (co-prime)\n• a×b = l/h\n\nRatio of Numbers Given:\nIf ratio a:b and HCF = h\nNumbers are ah and bh where HCF(a,b) = 1",
+                "example": "Q: Two numbers are in ratio 3:4. Their HCF is 5. Find the numbers and their LCM.\n\nSolution:\nRatio = 3:4\nHCF = 5\n\nNumbers = 3×5 and 4×5 = 15 and 20\n\nVerify HCF:\n15 = 3 × 5\n20 = 2² × 5\nHCF = 5 ✓\n\nFind LCM:\nLCM = (15 × 20) / HCF\nLCM = 300 / 5 = 60\n\nAlternate:\n15 = 3 × 5\n20 = 2² × 5\nLCM = 2² × 3 × 5 = 60 ✓\n\nAnswer: Numbers are 15 and 20, LCM = 60",
+                "formula": "If ratio a:b and HCF = h:\nNumbers = ah, bh\nLCM = h × LCM(a,b) = h × ab (if co-prime)\n\nIf HCF and one number known:\nOther = (HCF × LCM) / Known number",
+                "shortcut": "• Ratio + HCF → Multiply ratio by HCF\n• Product and HCF given → LCM = Product/HCF\n• Sum and HCF/LCM → Try solving quadratic\n• Always verify HCF condition after finding numbers"
+            }
+        ]
+    },
+    {
+        "title": "3. Algebra",
+        "sections": [
+            {
+                "name": "Algebraic Identities - Basic",
+                "theory": "Fundamental algebraic expansions for quick calculations:\n\n1. (a + b)² = a² + 2ab + b²\n2. (a - b)² = a² - 2ab + b²\n3. (a + b)(a - b) = a² - b²\n4. (a + b)² + (a - b)² = 2(a² + b²)\n5. (a + b)² - (a - b)² = 4ab\n6. a² + b² = (a + b)² - 2ab\n7. a² + b² = (a - b)² + 2ab\n\nThese form the foundation for mental calculations and problem-solving.",
+                "example": "Q: Calculate 103² - 97²\n\nSolution (Using a² - b² = (a+b)(a-b)):\na = 103, b = 97\n\n103² - 97² = (103 + 97)(103 - 97)\n           = (200)(6)\n           = 1200\n\nWithout identity:\n103² = 10609\n97² = 9409\nDifference = 10609 - 9409 = 1200 ✓\n\nAnswer: 1200",
+                "formula": "(a + b)² = a² + 2ab + b²\n(a - b)² = a² - 2ab + b²\n(a + b)(a - b) = a² - b²\n(x + a)(x + b) = x² + (a+b)x + ab",
+                "shortcut": "• For (a+b)²: Square both, add double product\n• For a²-b²: Product of sum and difference\n• 98² = (100-2)² = 10000 - 400 + 4 = 9604\n• 52 × 48 = (50+2)(50-2) = 2500 - 4 = 2496"
+            },
+            {
+                "name": "Algebraic Identities - Cubic",
+                "theory": "Cubic expansions:\n\n1. (a + b)³ = a³ + 3a²b + 3ab² + b³ = a³ + b³ + 3ab(a + b)\n2. (a - b)³ = a³ - 3a²b + 3ab² - b³ = a³ - b³ - 3ab(a - b)\n3. a³ + b³ = (a + b)(a² - ab + b²)\n4. a³ - b³ = (a - b)(a² + ab + b²)\n5. a³ + b³ + c³ - 3abc = (a + b + c)(a² + b² + c² - ab - bc - ca)\n\nSpecial case: If a + b + c = 0, then a³ + b³ + c³ = 3abc",
+                "example": "Q: If x + 1/x = 5, find x³ + 1/x³\n\nSolution:\nGiven: x + 1/x = 5\n\nCubing both sides:\n(x + 1/x)³ = 5³\nx³ + 1/x³ + 3(x)(1/x)(x + 1/x) = 125\nx³ + 1/x³ + 3(1)(5) = 125\nx³ + 1/x³ + 15 = 125\nx³ + 1/x³ = 125 - 15 = 110\n\nAlternate (Using formula):\n(a + b)³ = a³ + b³ + 3ab(a + b)\na³ + b³ = (a + b)³ - 3ab(a + b)\nx³ + 1/x³ = (5)³ - 3(1)(5) = 125 - 15 = 110\n\nAnswer: 110",
+                "formula": "a³ + b³ = (a + b)³ - 3ab(a + b)\na³ - b³ = (a - b)³ + 3ab(a - b)\nIf a + b + c = 0: a³ + b³ + c³ = 3abc",
+                "shortcut": "• x + 1/x = k → x² + 1/x² = k² - 2\n• x + 1/x = k → x³ + 1/x³ = k³ - 3k\n• x - 1/x = k → x² + 1/x² = k² + 2"
+            },
+            {
+                "name": "Quadratic Equations",
+                "theory": "Standard form: ax² + bx + c = 0\n\nSolutions (Roots):\nx = [-b ± √(b² - 4ac)] / 2a\n\nDiscriminant D = b² - 4ac determines nature:\n• D > 0: Two distinct real roots\n• D = 0: Two equal real roots (repeated root)\n• D < 0: No real roots (complex roots)\n\nSum and Product of Roots:\nIf α and β are roots:\nα + β = -b/a\nαβ = c/a\n\nEquation from roots: x² - (sum)x + (product) = 0",
+                "example": "Q: Find the values of k for which equation x² - (k+1)x + k² = 0 has equal roots.\n\nSolution:\nFor equal roots: D = 0\nb² - 4ac = 0\n\nHere: a = 1, b = -(k+1), c = k²\n\nD = [-(k+1)]² - 4(1)(k²) = 0\n(k+1)² - 4k² = 0\nk² + 2k + 1 - 4k² = 0\n-3k² + 2k + 1 = 0\n3k² - 2k - 1 = 0\n3k² - 3k + k - 1 = 0\n3k(k - 1) + 1(k - 1) = 0\n(3k + 1)(k - 1) = 0\n\nk = 1 or k = -1/3\n\nAnswer: k = 1 or k = -1/3",
+                "formula": "Roots = [-b ± √(b²-4ac)] / 2a\nSum of roots α+β = -b/a\nProduct of roots αβ = c/a\n|α - β| = √D / |a|\nα² + β² = (α+β)² - 2αβ",
+                "shortcut": "• If a+b+c = 0, roots are 1 and c/a\n• If a-b+c = 0, roots are -1 and -c/a\n• Both roots positive: sum>0, product>0\n• Both roots negative: sum<0, product>0\n• Opposite signs: product<0"
+            },
+            {
+                "name": "Arithmetic Progression (AP)",
+                "theory": "Sequence where difference between consecutive terms is constant.\n\nGeneral form: a, a+d, a+2d, a+3d, ...\nwhere a = first term, d = common difference\n\nnth term: aₙ = a + (n-1)d\n\nSum of n terms:\nSₙ = n/2 [2a + (n-1)d]\nOR Sₙ = n/2 [a + l]  where l = last term\n\nProperties:\n• aₙ - aₙ₋₁ = d (constant)\n• Three terms in AP: a-d, a, a+d\n• Four terms in AP: a-3d, a-d, a+d, a+3d",
+                "example": "Q: The sum of first n terms of an AP is 3n² + 5n. Find the AP.\n\nSolution:\nGiven: Sₙ = 3n² + 5n\n\nFor n = 1:\nS₁ = a₁ = 3(1)² + 5(1) = 3 + 5 = 8\nFirst term a = 8\n\nFor n = 2:\nS₂ = 3(4) + 10 = 12 + 10 = 22\nS₂ = a₁ + a₂\n22 = 8 + a₂\na₂ = 14\n\nCommon difference d = a₂ - a₁ = 14 - 8 = 6\n\nAP: 8, 14, 20, 26, ...\n\nVerification:\na₃ = 8 + 2(6) = 20\nS₃ = 3(9) + 15 = 42\na₁ + a₂ + a₃ = 8 + 14 + 20 = 42 ✓\n\nAnswer: AP is 8, 14, 20, 26, ...",
+                "formula": "nth term: aₙ = a + (n-1)d\nSum: Sₙ = n/2[2a + (n-1)d]\nSum: Sₙ = n/2[first + last]\naₙ = Sₙ - Sₙ₋₁\nMiddle term (odd n): a(n+1)/2",
+                "shortcut": "• Sum of first n natural: n(n+1)/2\n• Sum of first n odd: n²\n• Sum of first n even: n(n+1)\n• AP with first=a, last=l, n terms: Sum = n(a+l)/2"
+            },
+            {
+                "name": "Geometric Progression (GP)",
+                "theory": "Sequence where ratio between consecutive terms is constant.\n\nGeneral form: a, ar, ar², ar³, ...\nwhere a = first term, r = common ratio\n\nnth term: aₙ = arⁿ⁻¹\n\nSum of n terms:\n• If r ≠ 1: Sₙ = a(rⁿ - 1)/(r - 1) OR a(1 - rⁿ)/(1 - r)\n• If r = 1: Sₙ = na\n\nInfinite GP (|r| < 1):\nS∞ = a/(1 - r)\n\nProperties:\n• aₙ/aₙ₋₁ = r (constant)\n• Three terms in GP: a/r, a, ar\n• Four terms in GP: a/r³, a/r, ar, ar³",
+                "example": "Q: Find the sum of series 1 + 1/2 + 1/4 + 1/8 + ... up to infinity.\n\nSolution:\nThis is infinite GP with:\na = 1 (first term)\nr = 1/2 (common ratio)\n\nSince |r| = 1/2 < 1, sum exists.\n\nS∞ = a/(1 - r)\n   = 1/(1 - 1/2)\n   = 1/(1/2)\n   = 2\n\nVerification (partial sums):\nS₁ = 1\nS₂ = 1.5\nS₃ = 1.75\nS₄ = 1.875\n...\n→ Approaching 2 ✓\n\nAnswer: 2",
+                "formula": "nth term: aₙ = arⁿ⁻¹\nSum: Sₙ = a(rⁿ-1)/(r-1)\nInfinite: S∞ = a/(1-r)  for |r|<1\nProduct of n terms: (a₁ × aₙ)ⁿ/²\nGM = √(ab) for 2 terms",
+                "shortcut": "• 1+2+4+8+... (n terms) = 2ⁿ - 1\n• If 3 numbers in GP: middle² = product of extremes\n• a, b, c in GP ⇒ b² = ac\n• GP sum formula: Multiply by r, subtract"
+            },
+            {
+                "name": "Harmonic Progression & Means",
+                "theory": "Harmonic Progression (HP):\nSequence where reciprocals form AP.\nIf a, b, c are in HP, then 1/a, 1/b, 1/c are in AP.\n\nMeans for two numbers a and b:\n\n1. Arithmetic Mean (AM) = (a + b)/2\n2. Geometric Mean (GM) = √(ab)\n3. Harmonic Mean (HM) = 2ab/(a + b)\n\nRelationship:\nAM ≥ GM ≥ HM (Equality when a = b)\nGM² = AM × HM",
+                "example": "Q: Find HM of 4 and 12. Also verify AM ≥ GM ≥ HM.\n\nSolution:\na = 4, b = 12\n\nAM = (4 + 12)/2 = 16/2 = 8\nGM = √(4 × 12) = √48 = 4√3 ≈ 6.93\nHM = 2(4)(12)/(4 + 12) = 96/16 = 6\n\nVerify inequality:\nAM = 8\nGM = 6.93\nHM = 6\n\n8 ≥ 6.93 ≥ 6 ✓\n\nVerify GM² = AM × HM:\n(6.93)² ≈ 48\n8 × 6 = 48 ✓\n\nAnswer: HM = 6",
+                "formula": "AM = (a+b)/2\nGM = √(ab)\nHM = 2ab/(a+b)\nGM² = AM × HM\nAM ≥ GM ≥ HM",
+                "shortcut": "• For equal numbers: AM = GM = HM\n• HM useful in speed problems (average speed)\n• If a, b, c in HP: b = 2ac/(a+c)"
+            },
+            {
+                "name": "Logarithms",
+                "theory": "If a^x = N, then x = log_a(N)\nwhere a = base, N = number, x = logarithm\n\nBasic Properties:\n1. log_a(mn) = log_a(m) + log_a(n)\n2. log_a(m/n) = log_a(m) - log_a(n)\n3. log_a(m^n) = n × log_a(m)\n4. log_a(1) = 0\n5. log_a(a) = 1\n6. a^(log_a(m)) = m\n7. log_a(b) = 1/log_b(a)\n\nChange of Base:\nlog_a(b) = log_c(b) / log_c(a)\n\nCommon Bases:\n• log₁₀ = Common log (log)\n• log_e = Natural log (ln)\n• log₂ = Binary log",
+                "example": "Q: If log₂ = 0.3010 and log₃ = 0.4771, find log₁₂.\n\nSolution:\nlog₁₂ = log(4 × 3)\n      = log(2² × 3)\n      = log(2²) + log(3)\n      = 2log(2) + log(3)\n      = 2(0.3010) + 0.4771\n      = 0.6020 + 0.4771\n      = 1.0791\n\nAlternate (using 12 = 3×4):\nlog₁₂ = log(3×4)\n      = log(3) + log(4)\n      = log(3) + log(2²)\n      = 0.4771 + 2(0.3010)\n      = 1.0791 ✓\n\nAnswer: 1.0791",
+                "formula": "log(ab) = log(a) + log(b)\nlog(a/b) = log(a) - log(b)\nlog(a^n) = n·log(a)\nlog_a(b) = log(b)/log(a)\nlog_a(b) × log_b(a) = 1",
+                "shortcut": "• log(10) = 1, log(1) = 0\n• log(2) ≈ 0.301, log(3) ≈ 0.477\n• log(5) = log(10/2) = 1 - log(2) ≈ 0.699\n• If log(x) = n.abc, then x has (n+1) digits"
+            },
+            {
+                "name": "Special Number Problems",
+                "theory": "Finding values when relationships given:\n\nType 1: x + 1/x type problems\n• Square to get x² + 1/x²\n• Cube to get x³ + 1/x³\n\nType 2: Sum and Product given\nIf sum = S and product = P:\nNumbers are roots of: t² - St + P = 0\n\nType 3: Ratio and Sum/Difference\nIf a:b = m:n and a+b = S:\na = mS/(m+n), b = nS/(m+n)",
+                "example": "Q: Two numbers are in ratio 3:5 and their sum is 80. Find the numbers.\n\nSolution:\nRatio = 3:5\nSum = 80\n\nLet numbers be 3x and 5x\n3x + 5x = 80\n8x = 80\nx = 10\n\nNumbers are:\n3x = 3(10) = 30\n5x = 5(10) = 50\n\nVerification:\nRatio: 30:50 = 3:5 ✓\nSum: 30 + 50 = 80 ✓\n\nAlternate (Direct formula):\na = 3(80)/(3+5) = 240/8 = 30\nb = 5(80)/(3+5) = 400/8 = 50\n\nAnswer: 30 and 50",
+                "formula": "If x + 1/x = a:\nx² + 1/x² = a² - 2\nx³ + 1/x³ = a³ - 3a\n\nIf sum S, product P:\nNumbers = [S ± √(S²-4P)]/2\n\nRatio m:n, sum S:\nNumbers = mS/(m+n), nS/(m+n)",
+                "shortcut": "• Ratio problems: Multiply by x, add, solve\n• x² + 1/x² is always ≥ 2\n• For sum-product: Use quadratic formula\n• Verify answer by substitution"
+            }
+        ]
+    },
+    {
+        "title": "4. Averages",
+        "sections": [
+            {
+                "name": "Basic Average Concepts",
+                "theory": "Average (Arithmetic Mean) = Sum of all values / Number of values\n\nKey Properties:\n1. If all values increase by x, average increases by x\n2. If all values decrease by x, average decreases by x\n3. If all values multiplied by x, average multiplied by x\n4. If all values divided by x, average divided by x\n5. Average lies between minimum and maximum values\n\nDeviation Method:\nAssumed Average method useful when numbers are large:\nActual Avg = Assumed Avg + (Sum of deviations / n)",
+                "example": "Q: Find average of 23, 27, 31, 29, 25.\n\nMethod 1 (Direct):\nAvg = (23+27+31+29+25)/5\n    = 135/5\n    = 27\n\nMethod 2 (Deviation from 25):\nDeviations: -2, +2, +6, +4, 0\nSum of deviations = 10\nAvg = 25 + 10/5 = 25 + 2 = 27 ✓\n\nAnswer: 27",
+                "formula": "Average = Sum / n\nSum = Average × n\nn = Sum / Average\nNew Avg = Old Avg + Change (if all increase by same)\nDeviation Avg = Assumed + (Σ deviations / n)",
+                "shortcut": "• For consecutive numbers: Avg = (First + Last)/2\n• For AP: Avg = Middle term\n• If numbers symmetric around x: Avg = x\n• First n naturals: Avg = (n+1)/2"
+            },
+            {
+                "name": "Weighted Average",
+                "theory": "When different values have different weights/frequencies.\n\nWeighted Average = (w₁x₁ + w₂x₂ + ... + wₙxₙ) / (w₁ + w₂ + ... + wₙ)\n\nwhere w = weight, x = value\n\nCommon in:\n• Combining groups with different sizes\n• Marks with different weightages\n• Prices with different quantities",
+                "example": "Q: A class has 30 students with average weight 40kg. Another class has 20 students with average 50kg. Find combined average weight.\n\nSolution:\nGroup 1: n₁ = 30, avg₁ = 40kg\nGroup 2: n₂ = 20, avg₂ = 50kg\n\nTotal weight = 30(40) + 20(50)\n             = 1200 + 1000\n             = 2200 kg\n\nTotal students = 30 + 20 = 50\n\nCombined average = 2200/50 = 44 kg\n\nAlternate (Weighted formula):\nAvg = (30×40 + 20×50)/(30+20)\n    = 2200/50 = 44 kg\n\nAnswer: 44 kg",
+                "formula": "Weighted Avg = Σ(weight × value) / Σweight\nCombined Avg = (n₁A₁ + n₂A₂ + ...)/(n₁+n₂+...)\nFor 2 groups: (n₁A₁ + n₂A₂)/(n₁+n₂)",
+                "shortcut": "• Weighted avg closer to group with larger weight\n• Use Alligation for 2 groups ratio method\n• Check: Result must be between individual averages"
+            },
+            {
+                "name": "Alligation Method",
+                "theory": "Quick method for mixing two quantities to find ratio.\n\nUsed when:\n• Two groups with different averages combine\n• Need to find ratio of quantities\n\nFormula (Visual):\n      Cheaper(C)    Dearer(D)\n           \\        /\n            Mean(M)\n           /        \\\n       (D-M)      (M-C)\n\nRatio = (D-M):(M-C)\n\nReversed cross-subtraction gives ratio.",
+                "example": "Q: Students with avg 40kg and 50kg are mixed to get avg 44kg. Find ratio.\n\nSolution using Alligation:\nLower avg (C) = 40\nHigher avg (D) = 50  \nMean (M) = 44\n\n       40        50\n         \\      /\n           44\n         /    \\\n      (50-44) (44-40)\n         6       4\n\nRatio = 6:4 = 3:2\n\nMeaning: 3 parts of 40kg group, 2 parts of 50kg group\n\nVerification:\nIf 30 students (40kg) and 20 students (50kg):\n(30×40 + 20×50)/50 = 2200/50 = 44 ✓\n\nAnswer: 3:2",
+                "formula": "Ratio of quantities = (Higher - Mean):(Mean - Lower)\nn₁:n₂ = (A₂ - A_combined):(A_combined - A₁)",
+                "shortcut": "• Alligation is faster than weighted avg for ratios\n• Cross-subtract: Higher-Mean and Mean-Lower\n• Simplify ratio at end\n• Mean must be between two averages"
+            },
+            {
+                "name": "Replacement Problems - Type 1",
+                "theory": "When one person/item leaves and another joins:\n\nNew Average = Old Average + [(New - Old) / Total count]\n\nOR\n\nNew person's value = Old Avg × Count + Increase × Count\n\nCommonly asked:\n• Student replaced, average changes\n• Player replaced, average changes",
+                "example": "Q: Average age of 11 players is 28 years. If captain (age 32) is replaced by new player, average becomes 27. Find new player's age.\n\nSolution:\nOld avg = 28, n = 11\nNew avg = 27\n\nDecrease in avg = 28 - 27 = 1 year\n\nTotal decrease = 1 × 11 = 11 years\n\nNew player's age = Captain's age - Total decrease\n                 = 32 - 11\n                 = 21 years\n\nAlternate method:\nOld sum = 28 × 11 = 308\nNew sum = 27 × 11 = 297\nDifference = 308 - 297 = 11\nNew player = 32 - 11 = 21\n\nAnswer: 21 years",
+                "formula": "Replaced value = Removed value + (Avg change × n)\nNew item = Old Avg + (Avg decrease × Total) - Old item\nIf avg increases: New > Old\nIf avg decreases: New < Old",
+                "shortcut": "• Change in total = Change in avg × Count\n• New = Old + Net change\n• If avg goes up, new item is heavier/larger"
+            },
+            {
+                "name": "Replacement Problems - Type 2",
+                "theory": "When person/item added (count increases):\n\nNew person's value = Old Avg + (Avg increase × New total count)\n\nWhen person/item removed (count decreases):\n\nRemoved value = Old Avg - (Avg increase × New count)\n\nCommon scenarios:\n• Teacher joins class\n• New member in team",
+                "example": "Q: Average weight of 24 students is 35kg. When teacher joins, average becomes 36kg. Find teacher's weight.\n\nSolution:\nOld: n = 24, avg = 35kg\nNew: n = 25, avg = 36kg\n\nMethod 1:\nOld sum = 24 × 35 = 840 kg\nNew sum = 25 × 36 = 900 kg\nTeacher's weight = 900 - 840 = 60 kg\n\nMethod 2 (Shortcut):\nIncrease in avg = 1 kg\nThis 1kg increase for all 24 students = 24kg\nPlus the teacher's own contribution above new avg\nTeacher = New avg + (Increase × Old count)\n        = 36 + (1 × 24)\n        = 36 + 24 = 60 kg\n\nAnswer: 60 kg",
+                "formula": "Added person = New Avg + (Avg increase × Old count)\nRemoved person = Old Avg - (Avg decrease × New count)\nChange in sum = Added/Removed value",
+                "shortcut": "• Teacher problem: Almost always addition\n• Formula: New avg + (increase × old n)\n• Verify: New value should raise average"
+            },
+            {
+                "name": "Average Speed",
+                "theory": "Average speed ≠ Average of speeds (usually)\n\nFor different distances/times:\nAvg Speed = Total Distance / Total Time\n\nSpecial Cases:\n\n1. Equal distances at speeds u and v:\n   Avg Speed = 2uv/(u+v)  [Harmonic Mean]\n\n2. Equal times at speeds u and v:\n   Avg Speed = (u+v)/2  [Arithmetic Mean]\n\n3. Three equal distances u, v, w:\n   Avg = 3uvw/(uv+vw+uw)",
+                "example": "Q: A person travels 60km at 30 km/hr and returns 60km at 60 km/hr. Find average speed.\n\nSolution:\nDistance 1 = 60 km, Speed 1 = 30 km/hr\nTime 1 = 60/30 = 2 hours\n\nDistance 2 = 60 km, Speed 2 = 60 km/hr  \nTime 2 = 60/60 = 1 hour\n\nTotal distance = 120 km\nTotal time = 3 hours\n\nAvg speed = 120/3 = 40 km/hr\n\nUsing formula (Equal distances):\nAvg = 2(30)(60)/(30+60)\n    = 3600/90\n    = 40 km/hr ✓\n\nNote: (30+60)/2 = 45 ≠ 40\n\nAnswer: 40 km/hr",
+                "formula": "Avg Speed = Total Dist / Total Time\nEqual distances: 2uv/(u+v)\nEqual times: (u+v)/2\n3 equal distances: 3uvw/(uv+vw+uw)",
+                "shortcut": "• Never just average the speeds\n• Equal distance → Use Harmonic Mean\n• Equal time → Use Arithmetic Mean\n• Round trip → Usually equal distances"
+            },
+            {
+                "name": "Cricket Batting Average",
+                "theory": "Batting Average = Total Runs / Number of times out\n\nNote: NOT divided by innings played, but times OUT\n\nCommon problems:\n• Average after n innings\n• Runs needed for target average\n• Average increase after scoring x runs",
+                "example": "Q: Batsman has average 42 after 10 innings. How many runs in 11th to make average 45?\n\nSolution:\nCurrent: 10 innings, avg 42\nTotal runs so far = 10 × 42 = 420\n\nRequired: 11 innings, avg 45\nRequired total = 11 × 45 = 495\n\nRuns needed in 11th = 495 - 420 = 75\n\nAlternate (Shortcut):\nIncrease needed = 45 - 42 = 3\nFor 10 past innings to increase by 3 each = 30\nPlus reach 45 in current = 45\nTotal = 30 + 45 = 75 ✓\n\nAnswer: 75 runs",
+                "formula": "New runs = (Target avg × New total) - Current total\nNew runs = New avg + (Increase × Old innings)",
+                "shortcut": "• Increase × old innings gives base\n• Add new average to get total\n• Total runs ≠ avg × innings if not always out"
+            },
+            {
+                "name": "Ages Average Problems",
+                "theory": "Age averages similar to regular averages.\n\nKey points:\n• After n years, everyone's age increases by n\n• After n years, average increases by n\n• Age difference remains constant\n• Birth adds person, death removes person",
+                "example": "Q: Average age of family of 6 is 25 years. If age of youngest (5 years) excluded, average becomes 27. Find age of youngest when born.\n\nSolution:\nWith youngest: n=6, avg=25\nTotal age = 6 × 25 = 150 years\n\nWithout youngest: n=5, avg=27  \nTotal of 5 = 5 × 27 = 135 years\n\nYoungest's age = 150 - 135 = 15 years\n\nWait, problem says youngest is 5 years.\nThis means:\nWhen youngest born, others had total = 135 years\nNow (5 yrs later), others have 135 + 5×5 = 160\nTotal now = 160 + 5 = 165\n\nActually, let me recalculate:\nCurrent total with youngest = 150\nYoungest is 5\nOthers total = 145\n\nWhen youngest born (5 years ago):\nOthers were 145 - 25 = 120 years\nYoungest was 0\nTotal then = 120\nAverage then = 120/6 = 20 years\n\nAnswer: Average was 20 years when youngest born",
+                "formula": "After n years: New avg = Old avg + n\nBefore n years: Old avg = Current avg - n",
+                "shortcut": "• Everyone ages equally\n• Average ages at same rate\n• Birth/death changes count"
+            }
+        ]
+    },
+    {
+        "title": "5. Percentages",
+        "sections": [
+            {
+                "name": "Fraction - Percentage Conversions",
+                "theory": "Percentages are fractions with denominator 100. Memorizing standard converts is vital for speed.\n\n1 = 100%\n1/2 = 50%\n1/3 = 33.33%\n1/4 = 25%\n1/5 = 20%\n1/6 = 16.66%\n1/7 = 14.28%\n1/8 = 12.5%\n1/9 = 11.11%\n1/10 = 10%\n1/11 = 9.09%\n1/12 = 8.33%\n1/15 = 6.66%\n1/20 = 5%\n1/25 = 4%",
+                "example": "Q: Find 37.5% of 120.\n\nSolution:\n37.5% = 3 × 12.5% = 3 × (1/8) = 3/8\n3/8 × 120 = 3 × 15 = 45\n\nAnswer: 45",
+                "formula": "x% of y = (x/100) × y\nPercentage change = [ (Final - Initial) / Initial ] × 100",
+                "shortcut": "• A% of B = B% of A\n• To increase by x%, multiply by (1 + x/100)\n• To decrease by x%, multiply by (1 - x/100)"
+            },
+            {
+                "name": "Successive Percentage Changes",
+                "theory": "When a value is modified multiple times in sequence.\n\nNet Percentage Change for two successive changes x% and y%:\nNet % = x + y + (xy/100)\n\nNote: Use +ve for increase and -ve for decrease.",
+                "example": "Q: A price increases by 20% and then decreases by 10%. Find net change.\n\nSolution:\nx = 20, y = -10\nNet % = 20 + (-10) + (20 × -10)/100\nNet % = 10 - 2 = 8%\n\nSince positive, it is an 8% increase.\n\nAnswer: 8% Increase",
+                "formula": "Net % = x + y + (xy/100)\nFor three changes: Use formula on first two, then on result and third.",
+                "shortcut": "• If value increases and then decreases by same x%, always a loss of (x/10)² %\n• Use Multiplying Factors: 1.2 × 0.9 = 1.08 (8% increase)"
+            },
+            {
+                "name": "Product Constancy (Price & Consumption)",
+                "theory": "Expenditure = Price × Consumption\nIf Expenditure is constant, and Price increases by x%, Consumption must decrease to compensate.\n\nIf Price increases by (1/n), Consumption decreases by 1/(n+1).\nIf Price decreases by (1/n), Consumption increases by 1/(n-1).",
+                "example": "Q: Price of sugar increases by 25%. By what % should a family reduce consumption to keep expenditure same?\n\nSolution:\nMethod 1 (Fraction):\n25% = 1/4 (Increase)\nConsumption must decrease by 1/(4+1) = 1/5\n1/5 = 20%\n\nMethod 2 (Formula):\n[x / (100 + x)] × 100\n= [25 / 125] × 100 = 20%\n\nAnswer: 20%",
+                "formula": "Reduction % = [x / (100 + x)] × 100\nIncrease % = [x / (100 - x)] × 100",
+                "shortcut": "• 25% up (1/4) → 20% down (1/5)\n• 20% up (1/5) → 16.66% down (1/6)\n• 50% up (1/2) → 33.33% down (1/3)\n• 100% up (1/1) → 50% down (1/2)"
+            },
+            {
+                "name": "Election & Voting Problems",
+                "theory": "Total Votes = Votes Polled + Did Not Vote\nVotes Polled = Valid Votes + Invalid Votes\nWinner's Margin = Winner's Votes - Runner-up's Votes",
+                "example": "Q: In an election, winner got 60% of total valid votes and won by 12,000 votes. Find total valid votes if there were only two candidates.\n\nSolution:\nWinner = 60%\nRunner-up = 40%\nMargin = 60% - 40% = 20%\n20% of Total = 12,000\n(1/5) × Total = 12,000\nTotal = 60,000\n\nAnswer: 60,000",
+                "formula": "Margin = (Winner % - Loser %) × Total Valid Votes\nValid = Total × (1 - Invalid %)",
+                "shortcut": "• Start with 100x for total votes\n• Deduct 'Did not vote' and 'Invalid' step by step"
+            },
+            {
+                "name": "Population & Depreciation",
+                "theory": "Similar to Compound Interest.\nPopulation after n years = P × (1 + R/100)ⁿ\nValue after n years (Depreciation) = V × (1 - R/100)ⁿ",
+                "example": "Q: The value of a machine depreciates by 10% every year. If current value is 10,000, find value after 2 years.\n\nSolution:\nV = 10,000, R = 10%, n = 2\nV₂ = 10,000 × (1 - 0.1)²\nV₂ = 10,000 × (0.9)²\nV₂ = 10,000 × 0.81 = 8,100\n\nAnswer: 8,100",
+                "formula": "Future Value = P(1 ± R/100)ⁿ\nInitial Value = P / (1 ± R/100)ⁿ",
+                "shortcut": "• Use successive change logic (multiplying factors)\n• r = 10% for 2 years (net decrease) = -10 -10 + 1 = -19%"
+            },
+            {
+                "name": "Exam & Venn Diagram Problems",
+                "theory": "Problems involving percentage of students passing/failing in subjects.\n\nFormula: n(A ∪ B) = n(A) + n(B) - n(A ∩ B)\nIn %: Total % = %A + %B - %Both + %None",
+                "example": "Q: In an exam, 40% failed in Math, 30% failed in English and 15% failed in both. Find % of students passed in both.\n\nSolution:\nFail in A (Math) = 40%\nFail in B (English) = 30%\nFail in Both = 15%\nTotal Failed = 40 + 30 - 15 = 55%\nPassed in Both = 100% - Total Failed = 100 - 55 = 45%\n\nAnswer: 45%",
+                "formula": "% Total = %A + %B - %Both + %None\nPassed in Both = 100 - (Fail A + Fail B - Fail Both)",
+                "shortcut": "• Draw a quick Venn diagram\n• Fill 'Both' first, then subtract from individual counts"
+            }
+        ]
+    },
+    {
+        "title": "6. Profit & Loss",
+        "sections": [
+            {
+                "name": "Basic Terms & Concepts",
+                "theory": "Profit and Loss are calculated by comparing the Cost Price (CP) and Selling Price (SP).\n\n• Cost Price (CP): Price at which an article is purchased.\n• Selling Price (SP): Price at which an article is sold.\n• Profit (Gain): If SP > CP, then Profit = SP - CP.\n• Loss: If CP > SP, then Loss = CP - SP.\n\nProfit or Loss is ALWAYS calculated on CP unless specified otherwise.",
+                "example": "Q: An article is bought for ₹800 and sold for ₹960. Find the profit percentage.\n\nSolution:\nCP = ₹800, SP = ₹960\nProfit = SP - CP = 960 - 800 = ₹160\nProfit % = (Profit / CP) × 100\nProfit % = (160 / 800) × 100\nProfit % = 1/5 × 100 = 20%\n\nAnswer: 20%",
+                "formula": "Profit % = (Profit / CP) × 100\nLoss % = (Loss / CP) × 100\nSP = [ (100 + P%) / 100 ] × CP\nCP = [ 100 / (100 + P%) ] × SP",
+                "shortcut": "• Use multiplying factors for speed: 20% profit means SP = 1.2 × CP\n• 10% loss means SP = 0.9 × CP"
+            },
+            {
+                "name": "Markup & Discount",
+                "theory": "Markup is the amount added to CP to reach the Marked Price (MP). Discount is the reduction given on MP to reach the SP.\n\n• Marked Price (MP): List price or tag price.\n• Markup = MP - CP\n• Discount = MP - SP\n\nMarkup % is calculated on CP. Discount % is calculated on MP.",
+                "example": "Q: A shopkeeper marks up his goods by 40% and then gives a discount of 20%. Find his net profit percentage.\n\nSolution:\nLet CP = 100\nMarkup 40% → MP = 140\nDiscount 20% on MP → SP = 140 - (20% of 140) = 140 - 28 = 112\nProfit = SP - CP = 112 - 100 = 12\nProfit % = 12%\n\nAlternative (Successive Change Formula):\nNet % = x + y + xy/100\nNet % = 40 - 20 - (40 × 20)/100 = 20 - 8 = 12%\n\nAnswer: 12%",
+                "formula": "Discount % = (Discount / MP) × 100\nMarkup % = (MP - CP)/CP × 100\nMP / CP = (100 + P%) / (100 - D%)",
+                "shortcut": "• MP/CP ratio = (100 + Success%) / (100 - Discount%)\n• Buy 4 get 1 Free: Discount = 1/(4+1) = 20%"
+            },
+            {
+                "name": "Dishonest Dealer Problems",
+                "theory": "Cases where a dealer cheats in weight or price. The profit depends on the actual weight given vs the weight for which money is taken.",
+                "example": "Q: A dishwasher dealer claims to sell at CP but uses a weight of 900g instead of 1kg. Find his profit percentage.\n\nSolution:\nActual weight given = 900g\nWeight charged for = 1000g\nProfit = 1000 - 900 = 100g\nDealer makes 100g profit on every 900g he gives.\nProfit % = (Error / Actual weight given) × 100\nProfit % = (100 / 900) × 100 = 11.11%\n\nAnswer: 11.11%",
+                "formula": "Profit % = [ (True Weight - False Weight) / False Weight ] × 100\nNet Gain Factor = (Price Gain Factor) × (Weight Gain Factor)",
+                "shortcut": "• Think: He gives 900g but takes money for 1000g. Profit is 100g on 900g given."
+            },
+            {
+                "name": "Special Profit/Loss Cases",
+                "theory": "Case 1: Same CP of two items, one sold at x% profit and another at x% loss → No Profit No Loss.\nCase 2: Same SP of two items, one sold at x% profit and another at x% loss → Always a LOSS of (x/10)² %.",
+                "example": "Q: Two watches are sold for ₹1200 each. One is sold at 20% profit and the other at 20% loss. Find the net profit or loss percentage.\n\nSolution:\nSP of both is same.\nLoss % = (x/10)² = (20/10)² = 2² = 4%\n\nAnswer: 4% Loss",
+                "formula": "Loss % = (Common % / 10)²\nOverall SP / CP relation: Successive percentage logic",
+                "shortcut": "• For Type 2, the owner always loses.\n• If SP is same, net loss % does not depend on the ₹ amount."
+            },
+            {
+                "name": "Profit & Loss in Ratios",
+                "theory": "Sometimes profit/loss is given in terms of number of articles.",
+                "example": "Q: CP of 15 articles is equal to SP of 12 articles. Find the profit percentage.\n\nSolution:\n15 CP = 12 SP\nCP / SP = 12 / 15 = 4 / 5\nLet CP = 4, SP = 5\nProfit = 1\nProfit % = (1 / 4) × 100 = 25%\n\nAnswer: 25%",
+                "formula": "Profit % = [ (Articles Bought - Articles Sold) / Articles Sold ] × 100",
+                "shortcut": "• If CP of x = SP of y:\nProfit/Loss % = (x-y)/y × 100\nPositive = Profit, Negative = Loss"
+            }
+        ]
+    },
+    {
+        "title": "7. Simple & Compound Interest",
+        "sections": [
+            {
+                "name": "Simple Interest (SI) Basics",
+                "theory": "Simple Interest is the interest calculated fixedly on the original principal for the entire period.\n\n• Principal (P): The money borrowed or lent.\n• Rate (R): The interest rate per annum (p.a.).\n• Time (T): The duration for which the money is kept.\n• Amount (A): Total money returned (Principal + Interest).",
+                "example": "Q: Find the simple interest on ₹5,000 at 10% per annum for 3 years.\n\nSolution:\nP = ₹5,000, R = 10%, T = 3 years\nSI = (P × R × T) / 100\nSI = (5,000 × 10 × 3) / 100\nSI = 50 × 10 × 3 = ₹1,500\nTotal Amount = 5,000 + 1,500 = ₹6,500\n\nAnswer: ₹1,500",
+                "formula": "SI = (P × R × T) / 100\nA = P + SI\nP = (100 × SI) / (R × T)",
+                "shortcut": "• If a sum doubles itself in T years, R = 100/T\n• If a sum becomes n times itself in T years, R = [100(n-1)] / T"
+            },
+            {
+                "name": "Compound Interest (CI) Basics",
+                "theory": "In Compound Interest, the interest earned in one period is added to the principal to calculate the interest for the next period (Interest on Interest).\n\n• Compounding: Adding interest to the principal at regular intervals.\n• Annual Compounding: Interest added once a year.",
+                "example": "Q: Find the compound interest on ₹8,000 at 5% per annum for 2 years, compounded annually.\n\nSolution:\nP = ₹8,000, R = 5%, n = 2\nA = P [ 1 + R/100 ]ⁿ\nA = 8,000 [ 1 + 5/100 ]²\nA = 8,000 [ 21/20 ]² = 8,000 × 441/400\nA = 20 × 441 = ₹8,820\nCI = A - P = 8,820 - 8,000 = ₹820\n\nAnswer: ₹820",
+                "formula": "A = P [ 1 + R/100 ]ⁿ\nCI = P [ (1 + R/100)ⁿ - 1 ]",
+                "shortcut": "• Successive Percentage Change logic: For 2 years at r%, net r% = 2r + r²/100\n• For 5% (2 years), net CI % = 5+5 + (25/100) = 10.25%"
+            },
+            {
+                "name": "Different Compounding Periods",
+                "theory": "Interest can be compounded more than once a year. When frequency changes, the Rate and Time must be adjusted accordingly.\n\n• Half-yearly: Rate becomes R/2, Time becomes 2n\n• Quarterly: Rate becomes R/4, Time becomes 4n",
+                "example": "Q: Find CI on ₹10,000 for 1 year at 20% p.a. compounded half-yearly.\n\nSolution:\nP = 10,000, R = 20% p.a. → 10% per half-year\nTime = 1 year → 2 half-years\nA = 10,000 [ 1 + 10/100 ]²\nA = 10,000 × 1.21 = ₹12,100\nCI = 12,100 - 10,000 = ₹2,100\n\nAnswer: ₹2,100",
+                "formula": "A = P [ 1 + (R/k)/100 ]^(nk) where k is frequency per year.",
+                "shortcut": "• Compounded half-yearly gives more interest than annually for same rate/time."
+            },
+            {
+                "name": "Difference between CI and SI",
+                "theory": "This is a very common interview question. For the first year, CI and SI are the same (if compounded annually). From the second year, the difference starts.",
+                "example": "Q: Find the difference between CI and SI on ₹4,000 at 10% p.a. for 2 years.\n\nSolution:\nMethod 1 (Direct Formula):\nDiff = P (R/100)²\nDiff = 4,000 × (10/100)² = 4,000 × 1/100 = ₹40\n\nMethod 2 (Logic):\nSI for 1st yr = 400. SI for 2nd yr = 400. Total SI = 800.\nCI for 1st yr = 400. 2nd yr Principal = 4400.\nInterest for 2nd yr = 4400 × 10% = 440.\nTotal CI = 400 + 440 = 840.\nDiff = 840 - 800 = ₹40.\n\nAnswer: ₹40",
+                "formula": "Difference for 2 years = P (R/100)²\nDifference for 3 years = P (R/100)² [ 3 + R/100 ]",
+                "shortcut": "• For 2 years, the difference is simply the interest on the first year's interest."
+            },
+            {
+                "name": "CI & SI Installments",
+                "theory": "Paying back a loan in equal periodic payments.",
+                "example": "Q: A sum of ₹2,100 is borrowed at 10% CI to be paid back in 2 equal annual installments. Find the value of each installment.\n\nSolution:\nLet installment be x.\nPrincipal = PV of 1st + PV of 2nd\n2100 = x/(1+10/100) + x/(1+10/100)²\n2100 = x/(1.1) + x/(1.21)\n2100 = (1.1x + x) / 1.21\n2100 = 2.1x / 1.21\nx = (2100 × 1.21) / 2.1 = 1000 × 1.21 = ₹1,210\n\nAnswer: ₹1,210",
+                "formula": "For CI: P = x/(1+r) + x/(1+r)² + ...\nFor SI: Installment x = [ 100P ] / [ 100T + RT(T-1)/2 ]",
+                "shortcut": "• For CI 2 installments at 10%, ratio of P to x is 210:121. Scale according to P."
+            }
+        ]
+    },
+    {
+        "title": "8. Ratio & Proportion & Partnership",
+        "sections": [
+            {
+                "name": "Ratio & Proportion Basics",
+                "theory": "A Ratio is a comparison of two quantities of the same kind by division. Proportion is an equality of two ratios.\n\n• Duplicate Ratio of a:b is a²:b²\n• Sub-duplicate Ratio of a:b is √a:√b\n• Mean Proportional between a and b is √(ab)\n• Third Proportional to a and b is b²/a\n• Fourth Proportional to a, b, c is (b×c)/a",
+                "example": "Q: Find the fourth proportional to 4, 9, 12.\n\nSolution:\nLet fourth proportional be x.\n4/9 = 12/x\n4x = 9 × 12\n4x = 108\nx = 27\n\nAnswer: 27",
+                "formula": "If a/b = c/d, then ad = bc\nMean proportional = √(ab)\nDirect Proportion: y = kx\nInverse Proportion: y = k/x",
+                "shortcut": "• Compounded Ratio: If a:b and c:d are given, compounded is ac:bd"
+            },
+            {
+                "name": "Comparing & Dividing Ratios",
+                "theory": "To compare ratios, convert them to fractions with the same denominator. To divide a quantity in a ratio a:b, the parts are [a/(a+b)] × Total and [b/(a+b)] × Total.",
+                "example": "Q: Divide ₹1,200 between A and B in ratio 3:5.\n\nSolution:\nTotal parts = 3 + 5 = 8\nA's share = (3/8) × 1,200 = 3 × 150 = ₹450\nB's share = (5/8) × 1,200 = 5 × 150 = ₹750\n\nAnswer: A = ₹450, B = ₹750",
+                "formula": "Share of x = [ ratio_x / sum_of_ratios ] × total_quantity",
+                "shortcut": "• Scaling Ratios: If a:b = 2:3 and b:c = 4:5, find a:b:c by making 'b' same (8:12:15)."
+            },
+            {
+                "name": "Coin & Bag Problems",
+                "theory": "Problems where a bag contains different denominations of coins in a given ratio. There are two variables: the Number of coins and the Value of coins.",
+                "example": "Q: A bag contains 50p, 25p, and 10p coins in ratio 5:9:4, amounting to ₹206. Find the number of coins of each type.\n\nSolution:\nRatio of numbers = 5x : 9x : 4x\nValue conversion (in ₹):\n50p = 0.5, 25p = 0.25, 10p = 0.1\nTotal Value = 5x(0.5) + 9x(0.25) + 4x(0.1) = 206\n2.5x + 2.25x + 0.4x = 206\n5.15x = 206\nx = 206 / 5.15 = 40\n\nNumbers:\n50p = 5 × 40 = 200\n25p = 9 × 40 = 360\n10p = 4 × 40 = 160\n\nAnswer: (200, 360, 160)",
+                "formula": "Total Value = Σ (Number of coins × Face Value)",
+                "shortcut": "• Work with smallest units (paise) to avoid decimals: 50(5x) + 25(9x) + 10(4x) = 20600"
+            },
+            {
+                "name": "Partnership Basics",
+                "theory": "Partnership is an association of two or more persons to carry out a business. Profits are distributed based on the investment and the time period.\n\nProfit Ratio = (Capital_A × Time_A) : (Capital_B × Time_B)",
+                "example": "Q: A and B invest ₹20,000 and ₹30,000 for 1 year and 2 years respectively. Find their profit share ratio.\n\nSolution:\nCapital A = 20,000, Time A = 1 yr\nCapital B = 30,000, Time B = 2 yr\nProfit A : Profit B = (20,000 × 1) : (30,000 × 2)\nRatio = 20,000 : 60,000 = 1 : 3\n\nAnswer: 1:3",
+                "formula": "P1/P2 = (C1 × T1) / (C2 × T2)\nActive partner usually gets extra commission.",
+                "shortcut": "• If time is same, Profit Ratio = Capital Ratio.\n• If capital is same, Profit Ratio = Time Ratio."
+            },
+            {
+                "name": "Problems on Ages (Ratio focus)",
+                "theory": "Age problems involving ratio changes over time. Remember: the age difference between two people always remains constant.",
+                "example": "Q: Ratio of ages of A and B is 4:5. After 5 years, the ratio becomes 5:6. Find their present ages.\n\nSolution:\nPresent: 4x, 5x\nAfter 5 yrs: (4x + 5)/(5x + 5) = 5/6\n24x + 30 = 25x + 25\nx = 5\nPresent ages = 4(5) and 5(5) = 20 and 25 years.\n\nAnswer: 20 and 25 years",
+                "formula": "x years from now = Current + x\nx years ago = Current - x",
+                "shortcut": "• Look at the parts difference: 4:5 to 5:6 (both differ by 1 part). This 1 part = 5 years. So 4 parts = 20, 5 parts = 25."
+            }
+        ]
+    },
+    {
+        "title": "9. Mixtures & Alligations",
+        "sections": [
+            {
+                "name": "Rule of Alligation",
+                "theory": "Alligation is a rule that enables us to find the ratio in which two or more ingredients at their respective prices must be mixed to produce a mixture of a specified price.\n\n• Cheaper quantity (c): The ingredient with the lower price.\n• Dearer quantity (d): The ingredient with the higher price.\n• Mean Price (m): The cost price of a unit of the mixture.",
+                "example": "Q: In what ratio must rice at ₹20 per kg be mixed with rice at ₹30 per kg so that the mixture is worth ₹24 per kg?\n\nSolution:\nCheaper (c) = 20, Dearer (d) = 30, Mean (m) = 24\nRatio = (d - m) : (m - c)\nRatio = (30 - 24) : (24 - 20)\nRatio = 6 : 4 = 3 : 2\n\nAnswer: 3:2",
+                "formula": "Quantity of Cheaper / Quantity of Dearer = (CP of Dearer - Mean Price) / (Mean Price - CP of Cheaper)",
+                "shortcut": "• Alligation works on weighted averages. Use it for speeds, interests, and profit percentages too."
+            },
+            {
+                "name": "Mean Price calculation",
+                "theory": "If the ratio of ingredients and their individual prices are given, we can find the mean price of the mixture using the weighted average method.",
+                "example": "Q: 5kg of variety A tea at ₹40/kg is mixed with 3kg of variety B tea at ₹60/kg. Find the cost of the mixture per kg.\n\nSolution:\nTotal Cost = (5 × 40) + (3 × 60) = 200 + 180 = 380\nTotal Weight = 5 + 3 = 8kg\nMean Price = 380 / 8 = ₹47.50\n\nAnswer: ₹47.50 per kg",
+                "formula": "Mean Price = (q1c1 + q2c2) / (q1 + q2)",
+                "shortcut": "• Use the deviation method from a base price for quick mental calculation."
+            },
+            {
+                "name": "Replacement Formula (Liquids)",
+                "theory": "This involves a container filled with a pure liquid (e.g., wine), and a part of it is replaced x amount of times by another liquid (e.g., water).",
+                "example": "Q: A container contains 40 liters of milk. From this container, 4 liters of milk was taken out and replaced by water. This process was repeated further two times. How much milk is now contained by the container?\n\nSolution:\nInitial Capacity (C) = 40, Quantity replaced (x) = 4, Number of operations (n) = 3 (Initial + 2 more)\nMilk Left = 40 [ 1 - 4/40 ]³\nMilk Left = 40 [ 9/10 ]³ = 40 × 729/1000\nMilk Left = 4 × 0.729 × 10 = 29.16 liters\n\nAnswer: 29.16 liters",
+                "formula": "Final Quantity = Initial Quantity [ 1 - x/C ]ⁿ where x is replaced volume, C is capacity, n is operations.",
+                "shortcut": "• For 10% replacement (4/40), use 0.9 as multiplying factor: 40 × 0.9 × 0.9 × 0.9."
+            },
+            {
+                "name": "Mixing Two Mixtures",
+                "theory": "When two already mixed solutions (e.g., Milk:Water) are mixed together to form a third mixture.",
+                "example": "Q: Container A has milk and water in ratio 5:2. Container B has them in 8:5. In what ratio should these be mixed to get a mixture with milk and water in ratio 9:4?\n\nSolution:\nLook at the fraction of milk:\nA = 5/7, B = 8/13, Target = 9/13\nUsing Alligation on milk fraction:\n       5/7        8/13\n            9/13\n    (9/13 - 8/13)  (5/7 - 9/13)\n        1/13 : (65-63)/91\n        1/13 : 2/91\n        (1/13 × 91) : 2 = 7 : 2\n\nAnswer: 7:2",
+                "formula": "Apply alligation rule on a single component's concentration (e.g., just milk fraction).",
+                "shortcut": "• Always choose the quantity that is easier to calculate (smaller numbers)."
+            },
+            {
+                "name": "Alligation in P&L and Interest",
+                "theory": "Alligation can be used to solve problems where total profit/interest is given for two parts of an investment.",
+                "example": "Q: A man lent ₹2000, part at 5% and rest at 4% per annum. Total interest after 1 year was ₹92. Find the sum lent at 5%.\n\nSolution:\nOverall Interest % = (92 / 2000) × 100 = 4.6%\nUsing Alligation on Rates:\n       5%        4%\n           4.6%\n     (4.6-4) : (5-4.6)\n       0.6 : 0.4 = 3 : 2\nSum at 5% = (3/5) × 2000 = ₹1200\n\nAnswer: ₹1200",
+                "formula": "Rate1 : Rate2 :: (Mean Rate - Rate2) : (Rate1 - Mean Rate)",
+                "shortcut": "• Total interest/profit percentage must always lie between the two individual rates/percentages."
+            }
+        ]
+    },
+    {
+        "title": "10. Time & Work & Pipes",
+        "sections": [
+            {
+                "name": "Basic Time & Work (LCM Method)",
+                "theory": "Time and Work share an inverse relationship. If a person completes a work in 'n' days, then in 1 day he does 1/n part of the work.\n\nLCM Method: Assume total work as the LCM of all given time periods. This avoids working with fractions.",
+                "example": "Q: A can do a work in 10 days and B in 15 days. In how many days can they complete it together?\n\nSolution:\nLCM of 10 and 15 is 30. Let Total Work = 30 units.\nA's efficiency (work/day) = 30 / 10 = 3 units/day\nB's efficiency (work/day) = 30 / 15 = 2 units/day\nCombined efficiency = 3 + 2 = 5 units/day\nTime taken together = Total work / Total efficiency = 30 / 5 = 6 days.\n\nAnswer: 6 days",
+                "formula": "1/Total Time = 1/T1 + 1/T2 + ...\nWork = Efficiency × Time",
+                "shortcut": "• For two people: Time = (A × B) / (A + B)"
+            },
+            {
+                "name": "Efficiency & Ratios",
+                "theory": "Efficiency (E) is inversely proportional to Time (T). If A is twice as efficient as B, A will take half the time to complete the same work.",
+                "example": "Q: A is thrice as efficient as B and therefore takes 60 days less than B to finish a job. Find the time in which they can do it together.\n\nSolution:\nEfficiency Ratio A:B = 3:1\nTime Ratio A:B = 1:3\nDifference in time parts = 3 - 1 = 2 parts\n2 parts = 60 days\n1 part (A's time) = 30 days\n3 parts (B's time) = 90 days\nTogether = (30 × 90) / (30 + 90) = 2700 / 120 = 22.5 days\n\nAnswer: 22.5 days",
+                "formula": "E1T1 = E2T2\nEfficiency Ratio = 1 / Time Ratio",
+                "shortcut": "• If A is n times as fast as B, then A:B efficiency is n:1 and time is 1:n."
+            },
+            {
+                "name": "Group Work Formula",
+                "theory": "Work done by a group of people over a period of time.",
+                "example": "Q: 12 men can complete a work in 16 days. How many men are required to complete the same work in 24 days?\n\nSolution:\nM1 = 12, D1 = 16\nM2 = ?, D2 = 24\nUsing M1D1 = M2D2\n12 × 16 = M2 × 24\nM2 = (12 × 16) / 24 = 8 men\n\nAnswer: 8 men",
+                "formula": "M1D1H1 / W1 = M2D2H2 / W2 (where M=Men, D=Days, H=Hours, W=Work)",
+                "shortcut": "• If work is same, M1D1 = M2D2. If hours also given, M1D1H1 = M2D2H2."
+            },
+            {
+                "name": "Work with Wages",
+                "theory": "Wages are distributed among workers in the ratio of the work done by them. If workers work for the same time, wages are in the ratio of their efficiencies.",
+                "example": "Q: A and B can do a work in 6 and 8 days respectively. They undertook to do it for ₹3500. With the help of C, they finished it in 3 days. Find C's share.\n\nSolution:\nTotal Work (LCM 6, 8, 3) = 24 units.\nA's eff = 4 units/day. Total work by A = 4 × 3 = 12 units.\nB's eff = 3 units/day. Total work by B = 3 × 3 = 9 units.\nC's work = Total - (A+B) = 24 - (12+9) = 3 units.\nRatio of work A:B:C = 12:9:3 = 4:3:1\nC's share = (1/8) × 3500 = ₹437.50\n\nAnswer: ₹437.50",
+                "formula": "Wage_A = [ Work_done_A / Total_Work ] × Total_Wage",
+                "shortcut": "• Always calculate the ratio of the actual work completed by each person."
+            },
+            {
+                "name": "Pipes & Cisterns",
+                "theory": "Similar to Time and Work, but with negative work. Inlet pipes do positive work (fill), while Outlet pipes (leaks) do negative work (empty).",
+                "example": "Q: Pipe A can fill a tank in 20 hours and Pipe B can empty it in 30 hours. If both are opened together, in how many hours will the tank be full?\n\nSolution:\nLCM of 20 and 30 is 60. Capacity = 60 units.\nA's filling rate = 60 / 20 = +3 units/hr\nB's emptying rate = 60 / 30 = -2 units/hr\nNet rate = 3 - 2 = +1 unit/hr\nTime to fill = 60 / 1 = 60 hours.\n\nAnswer: 60 hours",
+                "formula": "1/T_net = 1/T1 + 1/T2 - 1/T_leak\nTime = Capacity / Net Efficiency",
+                "shortcut": "• If a pipe fills in 'f' and leak empties in 'e', time to fill = (f × e) / (e - f)."
+            }
+        ]
+    },
+    {
+        "title": "11. Time Speed Distance (Trains, Boats, Races)",
+        "sections": [
+            {
+                "name": "Basic TSD Concepts",
+                "theory": "Distance = Speed × Time. This simple relationship governs all motion problems.\n\n• Unit Conversion: Multiplying by 5/18 converts km/hr to m/s. Multiplying by 18/5 converts m/s to km/hr.\n• If Distance is constant, Speed ∝ 1/Time.\n• If Time is constant, Distance ∝ Speed.",
+                "example": "Q: A car travels at 72 km/hr. Find its speed in m/s and the distance covered in 20 seconds.\n\nSolution:\nSpeed in m/s = 72 × (5/18) = 4 × 5 = 20 m/s\nDistance = Speed × Time = 20 × 20 = 400 meters.\n\nAnswer: 20 m/s, 400 m",
+                "formula": "D = S × T\nSpeed = D/T, Time = D/S\nkm/hr → m/s: multiply by 5/18",
+                "shortcut": "• Remember 18 km/hr = 5 m/s. Multiples are easy: 36=10, 54=15, 72=20, 90=25."
+            },
+            {
+                "name": "Relative Speed",
+                "theory": "The speed of one object with respect to another while both are in motion.\n\n• Same Direction: Relative Speed = S1 - S2 (Difference)\n• Opposite Direction: Relative Speed = S1 + S2 (Sum)",
+                "example": "Q: Two trains are 150 km apart. Train A starts at 8 AM at 50 km/hr towards B. Train B starts at 8 AM at 40 km/hr towards A. At what time will they meet?\n\nSolution:\nRelative Speed = 50 + 40 = 90 km/hr\nDistance = 150 km\nTime = 150 / 90 = 5/3 hours = 1 hour 40 minutes.\nMeeting time = 8 AM + 1 hr 40 min = 9:40 AM.\n\nAnswer: 9:40 AM",
+                "formula": "Time to meet = Distance between them / Relative Speed",
+                "shortcut": "• If they start at different times, find the distance at the time when the second one starts first."
+            },
+            {
+                "name": "Problems on Trains",
+                "theory": "When a train crosses an object:\n\n• Point Object (Pole/Man): Distance = Length of Train (L)\n• Lengthy Object (Platform/Bridge): Distance = L + Length of Object (P)\n• Crossing another Train: Distance = L1 + L2",
+                "example": "Q: A 300m long train is running at 54 km/hr. How much time will it take to cross a 150m long platform?\n\nSolution:\nSpeed = 54 × (5/18) = 15 m/s\nTotal Distance = 300 + 150 = 450 meters\nTime = 450 / 15 = 30 seconds.\n\nAnswer: 30 seconds",
+                "formula": "Time = (L + P) / Speed\nRelative Time = (L1 + L2) / (Rel Speed)",
+                "shortcut": "• Always convert speed to m/s when lengths are in meters."
+            },
+            {
+                "name": "Boats & Streams",
+                "theory": "Motion in a moving medium (water).\n\n• Speed of Boat in Still Water = u\n• Speed of Stream = v\n• Downstream Speed (D) = u + v (with the flow)\n• Upstream Speed (U) = u - v (against the flow)",
+                "example": "Q: A man can row 18 km/hr in still water. If the speed of the stream is 6 km/hr, find the time taken to row 48 km downstream.\n\nSolution:\nDownstream Speed (D) = 18 + 6 = 24 km/hr\nTime = 48 / 24 = 2 hours.\n\nAnswer: 2 hours",
+                "formula": "D = u + v, U = u - v\nu = (D + U) / 2\nv = (D - U) / 2",
+                "shortcut": "• If time taken upstream is 'n' times downstream, u = v × (n+1)/(n-1)."
+            },
+            {
+                "name": "Calculations on Races",
+                "theory": "Races involve 'Head start' (distance or time) and 'Dead heat' (finishing at same time).",
+                "example": "Q: In a 1000m race, A beats B by 100m. In a 400m race, B beats C by 40m. By how many meters will A beat C in a 500m race?\n\nSolution:\nRatio A:B = 1000 : 900 = 10 : 9\nRatio B:C = 400 : 360 = 10 : 9\nCombined Ratio A:B:C = 100 : 90 : 81\nIn a 100m race, A beats C by 19m.\nIn a 500m race, A beats C by 19 × 5 = 95m.\n\nAnswer: 95m",
+                "formula": "Ratio of speeds = Ratio of distances covered in same time.",
+                "shortcut": "• 'A beats B by x meters' means when A is at the end, B is x meters behind."
+            }
+        ]
+    },
+    {
+        "title": "12. Geometry & Mensuration",
+        "sections": [
+            {
+                "name": "2D Shapes - Area & Perimeter",
+                "theory": "Mensuration of 2D shapes involves calculating the space inside (Area) and the length of the boundary (Perimeter).\n\n• Triangle: Area = 1/2 × base × height OR √(s(s-a)(s-b)(s-c)) where s = (a+b+c)/2.\n• Circle: Area = πr², Circumference = 2πr.\n• Rectangle: Area = L × W, Perimeter = 2(L + W).\n• Square: Area = a², Perimeter = 4a, Diagonal = a√2.",
+                "example": "Q: The radius of a circular wheel is 70cm. How many revolutions will it make to cover a distance of 8.8 km?\n\nSolution:\nRadius (r) = 70 cm = 0.7 m\nDistance to cover = 8.8 km = 8800 m\nCircumference of wheel = 2 × (22/7) × 0.7 = 4.4 m\nNumber of revolutions = Total Distance / Circumference\nRevolutions = 8800 / 4.4 = 2000.\n\nAnswer: 2000",
+                "formula": "Triangle Area = √[s(s-a)(s-b)(s-c)]\nCircle Circumference = 2πr\nRhombus Area = 1/2 × d1 × d2",
+                "shortcut": "• If each side of a figure is increased by x%, Area increases by [2x + x²/100]%."
+            },
+            {
+                "name": "3D Shapes - Volume & Surface Area",
+                "theory": "Mensuration of 3D shapes involves calculating the capacity (Volume) and the area of the outer shell (Surface Area).\n\n• Cube: Volume = a³, Total Surface Area (TSA) = 6a².\n• Cuboid: Volume = L × W × H, TSA = 2(LW + WH + LH).\n• Cylinder: Volume = πr²h, Curved Surface Area (CSA) = 2πrh, TSA = 2πr(r+h).\n• Sphere: Volume = (4/3)πr³, TSA = 4πr².\n• Cone: Volume = (1/3)πr²h, CSA = πrl where l = √(r²+h²).",
+                "example": "Q: A cylindrical tank of radius 7m and height 10m is full of water. If all water is poured into a cubical tank of side 10m, will it overflow? If so, by how much?\n\nSolution:\nVolume of Cylinder = (22/7) × 7 × 7 × 10 = 1540 m³\nVolume of Cube = 10 × 10 × 10 = 1000 m³\nYes, it will overflow.\nOverflowing water = 1540 - 1000 = 540 m³.\n\nAnswer: Overflows by 540 m³",
+                "formula": "Cylinder Volume = πr²h\nSphere Volume = 4/3 πr³\nCone Slant Height l = √(r² + h²)",
+                "shortcut": "• When a sphere is melted to form smaller spheres, n = (R/r)³."
+            },
+            {
+                "name": "Lines & Angles Properties",
+                "theory": "Basic properties of angles formed by intersecting and parallel lines.\n\n• Complementary Angles: Sum = 90°\n• Supplementary Angles: Sum = 180°\n• Angles on a straight line = 180°, around a point = 360°\n• Transversal of parallel lines: Alternate interior angles are equal; Corresponding angles are equal.",
+                "example": "Q: An angle is 20° more than its supplement. Find the angle.\n\nSolution:\nLet the angle be x. Its supplement is 180 - x.\nx = (180 - x) + 20\n2x = 200\nx = 100°\n\nAnswer: 100°",
+                "formula": "Sum of interior angles of n-sided polygon = (n-2) × 180°\nEach exterior angle of regular polygon = 360/n",
+                "shortcut": "• Sum of exterior angles of ANY polygon is always 360°."
+            },
+            {
+                "name": "Properties of Triangles & Circles",
+                "theory": "Key theorems and properties.\n\n• Triangle: Sum of two sides > third side. Sum of angles = 180°.\n• Pythagoras Theorem: a² + b² = c² (for right-angled triangles).\n• Circle: Angle in a semi-circle is 90°. Tangent is perpendicular to the radius at the point of contact.",
+                "example": "Q: The lengths of two sides of a right-angled triangle are 3cm and 4cm. Find the length of the hypotenuse.\n\nSolution:\na² + b² = c²\n3² + 4² = c²\n9 + 16 = 25\nc = √25 = 5cm.\n\nAnswer: 5cm",
+                "formula": "Pythagoras: a² + b² = c²\nArea of equilateral triangle = (√3 / 4) × a²",
+                "shortcut": "• Common Pythagorean triplets: (3,4,5), (5,12,13), (7,24,25), (8,15,17)."
+            },
+            {
+                "name": "Practical Mensuration & Costs",
+                "theory": "Applying formulas to real-world costs.\n\n• Fencing cost = Perimeter × Rate\n• Painting/Plastering cost = Area × Rate\n• Flooring cost = Floor Area × Rate",
+                "example": "Q: Find the cost of fencing a circular garden of radius 21m at the rate of ₹10 per meter.\n\nSolution:\nPerimeter (Circumference) = 2 × (22/7) × 21\nPerimeter = 2 × 22 × 3 = 132 m\nCost = 132 × 10 = ₹1,320\n\nAnswer: ₹1,320",
+                "formula": "Cost = (Relevant measure) × Rate",
+                "shortcut": "• For fencing, use perimeter. For painting/turfing, use area."
+            }
+        ]
+    },
+    {
+        "title": "13. Permutation & Combination & Probability",
+        "sections": [
+            {
+                "name": "Fundamental Counting Principles",
+                "theory": "Counting principles form the base of P&C.\n\n• Addition Principle (OR): If an event occurs in 'm' ways or 'n' ways (mutually exclusive), total = m + n.\n• Multiplication Principle (AND): If an event occurs in 'm' ways followed by 'n' ways, total = m × n.\n• Factorial (!): n! = n × (n-1) × ... × 1. (0! = 1)",
+                "example": "Q: A person has 3 shirts and 4 trousers. In how many ways can he pick an outfit (1 shirt AND 1 trouser)?\n\nSolution:\nWays to pick shirt = 3\nWays to pick trouser = 4\nTotal ways = 3 × 4 = 12.\n\nAnswer: 12",
+                "formula": "n! = n × (n-1) × ... × 1\n0! = 1",
+                "shortcut": "• Use AND for successive steps, OR for alternative options."
+            },
+            {
+                "name": "Permutations (Arrangements)",
+                "theory": "Permutation is an arrangement of items in a specific order. Order matters.\n\n• nPr: Number of ways to arrange r items out of n.\n• Repeated items: If an item repeats p times, q times, etc., divide by p!, q!.\n• Circular Arrangement: (n-1)! ways.",
+                "example": "Q: In how many ways can the letters of the word 'APPLE' be arranged?\n\nSolution:\nTotal letters = 5\nRepeated letter = P (2 times)\nWays = 5! / 2! = 120 / 2 = 60.\n\nAnswer: 60",
+                "formula": "nPr = n! / (n - r)!\nCircular = (n - 1)!",
+                "shortcut": "• If all items are distinct, it's just n!."
+            },
+            {
+                "name": "Combinations (Selection)",
+                "theory": "Combination is a selection of items where order does not matter.\n\n• nCr: Number of ways to select r items out of n.\n• Property: nCr = nC(n-r).",
+                "example": "Q: In how many ways can a committee of 3 members be selected out of 10 people?\n\nSolution:\n10C3 = (10 × 9 × 8) / (3 × 2 × 1)\n10C3 = 10 × 3 × 4 = 120.\n\nAnswer: 120",
+                "formula": "nCr = n! / [r! (n - r)!]\nnCr = nPr / r!",
+                "shortcut": "• Handshakes theorem: For n people, handshakes = nC2 = n(n-1)/2."
+            },
+            {
+                "name": "Probability Basics",
+                "theory": "Probability (P) is the likelihood of an event occurring.\n\n• Sample Space (S): All possible outcomes.\n• Event (E): Specific outcomes we are interested in.\n• P(E) = n(E) / n(S). Range: 0 (impossible) to 1 (certain).",
+                "example": "Q: If a coin is tossed twice, what is the probability of getting at least one head?\n\nSolution:\nS = {HH, HT, TH, TT}, n(S) = 4.\nE (at least one H) = {HH, HT, TH}, n(E) = 3.\nP(E) = 3/4.\n\nAnswer: 3/4",
+                "formula": "P(E) = Number of favorable / Total possible\nP(E) + P(not E) = 1",
+                "shortcut": "• 'At least' = 1 - P(None)."
+            },
+            {
+                "name": "Dice, Cards & Coins",
+                "theory": "Standard scenarios in probability problems.\n\n• Coins: n tosses → 2ⁿ total outcomes.\n• Dice: n rolls → 6ⁿ total outcomes.\n• Cards: 52 total. 4 suits (13 each), 2 colors (26 red, 26 black), 12 face cards (J, Q, K).",
+                "example": "Q: Two dice are thrown simultaneously. What is the probability that the sum is 7?\n\nSolution:\nn(S) = 6 × 6 = 36.\nPairs giving sum 7: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1). n(E) = 6.\nP(E) = 6 / 36 = 1/6.\n\nAnswer: 1/6",
+                "formula": "P(A ∪ B) = P(A) + P(B) - P(A ∩ B)",
+                "shortcut": "• In 2 dice, the sum 7 is the most frequent (occurs 6 times)."
+            }
+        ]
+    },
+    {
+        "title": "14. Clocks & Calendars",
+        "sections": [
+            {
+                "name": "Clock Angles",
+                "theory": "The dial of a clock is a circle (360°).\n\n• Minute Hand: Moves 6° per minute (360° / 60 min).\n• Hour Hand: Moves 0.5° per minute (30° / 60 min).\n• Angle between hands: The difference between the positions of both hands.",
+                "example": "Q: What is the angle between the hands of a clock at 3:30?\n\nSolution:\nH = 3, M = 30\nAngle = |30H - (11/2)M|\nAngle = |30(3) - (11/2)(30)|\nAngle = |90 - 165| = 75°\n\nAnswer: 75°",
+                "formula": "Angle = |30H - 5.5M|\nReflex Angle = 360° - Angle",
+                "shortcut": "• Overlapping hands: 0° angle. At 0°: M = (60/11) × H."
+            },
+            {
+                "name": "Hands Overlapping & Opposite",
+                "theory": "Relative positioning of the hands.\n\n• Hands Overlap (0°): 22 times in 24 hours (once every hour except 11-1 and 5-7).\n• Hands Opposite (180°): 22 times in 24 hours.\n• Hands Right-Angled (90°): 44 times in 24 hours.",
+                "example": "Q: At what time between 4 and 5 o'clock will the hands of a clock be together?\n\nSolution:\nH = 4, Angle = 0°\n0 = |30(4) - 5.5M|\n5.5M = 120\nM = 120 / 5.5 = 240 / 11 = 21 9/11 minutes.\nTime = 4:21 9/11.\n\nAnswer: 4:21 9/11",
+                "formula": "Time M = (2/11) × [30H ± Angle]",
+                "shortcut": "• To find together time, use M = (60/11) × H."
+            },
+            {
+                "name": "Faulty Clocks",
+                "theory": "A clock that gains or loses time. If a clock covers more/less than 360° in its 'perceived' 12 hours.",
+                "example": "Q: A clock is set right at 5 AM. The clock loses 16 minutes in 24 hours. What will be the true time when the clock indicates 10 PM on the 4th day?\n\nSolution:\nTime from 5 AM to 10 PM (4th day) = 89 hours.\nIn 24 hours (clock), true time = 24h 16m = 1456/60 h.\nWait, if it LOSES 16m in 24h, then 23h 44m of this clock = 24h of true time.\n23h 44m = 356/15 hours.\nTrue time = 89 × (24 / (356/15)) = 89 × 15 × 24 / 356 = 90 hours.\n90 hours from 5 AM = 3 days and 18 hours = 11 PM.\n\nAnswer: 11 PM",
+                "formula": "True Time / Clock Time = True Interval / Clock Interval",
+                "shortcut": "• If a clock gains x min in 24h, True = Clock × 1440 / (1440 + x)."
+            },
+            {
+                "name": "Calendar Odd Days",
+                "theory": "The core of calendar problems is 'Odd Days' - extra days above complete weeks.\n\n• Ordinary Year (365 days) = 52 weeks + 1 Odd Day.\n• Leap Year (366 days) = 52 weeks + 2 Odd Days.\n• Leap Year check: Divisible by 4 (if century, divisible by 400).",
+                "example": "Q: If today is Monday, what day will it be after 61 days?\n\nSolution:\nOdd days in 61 = 61 mod 7 = 5.\nMonday + 5 days = Saturday.\n\nAnswer: Saturday",
+                "formula": "Odd days = Total days mod 7",
+                "shortcut": "• 100 yrs = 5 odd, 200 = 3 odd, 300 = 1 odd, 400 = 0 odd."
+            },
+            {
+                "name": "Finding Day of Week",
+                "theory": "Using codes for days and months to find the day for any historical or future date.",
+                "example": "Q: What was the day on 15th August 1947?\n\nSolution:\nUpto 1600: 0 odd\n1601 to 1900: 300 yrs = 1 odd\n1901 to 1946: 46 yrs (11 leap, 35 ord) = 11*2 + 35*1 = 57 = 1 odd day.\nJan to 15 Aug 1947:\nJan(3)+Feb(0)+Mar(3)+Apr(2)+May(3)+Jun(2)+Jul(3)+Aug(1)=17 = 3 odd days.\nTotal Odd = 0 + 1 + 1 + 3 = 5 odd days.\n5 odd days = Friday.\n\nAnswer: Friday",
+                "formula": "Day = (Day Code) of Total Odd Days",
+                "shortcut": "• 0=Sun, 1=Mon... 6=Sat."
+            }
+        ]
+    },
+    {
+        "title": "15. Logarithms",
+        "sections": [
+            {
+                "name": "Definition & Laws",
+                "theory": "Logarithm is the inverse operation to exponentiation. If a^x = N, then log_a(N) = x.\n\n• Base (a): Must be positive and ≠ 1.\n• Laws:\n1. log(MN) = log M + log N\n2. log(M/N) = log M - log N\n3. log(M^p) = p log M",
+                "example": "Q: Solve: log(2) + log(5).\n\nSolution:\nlog(2) + log(5) = log(2 × 5) = log(10).\nIf base is 10, then log₁₀(10) = 1.\n\nAnswer: 1",
+                "formula": "log(MN) = log M + log N\nlog(M/N) = log M - log N\nlog(M^p) = p log M",
+                "shortcut": "• log of 1 to any base is 0. log of base to itself is 1."
+            },
+            {
+                "name": "Change of Base Theorem",
+                "theory": "Allows converting a logarithm from one base to another. This is crucial for using log tables or calculators which generally use base 10 or e.",
+                "example": "Q: Evaluate log₈(16).\n\nSolution:\nUsing change of base to base 2:\nlog₈(16) = log₂(16) / log₂(8)\n16 = 2⁴, so log₂(16) = 4\n8 = 2³, so log₂(8) = 3\nResult = 4/3.\n\nAnswer: 4/3",
+                "formula": "log_a(b) = log_c(b) / log_c(a)\nlog_a(b) = 1 / log_b(a)",
+                "shortcut": "• log_aⁿ(bᵐ) = (m/n) log_a(b)."
+            },
+            {
+                "name": "Logarithmic Equations",
+                "theory": "Equations where the variable is part of a log expression. To solve, convert the log form back to exponential form.",
+                "example": "Q: Solve for x: log₂(x - 3) = 4.\n\nSolution:\nConvert to exponential form:\nx - 3 = 2⁴\nx - 3 = 16\nx = 19.\n\nAnswer: 19",
+                "formula": "log_a(x) = y ⟹ x = a^y",
+                "shortcut": "• Always check if the solution makes the argument of the log positive."
+            },
+            {
+                "name": "Number of Digits (Characteristic)",
+                "theory": "The integer part of a common log (base 10) is called the Characteristic. It helps in finding the number of digits in a large power.\n\n• Number of digits in aⁿ = Integer part of [n log₁₀(a)] + 1.",
+                "example": "Q: Find the number of digits in 2⁶⁴. (Given log 2 = 0.3010)\n\nSolution:\nValue = 64 log 2 = 64 × 0.3010\nValue = 19.264\nCharacteristic = 19.\nNumber of digits = 19 + 1 = 20.\n\nAnswer: 20",
+                "formula": "Digits = ⌊n log base₁₀⌋ + 1",
+                "shortcut": "• If log x = 3.45, x has 4 digits. If log x = 0.45, x has 1 digit."
+            }
+        ]
+    },
+    {
+        "title": "16. Data Interpretation",
+        "sections": [
+            {
+                "name": "Tables",
+                "theory": "Tables present data in rows and columns. They are the most precise way to show data but require careful reading of headers and units.\n\n• Analysis: Look for totals, averages, and percentage changes between rows/columns.",
+                "example": "Q: The table shows sales of 3 products (A, B, C) over 2 years. Year 1: A=100, B=150, C=200. Year 2: A=120, B=135, C=250. Find the total percentage growth in sales.\n\nSolution:\nTotal Year 1 = 100 + 150 + 200 = 450.\nTotal Year 2 = 120 + 135 + 250 = 505.\nGrowth = 505 - 450 = 55.\n% Growth = (55 / 450) × 100 = 12.22%.\n\nAnswer: 12.22%",
+                "formula": "% Growth = [ (New - Old) / Old ] × 100",
+                "shortcut": "• Use approximation: 55/450 is roughly 50/450 = 1/9 ≈ 11.11%. The answer is slightly more."
+            },
+            {
+                "name": "Bar Charts",
+                "theory": "Bar charts use vertical or horizontal bars to compare quantities between different categories.\n\n• Types: Simple, Grouped, and Stacked bar charts.",
+                "example": "Q: A bar chart shows revenue: Jan=₹10k, Feb=₹15k, Mar=₹20k. Find the average monthly revenue.\n\nSolution:\nAverage = (10 + 15 + 20) / 3 = 45 / 3 = ₹15k.\n\nAnswer: ₹15k",
+                "formula": "Average = Sum / Number of items",
+                "shortcut": "• Visually look for the 'middle' bar or the balance point."
+            },
+            {
+                "name": "Line Graphs",
+                "theory": "Line graphs are best for showing trends over time. The steeper the line, the faster the rate of change.",
+                "example": "Q: A line graph shows speed from 0 to 10s. Speed increases linearly from 0 to 50 m/s. Find acceleration.\n\nSolution:\nAcceleration = Slope of speed-time graph.\nSlope = (50 - 0) / (10 - 0) = 5 m/s².\n\nAnswer: 5 m/s²",
+                "formula": "Slope (Rate of change) = (y2 - y1) / (x2 - x1)",
+                "shortcut": "• A horizontal line means constant value (0 rate of change)."
+            },
+            {
+                "name": "Pie Charts",
+                "theory": "Pie charts show the distribution of parts in a whole. The total is always 360° or 100%.\n\n• Conversion: Value = (Angle / 360) × Total = (Percentage / 100) × Total.",
+                "example": "Q: In a pie chart showing market share, Company A has a sector of 72°. If the total market is ₹1,000 crores, find Company A's revenue.\n\nSolution:\nFraction = 72° / 360° = 1/5.\nRevenue = 1/5 × 1,000 = ₹200 crores.\n\nAnswer: ₹200 crores",
+                "formula": "1% = 3.6°\nValue = (Central Angle / 360) × Total",
+                "shortcut": "• Remember: 90° = 25%, 180° = 50%, 36° = 10% (very common)."
+            }
+        ]
+    },
+    {
+        "title": "17. Logical Reasoning",
+        "sections": [
+            {
+                "name": "Blood Relations",
+                "theory": "Involves deciphering family relationships based on given clues. Use symbols for sexes (e.g., + for Male, - for Female) and tree structures for generations.",
+                "example": "Q: Pointing to a man, a girl says, 'He is the son of the only daughter of my father's mother.' How is the man related to the girl?\n\nSolution:\nMy father's mother = Grandmother.\nOnly daughter of grandmother = Father's sister = Aunt.\nSon of aunt = Cousin.\n\nAnswer: Cousin",
+                "formula": "Horizontal line for siblings, Vertical for parent-child.",
+                "shortcut": "• Put yourself in the place of the person speaking to solve quickly."
+            },
+            {
+                "name": "Coding & Decoding",
+                "theory": "Messages are encoded using a specific logic (shifts, reversals, substitution). Identifying the pattern is key.\n\n• Letter Coding: A becomes D (+3 shift).\n• Number Coding: CAT = 3+1+20 = 24.",
+                "example": "Q: In a certain code, 'KING' is written as 'PRMT'. How is 'QUEEN' written?\n\nSolution:\nPattern: Opposite letters (K↔P, I↔R, N↔M, G↔T).\nQ ↔ J, U ↔ F, E ↔ V, E ↔ V, N ↔ M.\nResult: 'JFVVM'.\n\nAnswer: JFVVM",
+                "formula": "A=1, B=2 ... Z=26\nOpposite = 27 - Current position",
+                "shortcut": "• Memorize EJOTY (5, 10, 15, 20, 25) for quick letter positioning."
+            },
+            {
+                "name": "Direction Sense",
+                "theory": "Problems involving movements in 4 main directions (N, S, E, W) and 4 cardinal directions (NE, NW, SE, SW).\n\n• Standard Mapping: North (Up), South (Down), East (Right), West (Left).",
+                "example": "Q: A man walks 10m North, then turns Right and walks 7m, then turns Right and walks 10m. How far is he from the starting point?\n\nSolution:\nNorth 10m → Top\nRight turn (East) 7m → Right\nRight turn (South) 10m → Bottom\nHe is now 7m East from start.\n\nAnswer: 7 meters",
+                "formula": "Shortest distance = √(x² + y²) [Pythagoras]",
+                "shortcut": "• Always draw a small compass and track turns carefully."
+            },
+            {
+                "name": "Syllogisms",
+                "theory": "Logical arguments where a conclusion is drawn from two or more premises. Use Venn diagrams to test validity.\n\n• Keywords: All, Some, No, Some Not.",
+                "example": "Q: Statements: (1) All Cats are Dogs. (2) Some Dogs are Rats. Conclusion: Some Cats are Rats.\n\nSolution:\nDraw Circle A (Cats) inside Circle B (Dogs).\nDraw Circle C (Rats) overlapping Circle B.\nIs Circle C necessarily overlapping Circle A? No.\nConclusion is False.\n\nAnswer: False",
+                "formula": "All A are B ⟹ A ⊆ B\nSome A are B ⟹ A ∩ B ≠ ∅",
+                "shortcut": "• If statements are positive, a negative conclusion cannot follow."
+            },
+            {
+                "name": "Cubes & Dice",
+                "theory": "Visualizing unfolded cubes or identifying opposite faces on a die.\n\n• Standard Dice: Sum of opposite faces = 7.\n• Painted Cubes: n refers to side length ratio.",
+                "example": "Q: Two positions of a dice are shown. Faces 1,2,3 visible in Pos 1. Faces 1,3,5 visible in Pos 2. What is opposite to 2?\n\nSolution:\nFaces 1 and 3 are common in both. The remaining faces in both (2 and 5) must be opposite.\n\nAnswer: 5",
+                "formula": "Unpainted cubes = (n-2)³\nCubes with 1 face painted = 6(n-2)²",
+                "shortcut": "• In an open cube, alternate squares (horizontally or vertically) are opposite."
+            },
+            {
+                "name": "Seating Arrangement",
+                "theory": "Arranging items in a line (Linear) or circle (Circular).\n\n• Circular: Facing Center (Left=CW, Right=ACW), Facing Outward (Reversed).\n• Linear: Left and Right are relative to the direction faced.",
+                "example": "Q: A, B, C, D are 4 friends around a table facing center. A is left of B. C is between B and D. Who is right of A?\n\nSolution:\nB is at a position. A is at B's Left. \nC is between B and D → B, C, D sequence.\nCycle: A → B → C → D (Clockwise).\nRight of A is D.\n\nAnswer: D",
+                "formula": "n/a",
+                "shortcut": "• For circular facing center, 'Right' is Anti-Clockwise."
+            },
+            {
+                "name": "Inequalities",
+                "theory": "Logical relations using symbols (>, <, =, ≥, ≤). Combining chains of relations.",
+                "example": "Q: Statement: P > Q = R ≤ S. Is P > R true?\n\nSolution:\nSince P > Q and Q = R,\nthen substituting R for Q gives: P > R.\nConclusion is True.\n\nAnswer: True",
+                "formula": "A > B and B > C ⟹ A > C",
+                "shortcut": "• If symbols are in opposite directions (e.g., A > B < C), no direct relation can be established."
+            },
+            {
+                "name": "Input-Output",
+                "theory": "Deciphering the rule a machine uses to transform a set of inputs (words or numbers) into steps until final arrangement.\n\n• Common steps: Alphabetical sorting, descending numbers, alternating swaps.",
+                "example": "Q: Input: 32 cat 54 dog. Step 1: 54 32 cat dog. Step 2: 54 32 dog cat. What rule is used?\n\nSolution:\nStep 1 moves largest number to the front.\nStep 2 moves words in descending alphabetical order.\n\nAnswer: Number (Desc) followed by Words (Desc Alphabetical)",
+                "formula": "n/a",
+                "shortcut": "• Look at the first and last steps to understand the final target arrangement."
+            },
+            {
+                "name": "Data Sufficiency",
+                "theory": "Deciding if the given statements (1 and 2) are enough to answer the question, without necessarily solving it.\n\n• Options: (A) 1 alone, (B) 2 alone, (C) Either, (D) Both, (E) Neither.",
+                "example": "Q: What is x? (1) x + y = 10 (2) x - y = 2.\n\nSolution:\nStatement 1 alone has infinite solutions (e.g., 5+5, 4+6). Insufficient.\nStatement 2 alone has infinite solutions. Insufficient.\nCombining both gives a unique solution (2x = 12, x=6). Sufficient together.\n\nAnswer: Both statements needed",
+                "formula": "n/a",
+                "shortcut": "• Don't solve! Just check if you reach a unique value."
+            },
+            {
+                "name": "Critical Reasoning",
+                "theory": "Evaluating arguments, identifying assumptions, and determining conclusions or inferences.",
+                "example": "Q: Argument: 'Eating apples keeps you healthy. Ram eats apples, so he is healthy.' Identify the assumption.\n\nSolution:\nThe argument assumes that apples are the *only* or *sufficient* requirement for Ram's health and that he eats them correctly.\n\nAnswer: Eating apples is sufficient for health",
+                "formula": "Assumption + Premise = Conclusion",
+                "shortcut": "• Look for extreme words like 'only', 'all', 'never' in assumptions - they are usually incorrect."
+            },
+            {
+                "name": "Logical Puzzles",
+                "theory": "Connecting multiple pieces of information like days, colors, subjects, and cities into a coherent table or grid.",
+                "example": "Q: 3 people (X, Y, Z) like 3 fruits (Apple, Mango, Banana). X does not like Apple. Y likes Mango. What does Z like if everyone likes distinct fruits?\n\nSolution:\nY likes Mango.\nX must like Banana (since Apple is out).\nZ must like Apple.\n\nAnswer: Apple",
+                "formula": "n/a",
+                "shortcut": "• Use a grid (Matrix method) and cross out definitely unreachable combinations."
+            }
+        ]
+    },
+    {
+        "title": "18. Vedic Maths & Fast Calculation",
+        "sections": [
+            {
+                "name": "Squares of Numbers Ending in 5",
+                "theory": "A very simple technique for squaring numbers like 25, 45, 105, etc. The result always ends in 25.",
+                "example": "Q: Find the square of 85.\n\nSolution:\nStep 1: The last two digits are 25.\nStep 2: Take the first digit (8) and multiply it by its successor (8+1=9).\nValue = 8 × 9 = 72.\nResult = 7225.\n\nAnswer: 7225",
+                "formula": "(n5)² = [n × (n+1)] | 25",
+                "shortcut": "• For 105: 10 × 11 = 110. Result = 11025."
+            },
+            {
+                "name": "Base Multiplication (Nikhilam)",
+                "theory": "Multiplying numbers close to a base like 10, 100, or 1000. It involves finding the deviation from the base.",
+                "example": "Q: Multiply 104 × 107.\n\nSolution:\nBase = 100\nDeviations: +4 and +7\nStep 1: Add one deviation to the other number: 104 + 7 = 111.\nStep 2: Multiply the deviations: 4 × 7 = 28.\nCombine: 11128.\n\nAnswer: 11128",
+                "formula": "(B + x)(B + y) = (B + x + y) | xy",
+                "shortcut": "• If deviations are 12 and 13: 112+13=125, 12×13=156. Since base 100 has 2 zeros, carry 1: 125+1 | 56 = 12656."
+            },
+            {
+                "name": "Digital Sum (Casting Out 9s)",
+                "theory": "Used for verifying calculations. The digital sum is the single-digit sum of all digits in a number. 9 is treated as 0.",
+                "example": "Q: Verify 123 × 11 = 1353 using digital sum.\n\nSolution:\nDS(123) = 1+2+3 = 6\nDS(11) = 1+1 = 2\nProduct DS = 6 × 2 = 12 → 1+2 = 3\nResult DS(1353) = 1+3+5+3 = 12 → 3\nSince 3 = 3, the calculation is likely correct.\n\nAnswer: Verified (3=3)",
+                "formula": "DS(A × B) = DS [ DS(A) × DS(B) ]",
+                "shortcut": "• Ignore 9 and digits that sum to 9 (e.g., in 1984, 1+8=9 and 9 itself are ignored, DS = 4)."
+            },
+            {
+                "name": "Multiplication by 11",
+                "theory": "A rapid way to multiply any number by 11 by adding adjacent digits.",
+                "example": "Q: Multiply 2543 × 11.\n\nSolution:\nStep 1: Write last digit: 3\nStep 2: 3+4=7\nStep 3: 4+5=9\nStep 4: 5+2=7\nStep 5: Write first digit: 2\nResult: 27973.\n\nAnswer: 27973",
+                "formula": "abc... × 11 = a | (a+b) | (b+c) | ... | last digit",
+                "shortcut": "• If sum > 9, carry over to the left."
+            },
+            {
+                "name": "Advanced Number System Practice",
+                "theory": "Complex problems involving remainder cycles and power towers.",
+                "example": "Q: Find the last two digits of 2³¹.\n\nSolution:\nWe need 2³¹ mod 100.\n2¹⁰ = 1024 ≡ 24 (mod 100)\n2²⁰ = 24² = 576 ≡ 76 (mod 100)\n2³⁰ = 2²⁰ × 2¹⁰ ≡ 76 × 24 ≡ 1824 ≡ 24 (mod 100)\n2³¹ = 2³⁰ × 2 ≡ 24 × 2 = 48.\n\nAnswer: 48",
+                "formula": "Last two digits = N mod 100",
+                "shortcut": "• 76 to any power ends in 76. 24 to even power ends in 76, odd power ends in 24."
+            },
+            {
+                "name": "Advanced Time & Work Practice",
+                "theory": "Problems involving varying efficiencies and alternating patterns.",
+                "example": "Q: A, B, C can do work in 10, 20, 30 days. They work in turns: A on day 1, B on day 2, C on day 3, then repeat. When will work finish?\n\nSolution:\nTotal Work (LCM 10,20,30) = 60 units.\nEfficiencies: A=6, B=3, C=2.\nOne cycle (3 days) = 6+3+2 = 11 units.\n5 cycles (15 days) = 55 units.\nRemaining = 5 units.\nOn day 16, A works. A does 6 units but only 5 needed.\nTime = 5/6 of a day.\nTotal Time = 15 5/6 days.\n\nAnswer: 15 5/6 days",
+                "formula": "Total Days = Full Cycles + Fraction of next day",
+                "shortcut": "• Work done in one cycle is the sum of individual efficiencies."
+            },
+            {
+                "name": "Estimation & Approximation",
+                "theory": "Crucial for Data Interpretation and multiple-choice questions where exact answers take too long.",
+                "example": "Q: Estimate 451 × 598 / 31.\n\nSolution:\nApproximate: 450 × 600 / 30\n= 450 × (600/30)\n= 450 × 20\n= 9000.\nActual is 451×598/31 = 8699.9\nEstimation is within 3%.\n\nAnswer: ~9000",
+                "formula": "Approx ≈ (Rounded A × Rounded B) / Rounded C",
+                "shortcut": "• Round up one factor and round down the other to keep the product stable."
+            }
+        ]
+    },
+    {
+        "title": "19. Advanced Logical Puzzles",
+        "sections": [
+            {
+                "name": "Linear Arrangement (Rankings)",
+                "theory": "Ordering people or objects based on height, weight, marks, or any measurable attribute.\n\n• Keywords: 'Heavier than', 'Taller than', 'Between'.",
+                "example": "Q: P is taller than Q but shorter than R. S is taller than R. Who is the shortest?\n\nSolution:\nRelation 1: R > P > Q\nRelation 2: S > R\nCombined: S > R > P > Q\nThe shortest is Q.\n\nAnswer: Q",
+                "formula": "Total = (Rank from Top + Rank from Bottom) - 1",
+                "shortcut": "• If total in row is N, and person is xth from left, they are (N-x+1)th from right."
+            },
+            {
+                "name": "Matrix Based Puzzles",
+                "theory": "Categorizing items across multiple variables (e.g., Name, Color, City, Occupation).",
+                "example": "Q: 4 friends (A,B,C,D) have 4 cars (Red, Blue, Green, Yellow). A does not have Red. B has Blue. C does not have Green. D has Yellow. What is the color of A's car?\n\nSolution:\nKnown: B=Blue, D=Yellow.\nRemaining colors: Red, Green.\nC does not have Green, so C must have Red.\nThat leaves A with Green.\n\nAnswer: Green",
+                "formula": "Use a grid with 'X' and 'Tick' marks.",
+                "shortcut": "• Fill definitely known values first (Ticks) and eliminate their rows/cols."
+            },
+            {
+                "name": "Number Series (Deductive)",
+                "theory": "Finding the rule in a sequence of numbers (Prime, Square, Difference of Difference, etc.).",
+                "example": "Q: Find next number: 2, 5, 10, 17, 26, ?\n\nSolution:\nDifference 1: 5-2 = 3\nDifference 2: 10-5 = 5\nDifference 3: 17-10 = 7\nDifference 4: 26-17 = 9\nPattern: Sequential odd numbers.\nNext difference = 11.\nNext number = 26 + 11 = 37.\n(Also n² + 1 pattern: 1+1, 4+1, 9+1, 16+1, 25+1, 36+1)\n\nAnswer: 37",
+                "formula": "Check for: Arithmetic, Geometric, Square/Cube, or Combined Series.",
+                "shortcut": "• If terms grow slowly, check differences. If they grow fast, check multiplication or squares."
+            },
+            {
+                "name": "Floor Based Puzzles",
+                "theory": "Assigning people to floors (1 to 8) based on adjacency and specific positioning constraints.",
+                "example": "Q: A lives 2 floors above B. B lives on the 3rd floor. C lives on the floor immediately below A. Which floor is C on?\n\nSolution:\nB is on Floor 3.\nA is 2 floors above B → Floor 5.\nC is immediately below A → Floor 4.\n\nAnswer: floor 4",
+                "formula": "Relative distance = Floor(A) - Floor(B)",
+                "shortcut": "• 'between' x and y means x+1 to y-1."
+            },
+            {
+                "name": "Radar Charts (Web/Spider Graphs)",
+                "theory": "A 2D chart used to compare multiple quantitative variables. Usually shows strengths and weaknesses across categories.",
+                "example": "Q: In a radar chart for 5 skills (Math, Logic, Gk, Eng, CS), a student scores 8, 9, 6, 7, 10 respectively (out of 10). What is the percentage score?\n\nSolution:\nTotal Score = 8+9+6+7+10 = 40\nMax Score = 50\nPercentage = (40/50) × 100 = 80%.\n\nAnswer: 80%",
+                "formula": "Avg Score = Area of polygon / Sum of categories (simplified)",
+                "shortcut": "• The area of the web indicates the overall 'balance' of skills."
+            },
+            {
+                "name": "Case Studies in Profit & Loss",
+                "theory": "Longer passages describing multiple transactions, markups, and final yields.",
+                "example": "Q: A trader buys goods at ₹x. Marks up 50%. Sells half at 10% discount and the rest at cost. Find overall profit.\n\nSolution:\nLet CP = 100. MP = 150.\nPart 1 (50): Sold at 10% off MP = 150 × 0.9 = 135 (for half, so 67.5).\nPart 2 (50): Sold at CP = 50.\nTotal SP = 67.5 + 50 = 117.5.\nNet Profit = 17.5%.\n\nAnswer: 17.5%",
+                "formula": "Net SP = Σ (Qty_i × Price_i)",
+                "shortcut": "• Always assume base 100 for CP unless specified."
+            }
+        ]
+    },
+    {
+        "title": "20. Stocks & Shares",
+        "sections": [
+            {
+                "name": "Basic Terms (FV, MV, Dividend)",
+                "theory": "Stocks represent ownership in a company.\n\n• Face Value (FV): The original value of a share.\n• Market Value (MV): The current price at which it is traded (at par, at premium, or at discount).\n• Dividend: The profit shared by the company with shareholders (calculated on FV).",
+                "example": "Q: Find the dividend on 500 shares of FV ₹10 each if the dividend rate is 12%.\n\nSolution:\nTotal FV = 500 × 10 = ₹5,000.\nDividend = 12% of 5,000 = ₹600.\n\nAnswer: ₹600",
+                "formula": "Dividend = (Div % / 100) × Face Value × Number of shares",
+                "shortcut": "• Always calculate dividend on FV, not MV."
+            },
+            {
+                "name": "Yield & Investment",
+                "theory": "Yield is the actual percentage return on the money invested (calculated on MV).",
+                "example": "Q: A man buys ₹100 shares at ₹125. The company pays 15% dividend. Find his yield percentage.\n\nSolution:\nInvestment = ₹125.\nIncome = 15% of 100 = ₹15.\nYield = (15 / 125) × 100 = 12%.\n\nAnswer: 12%",
+                "formula": "Yield % = (Dividend / Market Value) × 100",
+                "shortcut": "• If MV > FV, Yield < Dividend%."
+            }
+        ]
+    },
+    {
+        "title": "21. Set Theory & Venn Diagrams (3 Circles)",
+        "sections": [
+            {
+                "name": "Three Set Venn Diagrams",
+                "theory": "Analyzing overlapping groups (A, B, C).\n\nn(A∪B∪C) = n(A) + n(B) + n(C) - n(A∩B) - n(B∩C) - n(C∩A) + n(A∩B∩C).",
+                "example": "Q: In a group, 50 speak Eng, 40 speak Hindi, 30 speak French. 15 speak Eng & Hindi, 10 speak Hindi & French, 12 speak Eng & French. 5 speak all three. How many speak at least one?\n\nSolution:\nTotal = 50 + 40 + 30 - (15 + 10 + 12) + 5\nTotal = 120 - 37 + 5 = 88.\n\nAnswer: 88",
+                "formula": "Total = ΣIndividual - ΣPairs + All_Three",
+                "shortcut": "• Use regions (a,b,c,x,y,z,k) in a diagram to solve complex 'Exactly two' or 'Only one' problems."
+            },
+            {
+                "name": "Set Operations (Union, Intersection)",
+                "theory": "Union (OR): All elements in either set.\nIntersection (AND): Only common elements.\nComplement: Elements not in the set.",
+                "example": "Q: Set A = {1,2,3,4}, Set B = {3,4,5,6}. Find A ∩ B.\n\nSolution:\nCommon elements are 3 and 4.\nA ∩ B = {3, 4}.\n\nAnswer: {3, 4}",
+                "formula": "A ∪ B = A + B - (A ∩ B)",
+                "shortcut": "• Intersection is the 'overlapping' part."
+            }
+        ]
+    },
+    {
+        "title": "22. Aptitude Test Strategies",
+        "sections": [
+            {
+                "name": "Time Management",
+                "theory": "In competitive exams, time is the scarcest resource. Managing it effectively is the difference between success and failure.\n\n• The 1-Minute Rule: If you cannot find a logic in 1 minute, move to the next question.\n• Question Selection: Scan all questions first and pick the 'Low Hanging Fruits' (easy one-liners).",
+                "example": "Q: A test has 50 questions and 60 minutes. 10 are easy, 30 are medium, 10 are hard. How should you allocate time?\n\nSolution:\n1. Easy (10): 5 mins (30s each)\n2. Medium (30): 40 mins (1.33m each)\n3. Hard (10): 10 mins (1m each) - only if time permits.\nRemaining 5 mins for revision.\n\nAnswer: Prioritize easy first",
+                "formula": "Time per question = Total Time / Total Questions",
+                "shortcut": "• Use options to eliminate answers (Substitution method) instead of solving."
+            },
+            {
+                "name": "Elimination Techniques",
+                "theory": "Even if you don't know the answer, you can often eliminate 2 out of 4 options based on units, parity (even/odd), or order of magnitude.",
+                "example": "Q: What is 23 × 19?\n(A) 437, (B) 430, (C) 500, (D) 400.\n\nSolution:\nLast digit must be 3 × 9 = 27 (ends in 7).\nOnly (A) ends in 7.\n\nAnswer: (A)",
+                "formula": "Result Unit Digit = (UD of A × UD of B) mod 10",
+                "shortcut": "• Use Digital Sum or Unit Digit for rapid elimination."
+            }
+        ]
+    },
+    {
+        "title": "23. Verbal Reasoning Basics",
+        "sections": [
+            {
+                "name": "Analogy",
+                "theory": "Finding a relationship between two words and applying it to another pair.\n\n• Type 1: Synonym/Antonym\n• Type 2: Worker-Tool\n• Type 3: Cause-Effect",
+                "example": "Q: Architect : Building :: Sculptor : ?\n\nSolution:\nRelation: Architect designs a Building.\nSculptor designs a Statue.\n\nAnswer: Statue",
+                "formula": "A : B :: C : D",
+                "shortcut": "• Define a sentence for the first pair: 'An Architect creates a Building'."
+            },
+            {
+                "name": "Series Completion (Letters)",
+                "theory": "Similar to number series but using the alphabet.",
+                "example": "Q: Next in series: AB, DG, GL, ?\n\nSolution:\n1st letters: A (+3) D (+3) G (+3) J\n2nd letters: B (+5) G (+5) L (+5) Q\nResult: JQ.\n\nAnswer: JQ",
+                "formula": "EJOTY (5, 10, 15, 20, 25)",
+                "shortcut": "• Write the numerical equivalent of letters (A=1, B=2...) to solve easily."
+            }
+        ]
+    },
+    {
+        "title": "24. Advanced Mathematical Concepts",
+        "sections": [
+            {
+                "name": "Derangements",
+                "theory": "A permutation of elements of a set such that no element appears in its original position.\n\nExample: Sending n letters to n addresses so that none reach the correct address.",
+                "example": "Q: In how many ways can 3 letters be put into 3 envelopes such that none are in the correct envelope?\n\nSolution:\nUsing formula D₃ = 3! [ 1 - 1/1! + 1/2! - 1/3! ]\nD₃ = 6 [ 1 - 1 + 0.5 - 0.166 ]\nD₃ = 6 [ 0.333 ] = 2.\n\nAnswer: 2",
+                "formula": "Dₙ = n! [ 1 - 1/1! + 1/2! - 1/3! + ... + (-1)ⁿ/n! ]",
+                "shortcut": "• D₁=0, D₂=1, D₃=2, D₄=9, D₅=44 (Memorize these)."
+            },
+            {
+                "name": "Geometric Probability",
+                "theory": "Probability based on measure (length, area, or volume) of regions.",
+                "example": "Q: A point is chosen at random inside a square of side 2. What is the probability that it lies inside an inscribed circle?\n\nSolution:\nArea of Square = 4.\nArea of Circle = π(1)² = π.\nP = Area(Circle) / Area(Square) = π/4 ≈ 0.785.\n\nAnswer: π/4",
+                "formula": "P = Measure(Success) / Measure(Sample Space)",
+                "shortcut": "• For a circle in a square, P is always π/4."
+            }
+        ]
+    },
+    {
+        "title": "25. Quick Reference Tables",
+        "sections": [
+            {
+                "name": "Squares & Cubes (1-30)",
+                "theory": "Memorizing these values is the single best way to save time in aptitude tests.\n\nSquares:\n1²=1, 2²=4, 3²=9, 4²=16, 5²=25, 6²=36, 7²=49, 8²=64, 9²=81, 10²=100\n11²=121, 12²=144, 13²=169, 14²=196, 15²=225, 16²=256, 17²=289, 18²=324, 19²=361, 20²=400\n21²=441, 22²=484, 23²=529, 24²=576, 25²=625, 26²=676, 27²=729, 28²=784, 29²=841, 30²=900\n\nCubes:\n1³=1, 2³=8, 3³=27, 4³=64, 5³=125, 6³=216, 7³=343, 8³=512, 9³=729, 10³=1000\n11³=1331, 12³=1728, 13³=2197, 14³=2744, 15³=3375, 16³=4096, 17³=4913, 18³=5832, 19³=6859, 20³=8000",
+                "example": "Q: Solve: √576 + ∛729.\n\nSolution:\n√576 = 24\n∛729 = 9\nSum = 24 + 9 = 33.\n\nAnswer: 33",
+                "formula": "Memorization is the key.",
+                "shortcut": "• Squares of 21-29 are related to 11-19 (e.g., 21²=441, 11²=121; 29²=841, 19²=361)."
+            },
+            {
+                "name": "Fraction to Decimal (Advanced)",
+                "theory": "Useful for percentage and DI problems.\n\n1/7 ≈ 0.1428\n1/13 ≈ 0.0769\n1/17 ≈ 0.0588\n1/19 ≈ 0.0526\n3/8 = 0.375\n5/8 = 0.625\n7/8 = 0.875",
+                "example": "Q: What is 87.5% of 64?\n\nSolution:\n87.5% = 7/8\n(7/8) × 64 = 7 × 8 = 56.\n\nAnswer: 56",
+                "formula": "Value = Fraction × Number",
+                "shortcut": "• 1/2ⁿ fractions are easy to calculate by repeated halving."
+            }
+        ]
+    }
+]

@@ -1,129 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Brain } from 'lucide-react';
+import { ArrowLeft, Brain, Search, BookOpen, Lightbulb, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import aptitudeData from '../data/aptitudeTopics.json';
 
 const ReasoningTheory = () => {
-    const topics = [
-        {
-            title: "Verbal Reasoning",
-            sections: [
-                {
-                    name: "Analogies",
-                    theory: "Finding relationships between pairs of words. Common types: Synonym, Antonym, Part-Whole, Category, Function.",
-                    example: "Book : Author :: Painting : Artist\n(Relationship: Created by)\n\nWheel : Car :: Wing : Airplane\n(Relationship: Part of)",
-                    formula: "A : B :: C : D\nFind the relationship between A and B, then apply to C to find D"
-                },
-                {
-                    name: "Syllogism",
-                    theory: "Drawing conclusions from given statements using logical deduction. Use Venn diagrams for clarity.",
-                    example: "All cats are animals.\nSome animals are pets.\nConclusion: Some cats MAY be pets (not definite).\n\nAll students are hardworking.\nRam is a student.\nConclusion: Ram is hardworking (definite).",
-                    formula: "All A are B + All B are C → All A are C\nSome A are B + All B are C → Some A are C"
-                }
-            ]
-        },
-        {
-            title: "Series & Sequences",
-            sections: [
-                {
-                    name: "Number Series",
-                    theory: "Find the pattern in numbers. Common patterns: +n, ×n, squares, cubes, alternating operations.",
-                    example: "2, 4, 8, 16, 32, __?\nPattern: ×2 (each term doubles)\nAnswer: 64\n\n1, 4, 9, 16, 25, __?\nPattern: n² (perfect squares)\nAnswer: 36",
-                    formula: "Arithmetic: a, a+d, a+2d, ...\nGeometric: a, ar, ar², ...\nSquares: 1², 2², 3², 4², ..."
-                },
-                {
-                    name: "Letter Series",
-                    theory: "Find alphabet patterns. Common: +n positions, alternating, skipping letters.",
-                    example: "A, C, E, G, I, __?\nPattern: +2 positions\nAnswer: K\n\nABC, DEF, GHI, __?\nPattern: Groups of 3\nAnswer: JKL",
-                    formula: "Track: Position changes, gaps, alternating patterns"
-                }
-            ]
-        },
-        {
-            title: "Coding-Decoding",
-            sections: [
-                {
-                    name: "Letter Shifting",
-                    theory: "Letters are shifted forward/backward in alphabet by fixed positions.",
-                    example: "If CAT = DBU, what is DOG?\nPattern: Each letter +1 position\nD→E, O→P, G→H\nAnswer: EPH",
-                    formula: "Find shift value (forward/backward)\nApply same shift to decode"
-                },
-                {
-                    name: "Number Coding",
-                    theory: "Each letter assigned a number based on position or pattern.",
-                    example: "If A=1, B=2, C=3...\nCAT = 3 + 1 + 20 = 24\nDOG = 4 + 15 + 7 = 26",
-                    formula: "A=1, B=2, C=3, ..., Z=26\nOr reverse: A=26, B=25, ..."
-                }
-            ]
-        },
-        {
-            title: "Blood Relations",
-            sections: [
-                {
-                    name: "Basic Relations",
-                    theory: "Mother/Father: Parents\nSon/Daughter: Children\nBrother/Sister: Siblings\nUncle/Aunt: Parents' siblings\nNephew/Niece: Siblings' children",
-                    example: "A is B's father. B is C's sister.\nWhat is A to C?\nAnswer: Father (B and C are siblings, A is their father)",
-                    formula: "Draw family tree\nMark generations\nTrace relationships"
-                },
-                {
-                    name: "Complex Relations",
-                    theory: "Mother's/Father's side: Maternal/Paternal\nIn-laws: Spouse's family",
-                    example: "A's mother's brother's son = A's maternal cousin\nA's father's sister = A's paternal aunt",
-                    formula: "Maternal = Mother's side\nPaternal = Father's side\nIn-law = Through marriage"
-                }
-            ]
-        }
-    ];
+    const [expandedTopic, setExpandedTopic] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filter for reasoning-specific topics from the shared JSON
+    const reasoningTopics = aptitudeData.filter(topic =>
+        topic.title.toLowerCase().includes('reasoning') ||
+        topic.title.toLowerCase().includes('puzzles') ||
+        topic.title.toLowerCase().includes('clocks') ||
+        topic.title.toLowerCase().includes('logical')
+    );
+
+    const filteredTopics = reasoningTopics.filter(topic =>
+        topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        topic.sections.some(s =>
+            s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            s.theory.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-6xl mx-auto p-8">
-                <div className="flex items-center justify-between mb-8">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+            <div className="max-w-6xl mx-auto p-4 md:p-8">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                     <div>
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">Reasoning - Theory & Concepts</h1>
-                        <p className="text-gray-600">Master logical and verbal reasoning with clear examples</p>
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                            <Brain className="h-8 w-8 text-green-600" />
+                            Reasoning - Complete Theory
+                        </h1>
+                        <p className="text-gray-600">Logical Deduction • Verbal Reasoning • Puzzles • Patterns</p>
                     </div>
-                    <Link to="/knowledge-base" className="flex items-center text-blue-600 hover:underline">
+                    <Link to="/knowledge-base" className="flex items-center text-green-600 hover:underline font-medium">
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Knowledge Base
+                        Back
                     </Link>
                 </div>
 
-                <div className="space-y-8">
-                    {topics.map((topic, idx) => (
-                        <div key={idx} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                            <div className="bg-gradient-to-r from-green-600 to-teal-600 p-6">
-                                <div className="flex items-center">
-                                    <Brain className="h-8 w-8 text-white mr-3" />
-                                    <h2 className="text-2xl font-bold text-white">{topic.title}</h2>
-                                </div>
-                            </div>
+                {/* Search */}
+                <div className="mb-6 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search reasoning concepts, blood relations, puzzles..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm"
+                    />
+                </div>
 
-                            <div className="p-6 space-y-6">
-                                {topic.sections.map((section, sIdx) => (
-                                    <div key={sIdx} className="border-l-4 border-teal-500 pl-6">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3">{section.name}</h3>
-
-                                        <div className="mb-4">
-                                            <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Theory</h4>
-                                            <p className="text-gray-700 whitespace-pre-line">{section.theory}</p>
-                                        </div>
-
-                                        <div className="mb-4 bg-green-50 p-4 rounded-lg">
-                                            <h4 className="text-sm font-semibold text-green-700 uppercase mb-2">Examples</h4>
-                                            <pre className="text-gray-800 whitespace-pre-wrap font-mono text-sm">{section.example}</pre>
-                                        </div>
-
-                                        {section.formula && (
-                                            <div className="bg-blue-50 p-4 rounded-lg">
-                                                <h4 className="text-sm font-semibold text-blue-700 uppercase mb-2">Key Points / Approach</h4>
-                                                <pre className="text-blue-900 font-mono text-sm whitespace-pre-wrap">{section.formula}</pre>
-                                            </div>
-                                        )}
+                {/* Topics */}
+                <div className="space-y-6">
+                    {filteredTopics.length > 0 ? (
+                        filteredTopics.map((topic, idx) => (
+                            <div key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
+                                <button
+                                    onClick={() => setExpandedTopic(expandedTopic === idx ? null : idx)}
+                                    className="w-full bg-gradient-to-r from-green-600 to-teal-600 p-5 flex items-center justify-between text-left"
+                                >
+                                    <div className="flex items-center">
+                                        <Brain className="h-7 w-7 text-white mr-3 opacity-90" />
+                                        <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">{topic.title}</h2>
+                                        <span className="ml-3 px-2 py-0.5 bg-white/20 rounded-full text-white text-xs font-semibold">
+                                            {topic.sections.length} categories
+                                        </span>
                                     </div>
-                                ))}
+                                    {expandedTopic === idx ? (
+                                        <ChevronUp className="h-6 w-6 text-white opacity-80" />
+                                    ) : (
+                                        <ChevronDown className="h-6 w-6 text-white opacity-80" />
+                                    )}
+                                </button>
+
+                                {(expandedTopic === idx || searchTerm) && (
+                                    <div className="p-6 space-y-10">
+                                        {topic.sections.map((section, sIdx) => (
+                                            <div key={sIdx} className="relative pl-8 border-l-4 border-green-500">
+                                                <div className="absolute -left-[1.35rem] top-0 w-8 h-8 bg-green-100 border-2 border-white shadow-sm rounded-full flex items-center justify-center text-green-700 font-bold text-sm">
+                                                    {sIdx + 1}
+                                                </div>
+
+                                                <h3 className="text-xl font-bold text-gray-900 mb-5">{section.name}</h3>
+
+                                                <div className="grid lg:grid-cols-2 gap-6">
+                                                    <div className="space-y-6">
+                                                        <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Concept</h4>
+                                                            <p className="text-gray-700 whitespace-pre-line text-sm lg:text-base">
+                                                                {section.theory}
+                                                            </p>
+                                                        </div>
+                                                        {section.formula && (
+                                                            <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-blue-500">
+                                                                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-2 text-blue-600">Approach / Logic</h4>
+                                                                <pre className="text-blue-900 font-mono text-sm whitespace-pre-wrap font-semibold">
+                                                                    {section.formula}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="space-y-6">
+                                                        <div className="bg-emerald-50 p-5 rounded-xl border-l-4 border-emerald-500">
+                                                            <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Detailed Example</h4>
+                                                            <pre className="text-gray-800 whitespace-pre-wrap font-mono text-sm">
+                                                                {section.example}
+                                                            </pre>
+                                                        </div>
+                                                        {section.shortcut && (
+                                                            <div className="bg-amber-50 p-5 rounded-xl border-l-4 border-amber-400">
+                                                                <h4 className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">Pro Tip</h4>
+                                                                <pre className="text-amber-900 whitespace-pre-wrap text-sm font-medium">
+                                                                    {section.shortcut}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
+                        ))
+                    ) : (
+                        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+                            <Brain className="h-16 w-16 text-gray-200 mx-auto mb-4" />
+                            <p className="text-gray-500 font-medium">No reasoning topics found. Check back later!</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
         </div>

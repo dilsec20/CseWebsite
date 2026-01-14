@@ -2,62 +2,108 @@ const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
 
+// Helper to check if type column exists
+let typeColumnExists = null;
+const checkTypeColumn = async () => {
+    if (typeColumnExists !== null) return typeColumnExists;
+    try {
+        await pool.query("SELECT type FROM blogs LIMIT 1");
+        typeColumnExists = true;
+    } catch (err) {
+        typeColumnExists = false;
+    }
+    return typeColumnExists;
+};
+
 // ============================================
 // IMPORTANT: Specific routes MUST come BEFORE wildcard /:id routes!
 // ============================================
 
-// GET /api/blogs/recent - Get recent blogs (type = 'blog' only)
+// GET /api/blogs/recent - Get recent blogs (type = 'blog' only, or all if no type column)
 router.get("/recent", async (req, res) => {
     try {
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name, u.user_id as author_id 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.type = 'blog'
-             ORDER BY b.created_at DESC
-             LIMIT 20`
-        );
+        const hasType = await checkTypeColumn();
+        let query;
+
+        if (hasType) {
+            query = `SELECT b.*, u.username as author_name, u.user_id as author_id 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.type = 'blog'
+                     ORDER BY b.created_at DESC
+                     LIMIT 20`;
+        } else {
+            // No type column yet - return all for /blog page
+            query = `SELECT b.*, u.username as author_name, u.user_id as author_id 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     ORDER BY b.created_at DESC
+                     LIMIT 20`;
+        }
+
+        const blogs = await pool.query(query);
         res.json(blogs.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("blogs/recent error:", err.message);
         res.status(500).json({ error: "Server error" });
     }
 });
 
-// GET /api/blogs/discussions - Get discussions (type = 'discussion' or NULL for existing posts)
+// GET /api/blogs/discussions - Get discussions
 router.get("/discussions", async (req, res) => {
     try {
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name, u.user_id as author_id 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.type = 'discussion' OR b.type IS NULL
-             ORDER BY b.created_at DESC
-             LIMIT 10`
-        );
+        const hasType = await checkTypeColumn();
+        let query;
+
+        if (hasType) {
+            query = `SELECT b.*, u.username as author_name, u.user_id as author_id 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.type = 'discussion' OR b.type IS NULL
+                     ORDER BY b.created_at DESC
+                     LIMIT 10`;
+        } else {
+            // No type column - return all posts as discussions
+            query = `SELECT b.*, u.username as author_name, u.user_id as author_id 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     ORDER BY b.created_at DESC
+                     LIMIT 10`;
+        }
+
+        const blogs = await pool.query(query);
         res.json(blogs.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("blogs/discussions error:", err.message);
         res.status(500).json({ error: "Server error" });
     }
 });
 
 // GET /api/blogs/user/my-posts - Get all DISCUSSIONS by current user
-// MUST be before /:id route!
 router.get("/user/my-posts", authorization, async (req, res) => {
     try {
         const user_id = req.user;
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.user_id = $1 AND (b.type = 'discussion' OR b.type IS NULL)
-             ORDER BY b.created_at DESC`,
-            [user_id]
-        );
+        const hasType = await checkTypeColumn();
+        let query;
+
+        if (hasType) {
+            query = `SELECT b.*, u.username as author_name 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.user_id = $1 AND (b.type = 'discussion' OR b.type IS NULL)
+                     ORDER BY b.created_at DESC`;
+        } else {
+            query = `SELECT b.*, u.username as author_name 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.user_id = $1
+                     ORDER BY b.created_at DESC`;
+        }
+
+        const blogs = await pool.query(query, [user_id]);
         res.json(blogs.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("user/my-posts error:", err.message);
         res.status(500).json({ error: "Server error" });
     }
 });
@@ -66,17 +112,28 @@ router.get("/user/my-posts", authorization, async (req, res) => {
 router.get("/user/my-blogs", authorization, async (req, res) => {
     try {
         const user_id = req.user;
-        const blogs = await pool.query(
-            `SELECT b.*, u.username as author_name 
-             FROM blogs b
-             JOIN users u ON b.user_id = u.user_id
-             WHERE b.user_id = $1 AND b.type = 'blog'
-             ORDER BY b.created_at DESC`,
-            [user_id]
-        );
+        const hasType = await checkTypeColumn();
+        let query;
+
+        if (hasType) {
+            query = `SELECT b.*, u.username as author_name 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.user_id = $1 AND b.type = 'blog'
+                     ORDER BY b.created_at DESC`;
+        } else {
+            // No type column - return empty (no blogs created yet)
+            query = `SELECT b.*, u.username as author_name 
+                     FROM blogs b
+                     JOIN users u ON b.user_id = u.user_id
+                     WHERE b.user_id = $1 AND 1=0
+                     ORDER BY b.created_at DESC`;
+        }
+
+        const blogs = await pool.query(query, [user_id]);
         res.json(blogs.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("user/my-blogs error:", err.message);
         res.status(500).json({ error: "Server error" });
     }
 });
@@ -131,27 +188,27 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// POST /api/blogs - Create new blog (type from request body, default 'discussion')
+// POST /api/blogs - Create new blog
 router.post("/", authorization, async (req, res) => {
     try {
         const { title, content, type = 'discussion' } = req.body;
         const user_id = req.user;
+        const hasType = await checkTypeColumn();
 
-        // Check if type column exists, if not just insert without it
-        try {
-            const newBlog = await pool.query(
+        let newBlog;
+        if (hasType) {
+            newBlog = await pool.query(
                 "INSERT INTO blogs (user_id, title, content, type) VALUES ($1, $2, $3, $4) RETURNING *",
                 [user_id, title, content, type]
             );
-            res.json(newBlog.rows[0]);
-        } catch (typeErr) {
-            // Fallback if type column doesn't exist yet
-            const newBlog = await pool.query(
+        } else {
+            newBlog = await pool.query(
                 "INSERT INTO blogs (user_id, title, content) VALUES ($1, $2, $3) RETURNING *",
                 [user_id, title, content]
             );
-            res.json(newBlog.rows[0]);
         }
+
+        res.json(newBlog.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: "Server error" });

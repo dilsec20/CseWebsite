@@ -1,26 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { BookOpen, Eye, ThumbsUp, Calendar, User, ArrowRight, PenTool } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BookOpen, Eye, ThumbsUp, Calendar, User, ArrowRight, PenTool, X, Image } from 'lucide-react';
 import { API_URL } from '../config';
+import { toast } from 'react-toastify';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showEditor, setShowEditor] = useState(false);
+    const navigate = useNavigate();
+
+    const isAuthenticated = !!localStorage.getItem('token');
+
+    const fetchBlogs = async () => {
+        try {
+            const res = await fetch(`${API_URL}/blogs/recent`);
+            const data = await res.json();
+            setBlogs(data);
+        } catch (err) {
+            console.error("Failed to fetch blogs:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const res = await fetch(`${API_URL}/blogs/recent`);
-                const data = await res.json();
-                setBlogs(data);
-            } catch (err) {
-                console.error("Failed to fetch blogs:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchBlogs();
     }, []);
+
+    const handleWriteClick = () => {
+        if (!isAuthenticated) {
+            toast.info("Please login to write a blog");
+            navigate('/login');
+            return;
+        }
+        setShowEditor(true);
+    };
+
+    const handleSave = async (title, content) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`${API_URL}/blogs`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "token": token
+                },
+                body: JSON.stringify({ title, content })
+            });
+
+            if (response.ok) {
+                toast.success("Blog published!");
+                setShowEditor(false);
+                fetchBlogs(); // Refresh the list
+            } else {
+                const data = await response.json();
+                toast.error(data.error || "Failed to publish blog");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Error publishing blog");
+        }
+    };
 
     // Helper to create excerpt from content
     const createExcerpt = (content, maxLength = 150) => {
@@ -58,13 +101,13 @@ const Blog = () => {
                                 Learn DSA, master algorithms, and ace your coding interviews.
                             </p>
                         </div>
-                        <Link
-                            to="/my-blogs"
+                        <button
+                            onClick={handleWriteClick}
                             className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition shadow-lg"
                         >
                             <PenTool className="h-4 w-4" />
                             Write a Blog
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -90,13 +133,13 @@ const Blog = () => {
                                 <BookOpen className="h-16 w-16 text-slate-300 mx-auto mb-4" />
                                 <h3 className="text-xl font-semibold text-slate-700 mb-2">No blogs yet</h3>
                                 <p className="text-slate-500 mb-6">Be the first to share your knowledge with the community!</p>
-                                <Link
-                                    to="/my-blogs"
+                                <button
+                                    onClick={handleWriteClick}
                                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
                                 >
                                     <PenTool className="h-4 w-4" />
                                     Write a Blog
-                                </Link>
+                                </button>
                             </div>
                         ) : (
                             blogs.map(blog => (
@@ -198,7 +241,180 @@ const Blog = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Blog Editor Modal */}
+            {showEditor && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-xl animate-in fade-in zoom-in duration-200">
+                        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                            <h3 className="font-bold text-lg">Write a New Blog</h3>
+                            <button onClick={() => setShowEditor(false)} className="p-2 hover:bg-gray-200 rounded-full transition">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+                        <BlogEditor
+                            onSubmit={handleSave}
+                            onCancel={() => setShowEditor(false)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
+    );
+};
+
+// Blog Editor Component
+const BlogEditor = ({ onSubmit, onCancel }) => {
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const quillRef = React.useRef(null);
+
+    // Custom image handler for Cloudinary upload
+    const imageHandler = React.useCallback(() => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image must be less than 5MB");
+                return;
+            }
+
+            setUploading(true);
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_URL}/upload/image`, {
+                    method: 'POST',
+                    headers: { token },
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (data.success && data.url) {
+                    const quill = quillRef.current?.getEditor();
+                    if (quill) {
+                        const range = quill.getSelection(true);
+                        quill.insertEmbed(range.index, 'image', data.url);
+                        quill.setSelection(range.index + 1);
+                    }
+                    toast.success("Image uploaded!");
+                } else {
+                    toast.error(data.error || "Failed to upload image");
+                }
+            } catch (err) {
+                console.error("Upload error:", err);
+                toast.error("Failed to upload image");
+            } finally {
+                setUploading(false);
+            }
+        };
+    }, []);
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                ['blockquote', 'code-block'],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: {
+                image: imageHandler
+            }
+        }
+    }), [imageHandler]);
+
+    const formats = [
+        'header', 'bold', 'italic', 'underline', 'strike',
+        'color', 'background',
+        'list', 'bullet', 'indent',
+        'blockquote', 'code-block',
+        'link', 'image'
+    ];
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!title.trim() || !content.trim()) {
+            toast.warning("Please fill in both title and content");
+            return;
+        }
+        onSubmit(title, content);
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col h-[calc(90vh-80px)]">
+            <div className="p-6 space-y-4 flex-1 overflow-y-auto">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-medium"
+                        placeholder="Enter a compelling title..."
+                        autoFocus
+                    />
+                </div>
+                <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Content
+                        <span className="text-gray-400 font-normal ml-2">(Use toolbar to add images, format text)</span>
+                    </label>
+                    <div className="border border-gray-200 rounded-xl overflow-hidden relative">
+                        {uploading && (
+                            <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
+                                <div className="flex items-center gap-2 text-blue-600">
+                                    <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                                    Uploading image...
+                                </div>
+                            </div>
+                        )}
+                        <ReactQuill
+                            ref={quillRef}
+                            theme="snow"
+                            value={content}
+                            onChange={setContent}
+                            modules={modules}
+                            formats={formats}
+                            placeholder="Write your blog post here... Click the image icon to upload images"
+                            className="h-80"
+                        />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                        <Image className="h-3 w-3" />
+                        Click the image icon in toolbar to upload images directly (max 5MB)
+                    </p>
+                </div>
+            </div>
+            <div className="p-4 border-t bg-gray-50 flex justify-end gap-3">
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="px-5 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition shadow-sm"
+                >
+                    Publish Blog
+                </button>
+            </div>
+        </form>
     );
 };
 

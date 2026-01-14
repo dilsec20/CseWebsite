@@ -1,11 +1,9 @@
-// MyBlogs.jsx
-import React, { useEffect, useState, useMemo } from 'react';
+// MyBlogs.jsx - Your Discussion Posts (Simple text, no rich editor)
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Code, BookOpen, Trophy, LogOut, Edit2, Trash2, Plus, MessageSquare, X, Image } from 'lucide-react';
+import { LayoutDashboard, Code, BookOpen, Trophy, LogOut, Edit2, Trash2, Plus, MessageSquare, X } from 'lucide-react';
 import { API_URL } from '../config';
 import { toast } from 'react-toastify';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 const MyBlogs = ({ setAuth }) => {
     const [blogs, setBlogs] = useState([]);
@@ -14,7 +12,7 @@ const MyBlogs = ({ setAuth }) => {
     const [editingBlog, setEditingBlog] = useState(null);
     const navigate = useNavigate();
 
-    // Fetch user's blogs
+    // Fetch user's discussion posts
     const fetchMyBlogs = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -111,6 +109,12 @@ const MyBlogs = ({ setAuth }) => {
         toast.success("Logged out successfully");
     };
 
+    // Strip HTML tags for preview
+    const stripHtml = (html) => {
+        if (!html) return '';
+        return html.replace(/<[^>]+>/g, '');
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
@@ -128,8 +132,8 @@ const MyBlogs = ({ setAuth }) => {
                     <Link to="/problems" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
                         <Code className="h-5 w-5" /> Problems
                     </Link>
-                    <Link to="/blog" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
-                        <BookOpen className="h-5 w-5" /> Blog
+                    <Link to="/knowledge-base" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
+                        <BookOpen className="h-5 w-5" /> Knowledge Base
                     </Link>
                     <Link to="/contests" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium transition">
                         <Trophy className="h-5 w-5" /> Contests
@@ -154,13 +158,13 @@ const MyBlogs = ({ setAuth }) => {
                 <header className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900">Your Posts</h1>
-                        <p className="text-gray-500 mt-1">Write professional blogs with images and formatting.</p>
+                        <p className="text-gray-500 mt-1">Manage your discussions and quick posts.</p>
                     </div>
                     <button
                         onClick={() => { setEditingBlog(null); setShowEditor(true); }}
                         className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium"
                     >
-                        <Plus className="h-5 w-5" /> Create New
+                        <Plus className="h-5 w-5" /> New Discussion
                     </button>
                 </header>
 
@@ -174,7 +178,7 @@ const MyBlogs = ({ setAuth }) => {
                             </div>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">No posts yet</h3>
-                        <p className="text-gray-500 mt-1 mb-6">Start a discussion or write an article to share with others.</p>
+                        <p className="text-gray-500 mt-1 mb-6">Start a discussion to share your thoughts!</p>
                         <button
                             onClick={() => { setEditingBlog(null); setShowEditor(true); }}
                             className="text-blue-600 font-medium hover:text-blue-700 hover:underline"
@@ -187,9 +191,7 @@ const MyBlogs = ({ setAuth }) => {
                         {blogs.map(blog => (
                             <div key={blog.blog_id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
                                 <div className="flex justify-between items-start">
-                                    <Link to={`/blog/${blog.blog_id}`} className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition">
-                                        {blog.title}
-                                    </Link>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{blog.title}</h3>
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => handleEditStart(blog)}
@@ -207,10 +209,7 @@ const MyBlogs = ({ setAuth }) => {
                                         </button>
                                     </div>
                                 </div>
-                                <div
-                                    className="text-gray-600 line-clamp-3 mb-4 prose prose-sm max-w-none"
-                                    dangerouslySetInnerHTML={{ __html: blog.content }}
-                                />
+                                <p className="text-gray-600 line-clamp-3 mb-4">{stripHtml(blog.content)}</p>
                                 <div className="text-sm text-gray-400">
                                     Posted on {new Date(blog.created_at).toLocaleDateString()}
                                 </div>
@@ -220,17 +219,17 @@ const MyBlogs = ({ setAuth }) => {
                 )}
             </main>
 
-            {/* Editor Modal */}
+            {/* Simple Editor Modal */}
             {showEditor && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-xl animate-in fade-in zoom-in duration-200">
-                        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
-                            <h3 className="font-bold text-lg">{editingBlog ? 'Edit Post' : 'Create New Post'}</h3>
-                            <button onClick={() => setShowEditor(false)} className="p-2 hover:bg-gray-200 rounded-full transition">
+                    <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl animate-in fade-in zoom-in duration-200">
+                        <div className="p-4 border-b flex justify-between items-center">
+                            <h3 className="font-bold text-lg">{editingBlog ? 'Edit Discussion' : 'New Discussion'}</h3>
+                            <button onClick={() => setShowEditor(false)} className="p-1 hover:bg-gray-100 rounded-full transition">
                                 <X className="h-5 w-5" />
                             </button>
                         </div>
-                        <BlogsForm
+                        <SimpleEditor
                             initialData={editingBlog}
                             onSubmit={handleSave}
                             onCancel={() => setShowEditor(false)}
@@ -242,89 +241,10 @@ const MyBlogs = ({ setAuth }) => {
     );
 };
 
-const BlogsForm = ({ initialData, onSubmit, onCancel }) => {
+// Simple text-based editor (no rich text)
+const SimpleEditor = ({ initialData, onSubmit, onCancel }) => {
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
-    const [uploading, setUploading] = useState(false);
-    const quillRef = React.useRef(null);
-
-    // Custom image handler for Cloudinary upload
-    const imageHandler = React.useCallback(() => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (!file) return;
-
-            // Validate file size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error("Image must be less than 5MB");
-                return;
-            }
-
-            setUploading(true);
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_URL}/upload/image`, {
-                    method: 'POST',
-                    headers: { token },
-                    body: formData
-                });
-
-                const data = await res.json();
-
-                if (data.success && data.url) {
-                    const quill = quillRef.current?.getEditor();
-                    if (quill) {
-                        const range = quill.getSelection(true);
-                        quill.insertEmbed(range.index, 'image', data.url);
-                        quill.setSelection(range.index + 1);
-                    }
-                    toast.success("Image uploaded!");
-                } else {
-                    toast.error(data.error || "Failed to upload image");
-                }
-            } catch (err) {
-                console.error("Upload error:", err);
-                toast.error("Failed to upload image");
-            } finally {
-                setUploading(false);
-            }
-        };
-    }, []);
-
-    // Quill modules configuration with custom image handler
-    const modules = useMemo(() => ({
-        toolbar: {
-            container: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                ['blockquote', 'code-block'],
-                ['link', 'image'],
-                ['clean']
-            ],
-            handlers: {
-                image: imageHandler
-            }
-        }
-    }), [imageHandler]);
-
-    const formats = [
-        'header', 'bold', 'italic', 'underline', 'strike',
-        'color', 'background',
-        'list', 'bullet', 'indent',
-        'blockquote', 'code-block',
-        'link', 'image'
-    ];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -336,62 +256,32 @@ const BlogsForm = ({ initialData, onSubmit, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col h-[calc(90vh-80px)]">
-            <div className="p-6 space-y-4 flex-1 overflow-y-auto">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                    <input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-medium"
-                        placeholder="Enter a compelling title..."
-                        autoFocus
-                    />
-                </div>
-                <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Content
-                        <span className="text-gray-400 font-normal ml-2">(Use toolbar to add images, format text)</span>
-                    </label>
-                    <div className="border border-gray-200 rounded-xl overflow-hidden relative">
-                        {uploading && (
-                            <div className="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
-                                <div className="flex items-center gap-2 text-blue-600">
-                                    <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-                                    Uploading image...
-                                </div>
-                            </div>
-                        )}
-                        <ReactQuill
-                            ref={quillRef}
-                            theme="snow"
-                            value={content}
-                            onChange={setContent}
-                            modules={modules}
-                            formats={formats}
-                            placeholder="Write your blog post here... Click the image icon to upload images"
-                            className="h-80"
-                        />
-                    </div>
-                    <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-                        <Image className="h-3 w-3" />
-                        Click the image icon in toolbar to upload images directly (max 5MB)
-                    </p>
-                </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="What's on your mind?"
+                    autoFocus
+                />
             </div>
-            <div className="p-4 border-t bg-gray-50 flex justify-end gap-3">
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    className="px-5 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition"
-                >
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-40 resize-none"
+                    placeholder="Share your thoughts, ask a question, or explain something..."
+                />
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+                <button type="button" onClick={onCancel} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                     Cancel
                 </button>
-                <button
-                    type="submit"
-                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition shadow-sm"
-                >
-                    {initialData ? 'Update Post' : 'Publish Post'}
+                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+                    {initialData ? 'Update' : 'Post'}
                 </button>
             </div>
         </form>
@@ -399,4 +289,3 @@ const BlogsForm = ({ initialData, onSubmit, onCancel }) => {
 };
 
 export default MyBlogs;
-

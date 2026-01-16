@@ -34,6 +34,12 @@ import CPSheet from './pages/CPSheet';
 import MyBlogs from './pages/MyBlogs';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import VisAlgo from './pages/VisAlgo';
+import SortingVisualizer from './pages/VisAlgo/SortingVisualizer';
+import BinarySearchVisualizer from './pages/VisAlgo/BinarySearchVisualizer';
+import GraphVisualizer from './pages/VisAlgo/GraphVisualizer';
+import BSTVisualizer from './pages/VisAlgo/BSTVisualizer';
+import DPVisualizer from './pages/VisAlgo/DPVisualizer';
 import CourseBrowser from './pages/Courses/CourseBrowser';
 import CourseDetails from './pages/Courses/CourseDetails';
 import MyCourses from './pages/Courses/MyCourses';
@@ -126,6 +132,9 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
           <div className="hidden md:flex items-center gap-6">
             <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Dashboard
+            </Link>
+            <Link to="/visalgo" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              VisAlgo
             </Link>
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
@@ -279,6 +288,12 @@ function App() {
             <Route path="/my-blogs" element={isAuthenticated ? <MyBlogs setAuth={setAuth} /> : <Navigate to="/login" />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/visalgo" element={<VisAlgo />} />
+            <Route path="/visalgo/sorting" element={<SortingVisualizer />} />
+            <Route path="/visalgo/binary-search" element={<BinarySearchVisualizer />} />
+            <Route path="/visalgo/graph" element={<GraphVisualizer />} />
+            <Route path="/visalgo/bst" element={<BSTVisualizer />} />
+            <Route path="/visalgo/dp" element={<DPVisualizer />} />
 
             {/* Course Routes */}
             <Route path="/courses" element={isAuthenticated ? <CourseBrowser setAuth={setAuth} /> : <Navigate to="/login" />} />

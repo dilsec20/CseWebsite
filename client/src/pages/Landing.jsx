@@ -163,10 +163,10 @@ const Landing = ({ setAuth }) => {
 
             {/* Footer */}
             <footer className="bg-gray-900 border-t border-gray-800 text-gray-400 py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-center md:text-left">
                         {/* About Us */}
-                        <div>
+                        <div className="flex flex-col items-center md:items-start">
                             <div className="flex items-center space-x-2 text-white mb-6">
                                 <Code className="h-6 w-6" />
                                 <span className="text-xl font-bold tracking-tight">AceCoder</span>
@@ -180,7 +180,7 @@ const Landing = ({ setAuth }) => {
                         </div>
 
                         {/* Contact Us */}
-                        <div>
+                        <div className="flex flex-col items-center md:items-start">
                             <h3 className="text-lg font-bold text-white mb-6">Contact Us</h3>
                             <div className="space-y-4">
                                 <div className="flex items-start space-x-3">

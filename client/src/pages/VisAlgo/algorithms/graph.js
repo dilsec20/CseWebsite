@@ -75,6 +75,14 @@ export const bfs = (graph, startNode, targetNode) => {
             visited: [...visited],
             description: `BFS Complete. Path to ${targetNode} found.`,
             path: finalPath,
+            result: finalPath, // Result is the path
+            line: 10
+        });
+    } else {
+        steps.push({
+            visited: [...visited],
+            description: `BFS Complete. All reachable nodes visited.`,
+            result: traversalOrder, // Result is traversal order
             line: 10
         });
     }
@@ -128,6 +136,14 @@ export const dfs = (graph, startNode, targetNode) => {
             visited: [...visited],
             description: `DFS Complete. Path to ${targetNode} found.`,
             path: finalPath,
+            result: finalPath,
+            line: 10
+        });
+    } else {
+        steps.push({
+            visited: [...visited],
+            description: `DFS Complete. All reachable nodes visited.`,
+            result: traversalOrder,
             line: 10
         });
     }

@@ -160,6 +160,88 @@ const GraphVisualizer = () => {
         setCurrentPath([]);
     };
 
+    const generateSummary = (algo, stats) => {
+        const { visitedCount, pathLength, pathSequence } = stats;
+        const pathStr = pathSequence && pathSequence.length > 0 ? pathSequence.join(" → ") : "No path found";
+
+        switch (algo) {
+            case 'bfs':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>BFS explored {visitedCount} nodes level-by-level.</p>
+                        <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                            <strong>Path/Order:</strong> {pathStr}
+                        </div>
+                    </div>
+                );
+            case 'dfs':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>DFS explored {visitedCount} nodes depth-first.</p>
+                        <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                            <strong>Path/Order:</strong> {pathStr}
+                        </div>
+                    </div>
+                );
+            case 'dijkstra':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>Dijkstra visited {visitedCount} nodes finding shortest paths.</p>
+                        <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                            <strong>Shortest Path:</strong> {pathStr}
+                        </div>
+                    </div>
+                );
+            case 'bellmanFord':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>Bellman-Ford relaxed edges {stats.nodeCount - 1} times.</p>
+                        <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                            <strong>Shortest Path:</strong> {pathStr}
+                        </div>
+                    </div>
+                );
+            case 'floydWarshall':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>Floyd-Warshall computed all-pairs shortest paths.</p>
+                        <p className="text-[10px] opacity-75">Check console or hover nodes for details (dense output).</p>
+                    </div>
+                );
+            case 'topological':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>Topological Sort completed.</p>
+                        <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                            <strong>Order:</strong> {pathStr}
+                        </div>
+                    </div>
+                );
+            case 'hamiltonian':
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>{pathSequence && pathSequence.length > 0 ? "Hamiltonian Cycle Found!" : "No Hamiltonian Cycle found."}</p>
+                        {pathSequence && pathSequence.length > 0 && (
+                            <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                                <strong>Cycle:</strong> {pathStr}
+                            </div>
+                        )}
+                    </div>
+                );
+            default:
+                return (
+                    <div className="flex flex-col gap-2">
+                        <p>Algorithm completed.</p>
+                        {pathSequence && pathSequence.length > 0 && (
+                            <div className="bg-white/50 p-2 rounded border border-green-200 font-mono text-xs break-all">
+                                <strong>Result:</strong> {pathStr}
+                            </div>
+                        )}
+                    </div>
+                );
+        }
+    };
+
     const runAlgorithm = () => {
         const adj = {};
         const weightedAdj = {};
@@ -184,6 +266,7 @@ const GraphVisualizer = () => {
 
         stopAnimation();
         resetVisuals();
+        setSummary(null); // Clear summary before running
 
         let algoSteps = [];
         if (algorithm === 'bfs') algoSteps = bfs(adj, startNode, targetNode);
@@ -198,6 +281,10 @@ const GraphVisualizer = () => {
             const edgeList = edges.map(e => ({ u: e.source, v: e.target, w: e.weight || 1 }));
             algoSteps = boruvka(edgeList, nodes);
         } else if (algorithm === 'hamiltonian') algoSteps = hamiltonianCycle(weightedAdj, nodes);
+        else if (algorithm === 'bellmanFord') {
+            const edgeList = edges.map(e => ({ source: e.source, target: e.target, weight: e.weight || 1 }));
+            algoSteps = bellmanFord(edgeList, startNode, targetNode, nodes);
+        } else if (algorithm === 'floydWarshall') algoSteps = floydWarshall(weightedAdj, nodes, isDirected);
 
         if (algoSteps.length === 0) {
             setDescription("Invalid start node or empty graph");
@@ -207,6 +294,22 @@ const GraphVisualizer = () => {
         setSteps(algoSteps);
         setCurrentStep(0);
         setIsPlaying(true);
+
+        // Generate Summary
+        const visitedSet = new Set();
+        algoSteps.forEach(s => {
+            if (s.current !== null && s.current !== undefined) visitedSet.add(s.current);
+        });
+        const lastStep = algoSteps[algoSteps.length - 1];
+        const pathLen = (lastStep && lastStep.path) ? lastStep.path.length : 0;
+        const pathSeq = (lastStep && (lastStep.path || lastStep.result)) ? (lastStep.path || lastStep.result) : [];
+
+        setSummary(generateSummary(algorithm, {
+            visitedCount: visitedSet.size,
+            pathLength: pathLen,
+            pathSequence: pathSeq,
+            nodeCount: nodes.length
+        }));
     };
 
     useEffect(() => {

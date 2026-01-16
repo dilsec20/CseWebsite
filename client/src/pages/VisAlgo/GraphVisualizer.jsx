@@ -312,7 +312,7 @@ const GraphVisualizer = () => {
         else if (algorithm === 'boruvka') {
             const edgeList = edges.map(e => ({ u: e.source, v: e.target, w: e.weight || 1 }));
             algoSteps = boruvka(edgeList, nodes);
-        } else if (algorithm === 'hamiltonian') algoSteps = hamiltonianCycle(weightedAdj, nodes);
+        } else if (algorithm === 'hamiltonian') algoSteps = hamiltonianCycle(weightedAdj, nodes, startNode);
         else if (algorithm === 'bellmanFord') {
             const edgeList = edges.map(e => ({ source: e.source, target: e.target, weight: e.weight || 1 }));
             algoSteps = bellmanFord(edgeList, startNode, targetNode, nodes);
@@ -465,7 +465,12 @@ const GraphVisualizer = () => {
 
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-gray-600">Start:</span>
-                            <input type="number" value={startNode} onChange={(e) => setStartNode(parseInt(e.target.value))} className="w-12 px-2 py-1 border border-gray-300 rounded text-center" />
+                            <input
+                                type="number"
+                                value={startNode !== '' && !isNaN(startNode) ? startNode : ''}
+                                onChange={(e) => setStartNode(e.target.value !== '' ? parseInt(e.target.value) : '')}
+                                className="w-12 px-2 py-1 border border-gray-300 rounded text-center"
+                            />
                         </div>
 
                         {(algorithm === 'dijkstra' || algorithm === 'bfs' || algorithm === 'dfs' || algorithm === 'bellmanFord') && (

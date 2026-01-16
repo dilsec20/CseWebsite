@@ -391,12 +391,12 @@ export const boruvka = (edges, nodes) => {
     return steps;
 };
 
-export const hamiltonianCycle = (adj, nodes) => {
+export const hamiltonianCycle = (adj, nodes, startNodeId) => {
     const steps = [];
     const path = [];
     const visited = new Set();
-    const startNode = nodes[0]?.id;
-    if (!startNode) return [];
+    const startNode = startNodeId !== undefined ? startNodeId : nodes[0]?.id;
+    if (startNode === undefined) return [];
 
     const solve = (u) => {
         path.push(u); visited.add(u);

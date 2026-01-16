@@ -3,8 +3,8 @@ import { Play, Pause, RotateCcw, PlusCircle, Move, MousePointer2, ArrowLeft, Che
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import {
-    bfs, dfs, dijkstra, prim, kruskal, topologicalSort, boruvka, hamiltonianCycle,
-    bfsCode, dfsCode, dijkstraCode, primsCode, kruskalCode, boruvkaCode, topoCode, hamiltonianCode
+    bfs, dfs, dijkstra, prim, kruskal, topologicalSort, boruvka, hamiltonianCycle, bellmanFord, floydWarshall,
+    bfsCode, dfsCode, dijkstraCode, primsCode, kruskalCode, boruvkaCode, topoCode, hamiltonianCode, bellmanFordCode, floydWarshallCode
 } from './algorithms/graph';
 
 const GraphVisualizer = () => {
@@ -141,6 +141,37 @@ const GraphVisualizer = () => {
             setIsDirected(false);
             setTargetNode(null);
             setDescription("Hamiltonian Cycle: Can you visit every node exactly once and return to start?");
+        } else if (algorithm === 'bellmanFord') {
+            setNodes([
+                { id: 0, x: 100, y: 250 },
+                { id: 1, x: 300, y: 100 },
+                { id: 2, x: 300, y: 400 },
+                { id: 3, x: 500, y: 250 },
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 4 },
+                { source: 0, target: 2, weight: 2 },
+                { source: 1, target: 3, weight: -3 }, // Negative weight!
+                { source: 2, target: 1, weight: 1 },
+                { source: 2, target: 3, weight: 3 }
+            ]);
+            setIsDirected(true);
+            setTargetNode(3);
+            setDescription("Bellman-Ford: Handles negative weights (unlike Dijkstra). Complexity O(VE).");
+        } else if (algorithm === 'floydWarshall') {
+            setNodes([
+                { id: 0, x: 200, y: 100 },
+                { id: 1, x: 400, y: 100 },
+                { id: 2, x: 300, y: 300 },
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 3 },
+                { source: 1, target: 2, weight: 1 },
+                { source: 2, target: 0, weight: 7 }, // Cycle
+            ]);
+            setIsDirected(true);
+            setTargetNode(null);
+            setDescription("Floyd-Warshall: O(V^3) All-Pairs Shortest Path algorithm.");
         }
     }, [algorithm]);
 
@@ -550,7 +581,9 @@ const GraphVisualizer = () => {
                                                 algorithm === 'kruskal' ? kruskalCode :
                                                     algorithm === 'boruvka' ? boruvkaCode :
                                                         algorithm === 'topological' ? topoCode :
-                                                            hamiltonianCode
+                                                            algorithm === 'hamiltonian' ? hamiltonianCode :
+                                                                algorithm === 'bellmanFord' ? bellmanFordCode :
+                                                                    floydWarshallCode
                             }
                             activeLine={activeLine}
                         />
@@ -581,6 +614,8 @@ const GraphVisualizer = () => {
                                 {algorithm === 'boruvka' && "Borůvka's works by adding the cheapest edge from each component to another component in iterations."}
                                 {algorithm === 'topological' && "Topological Sort ordering only exists for DAGs. It's used for scheduling tasks with dependencies."}
                                 {algorithm === 'hamiltonian' && "A Hamiltonian cycle visits every node exactly once. It is an NP-complete problem!"}
+                                {algorithm === 'bellmanFord' && "Bellman-Ford relaxes all edges V-1 times. It can detect negative cycles."}
+                                {algorithm === 'floydWarshall' && "Floyd-Warshall iterates through every node as a pivot to check if a path via that pivot is shorter."}
                             </p>
                         </div>
                     </div>

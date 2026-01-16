@@ -11,6 +11,10 @@ const ProblemList = ({ setAuth }) => {
     const [solvedFilter, setSolvedFilter] = useState('all'); // all, solved, unsolved
     const [solvedProblems, setSolvedProblems] = useState(new Set());
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const problemsPerPage = 50;
+
     // Available topics (matching mockData.js)
     const topics = ['all', 'Array', 'String', 'Linked List', 'Stack', 'Queue', 'Tree', 'Graph',
         'Dynamic Programming', 'Greedy', 'Backtracking', 'Binary Search', 'Heap', 'Hashing'];
@@ -69,6 +73,19 @@ const ProblemList = ({ setAuth }) => {
             (solvedFilter === 'unsolved' && !solvedProblems.has(p.problem_id));
         return difficultyMatch && topicMatch && solvedMatch;
     });
+
+    // Reset to first page when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filter, topicFilter, solvedFilter]);
+
+    // Get current problems
+    const indexOfLastProblem = currentPage * problemsPerPage;
+    const indexOfFirstProblem = indexOfLastProblem - problemsPerPage;
+    const currentProblems = filteredProblems.slice(indexOfFirstProblem, indexOfLastProblem);
+    const totalPages = Math.ceil(filteredProblems.length / problemsPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (loading) {
         return (
@@ -212,7 +229,7 @@ const ProblemList = ({ setAuth }) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {filteredProblems.map((problem) => (
+                                {currentProblems.map((problem) => (
                                     <tr key={problem.problem_id} className="hover:bg-gray-50 transition">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {solvedProblems.has(problem.problem_id) ? (
@@ -257,11 +274,68 @@ const ProblemList = ({ setAuth }) => {
                         </div>
                     )}
 
-                    <div className="bg-gray-50 px-6 py-4 border-t">
+                    <div className="bg-gray-50 px-6 py-4 border-t flex items-center justify-between">
                         <p className="text-sm text-gray-600">
-                            Showing <span className="font-semibold text-gray-900">{filteredProblems.length}</span> of{' '}
-                            <span className="font-semibold text-gray-900">{problems.length}</span> problems
+                            Showing <span className="font-semibold text-gray-900">{indexOfFirstProblem + 1}</span> to{' '}
+                            <span className="font-semibold text-gray-900">
+                                {Math.min(indexOfLastProblem, filteredProblems.length)}
+                            </span> of{' '}
+                            <span className="font-semibold text-gray-900">{filteredProblems.length}</span> problems
                         </p>
+
+                        {totalPages > 1 && (
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => paginate(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={`px-3 py-1 rounded border text-sm font-medium transition ${currentPage === 1
+                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                            : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                        }`}
+                                >
+                                    Previous
+                                </button>
+                                <div className="flex items-center gap-1">
+                                    {[...Array(totalPages)].map((_, i) => {
+                                        // Show first, last, and pages around current
+                                        if (
+                                            i === 0 ||
+                                            i === totalPages - 1 ||
+                                            (i >= currentPage - 2 && i <= currentPage)
+                                        ) {
+                                            return (
+                                                <button
+                                                    key={i + 1}
+                                                    onClick={() => paginate(i + 1)}
+                                                    className={`w-8 h-8 rounded border text-sm font-medium transition ${currentPage === i + 1
+                                                            ? 'bg-blue-600 text-white border-blue-600'
+                                                            : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                                        }`}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            );
+                                        } else if (
+                                            i === currentPage - 3 ||
+                                            i === currentPage + 1
+                                        ) {
+                                            return <span key={i} className="text-gray-400 px-1">...</span>;
+                                        }
+                                        return null;
+                                    })}
+                                </div>
+                                <button
+                                    onClick={() => paginate(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className={`px-3 py-1 rounded border text-sm font-medium transition ${currentPage === totalPages
+                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                            : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                        }`}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

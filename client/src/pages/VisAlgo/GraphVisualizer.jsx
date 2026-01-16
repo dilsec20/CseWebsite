@@ -46,6 +46,7 @@ const GraphVisualizer = () => {
     const [distances, setDistances] = useState({});
     const [activeLine, setActiveLine] = useState(0);
     const [currentPath, setCurrentPath] = useState([]); // Array of node IDs in order
+    const [summary, setSummary] = useState(null);
 
     // Interaction State
     const [selectedNode, setSelectedNode] = useState(null);
@@ -551,6 +552,19 @@ const GraphVisualizer = () => {
                             }
                             activeLine={activeLine}
                         />
+
+                        {summary && !isPlaying && (
+                            <div className="mt-4 bg-green-50 border border-green-100 rounded-xl p-4 shadow-sm animate-fade-in">
+                                <div className="flex items-center gap-2 text-green-700 font-bold mb-2">
+                                    <Info className="w-4 h-4" />
+                                    <span className="text-sm">Summary</span>
+                                </div>
+                                <div className="text-xs text-green-700 leading-relaxed font-medium">
+                                    {summary}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 shadow-sm">
                             <div className="flex items-center gap-2 text-blue-700 font-bold mb-2">
                                 <Info className="w-4 h-4" />

@@ -1,11 +1,13 @@
 // Graph represented as Adjacency Dictionary: { nodeId: [neighborId, ...] }
 
-export const bfs = (graph, startNode) => {
+export const bfs = (graph, startNode, targetNode) => {
     const steps = [];
     const queue = [startNode];
     const visited = new Set();
+    const parent = {};
     const traversalOrder = [];
     visited.add(startNode);
+    parent[startNode] = null;
 
     steps.push({
         queue: [...queue],
@@ -27,6 +29,18 @@ export const bfs = (graph, startNode) => {
             line: 3
         });
 
+        if (currentNode === targetNode && targetNode !== null) {
+            steps.push({
+                queue: [...queue],
+                visited: [...visited],
+                current: currentNode,
+                description: `Target node ${targetNode} found!`,
+                path: reconstructPath(parent, targetNode),
+                line: 3
+            });
+            break;
+        }
+
         const neighbors = graph[currentNode] || [];
         for (const neighbor of neighbors) {
             steps.push({
@@ -40,6 +54,7 @@ export const bfs = (graph, startNode) => {
 
             if (!visited.has(neighbor)) {
                 visited.add(neighbor);
+                parent[neighbor] = currentNode;
                 queue.push(neighbor);
                 steps.push({
                     queue: [...queue],
@@ -52,13 +67,26 @@ export const bfs = (graph, startNode) => {
             }
         }
     }
+
+    // Final step to highlight path if target exists, or otherwise just end
+    const finalPath = (targetNode !== null && visited.has(targetNode)) ? reconstructPath(parent, targetNode) : [];
+    if (finalPath.length > 0) {
+        steps.push({
+            visited: [...visited],
+            description: `BFS Complete. Path to ${targetNode} found.`,
+            path: finalPath,
+            line: 10
+        });
+    }
+
     return steps;
 };
 
-export const dfs = (graph, startNode) => {
+export const dfs = (graph, startNode, targetNode) => {
     const steps = [];
     const stack = [startNode];
     const visited = new Set();
+    const parent = {};
     const traversalOrder = [];
 
     steps.push({ stack: [...stack], visited: [...visited], current: null, description: `Starting DFS from ${startNode}`, line: 1 });
@@ -70,27 +98,61 @@ export const dfs = (graph, startNode) => {
             traversalOrder.push(u);
             steps.push({ stack: [...stack], visited: [...visited], current: u, description: `Visiting Node ${u}`, line: 3 });
 
+            if (u === targetNode && targetNode !== null) {
+                steps.push({
+                    stack: [...stack],
+                    visited: [...visited],
+                    current: u,
+                    description: `Target node ${targetNode} found!`,
+                    path: reconstructPath(parent, targetNode),
+                    line: 3
+                });
+                break;
+            }
+
             const neighbors = graph[u] || [];
             for (let i = neighbors.length - 1; i >= 0; i--) {
                 const v = neighbors[i];
                 if (!visited.has(v)) {
                     stack.push(v);
+                    parent[v] = u; // Note: In DFS, parent might be overwritten if visited multiple times before popping, but standard DFS tree logic works
                     steps.push({ stack: [...stack], visited: [...visited], current: u, checking: v, description: `Pushed ${v} to stack`, line: 6 });
                 }
             }
         }
     }
+
+    const finalPath = (targetNode !== null && visited.has(targetNode)) ? reconstructPath(parent, targetNode) : [];
+    if (finalPath.length > 0) {
+        steps.push({
+            visited: [...visited],
+            description: `DFS Complete. Path to ${targetNode} found.`,
+            path: finalPath,
+            line: 10
+        });
+    }
+
     return steps;
 };
 
-export const dijkstra = (adj, startNode, nodes) => {
+export const dijkstra = (adj, startNode, targetNode, nodes) => {
     const steps = [];
     const dist = {};
+    const parent = {};
     const unvisited = new Set();
-    nodes.forEach(n => { dist[n.id] = Infinity; unvisited.add(n.id); });
+    nodes.forEach(n => {
+        dist[n.id] = Infinity;
+        parent[n.id] = null;
+        unvisited.add(n.id);
+    });
     dist[startNode] = 0;
 
-    steps.push({ dist: { ...dist }, visited: [], description: "Initial distances set to Infinity.", line: 1 });
+    steps.push({
+        dist: { ...dist },
+        visited: [],
+        description: `Initial distances set to Infinity. Source is ${startNode}.`,
+        line: 1
+    });
 
     while (unvisited.size > 0) {
         let u = null;
@@ -102,27 +164,72 @@ export const dijkstra = (adj, startNode, nodes) => {
         if (u === null || dist[u] === Infinity) break;
         unvisited.delete(u);
 
-        steps.push({ dist: { ...dist }, visited: nodes.map(n => n.id).filter(id => !unvisited.has(id)), current: u, description: `Pick node ${u} with min distance ${dist[u]}`, line: 3 });
+        steps.push({
+            dist: { ...dist },
+            visited: nodes.map(n => n.id).filter(id => !unvisited.has(id)),
+            current: u,
+            description: `Pick node ${u} with min distance ${dist[u]}`,
+            line: 3
+        });
+
+        if (u === targetNode && targetNode !== null) {
+            steps.push({
+                dist: { ...dist },
+                current: u,
+                description: `Target node ${targetNode} reached!`,
+                path: reconstructPath(parent, targetNode),
+                line: 3
+            });
+            break;
+        }
 
         const neighbors = adj[u] || [];
         for (const edge of neighbors) {
             const v = edge.to;
             if (unvisited.has(v)) {
-                steps.push({ dist: { ...dist }, current: u, checking: v, description: `Relaxing edge to ${v}`, line: 5 });
+                steps.push({ dist: { ...dist }, current: u, checking: v, description: `Checking edge to ${v}`, line: 5 });
                 if (dist[u] + edge.w < dist[v]) {
                     dist[v] = dist[u] + edge.w;
-                    steps.push({ dist: { ...dist }, current: u, checking: v, description: `Update distance of ${v} to ${dist[v]}`, line: 6 });
+                    parent[v] = u;
+                    steps.push({
+                        dist: { ...dist },
+                        current: u,
+                        checking: v,
+                        description: `Update distance of ${v} to ${dist[v]} (via ${u})`,
+                        line: 6
+                    });
                 }
             }
         }
     }
+
+    const finalPath = targetNode !== null ? reconstructPath(parent, targetNode) : [];
+    steps.push({
+        dist: { ...dist },
+        visited: nodes.map(n => n.id).filter(id => !unvisited.has(id)),
+        description: targetNode !== null ? `Dijkstra complete. Shortest path to ${targetNode} found.` : "Dijkstra complete. All reachable nodes visited.",
+        path: finalPath,
+        line: 10
+    });
+
     return steps;
+};
+
+const reconstructPath = (parent, target) => {
+    const path = [];
+    let curr = target;
+    while (curr !== null && curr !== undefined) {
+        path.push(curr);
+        curr = parent[curr];
+    }
+    return path.length > 1 ? path.reverse() : []; // Only return path if it has at least start and end
 };
 
 export const prim = (adj, startNode, nodes) => {
     const steps = [];
     const key = {};
     const mstSet = new Set();
+    const parent = {}; // To reconstruct MST edges
     const unvisited = new Set(nodes.map(n => n.id));
     nodes.forEach(n => key[n.id] = Infinity);
     key[startNode] = 0;
@@ -139,17 +246,35 @@ export const prim = (adj, startNode, nodes) => {
 
         unvisited.delete(u);
         mstSet.add(u);
-        steps.push({ dist: { ...key }, visited: [...mstSet], current: u, description: `Add ${u} to MST`, line: 3 });
+
+        // Collect current MST edges
+        const currentMSTEdges = [];
+        for (const node of mstSet) {
+            if (parent[node] !== undefined) {
+                currentMSTEdges.push({ u: parent[node], v: node });
+            }
+        }
+
+        steps.push({ dist: { ...key }, visited: [...mstSet], mstEdges: currentMSTEdges, current: u, description: `Add ${u} to MST`, line: 3 });
 
         const neighbors = adj[u] || [];
         for (const edge of neighbors) {
             const v = edge.to;
             if (unvisited.has(v) && edge.w < key[v]) {
                 key[v] = edge.w;
-                steps.push({ dist: { ...key }, visited: [...mstSet], current: u, checking: v, description: `Update key of ${v} to ${edge.w}`, line: 5 });
+                parent[v] = u;
+                steps.push({ dist: { ...key }, visited: [...mstSet], mstEdges: currentMSTEdges, current: u, checking: v, description: `Update key of ${v} to ${edge.w}`, line: 5 });
             }
         }
     }
+
+    // Final MST Edges
+    const finalMSTEdges = [];
+    nodes.forEach(n => {
+        if (parent[n.id] !== undefined) finalMSTEdges.push({ u: parent[n.id], v: n.id });
+    });
+    steps.push({ visited: [...mstSet], mstEdges: finalMSTEdges, description: "Prim's MST Completed.", line: 10 });
+
     return steps;
 };
 
@@ -177,6 +302,8 @@ export const kruskal = (edges, nodes) => {
             steps.push({ mst: [...mst], description: `Skipped edge (${edge.u}-${edge.v}) [Cycle]`, line: 8 });
         }
     }
+    // Final Step with plain mst list (already in 'mst' prop)
+    steps.push({ mst: [...mst], description: "Kruskal's MST Completed.", line: 10 });
     return steps;
 };
 
@@ -206,6 +333,7 @@ export const topologicalSort = (adj, nodes) => {
             }
         }
     }
+    steps.push({ inDegree: { ...inDegree }, queue: [], description: "Topological Sort Completed: " + result.join(" -> "), path: result, line: 10 });
     return steps;
 };
 
@@ -243,6 +371,7 @@ export const boruvka = (edges, nodes) => {
         }
         if (!changed) break;
     }
+    steps.push({ mst: [...mst], description: "Boruvka's MST Completed.", line: 10 });
     return steps;
 };
 
@@ -259,7 +388,7 @@ export const hamiltonianCycle = (adj, nodes) => {
 
         if (path.length === nodes.length) {
             const hasEdgeBack = (adj[u] || []).some(e => e.to === startNode);
-            steps.push({ path: [...path], current: u, description: hasEdgeBack ? "Cycle found!" : "No edge back to start.", line: 8 });
+            steps.push({ path: [...path, startNode], current: u, description: hasEdgeBack ? "Cycle found!" : "No edge back to start.", line: 8 });
             if (hasEdgeBack) return true;
         } else {
             for (const edge of (adj[u] || [])) {
@@ -359,4 +488,187 @@ export const hamiltonianCode = `bool Hamiltonian(int u) {
         }
     }
     return false;
+}`;
+export const bellmanFord = (edges, startNode, targetNode, nodes) => {
+    const steps = [];
+    const dist = {};
+    const parent = {};
+    nodes.forEach(n => {
+        dist[n.id] = Infinity;
+        parent[n.id] = null;
+    });
+    dist[startNode] = 0;
+
+    steps.push({
+        dist: { ...dist },
+        description: `Initialized distances. Source: ${startNode}`,
+        line: 1
+    });
+
+    // Relax edges |V| - 1 times
+    for (let i = 1; i < nodes.length; i++) {
+        let changed = false;
+        steps.push({
+            dist: { ...dist },
+            description: `Iteration ${i}: Relaxing edges...`,
+            line: 3
+        });
+
+        for (const edge of edges) {
+            const u = edge.source;
+            const v = edge.target;
+            const w = edge.weight || 1;
+
+            if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                parent[v] = u;
+                changed = true;
+                steps.push({
+                    dist: { ...dist },
+                    current: u,
+                    checking: v,
+                    highlight: { u, v }, // highlight edge
+                    description: `Relaxed edge ${u}->${v}. New dist[${v}] = ${dist[v]}`,
+                    line: 6
+                });
+            } else {
+                steps.push({
+                    dist: { ...dist },
+                    current: u,
+                    checking: v,
+                    highlight: { u, v },
+                    description: `Checked edge ${u}->${v}. No update.`,
+                    line: 4 // checking line
+                });
+            }
+        }
+        if (!changed) {
+            steps.push({ description: "No changes in this iteration. Optimization: Stop early.", line: 8 });
+            break;
+        }
+    }
+
+    // Check for negative weight cycles (optional step usually, helpful for visualizer)
+    for (const edge of edges) {
+        const u = edge.source;
+        const v = edge.target;
+        const w = edge.weight || 1;
+        if (dist[u] !== Infinity && dist[u] + w < dist[v]) {
+            steps.push({
+                dist: { ...dist },
+                current: u,
+                checking: v,
+                description: `Negative cycle detected involving edge ${u}->${v}!`,
+                line: 10
+            });
+            return steps;
+        }
+    }
+
+    const finalPath = (targetNode !== null && dist[targetNode] !== Infinity) ? reconstructPath(parent, targetNode) : [];
+    steps.push({
+        dist: { ...dist },
+        path: finalPath,
+        description: targetNode !== null ? `Bellman-Ford Complete. Path found.` : "Bellman-Ford Complete. All reachable nodes updated.",
+        line: 12
+    });
+
+    return steps;
+};
+
+export const floydWarshall = (adj, nodes, isDirected) => {
+    // Note: FW is all-pairs. Visualizing it on a single graph view is complex.
+    // We will visualize the iterations and maybe update a "current shortest path" matrix conceptually
+    // or just animate the triplets.
+    // For this visualizer's "dist" prop, we can't easily show N*N distances.
+    // We will NOT update 'dist' on nodes to avoid confusion, or perhaps show dist from Node 0?
+    // Let's decide to NOT show 'dist' labels on nodes during FW, but describe the updates.
+
+    const steps = [];
+    const dist = {}; // 2D map: dist[i][j]
+    const next = {}; // To reconstruct path
+    const nodeIds = nodes.map(n => n.id);
+    const INF = Infinity;
+
+    // Initialize
+    nodeIds.forEach(i => {
+        dist[i] = {};
+        next[i] = {};
+        nodeIds.forEach(j => {
+            if (i === j) dist[i][j] = 0;
+            else dist[i][j] = INF;
+            next[i][j] = null;
+        });
+    });
+
+    // Edges
+    // Reconstruct edge list from adj or passed edges.
+    // Assuming adj is passed: { u: [{to: v, w: w}, ...] }
+    Object.keys(adj).forEach(u => {
+        adj[u].forEach(edge => {
+            dist[u][edge.to] = edge.w;
+            next[u][edge.to] = edge.to;
+        });
+    });
+
+    steps.push({ description: "Initialized distance matrix.", line: 1 });
+
+    for (const k of nodeIds) {
+        steps.push({ current: k, description: `Pivot Node k=${k}. Checking all pairs (i, j) passing through ${k}...`, line: 2 });
+        for (const i of nodeIds) {
+            for (const j of nodeIds) {
+                if (dist[i][k] !== INF && dist[k][j] !== INF) {
+                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[k][j]; //Standard FW path reconstruction update uses next[i][j] = next[i][k], wait.
+                        // Actually standard is: next[i][j] = next[i][k]. Wait, for 'next' meaning "next step from i to j".
+                        // Let's use standard predecessor logic or next pointer.
+                        // Standard: if path goes i->...->k->...->j.
+                        // If we use predecessor: pred[i][j] = pred[k][j].
+                        // If we use next: next[i][j] = next[i][k]. Correct.
+                        // Let's stick to simplest.
+                        // Correct logic for 'next' pointer initialization:
+                        // if edge (u,v), next[u][v] = v.
+                        // Update: next[i][j] = next[i][k].
+                        next[i][j] = next[i][k];
+
+                        steps.push({
+                            current: k,
+                            checking: j, // roughly saying we are checking j relative to i via k
+                            // highlight: {u: i, v: j}, // Can't easily highlight 'virtual' edge i->j
+                            description: `Update dist(${i}, ${j}) = ${dist[i][j]} (via ${k})`,
+                            line: 4
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    steps.push({ description: "Floyd-Warshall Complete. All-pairs shortest paths computed.", line: 8 });
+    return steps;
+};
+
+
+export const bellmanFordCode = `void BellmanFord(int src) {
+    dist[src] = 0;
+    for(int i=0; i<V-1; i++) {
+        for(auto e : edges) {
+            if(dist[e.u] + e.w < dist[e.v]) {
+                dist[e.v] = dist[e.u] + e.w;
+            }
+        }
+    }
+}`;
+
+export const floydWarshallCode = `void FloydWarshall() {
+    for(int k=0; k<V; k++) {
+        for(int i=0; i<V; i++) {
+            for(int j=0; j<V; j++) {
+                if(dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
 }`;

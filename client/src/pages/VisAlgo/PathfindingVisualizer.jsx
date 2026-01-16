@@ -26,6 +26,7 @@ const PathfindingVisualizer = () => {
     const [visitedNodes, setVisitedNodes] = useState(new Set());
     const [pathNodes, setPathNodes] = useState(new Set());
     const [activeLine, setActiveLine] = useState(0);
+    const [summary, setSummary] = useState(null);
 
     const timerRef = useRef(null);
 
@@ -101,11 +102,33 @@ const PathfindingVisualizer = () => {
         else if (algorithm === 'mst') result = primsMSTGrid(grid, startNode, allowDiagonals);
 
         if (result && result.steps && result.steps.length > 0) {
-            setSteps(result.steps);
+            const algoSteps = [...result.steps];
+            if (result.path && result.path.length > 0) {
+                algoSteps.push({
+                    type: 'path',
+                    path: result.path,
+                    description: `Path found! Length: ${result.path.length}`
+                });
+            }
+            setSteps(algoSteps);
             setCurrentStep(0);
             setIsPlaying(true);
+
+            // Calculate stats for summary
+            // Count unique visited nodes from steps (excluding path update steps purely)
+            const visitedSet = new Set();
+            result.steps.forEach(s => {
+                if (s.node) visitedSet.add(`${s.node.row}-${s.node.col}`);
+                if (s.to) visitedSet.add(`${s.to.row}-${s.to.col}`);
+            });
+            const stats = {
+                visitedCount: visitedSet.size,
+                pathLength: result.path ? result.path.length : 0
+            };
+            setSummary(generateSummary(algorithm, stats));
         } else {
             setDescription("No path found!");
+            setSummary("No path could be found. The target might be unreachable due to walls.");
         }
     };
 
@@ -119,6 +142,25 @@ const PathfindingVisualizer = () => {
         setPathNodes(new Set());
         setCurrentStep(0);
         setDescription("Ready.");
+        setSummary(null);
+    };
+
+    const generateSummary = (algo, stats) => {
+        const { visitedCount, pathLength } = stats;
+        switch (algo) {
+            case 'bfs':
+                return `BFS explores neighbors layer by layer. It visited ${visitedCount} nodes and found the shortest path of length ${pathLength}. It guarantees the shortest path because it expands equally in all directions (unweighted).`;
+            case 'dfs':
+                return `DFS explores as deep as possible along each branch before backtracking. It visited ${visitedCount} nodes. Note that DFS does not guarantee the shortest path, as seen here (path length: ${pathLength}).`;
+            case 'dijkstra':
+                return `Dijkstra's algorithm finds the shortest path by always picking the closest unvisited node. It explored ${visitedCount} nodes to find the optimal path of length ${pathLength}.`;
+            case 'astar':
+                return `A* uses a heuristic to guide the search towards the target, prioritizing nodes closer to the end. It visited ${visitedCount} nodes (often fewer than Dijkstra) and found a path of length ${pathLength}.`;
+            case 'mst':
+                return `Prim's algorithm connects all nodes with minimum total weight to form a Minimum Spanning Tree. It explored ${visitedCount} nodes. It does not look for a shortest path between two points, but rather a tree connecting the graph.`;
+            default:
+                return "Algorithm complete.";
+        }
     };
 
     useEffect(() => {
@@ -141,6 +183,12 @@ const PathfindingVisualizer = () => {
             const step = steps[currentStep];
             setDescription(step.description);
             setActiveLine(step.line || 0);
+
+            if (step.type === 'path') {
+                setPathNodes(new Set(step.path.map(n => `${n.row}-${n.col}`)));
+            } else {
+                setPathNodes(new Set());
+            }
 
             if (step.type === 'visit' || step.type === 'enqueue' || step.type === 'push' || step.type === 'update' || step.type === 'mst-edge') {
                 setVisitedNodes(prev => new Set([...prev, `${step.node?.row || step.to?.row}-${step.node?.col || step.to?.col}`]));
@@ -205,10 +253,12 @@ const PathfindingVisualizer = () => {
                                 row.map((node, cIdx) => {
                                     const key = `${rIdx}-${cIdx}`;
                                     const isVisited = visitedNodes.has(key);
+                                    const isPath = pathNodes.has(key);
 
                                     let bgColor = "bg-white";
                                     if (node.isStart) bgColor = "bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.6)] z-20 scale-105";
                                     else if (node.isEnd) bgColor = "bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.6)] z-20 scale-105";
+                                    else if (isPath) bgColor = "bg-amber-400 shadow-md scale-100 z-10 transition-colors duration-300";
                                     else if (node.isWall) bgColor = "bg-slate-800 scale-95 shadow-inner rounded-sm";
                                     else if (isVisited) bgColor = "bg-blue-400 animate-visit";
 
@@ -244,6 +294,18 @@ const PathfindingVisualizer = () => {
                                 <div className="bg-white/80 p-3 rounded-lg border border-blue-50 text-[10px] text-blue-800 italic">
                                     {description}
                                 </div>
+
+                                {summary && !isPlaying && (
+                                    <div className="bg-green-50 border border-green-100 rounded-lg p-3 animate-fade-in">
+                                        <h4 className="font-bold text-green-800 text-xs mb-1 flex items-center gap-1">
+                                            <Info className="w-3 h-3" /> Algorithm Summary
+                                        </h4>
+                                        <p className="text-[10px] text-green-700 leading-relaxed font-medium">
+                                            {summary}
+                                        </p>
+                                    </div>
+                                )}
+
                                 <div className="space-y-2">
                                     <h4 className="text-xs font-bold text-gray-700 flex items-center gap-1"><Settings className="w-3 h-3 text-gray-400" /> Settings:</h4>
                                     <p className="text-[10px] text-gray-500">

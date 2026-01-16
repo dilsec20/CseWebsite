@@ -133,9 +133,6 @@ const GlobalNavbar = ({ isAuthenticated, setAuth }) => {
             <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition">
               Dashboard
             </Link>
-            <Link to="/visalgo" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              VisAlgo
-            </Link>
             <Link to="/dsa-path" className="text-gray-700 hover:text-blue-600 font-medium transition">
               DSA Path
             </Link>

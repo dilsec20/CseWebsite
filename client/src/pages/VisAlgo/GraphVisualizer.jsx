@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, PlusCircle, Move, MousePointer2, ArrowLeft, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
-import { bfs, dfs, dijkstra, prim, bfsCode, dfsCode, dijkstraCode, primsCode } from './algorithms/graph';
+import {
+    bfs, dfs, dijkstra, prim, kruskal, topologicalSort, boruvka, hamiltonianCycle,
+    bfsCode, dfsCode, dijkstraCode, primsCode, kruskalCode, boruvkaCode, topoCode, hamiltonianCode
+} from './algorithms/graph';
 
 const GraphVisualizer = () => {
     // Mode: 'move', 'node', 'edge'
@@ -46,6 +49,90 @@ const GraphVisualizer = () => {
     const timerRef = useRef(null);
     const svgRef = useRef(null);
 
+    // Context-Aware Presets
+    useEffect(() => {
+        stopAnimation();
+        resetVisuals();
+        setSteps([]);
+
+        if (algorithm === 'bfs' || algorithm === 'dfs') {
+            setNodes([
+                { id: 0, x: 300, y: 50 },
+                { id: 1, x: 150, y: 150 },
+                { id: 2, x: 450, y: 150 },
+                { id: 3, x: 75, y: 300 },
+                { id: 4, x: 225, y: 300 },
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 1 },
+                { source: 0, target: 2, weight: 1 },
+                { source: 1, target: 3, weight: 1 },
+                { source: 1, target: 4, weight: 1 },
+            ]);
+            setIsDirected(true);
+            setDescription("Tree structure: Ideal for level-wise (BFS) or depth-wise (DFS) traversal.");
+        } else if (algorithm === 'dijkstra' || algorithm === 'prim' || algorithm === 'kruskal' || algorithm === 'boruvka') {
+            setNodes([
+                { id: 0, x: 100, y: 250 },
+                { id: 1, x: 250, y: 100 },
+                { id: 2, x: 250, y: 400 },
+                { id: 3, x: 450, y: 100 },
+                { id: 4, x: 450, y: 400 },
+                { id: 5, x: 600, y: 250 },
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 4 },
+                { source: 0, target: 2, weight: 2 },
+                { source: 1, target: 2, weight: 1 },
+                { source: 1, target: 3, weight: 5 },
+                { source: 2, target: 3, weight: 8 },
+                { source: 2, target: 4, weight: 10 },
+                { source: 3, target: 4, weight: 2 },
+                { source: 3, target: 5, weight: 6 },
+                { source: 4, target: 5, weight: 3 },
+            ]);
+            setIsDirected(algorithm === 'dijkstra');
+            setDescription(algorithm === 'dijkstra' ? "Weighted Graph: Find shortest paths from Node 0." : "Weighted Graph: Connect all nodes with minimum total weight.");
+        } else if (algorithm === 'topological') {
+            setNodes([
+                { id: 0, x: 100, y: 100 },
+                { id: 1, x: 300, y: 100 },
+                { id: 2, x: 100, y: 300 },
+                { id: 3, x: 300, y: 300 },
+                { id: 4, x: 500, y: 200 },
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 1 },
+                { source: 0, target: 2, weight: 1 },
+                { source: 1, target: 3, weight: 1 },
+                { source: 2, target: 3, weight: 1 },
+                { source: 3, target: 4, weight: 1 },
+            ]);
+            setIsDirected(true);
+            setDescription("Directed Acyclic Graph (DAG): Nodes must be visited after their dependencies.");
+        } else if (algorithm === 'hamiltonian') {
+            setNodes([
+                { id: 0, x: 300, y: 100 },
+                { id: 1, x: 500, y: 250 },
+                { id: 2, x: 400, y: 450 },
+                { id: 3, x: 200, y: 450 },
+                { id: 4, x: 100, y: 250 },
+                { id: 5, x: 300, y: 300 }
+            ]);
+            setEdges([
+                { source: 0, target: 1, weight: 1 },
+                { source: 1, target: 2, weight: 1 },
+                { source: 2, target: 3, weight: 1 },
+                { source: 3, target: 4, weight: 1 },
+                { source: 4, target: 0, weight: 1 },
+                { source: 0, target: 5, weight: 1 },
+                { source: 5, target: 2, weight: 1 }
+            ]);
+            setIsDirected(false);
+            setDescription("Hamiltonian Cycle: Can you visit every node exactly once and return to start?");
+        }
+    }, [algorithm]);
+
     const runAlgorithm = () => {
         const adj = {};
         const weightedAdj = {};
@@ -84,6 +171,16 @@ const GraphVisualizer = () => {
             algoSteps = dijkstra(weightedAdj, startNode, nodes);
         } else if (algorithm === 'prim') {
             algoSteps = prim(weightedAdj, startNode, nodes);
+        } else if (algorithm === 'kruskal') {
+            const edgeList = edges.map(e => ({ u: e.source, v: e.target, w: e.weight || 1 }));
+            algoSteps = kruskal(edgeList, nodes);
+        } else if (algorithm === 'topological') {
+            algoSteps = topologicalSort(weightedAdj, nodes);
+        } else if (algorithm === 'boruvka') {
+            const edgeList = edges.map(e => ({ u: e.source, v: e.target, w: e.weight || 1 }));
+            algoSteps = boruvka(edgeList, nodes);
+        } else if (algorithm === 'hamiltonian') {
+            algoSteps = hamiltonianCycle(weightedAdj, nodes);
         }
 
         if (algoSteps.length === 0) {
@@ -208,7 +305,11 @@ const GraphVisualizer = () => {
                             <option value="bfs">BFS</option>
                             <option value="dfs">DFS</option>
                             <option value="dijkstra">Dijkstra</option>
+                            <option value="topological">Topological Sort</option>
                             <option value="prim">Prim's MST</option>
+                            <option value="kruskal">Kruskal's MST</option>
+                            <option value="boruvka">Borůvkas MST</option>
+                            <option value="hamiltonian">Hamiltonian Cycle</option>
                         </select>
 
                         <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
@@ -285,17 +386,33 @@ const GraphVisualizer = () => {
                     </div>
 
                     <div className="lg:col-span-1 h-full overflow-y-auto">
-                        <CodePanel code={algorithm === 'bfs' ? bfsCode : algorithm === 'dfs' ? dfsCode : algorithm === 'dijkstra' ? dijkstraCode : primsCode} activeLine={activeLine} />
+                        <CodePanel
+                            code={
+                                algorithm === 'bfs' ? bfsCode :
+                                    algorithm === 'dfs' ? dfsCode :
+                                        algorithm === 'dijkstra' ? dijkstraCode :
+                                            algorithm === 'prim' ? primsCode :
+                                                algorithm === 'kruskal' ? kruskalCode :
+                                                    algorithm === 'boruvka' ? boruvkaCode :
+                                                        algorithm === 'topological' ? topoCode :
+                                                            hamiltonianCode
+                            }
+                            activeLine={activeLine}
+                        />
                         <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 shadow-sm">
                             <div className="flex items-center gap-2 text-blue-700 font-bold mb-2">
                                 <Info className="w-4 h-4" />
                                 <span className="text-sm">Things to Observe</span>
                             </div>
                             <p className="text-xs text-blue-600 leading-relaxed italic">
-                                {algorithm === 'bfs' && "Notice how BFS visits all neighbors at the current depth before moving to the next level."}
+                                {algorithm === 'bfs' && "Notice how BFS visits all neighbors at the current depth before moving to the next level. This forms a tree-like traversal."}
                                 {algorithm === 'dfs' && "DFS goes as deep as possible along each branch before backtracking."}
                                 {algorithm === 'dijkstra' && "Dijkstra's always picks the unvisited node with the smallest distance value."}
                                 {algorithm === 'prim' && "Prim's grows a MST by always adding the lowest weight edge that connects to the tree."}
+                                {algorithm === 'kruskal' && "Kruskal's sorts all edges and adds them one by one if they don't form a cycle. Uses Disjoint Set (Union-Find)."}
+                                {algorithm === 'boruvka' && "Borůvka's works by adding the cheapest edge from each component to another component in iterations."}
+                                {algorithm === 'topological' && "Topological Sort ordering only exists for DAGs. It's used for scheduling tasks with dependencies."}
+                                {algorithm === 'hamiltonian' && "A Hamiltonian cycle visits every node exactly once. It is an NP-complete problem!"}
                             </p>
                         </div>
                     </div>

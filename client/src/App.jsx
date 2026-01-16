@@ -40,6 +40,11 @@ import BinarySearchVisualizer from './pages/VisAlgo/BinarySearchVisualizer';
 import GraphVisualizer from './pages/VisAlgo/GraphVisualizer';
 import BSTVisualizer from './pages/VisAlgo/BSTVisualizer';
 import DPVisualizer from './pages/VisAlgo/DPVisualizer';
+import PathfindingVisualizer from './pages/VisAlgo/PathfindingVisualizer';
+import LinkedListVisualizer from './pages/VisAlgo/LinkedListVisualizer';
+import StackQueueVisualizer from './pages/VisAlgo/StackQueueVisualizer';
+import HeapVisualizer from './pages/VisAlgo/HeapVisualizer';
+import ConvexHullVisualizer from './pages/VisAlgo/ConvexHullVisualizer';
 import CourseBrowser from './pages/Courses/CourseBrowser';
 import CourseDetails from './pages/Courses/CourseDetails';
 import MyCourses from './pages/Courses/MyCourses';
@@ -291,6 +296,11 @@ function App() {
             <Route path="/visalgo/graph" element={<GraphVisualizer />} />
             <Route path="/visalgo/bst" element={<BSTVisualizer />} />
             <Route path="/visalgo/dp" element={<DPVisualizer />} />
+            <Route path="/visalgo/pathfinding" element={<PathfindingVisualizer />} />
+            <Route path="/visalgo/linked-list" element={<LinkedListVisualizer />} />
+            <Route path="/visalgo/stack-queue" element={<StackQueueVisualizer />} />
+            <Route path="/visalgo/heap" element={<HeapVisualizer />} />
+            <Route path="/visalgo/convex-hull" element={<ConvexHullVisualizer />} />
 
             {/* Course Routes */}
             <Route path="/courses" element={isAuthenticated ? <CourseBrowser setAuth={setAuth} /> : <Navigate to="/login" />} />

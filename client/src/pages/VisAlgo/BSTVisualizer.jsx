@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Plus, ArrowLeft, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
-import { insertBST, layoutTree, bstCode } from './algorithms/bst';
+import {
+    insertBST, layoutTree, getTreeAnalysis, getDepthLevels,
+    bstCode, heightCode, diameterCode
+} from './algorithms/bst';
 
 const BSTVisualizer = () => {
     const [root, setRoot] = useState(null);
@@ -14,6 +17,11 @@ const BSTVisualizer = () => {
     const [description, setDescription] = useState("Enter a value to insert into the BST.");
     const [highlightNode, setHighlightNode] = useState(null);
     const [activeLine, setActiveLine] = useState(0);
+
+    // Analysis State
+    const [isAnalysisMode, setIsAnalysisMode] = useState(false);
+    const [analysisData, setAnalysisData] = useState({ height: 0, diameter: 0, leaves: [], diameterPath: [] });
+    const [depthLevels, setDepthLevels] = useState({});
 
     // Visual tree state for rendering
     const [visualRoot, setVisualRoot] = useState(null); // The tree structure being displayed
@@ -98,6 +106,13 @@ const BSTVisualizer = () => {
     }, [isPlaying, speed, steps.length]);
 
     useEffect(() => {
+        if (root) {
+            setAnalysisData(getTreeAnalysis(root));
+            setDepthLevels(getDepthLevels(root));
+        }
+    }, [root]);
+
+    useEffect(() => {
         if (steps.length > 0 && currentStep < steps.length) {
             const step = steps[currentStep];
             setDescription(step.description);
@@ -105,32 +120,37 @@ const BSTVisualizer = () => {
             setActiveLine(step.line);
             setVisualRoot(step.tree);
         } else if (steps.length > 0 && currentStep >= steps.length - 1) {
-            // Animation done, ensure visual root matches actual root 
-            // (The last step should be the final tree state usually)
             layoutTree(root);
             setVisualRoot(root);
             setHighlightNode(null);
-            setDescription(`Inserted ${inputValue} (Complete)`);
+            setDescription(`Operation Complete.`);
         }
     }, [currentStep, steps]);
 
     // Recursive render helper
     const renderTree = (node) => {
         if (!node) return null;
+
+        const isLeaf = analysisData.leaves.includes(node.value);
+        const inDiameter = analysisData.diameterPath.includes(node.value);
+        const depth = depthLevels[node.value] ?? 0;
+
         return (
             <g key={node.value}>
                 {node.left && (
                     <line
                         x1={node.x} y1={node.y}
                         x2={node.left.x} y2={node.left.y}
-                        stroke="#9CA3AF" strokeWidth="2"
+                        stroke={inDiameter && analysisData.diameterPath.includes(node.left.value) ? "#EF4444" : "#9CA3AF"}
+                        strokeWidth={inDiameter && analysisData.diameterPath.includes(node.left.value) ? "4" : "2"}
                     />
                 )}
                 {node.right && (
                     <line
                         x1={node.x} y1={node.y}
                         x2={node.right.x} y2={node.right.y}
-                        stroke="#9CA3AF" strokeWidth="2"
+                        stroke={inDiameter && analysisData.diameterPath.includes(node.right.value) ? "#EF4444" : "#9CA3AF"}
+                        strokeWidth={inDiameter && analysisData.diameterPath.includes(node.right.value) ? "4" : "2"}
                     />
                 )}
                 {renderTree(node.left)}
@@ -139,10 +159,17 @@ const BSTVisualizer = () => {
                 <g transform={`translate(${node.x},${node.y})`}>
                     <circle
                         r="20"
-                        fill={Number(node.value) === Number(highlightNode) ? "#FCD34D" : "white"}
-                        stroke={Number(node.value) === Number(highlightNode) ? "#F59E0B" : "#3B82F6"}
+                        fill={
+                            Number(node.value) === Number(highlightNode) ? "#FCD34D" :
+                                (isAnalysisMode && isLeaf) ? "#D1FAE5" :
+                                    (isAnalysisMode && inDiameter) ? "#FEE2E2" : "white"
+                        }
+                        stroke={
+                            Number(node.value) === Number(highlightNode) ? "#F59E0B" :
+                                (isAnalysisMode && inDiameter) ? "#EF4444" : "#3B82F6"
+                        }
                         strokeWidth="3"
-                        className="transition-colors duration-300"
+                        className="transition-all duration-300"
                     />
                     <text
                         dy=".3em"
@@ -151,6 +178,15 @@ const BSTVisualizer = () => {
                     >
                         {node.value}
                     </text>
+                    {isAnalysisMode && (
+                        <text
+                            y="-25"
+                            textAnchor="middle"
+                            className="text-[10px] font-bold text-blue-500 fill-current"
+                        >
+                            d: {depth}
+                        </text>
+                    )}
                 </g>
             </g>
         );
@@ -204,11 +240,19 @@ const BSTVisualizer = () => {
                         </div>
 
                         <button
+                            onClick={() => setIsAnalysisMode(!isAnalysisMode)}
+                            className={`px-4 py-2 rounded-lg font-medium transition ${isAnalysisMode ? 'bg-purple-600 text-white shadow-lg' : 'bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'}`}
+                        >
+                            {isAnalysisMode ? "Stop Analysis" : "Analyze Tree"}
+                        </button>
+
+                        <button
                             onClick={() => {
                                 setRoot(null);
                                 setVisualRoot(null);
                                 stopAnimation();
                                 setSteps([]);
+                                setAnalysisData({ height: 0, diameter: 0, leaves: [], diameterPath: [] });
                             }}
                             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
                             title="Clear Tree"
@@ -228,16 +272,36 @@ const BSTVisualizer = () => {
                         </svg>
                     </div>
 
-                    <div className="lg:col-span-1 h-full">
-                        <CodePanel code={bstCode} activeLine={activeLine} />
+                    <div className="lg:col-span-1 h-full overflow-y-auto">
+                        <CodePanel
+                            code={isAnalysisMode ? (analysisData.diameter > 0 ? diameterCode : heightCode) : bstCode}
+                            activeLine={activeLine}
+                        />
                         <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 shadow-sm">
                             <div className="flex items-center gap-2 text-blue-700 font-bold mb-2">
                                 <Info className="w-4 h-4" />
-                                <span className="text-sm">Things to Observe</span>
+                                <span className="text-sm">Tree Insights</span>
                             </div>
-                            <p className="text-xs text-blue-600 leading-relaxed italic">
-                                Look at how the algorithm decides to go left or right. If the value to insert is smaller than the current node, it goes left. If larger, it goes right. This property maintains the sorted order of the tree!
-                            </p>
+                            <div className="space-y-2">
+                                <p className="text-xs text-blue-600 leading-relaxed italic">
+                                    {isAnalysisMode ? (
+                                        <>
+                                            <strong>Height:</strong> {analysisData.height} <br />
+                                            <strong>Diameter:</strong> {analysisData.diameter} <br />
+                                            <strong>Leaves:</strong> {analysisData.leaves.join(', ')}
+                                        </>
+                                    ) : (
+                                        "Look at how the algorithm decides to go left or right. If the value to insert is smaller than the current node, it goes left. If larger, it goes right."
+                                    )}
+                                </p>
+                                {isAnalysisMode && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        <span className="text-[10px] px-2 py-0.5 bg-red-100 text-red-700 rounded-full border border-red-200">Diameter Path</span>
+                                        <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">Leaf Nodes</span>
+                                        <span className="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-200">d = depth</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

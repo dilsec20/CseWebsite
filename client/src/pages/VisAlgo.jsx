@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart2, GitGraph, Share2, Activity, ArrowRight } from 'lucide-react';
+import { BarChart2, GitGraph, Share2, Activity, ArrowRight, Layers, Link2, Triangle, Network } from 'lucide-react';
 
 const VisAlgo = () => {
     const algorithms = [
@@ -51,6 +51,38 @@ const VisAlgo = () => {
             icon: <Activity className="w-8 h-8 text-indigo-500" />,
             color: 'bg-indigo-50 border-indigo-100 hover:border-indigo-300',
             path: '/visalgo/dp'
+        },
+        {
+            id: 'linkedlist',
+            title: 'Linked Lists',
+            description: 'Visualize Singly and Doubly Linked Lists with dynamic pointers and nodes.',
+            icon: <Link2 className="w-8 h-8 text-cyan-500" />,
+            color: 'bg-cyan-50 border-cyan-100 hover:border-cyan-300',
+            path: '/visalgo/linked-list'
+        },
+        {
+            id: 'stackqueue',
+            title: 'Stacks & Queues',
+            description: 'Master first-in-first-out and last-in-first-out data structures.',
+            icon: <Layers className="w-8 h-8 text-rose-500" />,
+            color: 'bg-rose-50 border-rose-100 hover:border-rose-300',
+            path: '/visalgo/stack-queue'
+        },
+        {
+            id: 'heap',
+            title: 'Heaps',
+            description: 'Visualize Max Heaps, Build Heap process, and priority queue logic.',
+            icon: <Network className="w-8 h-8 text-amber-500" />,
+            color: 'bg-amber-50 border-amber-100 hover:border-amber-300',
+            path: '/visalgo/heap'
+        },
+        {
+            id: 'convexhull',
+            title: 'Convex Hull',
+            description: 'Geometric visualization of the Graham Scan algorithm for finding boundaries.',
+            icon: <Triangle className="w-8 h-8 text-teal-500" />,
+            color: 'bg-teal-50 border-teal-100 hover:border-teal-300',
+            path: '/visalgo/convex-hull'
         }
     ];
 
@@ -97,7 +129,7 @@ const VisAlgo = () => {
 
             {/* Coming Soon Section */}
             <div className="text-center pb-20">
-                <p className="text-gray-500">More visualizations like Dynamic Programming and Backtracking coming soon.</p>
+                <p className="text-gray-500">More visualizations like Backtracking and Advanced Graph Algorithms coming soon.</p>
             </div>
         </div>
     );

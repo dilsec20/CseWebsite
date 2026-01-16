@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, ArrowLeft } from 'lucide-react';
+import { Play, Pause, RotateCcw, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { binarySearch, binarySearchCode } from './algorithms/search';
@@ -149,6 +149,26 @@ const BinarySearchVisualizer = () => {
                         >
                             Search
                         </button>
+
+                        <div className="flex items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm ml-2">
+                            <button
+                                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                                disabled={isPlaying || currentStep === 0}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Previous Step"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <div className="w-px h-4 bg-gray-200 mx-1"></div>
+                            <button
+                                onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
+                                disabled={isPlaying || (steps.length > 0 && currentStep === steps.length - 1)}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Next Step"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 

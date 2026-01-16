@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Plus, ArrowLeft } from 'lucide-react';
+import { Play, Pause, RotateCcw, Plus, ArrowLeft, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { insertBST, layoutTree, bstCode } from './algorithms/bst';
@@ -183,6 +183,26 @@ const BSTVisualizer = () => {
                             <Plus className="w-4 h-4" /> Insert
                         </button>
 
+                        <div className="flex items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+                            <button
+                                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                                disabled={isPlaying || currentStep === 0}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Previous Step"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <div className="w-px h-4 bg-gray-200 mx-1"></div>
+                            <button
+                                onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
+                                disabled={isPlaying || (steps.length > 0 && currentStep === steps.length - 1)}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Next Step"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
+
                         <button
                             onClick={() => {
                                 setRoot(null);
@@ -210,6 +230,15 @@ const BSTVisualizer = () => {
 
                     <div className="lg:col-span-1 h-full">
                         <CodePanel code={bstCode} activeLine={activeLine} />
+                        <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center gap-2 text-blue-700 font-bold mb-2">
+                                <Info className="w-4 h-4" />
+                                <span className="text-sm">Things to Observe</span>
+                            </div>
+                            <p className="text-xs text-blue-600 leading-relaxed italic">
+                                Look at how the algorithm decides to go left or right. If the value to insert is smaller than the current node, it goes left. If larger, it goes right. This property maintains the sorted order of the tree!
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

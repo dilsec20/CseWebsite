@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, FastForward, Sliders, ArrowLeft } from 'lucide-react';
+import { Play, Pause, RotateCcw, Sliders, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { bubbleSort, bubbleSortCode, selectionSort, selectionSortCode, mergeSort, mergeSortCode } from './algorithms/sorting';
@@ -100,7 +100,7 @@ const SortingVisualizer = () => {
                     </div>
 
                     {/* Controls */}
-                    <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex flex-wrap items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
                         <button
                             onClick={resetArray}
                             className="p-2 text-gray-600 hover:text-blue-600 hover:bg-white rounded-lg transition"
@@ -122,36 +122,6 @@ const SortingVisualizer = () => {
                             <option value="merge">Merge Sort</option>
                         </select>
 
-                        <div className="flex items-center gap-2 border-l border-gray-300 pl-4">
-                            <input
-                                type="text"
-                                placeholder="Custom Array (e.g. 10,2,5)"
-                                className="w-48 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        const values = e.target.value.split(',').map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-                                        if (values.length > 0) {
-                                            stopAnimation();
-                                            const validValues = values.slice(0, 20); // Limit size
-                                            setArray(validValues);
-
-                                            // Recalculate steps with current algo
-                                            let algoSteps = [];
-                                            if (algorithm === 'bubble') algoSteps = bubbleSort(validValues);
-                                            else if (algorithm === 'selection') algoSteps = selectionSort(validValues);
-                                            else if (algorithm === 'merge') algoSteps = mergeSort(validValues);
-
-                                            setSteps(algoSteps);
-                                            setCurrentStep(0);
-                                            setHighlights([]);
-                                            setDescription(`Ready to ${algorithm} sort custom array!`);
-                                        }
-                                    }
-                                }}
-                            />
-                            <span className="text-xs text-gray-400 hidden sm:block">Press Enter</span>
-                        </div>
-
                         <button
                             onClick={runAnimation}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${isPlaying
@@ -162,6 +132,26 @@ const SortingVisualizer = () => {
                             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                             {isPlaying ? "Pause" : "Play"}
                         </button>
+
+                        <div className="flex items-center bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+                            <button
+                                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                                disabled={isPlaying || currentStep === 0}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Previous Step"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <div className="w-px h-4 bg-gray-200 mx-1"></div>
+                            <button
+                                onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
+                                disabled={isPlaying || currentStep === steps.length - 1}
+                                className="p-2 text-gray-600 hover:text-blue-600 disabled:text-gray-300 disabled:cursor-not-allowed transition"
+                                title="Next Step"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
 
                         <div className="w-px h-8 bg-gray-300 mx-2"></div>
 
@@ -194,7 +184,7 @@ const SortingVisualizer = () => {
                         </div>
 
                         {/* Bars */}
-                        <div className="flex items-end justify-center gap-2 w-full h-[400px]">
+                        <div className="flex items-end justify-center gap-2 w-full h-[350px]">
                             {array.map((value, idx) => {
                                 let bgColor = 'bg-blue-500'; // Default
                                 if (highlights.includes(idx)) {
@@ -202,9 +192,6 @@ const SortingVisualizer = () => {
                                     if (colorType === 'swap') bgColor = 'bg-red-500';
                                     if (colorType === 'sorted') bgColor = 'bg-green-500';
                                 }
-                                // Keep sorted elements green even after pass
-                                // Simplified approach: If logic ensures 'sorted' state persists in step array, this is fine.
-                                // But our simple logic rebuilds array from step. Correct.
 
                                 return (
                                     <div
@@ -218,7 +205,33 @@ const SortingVisualizer = () => {
                             })}
                         </div>
 
-                        <div className="mt-8 flex gap-6 text-sm text-gray-600">
+                        {/* Manual Input Boxes */}
+                        <div className="mt-8 flex flex-wrap justify-center gap-3">
+                            <span className="text-sm font-medium text-gray-500 w-full text-center mb-1 text-xs uppercase tracking-widest">Manual Data Entry</span>
+                            {array.map((val, idx) => (
+                                <input
+                                    key={`input-${idx}`}
+                                    type="number"
+                                    value={val}
+                                    onChange={(e) => {
+                                        const newVal = parseInt(e.target.value) || 0;
+                                        const newArr = [...array];
+                                        newArr[idx] = Math.min(100, Math.max(0, newVal));
+                                        setArray(newArr);
+                                        let algoSteps = [];
+                                        if (algorithm === 'bubble') algoSteps = bubbleSort(newArr);
+                                        else if (algorithm === 'selection') algoSteps = selectionSort(newArr);
+                                        else if (algorithm === 'merge') algoSteps = mergeSort(newArr);
+                                        setSteps(algoSteps);
+                                        setCurrentStep(0);
+                                    }}
+                                    disabled={isPlaying}
+                                    className="w-10 h-10 md:w-12 md:h-12 text-center border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none font-bold text-gray-700 transition bg-white shadow-sm"
+                                />
+                            ))}
+                        </div>
+
+                        <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
                                 <span>Unsorted</span>

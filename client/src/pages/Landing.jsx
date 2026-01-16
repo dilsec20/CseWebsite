@@ -160,6 +160,67 @@ const Landing = ({ setAuth }) => {
                     </div>
                 </div>
             </section>
+
+            {/* Footer */}
+            <footer className="bg-gray-900 border-t border-gray-800 text-gray-400 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        {/* About Us */}
+                        <div>
+                            <div className="flex items-center space-x-2 text-white mb-6">
+                                <Code className="h-6 w-6" />
+                                <span className="text-xl font-bold tracking-tight">AceCoder</span>
+                            </div>
+                            <p className="leading-relaxed mb-6">
+                                AceCoder is a comprehensive coding platform designed for students and professionals. We provide a robust environment for practicing Data Structures, Algorithms, and Competitive Programming to help you crack your dream tech reviews.
+                            </p>
+                            <p className="text-sm">
+                                &copy; {new Date().getFullYear()} AceCoder. All rights reserved.
+                            </p>
+                        </div>
+
+                        {/* Contact Us */}
+                        <div>
+                            <h3 className="text-lg font-bold text-white mb-6">Contact Us</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-start space-x-3">
+                                    <div className="mt-1">
+                                        <Cpu className="h-5 w-5 text-blue-500" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-medium">Dilip Kumar</p>
+                                        <p className="text-sm">CSE Student (Batch 2027)</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center space-x-3">
+                                    <div className="flex-shrink-0">
+                                        <svg className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <a href="mailto:dilipkumardileep0555@gmail.com" className="hover:text-blue-400 transition">
+                                        dilipkumardileep0555@gmail.com
+                                    </a>
+                                </div>
+
+                                <div className="flex items-start space-x-3">
+                                    <div className="flex-shrink-0 mt-1">
+                                        <svg className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p>Motihari, Bihar</p>
+                                        <p className="text-sm">Pin Code: 845401</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };

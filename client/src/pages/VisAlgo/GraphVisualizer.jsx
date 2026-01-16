@@ -421,6 +421,8 @@ const GraphVisualizer = () => {
                             <option value="kruskal">Kruskal's MST</option>
                             <option value="boruvka">Borůvkas MST</option>
                             <option value="hamiltonian">Hamiltonian Cycle</option>
+                            <option value="bellmanFord">Bellman-Ford</option>
+                            <option value="floydWarshall">Floyd-Warshall</option>
                         </select>
 
                         <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm">
@@ -435,7 +437,7 @@ const GraphVisualizer = () => {
                             <input type="number" value={startNode} onChange={(e) => setStartNode(parseInt(e.target.value))} className="w-12 px-2 py-1 border border-gray-300 rounded text-center" />
                         </div>
 
-                        {(algorithm === 'dijkstra' || algorithm === 'bfs' || algorithm === 'dfs') && (
+                        {(algorithm === 'dijkstra' || algorithm === 'bfs' || algorithm === 'dfs' || algorithm === 'bellmanFord') && (
                             <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-gray-600">End:</span>
                                 <input type="number" value={targetNode !== null ? targetNode : ''} onChange={(e) => setTargetNode(e.target.value ? parseInt(e.target.value) : null)} className="w-12 px-2 py-1 border border-gray-300 rounded text-center" placeholder="None" />

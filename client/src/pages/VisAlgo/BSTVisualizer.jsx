@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Plus } from 'lucide-react';
+import { Play, Pause, RotateCcw, Plus, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { insertBST, layoutTree, bstCode } from './algorithms/bst';
 
@@ -160,6 +161,9 @@ const BSTVisualizer = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
+                        <Link to="/visalgo" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-2 transition">
+                            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Algorithms
+                        </Link>
                         <h1 className="text-3xl font-bold text-gray-900">BST Visualization</h1>
                         <p className="text-gray-600 mt-2">Binary Search Trees: Visualize Insertions and Structure.</p>
                     </div>

@@ -273,8 +273,36 @@ export const prim = (adj, startNode, nodes) => {
     return steps;
 };
 
-export const bfsCode = `void BFS(int startNode) { ... }`; // Abbreviated for brevity
-export const dfsCode = `void DFS(int u) { ... }`;
+export const bfsCode = `void BFS(int startNode) {
+    bool visited[V];
+    memset(visited, 0, sizeof(visited));
+    queue<int> q;
+
+    visited[startNode] = true;
+    q.push(startNode);
+
+    while(!q.empty()) {
+        int u = q.front(); q.pop();
+        cout << u << " ";
+
+        for(int v : adj[u]) {
+            if(!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}`;
+export const dfsCode = `void DFS(int u) {
+    visited[u] = true;
+    cout << u << " ";
+    
+    for(int v : adj[u]) {
+        if(!visited[v]) {
+            DFS(v);
+        }
+    }
+}`;
 
 export const dijkstraCode = `void Dijkstra(int src) {
     dist[src] = 0;

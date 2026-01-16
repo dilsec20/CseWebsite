@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, FastForward, Sliders } from 'lucide-react';
+import { Play, Pause, RotateCcw, FastForward, Sliders, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
-import { bubbleSort, bubbleSortCode } from './algorithms/sorting';
+import { bubbleSort, bubbleSortCode, selectionSort, selectionSortCode, mergeSort, mergeSortCode } from './algorithms/sorting';
 
 const SortingVisualizer = () => {
     // State
@@ -14,6 +15,7 @@ const SortingVisualizer = () => {
     const [description, setDescription] = useState("Ready to sort!");
     const [highlights, setHighlights] = useState([]);
     const [colorType, setColorType] = useState(null); // 'compare', 'swap', 'sorted'
+    const [algorithm, setAlgorithm] = useState('bubble');
 
     const timerRef = useRef(null);
 
@@ -22,7 +24,7 @@ const SortingVisualizer = () => {
         resetArray();
     }, []);
 
-    const resetArray = () => {
+    const resetArray = (algo = algorithm) => {
         stopAnimation();
         const newArr = Array.from({ length: 15 }, () => Math.floor(Math.random() * 90) + 10);
         setArray(newArr);
@@ -34,7 +36,11 @@ const SortingVisualizer = () => {
         setColorType(null);
 
         // Pre-calculate steps
-        const algoSteps = bubbleSort(newArr);
+        let algoSteps = [];
+        if (algo === 'bubble') algoSteps = bubbleSort(newArr);
+        else if (algo === 'selection') algoSteps = selectionSort(newArr);
+        else if (algo === 'merge') algoSteps = mergeSort(newArr);
+
         setSteps(algoSteps);
     };
 
@@ -86,8 +92,11 @@ const SortingVisualizer = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Bubble Sort Visualization</h1>
-                        <p className="text-gray-600 mt-2">Visually trace the algorithm as it bubbles the largest elements to the top.</p>
+                        <Link to="/visalgo" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-2 transition">
+                            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Algorithms
+                        </Link>
+                        <h1 className="text-3xl font-bold text-gray-900">Sorting Visualization</h1>
+                        <p className="text-gray-600 mt-2">Visually trace the algorithm as it sorts the array.</p>
                     </div>
 
                     {/* Controls */}
@@ -99,6 +108,19 @@ const SortingVisualizer = () => {
                         >
                             <RotateCcw className="w-5 h-5" />
                         </button>
+
+                        <select
+                            value={algorithm}
+                            onChange={(e) => {
+                                setAlgorithm(e.target.value);
+                                resetArray(e.target.value);
+                            }}
+                            className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer"
+                        >
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="merge">Merge Sort</option>
+                        </select>
 
                         <div className="flex items-center gap-2 border-l border-gray-300 pl-4">
                             <input
@@ -112,10 +134,17 @@ const SortingVisualizer = () => {
                                             stopAnimation();
                                             const validValues = values.slice(0, 20); // Limit size
                                             setArray(validValues);
-                                            setSteps(bubbleSort(validValues));
+
+                                            // Recalculate steps with current algo
+                                            let algoSteps = [];
+                                            if (algorithm === 'bubble') algoSteps = bubbleSort(validValues);
+                                            else if (algorithm === 'selection') algoSteps = selectionSort(validValues);
+                                            else if (algorithm === 'merge') algoSteps = mergeSort(validValues);
+
+                                            setSteps(algoSteps);
                                             setCurrentStep(0);
                                             setHighlights([]);
-                                            setDescription("Ready to sort custom array!");
+                                            setDescription(`Ready to ${algorithm} sort custom array!`);
                                         }
                                     }
                                 }}
@@ -211,7 +240,13 @@ const SortingVisualizer = () => {
 
                     {/* Code Panel */}
                     <div className="lg:col-span-1 h-full">
-                        <CodePanel code={bubbleSortCode} activeLine={activeLine} />
+                        <CodePanel
+                            code={
+                                algorithm === 'bubble' ? bubbleSortCode :
+                                    algorithm === 'selection' ? selectionSortCode : mergeSortCode
+                            }
+                            activeLine={activeLine}
+                        />
                     </div>
                 </div>
             </div>

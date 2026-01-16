@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { fibTable, dpCode } from './algorithms/dp';
 
@@ -82,6 +83,9 @@ const DPVisualizer = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
+                        <Link to="/visalgo" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-2 transition">
+                            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Algorithms
+                        </Link>
                         <h1 className="text-3xl font-bold text-gray-900">DP Visualization</h1>
                         <p className="text-gray-600 mt-2">Fibonacci Sequence (Bottom-Up)</p>
                     </div>
@@ -101,8 +105,8 @@ const DPVisualizer = () => {
                         <button
                             onClick={handleCalculate}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${isPlaying
-                                    ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
-                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
                                 }`}
                         >
                             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}

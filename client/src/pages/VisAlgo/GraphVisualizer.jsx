@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, PlusCircle, Move, MousePointer2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, PlusCircle, Move, MousePointer2, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import CodePanel from './CodePanel';
 import { bfs, dfs, dijkstra, prim, bfsCode, dfsCode, dijkstraCode, primsCode } from './algorithms/graph';
 
@@ -228,6 +229,9 @@ const GraphVisualizer = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
+                        <Link to="/visalgo" className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-2 transition">
+                            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Algorithms
+                        </Link>
                         <h1 className="text-3xl font-bold text-gray-900">Graph Traversal Visualizer</h1>
                         <p className="text-gray-600 mt-2">Build your own graph and watch BFS and DFS in action.</p>
                     </div>
@@ -268,6 +272,9 @@ const GraphVisualizer = () => {
                             className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                         >
                             <option value="bfs">BFS</option>
+                            <option value="dfs">DFS</option>
+                            <option value="dijkstra">Dijkstra (Shortest Path)</option>
+                            <option value="prim">Prim's (MST)</option>
                         </select>
 
                         <div className="flex items-center gap-2">

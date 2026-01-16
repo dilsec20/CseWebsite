@@ -121,26 +121,30 @@ const GraphVisualizer = () => {
             setTargetNode(null);
             setDescription("Directed Acyclic Graph (DAG): Nodes must be visited after their dependencies.");
         } else if (algorithm === 'hamiltonian') {
+            // Pentagon with center node - valid Hamiltonian cycle: 0->1->2->5->3->4->0
             setNodes([
-                { id: 0, x: 300, y: 100 },
-                { id: 1, x: 500, y: 250 },
-                { id: 2, x: 400, y: 450 },
-                { id: 3, x: 200, y: 450 },
-                { id: 4, x: 100, y: 250 },
-                { id: 5, x: 300, y: 300 }
+                { id: 0, x: 300, y: 80 },
+                { id: 1, x: 480, y: 200 },
+                { id: 2, x: 420, y: 400 },
+                { id: 3, x: 180, y: 400 },
+                { id: 4, x: 120, y: 200 },
+                { id: 5, x: 300, y: 280 }
             ]);
             setEdges([
                 { source: 0, target: 1, weight: 1 },
                 { source: 1, target: 2, weight: 1 },
-                { source: 2, target: 3, weight: 1 },
+                { source: 2, target: 5, weight: 1 },
+                { source: 5, target: 3, weight: 1 },
                 { source: 3, target: 4, weight: 1 },
                 { source: 4, target: 0, weight: 1 },
+                // Extra edges for complexity
                 { source: 0, target: 5, weight: 1 },
-                { source: 5, target: 2, weight: 1 }
+                { source: 1, target: 5, weight: 1 },
+                { source: 4, target: 5, weight: 1 }
             ]);
             setIsDirected(false);
             setTargetNode(null);
-            setDescription("Hamiltonian Cycle: Can you visit every node exactly once and return to start?");
+            setDescription("Hamiltonian Cycle: Visit every node exactly once and return to start. Try starting from node 0!");
         } else if (algorithm === 'bellmanFord') {
             setNodes([
                 { id: 0, x: 100, y: 250 },

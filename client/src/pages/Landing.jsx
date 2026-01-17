@@ -189,7 +189,7 @@ const Landing = ({ setAuth }) => {
                                     </div>
                                     <div>
                                         <p className="text-white font-medium">Dilip Kumar</p>
-                                        <p className="text-sm">CSE Student (Batch 2027)</p>
+                                        <p className="text-sm">CSE Student</p>
                                     </div>
                                 </div>
 
@@ -199,8 +199,8 @@ const Landing = ({ setAuth }) => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
                                     </div>
-                                    <a href="mailto:dilipkumardileep0555@gmail.com" className="hover:text-blue-400 transition">
-                                        dilipkumardileep0555@gmail.com
+                                    <a href="mailto:kumardileep0555@gmail.com" className="hover:text-blue-400 transition">
+                                        kumardileep0555@gmail.com
                                     </a>
                                 </div>
 

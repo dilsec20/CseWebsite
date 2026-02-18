@@ -1,11 +1,13 @@
 /**
- * One-time script to update the Sieve of Eratosthenes topic content in the database.
- * Run: node scripts/update_sieve_content.js
+ * Update Sieve of Eratosthenes content directly on PRODUCTION database.
+ * Uses the direct Supabase connection string.
  */
-const pool = require('../db');
+const { Pool } = require('pg');
 
-// Import the updated content from setup_cp.js
-// We'll read the numberTheoryTopics array indirectly by requiring the file data
+const pool = new Pool({
+    connectionString: 'postgresql://postgres.xlqzqcqacpajpqwneqpa:05Supabase%40%40%3F%3F@aws-1-ap-south-1.pooler.supabase.com:6543/postgres',
+    ssl: { rejectUnauthorized: false }
+});
 
 const updatedContent = `# Sieve of Eratosthenes
 
@@ -111,20 +113,27 @@ void sieve() {
 
 async function updateSieveContent() {
     try {
-        console.log('🔄 Updating Sieve of Eratosthenes content...');
+        console.log('🔄 Connecting to PRODUCTION database...');
 
-        // Find the topic by title pattern
+        // Test connection
+        const testConn = await pool.query('SELECT NOW()');
+        console.log('✅ Connected to production at:', testConn.rows[0].now);
+
+        // Find the topic
         const findResult = await pool.query(
-            "SELECT topic_id, title FROM cp_topics WHERE title LIKE '%Sieve%'"
+            "SELECT topic_id, title, LENGTH(content) as old_len FROM cp_topics WHERE title LIKE '%Sieve%'"
         );
 
         if (findResult.rows.length === 0) {
-            console.error('❌ Topic "Sieve of Eratosthenes" not found in database!');
+            console.error('❌ Topic "Sieve of Eratosthenes" not found in production database!');
+            // List all topics to debug
+            const allTopics = await pool.query("SELECT topic_id, title FROM cp_topics ORDER BY topic_id LIMIT 20");
+            console.log('Available topics:', allTopics.rows);
             process.exit(1);
         }
 
         const topic = findResult.rows[0];
-        console.log(`📍 Found topic: "${topic.title}" (ID: ${topic.topic_id})`);
+        console.log(`📍 Found: "${topic.title}" (ID: ${topic.topic_id}, old length: ${topic.old_len} chars)`);
 
         // Update the content
         const updateResult = await pool.query(
@@ -133,12 +142,18 @@ async function updateSieveContent() {
         );
 
         if (updateResult.rowCount === 1) {
-            console.log('✅ Successfully updated Sieve of Eratosthenes content!');
-            console.log('📝 New content includes: Intuition, Code Explanation, Dry Run, Tips');
+            // Verify
+            const verify = await pool.query(
+                "SELECT LENGTH(content) as new_len FROM cp_topics WHERE topic_id = $1",
+                [topic.topic_id]
+            );
+            console.log(`✅ Updated! New length: ${verify.rows[0].new_len} chars`);
+            console.log('📝 Content includes: Intuition, Code Explanation, Dry Run, Tips');
         } else {
             console.error('❌ Update failed - no rows affected');
         }
 
+        await pool.end();
         process.exit(0);
     } catch (err) {
         console.error('❌ Error:', err.message);

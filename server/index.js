@@ -5,6 +5,18 @@ const pool = require('./db');
 const path = require('path');
 const fs = require('fs');
 
+// ==================== CRASH PROTECTION ====================
+// Prevent unhandled errors from killing the process on Render
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('⚠️ Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit — keep the server alive
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('⚠️ Uncaught Exception:', err.message, err.stack);
+  // Don't exit — keep the server alive
+});
+
 dotenv.config();
 
 const app = express();
@@ -183,6 +195,13 @@ if (process.env.NODE_ENV === 'production' || fs.existsSync(distPath)) {
     res.sendFile(path.resolve(distPath, 'index.html'));
   });
 }
+
+// ==================== ERROR MIDDLEWARE ====================
+// Catch-all error handler — prevents Express from crashing on unhandled route errors
+app.use((err, req, res, next) => {
+  console.error('⚠️ Express Error:', err.message);
+  res.status(err.status || 500).json({ error: 'Internal Server Error' });
+});
 
 // Auto-fix schema on startup
 const fixSchema = require('./scripts/fix_schema');

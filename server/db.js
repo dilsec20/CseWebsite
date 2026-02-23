@@ -12,7 +12,7 @@ if (process.env.DATABASE_URL) {
     // 
     // Key settings for Supavisor (PgBouncer-style transaction pooler):
     // 1. Disable prepared statements — they break in transaction mode
-    // 2. Keep pool small — Supabase free tier allows ~10 direct connections
+    // 2. Keep pool size large enough for Node.js (Supavisor handles multiplexing up to 200 clients)
     // 3. Short idle timeout — Supavisor drops idle connections aggressively
     // ============================================================
     poolConfig = {
@@ -20,9 +20,9 @@ if (process.env.DATABASE_URL) {
         ssl: {
             rejectUnauthorized: false
         },
-        max: 5,                        // Keep pool small for Supabase free tier
+        max: 40,                       // Increased from 5 to 40 to handle 11 concurrent dashboard queries
         idleTimeoutMillis: 10000,      // Close idle connections after 10s (before Supavisor drops them)
-        connectionTimeoutMillis: 15000, // Allow 15s for connection attempts
+        connectionTimeoutMillis: 30000, // Allow 30s for connection attempts in queue
         allowExitOnIdle: true,         // Let pool shrink to 0 when idle
 
         // CRITICAL: Disable prepared statements for Supavisor transaction-mode pooling

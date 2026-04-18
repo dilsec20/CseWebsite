@@ -16,7 +16,10 @@ router.post("/run", async (req, res) => {
                 const response = await axios.post("https://emkc.org/api/v2/piston/execute", {
                     language: language,
                     version: "*",
-                    files: [{ content: code }],
+                    files: [{ 
+                        ...(language === 'java' ? { name: 'Main.java' } : {}),
+                        content: code 
+                    }],
                     stdin: stdin,
                     compile_timeout: 10000,
                     run_timeout: 3000
@@ -128,7 +131,10 @@ router.post("/submit", authorization, async (req, res) => {
                 const response = await axios.post("https://emkc.org/api/v2/piston/execute", {
                     language: language,
                     version: "*",
-                    files: [{ content: code }],
+                    files: [{ 
+                        ...(language === 'java' ? { name: 'Main.java' } : {}),
+                        content: code 
+                    }],
                     stdin: testCase.input,
                     compile_timeout: 10000,
                     run_timeout: 3000

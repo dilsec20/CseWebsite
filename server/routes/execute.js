@@ -22,8 +22,8 @@ router.post("/run", async (req, res) => {
                     run_timeout: 3000
                 });
 
-                // Check for SIGKILL
-                if (response.data.run.signal === 'SIGKILL' || response.data.compile.signal === 'SIGKILL') {
+                // Check for SIGKILL (compile may be undefined for interpreted languages)
+                if (response.data.run?.signal === 'SIGKILL' || response.data.compile?.signal === 'SIGKILL') {
                     console.log(`⚠️  SIGKILL detected in /run (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`);
 
                     if (retryCount < MAX_RETRIES) {
@@ -134,7 +134,7 @@ router.post("/submit", authorization, async (req, res) => {
                     run_timeout: 3000
                 }, { timeout: 15000 });
 
-                if (response.data.run.signal === 'SIGKILL' || response.data.compile.signal === 'SIGKILL') {
+                if (response.data.run?.signal === 'SIGKILL' || response.data.compile?.signal === 'SIGKILL') {
                     if (retryCount < MAX_RETRIES) {
                         await new Promise(resolve => setTimeout(resolve, 200));
                         return await executeCode(testCase, retryCount + 1);
@@ -142,7 +142,7 @@ router.post("/submit", authorization, async (req, res) => {
                     return { success: true, error_type: null, output: '(timeout skipped)', expected: testCase.expected_output };
                 }
 
-                if (response.data.compile && response.data.compile.code !== 0) {
+                if (response.data.compile?.code !== 0 && response.data.compile?.code !== undefined) {
                     return { success: false, error_type: 'Compilation Error', error: response.data.compile.stderr, output: null };
                 }
                 if (response.data.run.code !== 0 && response.data.run.signal) {
